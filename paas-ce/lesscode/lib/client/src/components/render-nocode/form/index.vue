@@ -2,7 +2,7 @@
     <draw-layout
         class="lesscode-editor-page-content">
         <left-panel slot="left" @move="fieldPanelHover = true" @end="fieldPanelHover = false" />
-        <layout style="margin: 20px 0">
+        <layout style="margin: 20px 0;height: 100%">
             <form-content
                 :fields="fieldsList"
                 @add="handleAddField"
@@ -12,7 +12,7 @@
                 @move="handleOrderField"
             />
         </layout>
-        <right-panel slot="right" :field="crtField" :list="fieldsList" />
+        <right-panel slot="right" :field="crtField" :list="fieldsList" @update="handleUpdateField" />
     </draw-layout>
 
 </template>
@@ -47,14 +47,14 @@
                 this.isEdit = true
                 this.fieldsList.splice(index, 0, field)
                 this.handleSelectField(field, index)
-                this.change()
+                this.saveFieldList()
             },
             // 复制字段
             handleCopyField (field, index) {
                 this.isEdit = true
                 this.fieldsList.splice(index + 1, 0, field)
                 this.handleSelectField(field, index + 1)
-                this.change()
+                this.saveFieldList()
             },
             // 删除字段
             handleDeleteField (index) {
@@ -64,7 +64,7 @@
                 if (this.crtIndex === index) {
                     this.crtIndex = -1
                 }
-                this.change()
+                this.saveFieldList()
             },
             // 选中字段
             handleSelectField (field, index) {
@@ -78,12 +78,25 @@
                 this.fieldsList.splice(newIndex, 0, field[0])
                 this.crtIndex = newIndex
                 this.crtField = cloneDeep(this.fieldsList[newIndex])
-                this.change()
+                this.saveFieldList()
             },
-            change () {
-                this.$emit('change', cloneDeep(this.fieldsList))
+            // change () {
+            //     this.$emit('change', cloneDeep(this.fieldsList))
+            // },
+            handleUpdateField (val) {
+                this.isEdit = true
+                this.crtField = val
+                this.fieldsList.splice(this.crtIndex, 1, val)
+                this.saveFieldList()
+            },
+            saveFieldList () {
+                this.$store.commit('fromSetting/setFieldsList', this.fieldsList)
             }
-
         }
     }
 </script>
+<style lang="postcss" >
+.middle{
+  display: none;
+}
+</style>

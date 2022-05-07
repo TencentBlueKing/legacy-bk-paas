@@ -11,7 +11,7 @@
         </transition>
         <div class="field-container">
             <div class="mask"></div>
-            <field-form-item :use-fixed-data-source="true" :field="field"></field-form-item>
+            <process-field-item :field="field"></process-field-item>
         </div>
         <transition name="slide-left">
             <div v-show="isHover" class="actions-area">
@@ -22,12 +22,12 @@
     </div>
 </template>
 <script>
-    import FieldFormItem from '@blueking/process-form-plugin'
+    import Vue from 'vue'
+    import { ProcessFieldItem } from '../../../common/processFormPlugin'
+    import '../../../common/processFormPlugin.css'
+    Vue.use(ProcessFieldItem)
     export default {
         name: 'FieldElement',
-        components: {
-            FieldFormItem
-        },
         props: {
             field: {
                 type: Object,

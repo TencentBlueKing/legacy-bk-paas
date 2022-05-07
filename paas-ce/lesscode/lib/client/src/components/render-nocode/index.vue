@@ -2,8 +2,8 @@
     <div>
         <render-flow v-if="nocodeType === 'flow'" />
         <render-data-manage v-else-if="nocodeType === 'dataManage'"></render-data-manage>
-        <render-form v-else />
-<!--        <render-form v-else @change="$emit('change',$event)" />-->
+        <render-form v-else @update="$emit('update', $event)" />
+        <!--        <render-form v-else @change="$emit('change',$event)" />-->
     </div>
 </template>
 

@@ -95,25 +95,12 @@ export const FIELDS_TYPES = [
         default: [],
         comp: 'Table'
     },
-    // {
-    //     type: 'IMAGE',
-    //     name: '图片上传',
-    //     default: '',
-    //     comp: 'ImageFile'
-    // },
-
     {
         type: 'DESC',
         name: '描述文本',
         default: '',
         comp: 'Description'
     },
-    // {
-    //     type: 'FORMULA',
-    //     name: '计算控件',
-    //     default: '',
-    //     comp: 'Formula'
-    // },
     {
         type: 'DIVIDER',
         name: '分割线',
@@ -144,3 +131,12 @@ export const FIELDS_TYPES_MAPS = {
     FORMULA: '计算控件',
     DIVIDER: '分割线'
 }
+
+// 只支持全行展示的字段类型
+export const FIELDS_FULL_LAYOUT = ['TABLE', 'RICHTEXT', 'DESC']
+
+// 支持数据源的字段类型
+export const DATA_SOURCE_FIELD = ['SELECT', 'INPUTSELECT', 'MULTISELECT', 'CHECKBOX', 'RADIO']
+
+// 需要展示默认值的字段类型
+export const FIELDS_SHOW_DEFAULT_VALUE = ['STRING', 'TEXT', 'INT', 'DATE', 'DATETIME', 'SELECT', 'MULTISELECT', 'INPUTSELECT', 'CHECKBOX', 'RADIO', 'MEMBER', 'MEMBERS', 'RICHTEXT', 'DESC']

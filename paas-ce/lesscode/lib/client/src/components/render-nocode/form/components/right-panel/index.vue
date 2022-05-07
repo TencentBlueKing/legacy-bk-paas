@@ -1,7 +1,7 @@
 <template>
     <div>
         <layout-setting v-if="editType === 'layout'" />
-        <form-setting v-else :field="field" :list="list" />
+        <form-setting v-else :field="field" :list="list" @update="$emit('update', $event)" />
     </div>
 </template>
 

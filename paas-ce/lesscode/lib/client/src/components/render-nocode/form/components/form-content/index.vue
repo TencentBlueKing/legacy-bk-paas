@@ -1,52 +1,32 @@
 <template>
-    <!--    <div>render-form</div>-->
-<!--    <div class="form-panel">-->
-<!--        <draggable-->
-<!--            filter=".actions-area"-->
-<!--            :class="['fields-container', activeCls]"-->
-<!--            :value="fields"-->
-<!--            :group="{ name: 'form', pull: true, put: ['menu', 'half-row-field'] }"-->
-<!--            @add="add"-->
-<!--            @end="end">-->
-<!--            <field-element-->
-<!--                v-for="(item, index) in fields"-->
-<!--                :key="`${item.type}_${index}`"-->
-<!--                :class="{ actived: selectedIndex === index }"-->
-<!--                :field="item"-->
-<!--                @action="handleFormAction($event, index)">-->
-<!--            </field-element>-->
-<!--            <bk-exception v-if="fields.length === 0" class="fields-empty" type="empty" scene="part">-->
-<!--                暂无内容，请在左侧选择需要添加的控件-->
-<!--            </bk-exception>-->
-<!--        </draggable>-->
-<!--    </div>-->
-    <div>
-        <h3>form组件整个引用：</h3>
-        <hr />
-        <process-form-plugin :fields="formFields"></process-form-plugin>
-        <br />
-        <br />
-        <h3>form组件单个field引用：</h3>
-        <hr />
-        <process-field-item :field="formFields[0]"></process-field-item>
-        <br />
+    <div class="form-panel">
+        <draggable
+            filter=".actions-area"
+            :class="['fields-container', activeCls]"
+            :value="fields"
+            :group="{ name: 'form', pull: true, put: ['menu', 'half-row-field'] }"
+            @add="add"
+            @end="end">
+            <field-element
+                v-for="(item, index) in fields"
+                :key="`${item.type}_${index}`"
+                :class="{ actived: selectedIndex === index }"
+                :field="item"
+                @action="handleFormAction($event, index)">
+            </field-element>
+            <bk-exception v-if="fields.length === 0" class="fields-empty" type="empty" scene="part">
+                暂无内容，请在左侧选择需要添加的控件
+            </bk-exception>
+        </draggable>
     </div>
 </template>
-
 <script>
-    // import draggable from 'vuedraggable'
-    // import cloneDeep from 'lodash.clonedeep'
-    // import FieldElement from '../from-edit/fieldElement'
-    // import { FIELDS_TYPES } from '../../constant/forms'
+    import draggable from 'vuedraggable'
+    import cloneDeep from 'lodash.clonedeep'
+    import { FIELDS_TYPES } from '../../constant/forms'
+    import FieldElement from '../from-edit/fieldElement.vue'
+    import pinyin from 'pinyin'
 
-    import Vue from 'vue'
-    import { ProcessFormPlugin, ProcessFieldItem } from '../../../common/processFormPlugin.js'
-    import '../../../common/processFormPlugin.css'
-    import jsonData from '../../../common/mockFormData.json'
-    console.log(jsonData)
-
-    Vue.use(ProcessFormPlugin)
-    Vue.use(ProcessFieldItem)
     export default {
         components: {
             draggable,
@@ -84,12 +64,19 @@
                 const defaultVal = ['MULTISELECT', 'CHECKBOX', 'MEMBER', 'MEMBERS', 'TABLE'].includes(type)
                     ? ''
                     : cloneDeep(field.default)
+                const key = pinyin(field.name, {
+                    style: pinyin.STYLE_NORMAL,
+                    heteronym: false
+                })
+                    .join('_')
+                    .toUpperCase()
                 const config = {
                     type, // 类型
                     name: field.name, // 名称
                     desc: '', // 描述
                     regex: 'EMPTY', // 校验规则
                     layout: 'COL_12', // 布局：半行、整行
+                    key,
                     unique: false, // 是否唯一
                     validate_type: 'OPTION', // 是否必填
                     source_type: 'CUSTOM', // 数据来源类型 [CUSTOM, API, DATADICT, RPC, WORKSHEET]
@@ -98,7 +85,12 @@
                     default: defaultVal, // 默认值
                     choice: this.getDefaultChoice(type), // 选项
                     worksheet_id: this.formId, // 表单id
-                    meta: {} // 复杂描述信息
+                    meta: {}, // 复杂描述信息
+                    show_conditions: {}, // 显隐藏条件
+                    read_only_conditions: {}, // 只读条件
+                    mandatory_conditions: {}, // 必填条件
+                    is_readonly: false, // 只读
+                    show_type: 0// 显隐
                 }
                 const index = this.fields.length === 0 ? 0 : e.newIndex
                 this.$emit('add', config, index)
@@ -141,14 +133,13 @@
                 }
                 return []
             }
-            return {
-                formFields: jsonData
-            }
+
         }
     }
 </script>
 
 <style lang="postcss" scoped>
+@import "@/css/mixins/scroller";
 .form-panel {
   margin: 24px;
   height: calc(100% - 48px);
@@ -158,10 +149,10 @@
 }
 
 .fields-container {
+  @mixin scroller;
   padding: 35px 0;
   height: 100%;
   overflow: auto;
-
   &.hover {
     outline: 2px dashed #1768ef;
     border-radius: 4px;
