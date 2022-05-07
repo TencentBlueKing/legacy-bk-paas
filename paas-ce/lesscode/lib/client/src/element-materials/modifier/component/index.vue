@@ -15,7 +15,7 @@
             <bk-tab
                 :active="tabPanelActive"
                 type="unborder-card"
-                ext-cls="king-tab"
+                class="king-tab"
                 @tab-change="handleModifier">
                 <bk-tab-panel
                     v-for="(tabPanel, panelIndex) in tabPanels"
@@ -23,16 +23,23 @@
                     :key="panelIndex" />
             </bk-tab>
             <div
-                
+                ref="container"
                 class="material-modifier-container">
                 <template v-for="(com, index) in modifierComList">
                     <component
                         :is="com"
                         :key="`${renderKey}_${index}`" />
                 </template>
+                <div
+                    v-if="isModifierEmpty"
+                    class="empty">
+                    配置项为空
+                </div>
             </div>
         </template>
-        <div v-else class="empty">
+        <div
+            v-else
+            class="empty">
             <span>请选择组件</span>
         </div>
     </div>
@@ -60,7 +67,8 @@
                 ],
                 tabPanelActive: 'props',
                 currentTabPanelType: 'unborder-card',
-                renderKey: ''
+                renderKey: '',
+                isModifierEmpty: false
             }
         },
         computed: {
@@ -82,6 +90,7 @@
                 this.tabPanelActive = target.tabPanelActive || 'props'
                 this.renderKey = target.renderKey
                 this.activeComponentNode = target
+                this.checkChildrenComponentInstance()
             }
 
             const activeClearCallback = () => {
@@ -104,11 +113,20 @@
             })
         },
         methods: {
+            checkChildrenComponentInstance () {
+                this.isModifierEmpty = false
+                setTimeout(() => {
+                    if (this.$refs.container) {
+                        this.isModifierEmpty = this.$refs.container.children.length < 1
+                    }
+                })
+            },
             handleModifier (tabPanelActive) {
                 this.tabPanelActive = tabPanelActive
                 if (this.activeComponentNode) {
                     this.activeComponentNode.setProperty('tabPanelActive', tabPanelActive)
                 }
+                this.checkChildrenComponentInstance()
             }
         }
     }
@@ -152,15 +170,6 @@
             padding-bottom: 20px;
             overflow-y: auto;
             position: relative;
-            .no-style,
-            .no-prop,
-            .no-event,
-            .no-slot {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-            }
         }
         /* bk-input 前后的 slot 文本样式 */
         .common-input-slot-text {

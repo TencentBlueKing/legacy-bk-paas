@@ -33,7 +33,7 @@
     justify-content: space-around;
     min-width: 1000px;
     padding: 40px 0 80px;
-    overflow: auto;
+    background: #fff;
     ::v-deep .lesscode-layout-empty {
         min-height: 0;
         min-width: 0;

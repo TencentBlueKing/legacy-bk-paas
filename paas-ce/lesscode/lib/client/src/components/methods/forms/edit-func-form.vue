@@ -95,7 +95,10 @@
                 const confirmFn = () => {
                     this.$emit('close')
                 }
-                if (this.formChanged) {
+                const monacoRef = this.$refs?.monaco?.$refs?.monaco
+                if (monacoRef?.isFull) {
+                    monacoRef?.exitFullScreen()
+                } else if (this.formChanged) {
                     this.$bkInfo({
                         title: '请确认是否关闭',
                         subTitle: '存在未保存的函数，关闭后不会保存更改',
