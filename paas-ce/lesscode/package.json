@@ -196,6 +196,7 @@
     "optimize-css-assets-webpack-plugin": "~5.0.3",
     "ora": "~4.0.2",
     "path-to-regexp": "^6.1.0",
+    "pinyin": "^2.11.2",
     "postcss": "~7.0.18",
     "postcss-advanced-variables": "~3.0.0",
     "postcss-atroot": "~0.1.3",
