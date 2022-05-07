@@ -74,7 +74,8 @@ export default class OnlineService {
                     varchar: CHARACTER_MAXIMUM_LENGTH,
                     text: CHARACTER_MAXIMUM_LENGTH,
                     int: COLUMN_TYPE.replace(/[^\d]/g, ''),
-                    decimal: NUMERIC_PRECISION
+                    decimal: NUMERIC_PRECISION,
+                    json: 1024 * 1024 * 1024
                 }
                 return lengthMap[DATA_TYPE]
             }

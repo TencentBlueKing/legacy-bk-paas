@@ -52,7 +52,9 @@ function getTableColumnSql (column) {
             varchar: `varchar(${length}) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci`,
             datetime: 'datetime(0)',
             text: 'text',
-            decimal: `decimal(${length}, ${scale})`
+            decimal: `decimal(${length}, ${scale})`,
+            json: 'json',
+            date: 'date'
         }
         return typeMap[column.type]
     }
@@ -66,7 +68,7 @@ function getTableColumnSql (column) {
     }
     // 默认值
     const getDefault = (column) => {
-        if (column.generated || column.type === 'text') return ''
+        if (column.generated || ['json', 'text'].includes(column.type)) return ''
 
         if (column.createDate) return 'DEFAULT CURRENT_TIMESTAMP(0)'
 
@@ -137,7 +139,7 @@ function createTable (data, index) {
         + `CREATE TABLE \`${tableName}\`  (\n`
         + fields.join(',\n')
         + '\n'
-        + `) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = \'${comment}\' ROW_FORMAT = Dynamic;\n`
+        + `) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = \'${comment}\' ROW_FORMAT = Dynamic;\n`
     )
 }
 
