@@ -18,8 +18,8 @@ import {
 } from '@vue/composition-api'
 import { VNode } from 'vue'
 import fieldTable from '@/components/field-table/field-table'
-import { uuid } from '@/common/util'
-import { ORM_KEYS, BASE_COLUMNS } from 'shared/data-source/constant'
+import { getDefaultJson, normalizeJson } from 'shared/data-source/helper'
+import { ORM_KEYS, BASE_COLUMNS, FIELDS_TYPES } from 'shared/data-source/constant'
 
 export interface IFieldSelectOption {
     id: string
@@ -49,60 +49,16 @@ export interface ITableStatus {
     data: object[]
 }
 
-function getDefaultRow () {
-    return {
-        type: '',
-        name: '',
-        primary: false,
-        index: false,
-        nullable: false,
-        default: '',
-        comment: '',
-        generated: false,
-        createDate: false,
-        updateDate: false,
-        length: '',
-        scale: ''
-    }
-}
-
 /**
  * orm 数据转为表格数据
  * @param item orm 数据
  * @returns 表格数据
  */
 function normalizeTableItem (item) {
-    const defaultRow = getDefaultRow()
-    const normalizedItem = Object.assign({}, defaultRow, item)
-    // 由于mysql限制，部分字段不可修改，需要设置默认值
-    switch (normalizedItem.type) {
-        case 'int':
-            normalizedItem.length = 11
-            normalizedItem.scale = 0
-            break
-        case 'varchar':
-            normalizedItem.scale = 0
-            break
-        case 'text':
-            normalizedItem.scale = 0
-            normalizedItem.length = 65535
-            normalizedItem.index = false
-            break
-        case 'datetime':
-            normalizedItem.scale = 0
-            normalizedItem.length = 0
-            normalizedItem.default = ''
-            break
-        default:
-            break
-    }
+    const normalizedItem = normalizeJson(item)
     // 默认列不可修改
     if (BASE_COLUMNS.some(item => item.columnId === normalizedItem.columnId)) {
         normalizedItem.isReadonly = true
-    }
-    // 每一行加id，用于 diff
-    if (!Reflect.has(normalizedItem, 'columnId')) {
-        normalizedItem.columnId = uuid(8)
     }
     return normalizedItem
 }
@@ -157,28 +113,7 @@ export default defineComponent({
                 type: 'select',
                 prop: 'type',
                 isRequire: true,
-                optionsList: [
-                    {
-                        id: 'varchar',
-                        name: 'varchar'
-                    },
-                    {
-                        id: 'int',
-                        name: 'int'
-                    },
-                    {
-                        id: 'datetime',
-                        name: 'datetime'
-                    },
-                    {
-                        id: 'text',
-                        name: 'text'
-                    },
-                    {
-                        id: 'decimal',
-                        name: 'decimal'
-                    }
-                ]
+                optionsList: FIELDS_TYPES
             },
             {
                 name: '长度',
@@ -230,7 +165,7 @@ export default defineComponent({
                 prop: 'index',
                 width: '100px',
                 isReadonly (item, props) {
-                    return props?.row?.type === 'text'
+                    return ['text', 'json'].includes(props?.row?.type)
                 }
             },
             {
@@ -244,7 +179,7 @@ export default defineComponent({
                 type: 'input',
                 prop: 'default',
                 isReadonly (item, props) {
-                    return ['text', 'datetime'].includes(props?.row?.type)
+                    return ['text', 'datetime', 'date', 'json'].includes(props?.row?.type)
                 },
                 componentProps (item, props) {
                     if (['int', 'datetime', 'decimal'].includes(props?.row?.type)) {
@@ -283,7 +218,7 @@ export default defineComponent({
         )
 
         const addField = (row, index) => {
-            const defaultRow = getDefaultRow()
+            const defaultRow = getDefaultJson()
             tableList.splice(index + 1, 0, defaultRow)
             emit('change')
         }
