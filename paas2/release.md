@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.9
+    - bugfix: console html title wrong
+
 # 2.14.8
     - update: login remove sensitive info from log
     - update: login/paas footer
