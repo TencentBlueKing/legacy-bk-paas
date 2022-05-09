@@ -8,6 +8,9 @@ export default {
     mutations: {
         setFieldsList (state, fieldsList) {
             state.fieldsList = fieldsList || []
+        },
+        restFieldList (state) {
+            state.fieldsList = []
         }
     },
     getters: {

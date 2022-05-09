@@ -24,6 +24,7 @@
     import RightPanel from './components/right-panel'
     import Layout from '@/components/render/pc/widget/layout'
     import FormContent from './components/form-content'
+    import { bus } from '@/common/bus'
     export default {
         components: {
             DrawLayout,
@@ -40,6 +41,16 @@
                 crtIndex: -1, // 当前选中字段索引
                 crtField: {} // 当前选中字段
             }
+        },
+        created () {
+            bus.$on('restFieldList', () => {
+                this.fieldsList = []
+                this.crtField = {}
+                this.crtIndex = -1
+            })
+        },
+        beforeDestroy () {
+            bus.$off('restFieldList')
         },
         methods: {
             // 添加字段

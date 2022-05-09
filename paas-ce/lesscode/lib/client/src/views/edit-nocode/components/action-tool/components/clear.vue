@@ -4,7 +4,7 @@
 
 <script>
     import MenuItem from '@/views/index/components/action-tool/components/menu-item'
-    
+    import { bus } from '@/common/bus'
     export default {
         components: {
             MenuItem
@@ -20,12 +20,12 @@
         },
         methods: {
             async handleClearAll () {
-                const me = this
-                me.$bkInfo({
+                this.$bkInfo({
                     title: '确定清空？',
                     subTitle: '清空',
-                    confirmFn () {
-                        alert('清空')
+                    confirmFn: () => {
+                        this.$store.commit('fromSetting/restFieldList')
+                        bus.$emit('restFieldList')
                     }
                 })
             }
