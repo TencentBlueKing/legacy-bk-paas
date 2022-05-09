@@ -19,7 +19,6 @@
             'bk-layout-custom-component-wrapper': componentData.isCustomComponent
         }"
         role="component-root"
-        :data-layout="componentData.layoutType"
         :style="Object.assign({}, componentData.style, safeStyles)"
         v-bind="{
             [componentData.componentId]: ''
@@ -247,7 +246,7 @@
                 }
                 
                 // 继承组件渲染结果的 display
-                const $baseComponentEl = this.$refs.componentRoot.querySelector('[lesscode-base-component]')
+                const $baseComponentEl = this.$refs.componentRoot.querySelector(':scope > [lesscode-base-component]')
                 if ($baseComponentEl) {
                     const {
                         display
@@ -277,7 +276,7 @@
                     if (!this.$refs.componentRoot) {
                         return
                     }
-                    const $baseComponentEl = this.$refs.componentRoot.querySelector('[lesscode-base-component]')
+                    const $baseComponentEl = this.$refs.componentRoot.querySelector(':scope > [lesscode-base-component]')
                     if ($baseComponentEl) {
                         const styleWidth = $baseComponentEl.style.width
                         if (styleWidth) {
@@ -310,7 +309,7 @@
                     if (!this.$refs.componentRoot) {
                         return
                     }
-                    const $baseComponentEl = this.$refs.componentRoot.querySelector('[lesscode-base-component]')
+                    const $baseComponentEl = this.$refs.componentRoot.querySelector(':scope > [lesscode-base-component]')
                     if ($baseComponentEl) {
                         const styleHeight = $baseComponentEl.style.height
                         if (styleHeight) {
