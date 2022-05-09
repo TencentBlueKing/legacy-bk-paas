@@ -24,8 +24,17 @@ export const paste = () => {
     }
     
     const newNode = copyNode.cloneNode(true)
+    newNode.setStyle({
+        position: '',
+        top: '',
+        left: '',
+        marginTop: '',
+        marginRight: '',
+        marginBottom: '',
+        marginLeft: ''
+    })
     if (activeNode === copyNode) {
-        activeNode.parentNode.insertAfert(newNode, activeNode)
+        activeNode.parentNode.insertAfter(newNode, activeNode)
     } else if (activeNode.layoutType) {
         activeNode.appendChild(newNode)
     }
