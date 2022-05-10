@@ -19,7 +19,7 @@
         },
         data () {
             return {
-                nocodeType: 'form'
+                nocodeType: 'dataManage'
             }
         }
     }
