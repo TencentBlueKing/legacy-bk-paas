@@ -75,10 +75,6 @@ export default class DragLine {
 
         this.mainContentNode = document.querySelector('#drawTarget')
 
-        // 布局模板情况下，contentNode 是 .navigation-container .container-content
-        // this.contentNode = this.hasNavLayout
-        //     ? document.querySelector('.navigation-container .container-content')
-        //     : this.mainContentNode
         this.contentNode = this.mainContentNode
     }
 
@@ -116,7 +112,14 @@ export default class DragLine {
                 return
             }
 
-            const { top, height, bottom, left, width, right } = item.getBoundingClientRect()
+            const {
+                top,
+                height,
+                bottom,
+                left,
+                width,
+                right
+            } = item.getBoundingClientRect()
 
             const dragWidthHalf = dragRect.width / 2
             const itemWidthHalf = width / 2
@@ -213,20 +216,10 @@ export default class DragLine {
                     item.classList.add('drag-line-active')
 
                     if (key === 'left') {
-                        // dragNode.style[key] = `${condition.dragValue - this.containerLeft - 1}px`
-
-                        // 没有 layout 导航布局模板时，contentNode 和 mainContentNode 是一样的，为 .main-content
-                        // const offsetLeft = this.hasNavLayout
-                        //     ? this.docBody.scrollLeft + this.contentNode.scrollLeft + this.mainContentNode.scrollLeft
-                        //     : this.docBody.scrollLeft + this.mainContentNode.scrollLeft
-
-                        // dragNode.style[key] = `${condition.dragValue - (this.containerLeft - offsetLeft + parseInt(this.offset.left)) - 1}px`
                         condition.lineNode.setTranslateX(condition.lineValue)
                     } else {
-                        // dragNode.style[key] = `${condition.dragValue - (this.containerTop - this.contentNode.scrollTop + parseInt(this.offset.top)) - 1}px`
                         condition.lineNode.setTranslateY(condition.lineValue)
                     }
-                    // condition.lineNode.style[key] = `${condition.lineValue}px`
                     condition.lineNode.show()
                 })
             }
@@ -235,7 +228,8 @@ export default class DragLine {
 
     uncheck () {
         Object.values(lines).forEach(item => item.hide())
-        Array.from(document.querySelectorAll('.drag-line-active')).forEach(item => item.classList.remove('drag-line-active'))
+        Array.from(document.querySelectorAll('.drag-line-active'))
+            .forEach(item => item.classList.remove('drag-line-active'))
     }
 
     _isNearly (dragValue, targetValue) {

@@ -22,6 +22,7 @@
 </template>
 <script>
     import LC from '@/element-materials/core'
+    import { setMousedown } from '../resolve-component'
 
     export default {
         name: 'render-draggable',
@@ -112,6 +113,7 @@
              */
             handleEnd (event) {
                 this.styles = {}
+                setMousedown(false)
                 this.$emit('end', event)
             },
             /**
@@ -119,6 +121,7 @@
              * @param { Object } dragEvent
              */
             handleAdd (event) {
+                setMousedown(false)
                 this.$emit('add', event)
             },
             handleSort (event) {
@@ -145,6 +148,7 @@
                         right: '',
                         bottom: '',
                         left: '',
+                        zIndex: '',
                         marginTop: '',
                         marginRight: '',
                         marginBottom: '',
@@ -178,6 +182,9 @@
         width: 100%;
         height: 100%;
         pointer-events: auto !important;
+        &:empty{
+            min-height: 34px;
+        }
     }
     .chosen{
         opacity: .9;
