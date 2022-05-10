@@ -1304,7 +1304,7 @@ class PageCode {
             const modifierStr = (modifiers || []).map((modifier) => `.${modifier}`).join('')
             const disPlayVal = this.handleUsedVariable(format, val, componentId)
             /** 兼容旧数据，v-model为undefined的情形(v-model不能为undefined) */
-            if (type === 'v-model' && disPlayVal === 'undefined') return
+            if (type === 'v-model' && val === undefined) return
             switch (type) {
                 case 'v-if':
                     const exitsVFor = exisDirectives.find((dir) => (dir.type === 'v-for'))
