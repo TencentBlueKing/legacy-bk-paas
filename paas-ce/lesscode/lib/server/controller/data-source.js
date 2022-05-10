@@ -47,8 +47,9 @@ export default class DataSourceController {
     // 开启数据源，需要同步创建项目下的数据库和用户
     @OutputJson()
     @Post('/enable')
-    async enable (@BodyParams() body) {
-        const { projectId } = body
+    async enable (
+        @BodyParams({ name: 'projectId', require: true }) projectId
+    ) {
         const projectInfo = await LCDataService.findOne(TABLE_FILE_NAME.PROJECT, { id: projectId, deleteFlag: 0 })
         if (projectInfo.isEnableDataSource <= 0) {
             // 如果未开启，则开启
