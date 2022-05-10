@@ -49,6 +49,7 @@
             </draggable>
             <lesscode-focus />
             <lesscode-tools />
+            <lesscode-resize />
         </div>
         <div
             v-if="showNotVisibleMask"
@@ -60,10 +61,11 @@
 <script>
     import LC from '@/element-materials/core'
     import Draggable from './components/draggable'
-    import LesscodeFocus from './components/lesscode-focus'
-    import LesscodeTools from './components/lesscode-tools'
+    import LesscodeFocus from './tools/lesscode-focus'
+    import LesscodeTools from './tools/lesscode-tool'
+    import LesscodeResize from './tools/lesscode-resize'
     import Layout from './widget/layout'
-    import ResolveComponent from './resolve-component'
+    import ResolveComponent, { setMousedown } from './resolve-component'
     import ResolveInteractiveComponent from './resolve-interactive-component'
 
     export default {
@@ -72,6 +74,7 @@
             Draggable,
             LesscodeFocus,
             LesscodeTools,
+            LesscodeResize,
             Layout,
             ResolveComponent,
             ResolveInteractiveComponent
@@ -107,7 +110,7 @@
                 console.log(`%c>> ${new Date().toString().slice(0, 25)}`,
                             'background-color: #3A84FF; color: #fff; padding: 2px 5px; border-radius: 3px; font-weight: bold;')
                 console.log(`%c组件更新%c${event.target.componentId}`,
-                            'padding: 2px 5px; background: #606060; color: #fff; border-radius: 3px 0 0 3px;',
+                            'padding: 2px 5px; background: #ea3636; color: #fff; border-radius: 3px 0 0 3px;',
                             'padding: 2px 5px; background: #42c02e; color: #fff; border-radius: 0 3px 3px 0; font-weight: bold;',
                             event)
             }
@@ -117,7 +120,7 @@
                 console.log(`%c>> ${new Date().toString().slice(0, 25)}`,
                             'background-color: #3A84FF; color: #fff; padding: 2px 5px; border-radius: 3px; font-weight: bold;')
                 console.log(`%c组件选中%c${event.target.componentId}`,
-                            'padding: 2px 5px; background: #606060; color: #fff; border-radius: 3px 0 0 3px;',
+                            'padding: 2px 5px; background: #ff9c01; color: #fff; border-radius: 3px 0 0 3px;',
                             'padding: 2px 5px; background: #42c02e; color: #fff; border-radius: 0 3px 3px 0; font-weight: bold;',
                             event)
             }
@@ -172,14 +175,26 @@
         },
         mounted () {
             this.componentData.mounted(this.$refs.root)
+            LC._mounted()
+            
+            const mousedownCallback = () => {
+                setMousedown(true)
+            }
+            const mouseupCallback = () => {
+                setMousedown(false)
+            }
             const resetCallback = () => {
                 LC.clearMenu()
             }
+            document.body.addEventListener('mousedown', mousedownCallback)
+            document.body.addEventListener('mouseup', mouseupCallback)
             document.body.addEventListener('click', resetCallback)
+            
             this.$once('hook:beforeDestroy', () => {
+                document.body.removeEventListener('mousedown', mousedownCallback)
+                document.body.removeEventListener('mouseup', mouseupCallback)
                 document.body.removeEventListener('click', resetCallback)
             })
-            LC._mounted()
         },
         beforeDestroy () {
             LC._unload()

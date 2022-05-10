@@ -49,6 +49,10 @@ export default {
         'pointer',
         'opacity'
     ],
+    renderStyles: {
+        display: 'inline-block',
+        width: '300px'
+    },
     directives: [
         {
             type: 'v-model',
