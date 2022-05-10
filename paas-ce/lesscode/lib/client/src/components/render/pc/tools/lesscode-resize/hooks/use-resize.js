@@ -150,7 +150,7 @@ export default function () {
                 top: `${tipTop}px`,
                 left: `${tipLeft}px`,
                 zIndex: 98,
-                padding: '0 2px',
+                padding: '0 4px',
                 fontSize: '12px',
                 lineHeight: '24px',
                 borderRadius: '2px',

@@ -164,8 +164,8 @@
             const { hoverComponentData } = useComponentHover(showHover)
 
             useScroll(() => {
-                showHover(hoverComponentData)
-                showActive(activeComponentData)
+                showHover(hoverComponentData.value)
+                showActive(activeComponentData.value)
             })
 
             onMounted(() => {

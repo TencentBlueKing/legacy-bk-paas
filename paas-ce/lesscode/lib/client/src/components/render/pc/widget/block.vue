@@ -105,7 +105,7 @@
 <style lang="postcss" module>
     .block{
         position: relative;
-        outline: 1px dashed #ccc;
+        border: 1px dashed #ccc;
         &.empty{
             min-height: 34px !important;
             background: #FAFBFD;
