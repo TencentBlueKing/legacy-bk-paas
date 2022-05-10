@@ -16,7 +16,7 @@ import dataTableModifyRecord from '../model/data-table-modify-record'
 import OnlineDBService from '../service/online-db-service'
 import DBEngineService from '../service/db-engine-service'
 import {
-    getPreviewDbEngine,
+    enablePerviewDb,
     getPreviewDbConfig,
     getPreviewDataService
 } from '../service/preview-db-service'
@@ -41,7 +41,6 @@ import {
 import {
     PERM_CODE
 } from '../../shared/perm/constant.js'
-const util = require('../util')
 
 @Controller('/api/data-source')
 export default class DataSourceController {
@@ -51,35 +50,14 @@ export default class DataSourceController {
     async enable (@BodyParams() body) {
         const { projectId } = body
         const projectInfo = await LCDataService.findOne(TABLE_FILE_NAME.PROJECT, { id: projectId, deleteFlag: 0 })
-        projectInfo.isEnableDataSource = 1
-
-        const dbInfo = {
-            projectId,
-            dbName: projectInfo.projectCode + projectInfo.id,
-            userName: util.uuid(),
-            passWord: util.uuid()
+        if (projectInfo.isEnableDataSource <= 0) {
+            // 如果未开启，则开启
+            projectInfo.isEnableDataSource = 1
+            await enablePerviewDb(projectId, projectInfo.projectCode + projectInfo.id)
+            await LCDataService.update(TABLE_FILE_NAME.PROJECT, projectInfo)
+        } else {
+            throw new Error('已开启数据源的项目，不能重复开启！')
         }
-
-        // 创建用于预览的DB
-        const previewDbEngine = await getPreviewDbEngine()
-        await previewDbEngine.execCb(async (pool) => {
-            // 创建项目对应的预览数据库
-            await pool.query(`CREATE DATABASE \`${dbInfo.dbName}\`;`)
-            // 创建用户并授权对应的库
-            await pool.query(`CREATE USER '${dbInfo.userName}'@'%' IDENTIFIED BY '${dbInfo.passWord}';`)
-            await pool.query(`GRANT ALL ON ${dbInfo.dbName}.* TO '${dbInfo.userName}'@'%';`)
-            await pool.query('FLUSH PRIVILEGES;')
-        })
-
-        // 加密
-        dbInfo.userName = util.encrypt(dbInfo.userName)
-        dbInfo.passWord = util.encrypt(dbInfo.passWord)
-
-        // 写入数据库
-        return Promise.all([
-            LCDataService.update(TABLE_FILE_NAME.PROJECT, projectInfo),
-            LCDataService.add(TABLE_FILE_NAME.PREVIEW_DB, dbInfo)
-        ])
     }
 
     // 获取项目下的所有表结构

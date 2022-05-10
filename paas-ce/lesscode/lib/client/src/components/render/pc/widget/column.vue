@@ -114,7 +114,7 @@
         width: 100% !important;
         height: 100% !important;
         &.render-grid-empty{
-            min-height: 64px !important;
+            min-height: 34px !important;
         }
         &.empty{
             background: #FAFBFD;

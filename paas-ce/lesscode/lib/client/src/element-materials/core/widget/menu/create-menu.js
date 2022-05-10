@@ -80,6 +80,27 @@ export default () => {
     if (activeNode.type === 'render-column') {
         removeDisabled = activeNode.parentNode.children.length <= 1
     }
+
+    if (activeNode.parentNode.type === 'free-layout') {
+        list.push({
+            name: '上移一层',
+            action: () => {
+                const zIndex = ~~activeNode.style['z-index']
+                activeNode.setStyle({
+                    zIndex: zIndex + 1
+                })
+            }
+        })
+        list.push({
+            name: '下移一层',
+            action: () => {
+                const zIndex = ~~activeNode.style['z-index']
+                activeNode.setStyle({
+                    zIndex: zIndex - 1
+                })
+            }
+        })
+    }
     
     list.push({
         name: '删除',

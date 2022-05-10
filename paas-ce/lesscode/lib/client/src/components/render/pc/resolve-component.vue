@@ -19,13 +19,15 @@
             'bk-layout-custom-component-wrapper': componentData.isCustomComponent
         }"
         role="component-root"
-        :data-component-id="`${componentData.componentId}`"
-        :data-layout="componentData.layoutType"
         :style="Object.assign({}, componentData.style, safeStyles)"
+        v-bind="{
+            [componentData.componentId]: ''
+        }"
         @mousedown.stop="handleMousedown"
         @mousemove="handleMousemove"
         @mouseup="handleMouseup"
         @click.stop="handleClick"
+        @dblclick.stop="handleDBClick"
         @contextmenu.stop="handleShowContextmenu">
         <render-component
             :ref="componentData.componentId"
@@ -244,7 +246,7 @@
                 }
                 
                 // 继承组件渲染结果的 display
-                const $baseComponentEl = this.$refs.componentRoot.querySelector('[data-base-component="true"]')
+                const $baseComponentEl = this.$refs.componentRoot.querySelector(':scope > [lesscode-base-component]')
                 if ($baseComponentEl) {
                     const {
                         display
@@ -274,7 +276,7 @@
                     if (!this.$refs.componentRoot) {
                         return
                     }
-                    const $baseComponentEl = this.$refs.componentRoot.querySelector('[data-base-component="true"]')
+                    const $baseComponentEl = this.$refs.componentRoot.querySelector(':scope > [lesscode-base-component]')
                     if ($baseComponentEl) {
                         const styleWidth = $baseComponentEl.style.width
                         if (styleWidth) {
@@ -307,7 +309,7 @@
                     if (!this.$refs.componentRoot) {
                         return
                     }
-                    const $baseComponentEl = this.$refs.componentRoot.querySelector('[data-base-component="true"]')
+                    const $baseComponentEl = this.$refs.componentRoot.querySelector(':scope > [lesscode-base-component]')
                     if ($baseComponentEl) {
                         const styleHeight = $baseComponentEl.style.height
                         if (styleHeight) {
@@ -352,18 +354,10 @@
              */
             handleClick () {
                 LC.clearMenu()
-                if (this.componentData.isActived) {
-                    return
-                }
                 this.componentData.active()
             },
-            /**
-             * @desc 鼠标右键——选中组件、弹出菜单
-             * @param { Object } event
-             */
-            handleShowContextmenu (event) {
-                this.componentData.active()
-                LC.showMenu(event)
+            handleDBClick () {
+                console.log('dbdbdb')
             },
             /**
              * @desc 记录鼠标按下状态，抛出 component-mousedown 事件
@@ -398,6 +392,14 @@
                     type: 'componentHover',
                     target: this.componentData
                 })
+            },
+            /**
+             * @desc 鼠标右键——选中组件、弹出菜单
+             * @param { Object } event
+             */
+            handleShowContextmenu (event) {
+                this.componentData.active()
+                LC.showMenu(event)
             }
         }
     }
