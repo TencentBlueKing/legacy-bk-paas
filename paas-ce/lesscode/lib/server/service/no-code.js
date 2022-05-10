@@ -28,7 +28,7 @@ const execSqlInPreviewDb = async (sql, projectId) => {
  * @param { tableName: 表名, projectId: 项目id, columns: 字段 json, comment: 备注 } dataTable 表数据
  * @returns 新增数据
  */
-export const createNCTable = (dataTable) => {
+export const createNCTable = async (dataTable) => {
     // 构造数据入库 DATA_TABLE
     const newTable = {
         ...dataTable,
@@ -57,7 +57,7 @@ export const createNCTable = (dataTable) => {
  * @param { id: 要更新的表id, tableName: 表名, projectId: 项目id, columns: 字段 json, comment: 备注 } dataTable 表数据
  * @returns 更新数据
  */
-export const updateNCTable = (dataTable) => {
+export const updateNCTable = async (dataTable) => {
     // 获取原始 table
     const originData = await LCDataService.findOne(TABLE_FILE_NAME.DATA_TABLE, { id: dataTable.id })
     // 构造数据入库 DATA_TABLE
