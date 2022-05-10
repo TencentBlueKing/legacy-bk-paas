@@ -19,7 +19,7 @@ const dataBaseConf = require('../conf/data-source')
 
 /**
  * 开启预览
- * @param {*} projectId 项目id
+ * @param {*} projectId 应用id
  */
 export const enablePerviewDb = async (projectId, dbName) => {
     const dbInfo = {
@@ -32,7 +32,7 @@ export const enablePerviewDb = async (projectId, dbName) => {
     // 创建用于预览的DB
     const previewDbEngine = await getPreviewDbEngine()
     await previewDbEngine.execCb(async (pool) => {
-        // 创建项目对应的预览数据库
+        // 创建应用对应的预览数据库
         await pool.query(`CREATE DATABASE \`${dbInfo.dbName}\`;`)
         // 创建用户并授权对应的库
         await pool.query(`CREATE USER '${dbInfo.userName}'@'%' IDENTIFIED BY '${dbInfo.passWord}';`)
