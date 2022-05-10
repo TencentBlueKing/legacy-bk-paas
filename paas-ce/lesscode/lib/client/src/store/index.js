@@ -30,6 +30,7 @@ import functionMarket from './modules/function-market'
 import perm from './modules/perm'
 import projectVersion from './modules/project-version'
 import dataSource from './modules/data-source'
+import fromSetting from './modules/form-setting'
 import http from '@/api'
 import router from '../router'
 import { unifyObjectStyle, json2Query, circleJSON } from '@/common/util'
@@ -59,7 +60,8 @@ const store = new Vuex.Store({
         functionMarket,
         perm,
         projectVersion,
-        dataSource
+        dataSource,
+        fromSetting
     },
     // 公共 store
     state: {
@@ -230,7 +232,6 @@ store.dispatch = function (_type, _payload, config = {}) {
         }
         return
     }
-
     store._actionSubscribers.forEach(sub => {
         return sub(action, store.state)
     })

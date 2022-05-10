@@ -77,6 +77,40 @@ export const ORM_KEYS = [
 ]
 
 /**
+ * 数据源字段类型
+ */
+export const FIELDS_TYPES = [
+    {
+        id: 'varchar',
+        name: 'varchar'
+    },
+    {
+        id: 'int',
+        name: 'int'
+    },
+    {
+        id: 'date',
+        name: 'date'
+    },
+    {
+        id: 'datetime',
+        name: 'datetime'
+    },
+    {
+        id: 'text',
+        name: 'text'
+    },
+    {
+        id: 'decimal',
+        name: 'decimal'
+    },
+    {
+        id: 'json',
+        name: 'json'
+    }
+]
+
+/**
  * typeorm 不支持 length 属性的 key
  */
 export const NO_LENGTH_ORM_KEY = [
