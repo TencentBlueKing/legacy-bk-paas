@@ -7,6 +7,21 @@
             <bk-form-item label="唯一标识">
                 <bk-input v-model.trim="fieldData.key" @change="change" @blur="onNameBlur"></bk-input>
             </bk-form-item>
+            <bk-form-item label="上传模板附件" :ext-cls="'input-position mt20-item'" v-if="fieldData.type === 'FILE'">
+                <bk-button :theme="'default'" title="点击上传">
+                    点击上传
+                </bk-button>
+                <input type="file" :value="fileVal" class="input-file" @change="handleAddFiles">
+                <ul class="file-list">
+                    <li v-for="(item, index) in fieldData.fileTemplate" :key="index">
+                        <span class="file-success">
+                            <i class="bk-icon icon-check-1"></i>
+                        </span>
+                        <span>{{item.name}}</span>
+                        <span class="file-delete" @click="handleDelete(item, index)">×</span>
+                    </li>
+                </ul>
+            </bk-form-item>
             <bk-form-item label="布局">
                 <bk-radio-group v-model="fieldData.layout" @change="change">
                     <bk-radio value="COL_6" :disabled="fieldProps.fieldsFullLayout.includes(fieldData.type)">半行</bk-radio>
@@ -177,7 +192,8 @@
                 dataSourceDialogShow: false,
                 readerOnlyShow: false,
                 requireConfigShow: false,
-                showTypeShow: false
+                showTypeShow: false,
+                fileVal: ''
             }
         },
         computed: {
@@ -248,6 +264,37 @@
                     .join('_')
                     .toUpperCase()
                 this.fieldData.key = key
+            },
+            handleAddFiles (e) {
+                const fileInfo = e.target.files[0]
+                const maxSize = 100000
+                const fileSize = fileInfo.size / 1024
+                const fileName = fileInfo.name
+                for (let i = 0; i < this.fileList.length; i++) {
+                    if (fileName === this.fieldData.fileTemplate.name) {
+                        this.$bkMessage({
+                            message: '此文件已经上传',
+                            theme: 'error'
+                        })
+                        break
+                    }
+                }
+                if (fileSize <= maxSize) {
+                    const data = new FormData()
+                    data.append('field_file', fileInfo)
+                    // todo ajax
+                } else {
+                    this.fileVal = ''
+                    this.$bkMessage({
+                        message: '该文件大小超过100MB',
+                        theme: 'error'
+                    })
+                }
+                this.change()
+            },
+            handleDelete (item, index) {
+                this.fieldData.fileTemplate.splice(index, 1)
+                this.change()
             },
             handleCheckedChange () {
                 this.fieldData.tips = ''
@@ -396,5 +443,43 @@
 .source-data{
   display: flex;
   justify-content: space-between;
+}
+
+.mt20-item{
+  margin-top: 20px!important;
+}
+.input-position {
+  position: relative;
+  .input-file {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 96px;
+    height: 36px;
+    overflow: hidden;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .file-list {
+    margin-top: 10px;
+    line-height: 25px;
+    font-size: 14px;
+    color: #424950;
+    li {
+      &:hover {
+        background-color: #dfeeff;
+      }
+    }
+    .file-success {
+      color: #30d878;
+      font-size: 12px;
+    }
+    .file-delete {
+      float: right;
+      font-size: 20px;
+      color: #7a7f85;
+      cursor: pointer;
+    }
+  }
 }
 </style>

@@ -110,8 +110,8 @@
                         @change="handleValChange(expression, $event)">
                     </field-value>
                     <div class="operate-btns" style="margin-left: 8px">
-                        <i class="custom-icon-font icon-add-circle" @click="handleAddExpression(index)"></i>
-                        <i class="custom-icon-font icon-reduce-circle" @click="handleDeleteExpression(index)">
+                        <i class="icon bk-drag-icon bk-drag-add-fill" @click="handleAddExpression(index)"></i>
+                        <i class="icon bk-drag-icon bk-drag-add-fill" @click="handleDeleteExpression(index)">
                         </i>
                     </div>
                 </div>

@@ -90,7 +90,8 @@
                     read_only_conditions: {}, // 只读条件
                     mandatory_conditions: {}, // 必填条件
                     is_readonly: false, // 只读
-                    show_type: 0// 显隐
+                    show_type: 0, // 显隐
+                    fileTemplate: []// 存储文件类型组件的值
                 }
                 const index = this.fields.length === 0 ? 0 : e.newIndex
                 this.$emit('add', config, index)
