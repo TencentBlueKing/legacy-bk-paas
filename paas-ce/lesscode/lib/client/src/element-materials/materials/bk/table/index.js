@@ -140,7 +140,16 @@ export default {
             ]
         }
     ],
-    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     directives: [
         // {
         //     type: 'v-bind',

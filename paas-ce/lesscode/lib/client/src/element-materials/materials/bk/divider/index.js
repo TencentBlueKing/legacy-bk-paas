@@ -20,7 +20,10 @@ export default {
     events: [],
     styles: [
         'position',
-        'size',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
         'margin',
         'pointer',
         'opacity'
