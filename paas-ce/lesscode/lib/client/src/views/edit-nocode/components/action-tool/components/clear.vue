@@ -24,7 +24,7 @@
                     title: '确定清空？',
                     subTitle: '清空',
                     confirmFn: () => {
-                        this.$store.commit('fromSetting/restFieldList')
+                        this.$store.commit('formSetting/restFieldList')
                         bus.$emit('restFieldList')
                     }
                 })

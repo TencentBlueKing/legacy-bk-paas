@@ -27,7 +27,7 @@
         },
         methods: {
             async handleSubmit () {
-                const fieldsList = this.$store.state.fromSetting.fieldsList
+                const fieldsList = this.$store.state.formSetting.fieldsList
                 console.log(fieldsList)
             }
         }

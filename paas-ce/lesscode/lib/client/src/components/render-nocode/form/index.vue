@@ -101,7 +101,7 @@
                 this.saveFieldList()
             },
             saveFieldList () {
-                this.$store.commit('fromSetting/setFieldsList', this.fieldsList)
+                this.$store.commit('formSetting/setFieldsList', this.fieldsList)
             }
         }
     }

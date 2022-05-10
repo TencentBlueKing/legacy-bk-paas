@@ -140,3 +140,19 @@ export const DATA_SOURCE_FIELD = ['SELECT', 'INPUTSELECT', 'MULTISELECT', 'CHECK
 
 // 需要展示默认值的字段类型
 export const FIELDS_SHOW_DEFAULT_VALUE = ['STRING', 'TEXT', 'INT', 'DATE', 'DATETIME', 'SELECT', 'MULTISELECT', 'INPUTSELECT', 'CHECKBOX', 'RADIO', 'MEMBER', 'MEMBERS', 'RICHTEXT', 'DESC']
+
+// 字段数据源配置
+export const FIELDS_SOURCE_TYPE = [
+    {
+        id: 'CUSTOM',
+        name: '自定义数据'
+    },
+    {
+        id: 'API',
+        name: '接口数据'
+    },
+    {
+        id: 'WORKSHEET',
+        name: '表单数据'
+    }
+]

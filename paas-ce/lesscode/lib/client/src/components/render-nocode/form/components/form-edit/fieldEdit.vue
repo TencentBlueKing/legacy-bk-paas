@@ -13,6 +13,20 @@
                     <bk-radio value="COL_12" :disabled="fieldProps.fieldsFullLayout.includes(fieldData.type)">整行</bk-radio>
                 </bk-radio-group>
             </bk-form-item>
+            <bk-form-item v-if="fieldProps.fieldsDataSource.includes(fieldData.type)" label="下拉数据源">
+                <div class="source-data">
+                    <bk-select
+                        :value="fieldData.source_type"
+                        :clearable="false"
+                        style="width: 200px"
+                        @selected="handleSourceTypeChange">
+                        <bk-option v-for="item in sourceTypeList" :key="item.id" :id="item.id" :name="item.name"></bk-option>
+                    </bk-select>
+                    <bk-button :theme="'default'" :title="'配置'" @click="dataSourceDialogShow = true">
+                        配置
+                    </bk-button>
+                </div>
+            </bk-form-item>
             <bk-form-item label="填写属性">
                 <div class="attr-value">
                     <div class="contidion">
@@ -101,24 +115,38 @@
             :value="fieldData.show_conditions"
             @confirm="(val) => onConfirm('show_conditions',val)">
         </show-type-dialog>
+        <data-source-dialog
+            :show.sync="dataSourceDialogShow"
+            :app-id="'1'"
+            :source-type="fieldData.source_type"
+            :field-type="fieldData.type"
+            :value="sourceData"
+            @confirm="handleDataSourceChange">
+        </data-source-dialog>
     </div>
 </template>
 
 <script>
     import cloneDeep from 'lodash.clonedeep'
-    import { FIELDS_FULL_LAYOUT, FIELDS_SHOW_DEFAULT_VALUE } from '../../constant/forms'
     import pinyin from 'pinyin'
     import DefaultValue from './defaultValue.vue'
     import ReadOnlyDialog from './readOnlyDialog.vue'
     import RequireDialog from './requireDialog.vue'
     import ShowTypeDialog from './showTypeDialog.vue'
+    import DataSourceDialog from './dataSourceDialog.vue'
+    import { FIELDS_FULL_LAYOUT,
+             FIELDS_SHOW_DEFAULT_VALUE,
+             DATA_SOURCE_FIELD,
+             FIELDS_SOURCE_TYPE } from '../../constant/forms'
+
     export default {
         name: 'formEdit',
         components: {
             DefaultValue,
             ReadOnlyDialog,
             RequireDialog,
-            ShowTypeDialog
+            ShowTypeDialog,
+            DataSourceDialog
         },
         model: {
             prop: 'value',
@@ -143,11 +171,37 @@
                 defaultData: this.getDefaultData(),
                 fieldProps: {
                     fieldsFullLayout: FIELDS_FULL_LAYOUT,
-                    fieldsShowDefaultValue: FIELDS_SHOW_DEFAULT_VALUE
+                    fieldsShowDefaultValue: FIELDS_SHOW_DEFAULT_VALUE,
+                    fieldsDataSource: DATA_SOURCE_FIELD
                 },
+                dataSourceDialogShow: false,
                 readerOnlyShow: false,
                 requireConfigShow: false,
                 showTypeShow: false
+            }
+        },
+        computed: {
+            sourceTypeList () {
+                if (this.fieldData.type === 'TABLE') {
+                    return FIELDS_SOURCE_TYPE.filter(item => item.id === 'CUSTOM')
+                }
+                return FIELDS_SOURCE_TYPE
+            },
+            sourceData () {
+                const { source_type, choice, meta, api_info, kv_relation } = this.fieldData
+                let data = {}
+                switch (source_type) {
+                    case 'CUSTOM':
+                        data = choice
+                        break
+                    case 'API':
+                        data = { api_info, kv_relation }
+                        break
+                    case 'WORKSHEET':
+                        data = meta.data_config
+                        break
+                }
+                return data
             }
         },
         watch: {
@@ -169,7 +223,7 @@
                     const params = {
                         type: this.fieldData.type
                     }
-                    const resp = await this.$store.dispatch('fromSetting/getRegexList', params)
+                    const resp = await this.$store.dispatch('formSetting/getRegexList', params)
                     this.regexList = resp.data.regex_choice.map((item) => {
                         const [id, name] = item
                         return { id, name: name === '' ? '无' : name }
@@ -232,6 +286,62 @@
                 }
                 this.change()
             },
+            // 数据源配置变更
+            handleDataSourceChange (val) {
+                const { source_type } = this.fieldData
+                this.dataSourceDialogShow = false
+                if (source_type === 'CUSTOM') {
+                    this.fieldData.choice = val
+                } else if (source_type === 'API') {
+                    this.fieldData.api_info = val.api_info
+                    this.fieldData.kv_relation = val.kv_relation
+                } else if (source_type === 'WORKSHEET') {
+                    this.fieldData.meta.data_config = val
+                }
+                this.change()
+            },
+            // 数据源类型切换
+            handleSourceTypeChange (val) {
+                this.fieldData.source_type = val
+                if (val === 'CUSTOM') {
+                    this.fieldData.choice = [
+                        { key: 'XUANXIANG1', name: '选项1', color: '#FF8C00', isDefaultVal: true },
+                        { key: 'XUANXIANG2', name: '选项2', color: '#3A84FF', isDefaultVal: false }
+                    ]
+                    this.fieldData.api_info = {}
+                    this.fieldData.kv_relation = {}
+                } else if (val === 'API') {
+                    this.fieldData.choice = []
+                    this.fieldData.api_info = {
+                        remote_api_id: '',
+                        remote_system_id: '',
+                        req_body: {},
+                        req_params: {},
+                        rsp_data: ''
+                    }
+                    this.fieldData.kv_relation = { key: '', name: '' }
+                } else if (val === 'WORKSHEET') {
+                    this.fieldData.choice = []
+                    this.fieldData.api_info = {}
+                    this.fieldData.kv_relation = {}
+                    this.fieldData.meta.data_config = {
+                        // id: '',
+                        field: '',
+                        source: {
+                            project_key: this.appId
+                        },
+                        target: {
+                            project_key: this.appId,
+                            worksheet_id: ''
+                        },
+                        conditions: {
+                            connector: '',
+                            expressions: []
+                        }
+                    }
+                }
+                this.change()
+            },
             change () {
                 this.$emit('change', this.fieldData)
             }
@@ -281,5 +391,10 @@
 }
 .check-tips-input {
   margin-top: 16px;
+}
+
+.source-data{
+  display: flex;
+  justify-content: space-between;
 }
 </style>

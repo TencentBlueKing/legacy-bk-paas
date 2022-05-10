@@ -30,7 +30,7 @@ import functionMarket from './modules/function-market'
 import perm from './modules/perm'
 import projectVersion from './modules/project-version'
 import dataSource from './modules/data-source'
-import fromSetting from './modules/form-setting'
+import formSetting from './modules/form-setting'
 import http from '@/api'
 import router from '../router'
 import { unifyObjectStyle, json2Query, circleJSON } from '@/common/util'
@@ -61,7 +61,7 @@ const store = new Vuex.Store({
         perm,
         projectVersion,
         dataSource,
-        fromSetting
+        formSetting
     },
     // 公共 store
     state: {

@@ -121,8 +121,8 @@
             getDefaultChoice (type) {
                 if (['SELECT', 'INPUTSELECT', 'MULTISELECT', 'CHECKBOX', 'RADIO'].includes(type)) {
                     return [
-                        { key: 'XUANXIANG1', name: '选项1' },
-                        { key: 'XUANXIANG2', name: '选项2' }
+                        { key: 'XUANXIANG1', name: '选项1', color: '#FF8C00', isDefaultVal: true },
+                        { key: 'XUANXIANG2', name: '选项2', color: '#3A84FF', isDefaultVal: false }
                     ]
                 }
                 if (['TABLE'].includes(type)) {
