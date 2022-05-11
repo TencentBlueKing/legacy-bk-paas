@@ -83,6 +83,7 @@
     @import "@/css/mixins/scroller";
 
     .horizontal-wrapper{
+        position: relative;
         height: 100%;
         padding: 0 20px;
         overflow-y: auto;
