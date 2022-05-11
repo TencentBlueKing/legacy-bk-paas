@@ -34,6 +34,7 @@ export const createNCTable = async (dataTable) => {
         TABLE_FILE_NAME.DATA_TABLE,
         {
             tableName: dataTable.tableName,
+            projectId: dataTable.projectId,
             deleteFlag: 0
         }
     )
