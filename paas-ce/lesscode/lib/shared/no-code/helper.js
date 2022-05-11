@@ -30,7 +30,6 @@ export const transformNCJson2LCJson = (ncJson) => {
             const json = {
                 name: cur.key,
                 type: typeMap[cur.type],
-                nullable: cur.validate_type !== 'REQUIRE',
                 default: cur.default,
                 comment: cur.desc,
                 length: 255
