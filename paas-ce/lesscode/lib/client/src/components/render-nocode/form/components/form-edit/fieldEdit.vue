@@ -1,119 +1,195 @@
 <template>
     <div class="field-edit">
         <bk-form form-type="vertical">
-            <bk-form-item label="字段名称">
-                <bk-input v-model.trim="fieldData.name" @change="handleChangeName" @blur="onNameBlur"></bk-input>
-            </bk-form-item>
-            <bk-form-item label="唯一标识">
-                <bk-input v-model.trim="fieldData.key" @change="change" @blur="onNameBlur"></bk-input>
-            </bk-form-item>
-            <bk-form-item label="上传模板附件" :ext-cls="'input-position mt20-item'" v-if="fieldData.type === 'FILE'">
-                <bk-button :theme="'default'" title="点击上传">
-                    点击上传
+            <div v-if="fieldData.type === 'DESC'">
+                <bk-button :theme="'default'" title="内容配置" @click="descCompValueShow = true" class="mr10">
+                    内容配置
                 </bk-button>
-                <input type="file" :value="fileVal" class="input-file" @change="handleAddFiles">
-                <ul class="file-list">
-                    <li v-for="(item, index) in fieldData.fileTemplate" :key="index">
-                        <span class="file-success">
-                            <i class="bk-icon icon-check-1"></i>
-                        </span>
-                        <span>{{item.name}}</span>
-                        <span class="file-delete" @click="handleDelete(item, index)">×</span>
-                    </li>
-                </ul>
-            </bk-form-item>
-            <bk-form-item label="布局">
-                <bk-radio-group v-model="fieldData.layout" @change="change">
-                    <bk-radio value="COL_6" :disabled="fieldProps.fieldsFullLayout.includes(fieldData.type)">半行</bk-radio>
-                    <bk-radio value="COL_12" :disabled="fieldProps.fieldsFullLayout.includes(fieldData.type)">整行</bk-radio>
-                </bk-radio-group>
-            </bk-form-item>
-            <bk-form-item v-if="fieldProps.fieldsDataSource.includes(fieldData.type)" label="下拉数据源">
-                <div class="source-data">
+            </div>
+            <template v-else-if="fieldData.type === 'DIVIDER'">
+                <bk-form-item label="是否展示文字">
+                    <bk-input v-model.trim="fieldData.default" @change="change"></bk-input>
+                </bk-form-item>
+                <bk-form-item label="文字位置">
                     <bk-select
-                        :value="fieldData.source_type"
+                        v-model="fieldData.deviderAttr.align"
                         :clearable="false"
-                        style="width: 200px"
-                        @selected="handleSourceTypeChange">
-                        <bk-option v-for="item in sourceTypeList" :key="item.id" :id="item.id" :name="item.name"></bk-option>
+                        :searchable="true"
+                        :loading="regexListLoading"
+                        :disabled="
+                            regexListLoading ||
+                                fieldData.source === 'TABLE' ||
+                                (fieldData.meta && fieldData.meta.code === 'APPROVE_RESULT')
+                        "
+                        @selected="change">
+                        <bk-option v-for="option in regexList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
                     </bk-select>
-                    <bk-button :theme="'default'" :title="'配置'" @click="dataSourceDialogShow = true">
-                        配置
+                </bk-form-item>
+                <bk-form-item label="线条颜色">
+                    <bk-color-picker v-model="fieldData.deviderAttr.color" size="small" @change="change">
+                    </bk-color-picker>
+                </bk-form-item>
+            </template>
+            <template v-else>
+                <bk-form-item label="字段名称">
+                    <bk-input v-model.trim="fieldData.name" @change="handleChangeName" @blur="onNameBlur"></bk-input>
+                </bk-form-item>
+                <bk-form-item label="唯一标识">
+                    <bk-input v-model.trim="fieldData.key" @change="change" @blur="onNameBlur"></bk-input>
+                </bk-form-item>
+                <bk-form-item label="上传模板附件" :ext-cls="'input-position mt20-item'" v-if="fieldData.type === 'FILE'">
+                    <bk-button :theme="'default'" title="点击上传">
+                        点击上传
                     </bk-button>
-                </div>
-            </bk-form-item>
-            <bk-form-item label="填写属性">
-                <div class="attr-value">
-                    <div class="contidion">
-                        <bk-checkbox
-                            :true-value="true"
-                            :false-value="false"
-                            v-model="fieldData.is_readonly">
-                            只读
-                        </bk-checkbox>
-                        <span v-show="fieldData.is_readonly === true" @click="readerOnlyShow = true">条件编辑</span>
+                    <input type="file" :value="fileVal" class="input-file" @change="handleAddFiles">
+                    <ul class="file-list">
+                        <li v-for="(item, index) in fieldData.fileTemplate" :key="index">
+                            <span class="file-success">
+                                <i class="bk-icon icon-check-1"></i>
+                            </span>
+                            <span>{{ item.name }}</span>
+                            <span class="file-delete" @click="handleDelete(item, index)">×</span>
+                        </li>
+                    </ul>
+                </bk-form-item>
+                <bk-form-item label="布局">
+                    <bk-radio-group v-model="fieldData.layout" @change="change">
+                        <bk-radio value="COL_6" :disabled="fieldProps.fieldsFullLayout.includes(fieldData.type)">半行</bk-radio>
+                        <bk-radio value="COL_12" :disabled="fieldProps.fieldsFullLayout.includes(fieldData.type)">整行</bk-radio>
+                    </bk-radio-group>
+                </bk-form-item>
+                <bk-form-item v-if="fieldProps.fieldsDataSource.includes(fieldData.type)" label="下拉数据源">
+                    <div class="source-data">
+                        <bk-select
+                            :value="fieldData.source_type"
+                            :clearable="false"
+                            style="width: 200px"
+                            @selected="handleSourceTypeChange">
+                            <bk-option v-for="item in sourceTypeList" :key="item.id" :id="item.id" :name="item.name"></bk-option>
+                        </bk-select>
+                        <bk-button :theme="'default'" :title="'配置'" @click="dataSourceDialogShow = true">
+                            配置
+                        </bk-button>
                     </div>
-                    <div class="contidion">
-                        <bk-checkbox
-                            :true-value="'REQUIRE'"
-                            :false-value="'OPTION'"
-                            v-model="fieldData.validate_type">
-                            必填
-                        </bk-checkbox>
-                        <span v-show="fieldData.validate_type === 'REQUIRE'" @click="requireConfigShow = true">条件编辑</span>
+                </bk-form-item>
+                <bk-form-item label="填写属性">
+                    <div class="attr-value">
+                        <div class="contidion">
+                            <bk-checkbox
+                                :true-value="true"
+                                :false-value="false"
+                                v-model="fieldData.is_readonly"
+                                @change="change">
+                                只读
+                            </bk-checkbox>
+                            <span v-show="fieldData.is_readonly === true" @click="readerOnlyShow = true">条件编辑</span>
+                        </div>
+                        <div class="contidion">
+                            <bk-checkbox
+                                :true-value="'REQUIRE'"
+                                :false-value="'OPTION'"
+                                v-model="fieldData.validate_type"
+                                @change="handleChangeValidataType">
+                                必填
+                            </bk-checkbox>
+                            <span v-show="fieldData.validate_type === 'REQUIRE'" @click="requireConfigShow = true">条件编辑</span>
+                        </div>
+                        <div class="contidion">
+                            <bk-checkbox
+                                :true-value="1"
+                                :false-value="0"
+                                v-model="fieldData.show_type"
+                                @change="change">
+                                隐藏
+                            </bk-checkbox>
+                            <span v-show="fieldData.show_type === 1" @click="showTypeShow = true">条件编辑</span>
+                        </div>
                     </div>
-                    <div class="contidion">
-                        <bk-checkbox
-                            :true-value="1"
-                            :false-value="0"
-                            v-model="fieldData.show_type">
-                            隐藏
-                        </bk-checkbox>
-                        <span v-show="fieldData.show_type === 1" @click="showTypeShow = true">条件编辑</span>
+                </bk-form-item>
+                <bk-form-item label="控制上传范围" v-if="fieldData.type === 'IMAGE'">
+                    <div>
+                        <div>
+                            <bk-checkbox
+                                :disabled="fieldData.validate_type === 'REQUIRE'"
+                                :true-value="true"
+                                :false-value="false"
+                                v-model="fieldData.imageRange.isMin"
+                                @change="change">
+                                至少上传
+                            </bk-checkbox>
+                            <bk-input
+                                class="up-load-input"
+                                type="number"
+                                :max="99"
+                                :min="1"
+                                v-model="fieldData.imageRange.minLength"
+                                @change="change">
+                            </bk-input>
+                            张图
+                        </div>
+                        <div>
+                            <bk-checkbox
+                                :true-value="true"
+                                :false-value="false"
+                                v-model="fieldData.imageRange.isMax"
+                                @change="change">
+                                最多上传
+                            </bk-checkbox>
+                            <bk-input
+                                class="up-load-input"
+                                type="number"
+                                style="width: 80px"
+                                :max="99"
+                                :min="1"
+                                v-model="fieldData.imageRange.maxLength"
+                                @change="change">
+                            </bk-input>
+                            张图
+                        </div>
                     </div>
-                </div>
-            </bk-form-item>
-            <bk-form-item label="校验方式">
-                <bk-select
-                    v-model="fieldData.regex"
-                    :clearable="false"
-                    :searchable="true"
-                    :loading="regexListLoading"
-                    :disabled="
-                        regexListLoading ||
-                            fieldData.source === 'TABLE' ||
-                            (fieldData.meta && fieldData.meta.code === 'APPROVE_RESULT')
-                    "
-                    @selected="change">
-                    <bk-option v-for="option in regexList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
-                </bk-select>
-            </bk-form-item>
-            <bk-form-item
-                v-if="fieldProps.fieldsShowDefaultValue.includes(fieldData.type) && fieldData.source_type === 'CUSTOM'"
-                label="默认值">
-                <default-value
-                    :key="fieldData.type"
-                    :field="defaultData"
-                    @change="handleDefaultValChange">
-                </default-value>
-            </bk-form-item>
-            <bk-form-item label="填写说明">
-                <bk-input v-model.trim="fieldData.desc" type="textarea" :rows="4" @change="change"></bk-input>
-                <div>
-                    <div class="form-tip">
-                        <span>  <bk-checkbox v-model="checkTips" @change="handleCheckedChange">添加额外填写说明</bk-checkbox></span>
-                        <span class="tips" v-show="checkTips" v-bk-tooltips.top-start="fieldData.tips">效果预览</span>
+                </bk-form-item>
+                <bk-form-item label="校验方式">
+                    <bk-select
+                        v-model="fieldData.regex"
+                        :clearable="false"
+                        :searchable="true"
+                        :loading="regexListLoading"
+                        :disabled="
+                            regexListLoading ||
+                                fieldData.source === 'TABLE' ||
+                                (fieldData.meta && fieldData.meta.code === 'APPROVE_RESULT')
+                        "
+                        @selected="change">
+                        <bk-option v-for="option in regexList" :key="option.id" :id="option.id" :name="option.name"></bk-option>
+                    </bk-select>
+                </bk-form-item>
+                <bk-form-item
+                    label="默认值"
+                    v-if="fieldProps.fieldsShowDefaultValue.includes(fieldData.type) && fieldData.source_type === 'CUSTOM'">
+                    <default-value
+                        :key="fieldData.type"
+                        :field="defaultData"
+                        @change="handleDefaultValChange">
+                    </default-value>
+                </bk-form-item>
+                <bk-form-item label="填写说明">
+                    <bk-input v-model.trim="fieldData.desc" type="textarea" :rows="4" @change="change"></bk-input>
+                    <div>
+                        <div class="form-tip">
+                            <span>  <bk-checkbox v-model="checkTips" @change="handleCheckedChange">添加额外填写说明</bk-checkbox></span>
+                            <span class="tips" v-show="checkTips" v-bk-tooltips.top-start="fieldData.tips">效果预览</span>
+                        </div>
+                        <bk-input
+                            v-if="checkTips"
+                            class="check-tips-input"
+                            v-model.trim="fieldData.tips"
+                            type="textarea"
+                            :rows="4"
+                            @change="change">
+                        </bk-input>
                     </div>
-                    <bk-input
-                        v-if="checkTips"
-                        class="check-tips-input"
-                        v-model.trim="fieldData.tips"
-                        type="textarea"
-                        :rows="4"
-                        @change="change">
-                    </bk-input>
-                </div>
-            </bk-form-item>
+                </bk-form-item>
+            </template>
         </bk-form>
         <read-only-dialog
             :show.sync="readerOnlyShow"
@@ -138,6 +214,11 @@
             :value="sourceData"
             @confirm="handleDataSourceChange">
         </data-source-dialog>
+        <config-desc-comp-value-dialog
+            :show.sync="descCompValueShow"
+            :value="fieldData.value"
+            @confirm="handleDescValueChange">
+        </config-desc-comp-value-dialog>
     </div>
 </template>
 
@@ -149,10 +230,13 @@
     import RequireDialog from './requireDialog.vue'
     import ShowTypeDialog from './showTypeDialog.vue'
     import DataSourceDialog from './dataSourceDialog.vue'
-    import { FIELDS_FULL_LAYOUT,
-             FIELDS_SHOW_DEFAULT_VALUE,
-             DATA_SOURCE_FIELD,
-             FIELDS_SOURCE_TYPE } from '../../constant/forms'
+    import ConfigDescCompValueDialog from './configDescCompValueDialog'
+    import {
+        FIELDS_FULL_LAYOUT,
+        FIELDS_SHOW_DEFAULT_VALUE,
+        DATA_SOURCE_FIELD,
+        FIELDS_SOURCE_TYPE
+    } from '../../constant/forms'
 
     export default {
         name: 'formEdit',
@@ -161,7 +245,8 @@
             ReadOnlyDialog,
             RequireDialog,
             ShowTypeDialog,
-            DataSourceDialog
+            DataSourceDialog,
+            ConfigDescCompValueDialog
         },
         model: {
             prop: 'value',
@@ -193,6 +278,7 @@
                 readerOnlyShow: false,
                 requireConfigShow: false,
                 showTypeShow: false,
+                descCompValueShow: false,
                 fileVal: ''
             }
         },
@@ -389,6 +475,18 @@
                 }
                 this.change()
             },
+            // 设置描述组件的值
+            handleDescValueChange (val) {
+                this.descCompValueShow = false
+                this.fieldData.value = val
+                this.change()
+            },
+            handleChangeValidataType (val) {
+                if (val === 'REQUIRE') {
+                    this.fieldData.imageRange.isMin = true
+                }
+                this.change()
+            },
             change () {
                 this.$emit('change', this.fieldData)
             }
@@ -419,37 +517,48 @@
   }
 }
 
-.attr-value{
+.attr-value {
   display: flex;
   flex-direction: column;
+
   /deep/ .bk-form-checkbox {
     margin-top: 8px;
   }
-  .contidion{
+
+  .contidion {
     display: flex;
     justify-content: space-between;
-    span{
+
+    span {
       color: #3a84ff;
-      &:hover{
+
+      &:hover {
         cursor: pointer;
       }
     }
   }
 }
+
 .check-tips-input {
   margin-top: 16px;
 }
 
-.source-data{
+.source-data {
   display: flex;
   justify-content: space-between;
 }
 
-.mt20-item{
-  margin-top: 20px!important;
+.mt20-item {
+  margin-top: 20px !important;
+}
+
+.up-load-input{
+  width: 80px;
+  margin: 8px;
 }
 .input-position {
   position: relative;
+
   .input-file {
     position: absolute;
     top: 0;
@@ -460,20 +569,24 @@
     opacity: 0;
     cursor: pointer;
   }
+
   .file-list {
     margin-top: 10px;
     line-height: 25px;
     font-size: 14px;
     color: #424950;
+
     li {
       &:hover {
         background-color: #dfeeff;
       }
     }
+
     .file-success {
       color: #30d878;
       font-size: 12px;
     }
+
     .file-delete {
       float: right;
       font-size: 20px;

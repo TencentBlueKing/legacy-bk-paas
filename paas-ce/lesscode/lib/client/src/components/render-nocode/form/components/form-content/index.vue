@@ -91,7 +91,18 @@
                     mandatory_conditions: {}, // 必填条件
                     is_readonly: false, // 只读
                     show_type: 0, // 显隐
-                    fileTemplate: []// 存储文件类型组件的值
+                    fileTemplate: [], // 存储文件类型组件模板的值
+                    imageRange: { // 上传图片的范围
+                        isMin: false,
+                        minLength: 1,
+                        isMax: false,
+                        maxLength: 1
+                    },
+                    deviderAttr: { // 下划线属性
+                        align: 'center',
+                        color: '#787A7F'
+                    }
+
                 }
                 const index = this.fields.length === 0 ? 0 : e.newIndex
                 this.$emit('add', config, index)
@@ -134,13 +145,13 @@
                 }
                 return []
             }
-
         }
     }
 </script>
 
 <style lang="postcss" scoped>
 @import "@/css/mixins/scroller";
+
 .form-panel {
   margin: 24px;
   height: calc(100% - 48px);
@@ -154,6 +165,7 @@
   padding: 35px 0;
   height: 100%;
   overflow: auto;
+
   &.hover {
     outline: 2px dashed #1768ef;
     border-radius: 4px;

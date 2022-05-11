@@ -90,6 +90,12 @@ export const FIELDS_TYPES = [
         comp: 'Upload'
     },
     {
+        type: 'IMAGE',
+        name: '图片上传',
+        default: '',
+        comp: 'ImageFile'
+    },
+    {
         type: 'TABLE',
         name: '表格',
         default: [],
