@@ -188,7 +188,7 @@
                     {
                         name: 'ijob 平台公告',
                         desc: '运营类',
-                        image: require('../../images/ijob.png')
+                        image: require('../../images/TQOS.png')
                     },
                     {
                         name: '蓝鲸 Magicbox',
