@@ -13,8 +13,9 @@
  * json 操作
  */
 export class StructJsonParser {
-    constructor (datas) {
-        this.datas = datas || []
+    constructor (data) {
+        const dataList = Array.isArray(data) ? data : [data]
+        this.datas = dataList.filter(dataItem => dataItem)
     }
 
     set (that = {}) {

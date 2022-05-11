@@ -13,9 +13,9 @@
                 <div
                     class="component-wrapper"
                     style="display: flex"
-                    @mouseenter.stop="componentWrapperMouseenterHandler"
-                    @mouseleave.stop="componentWrapperMouseleaveHandler"
-                    @click.stop="handleSiteInfo">
+                    @mouseenter="componentWrapperMouseenterHandler"
+                    @mouseleave="componentWrapperMouseleaveHandler"
+                    @click="handleSiteInfo">
                     <span class="title-icon">
                         <img style="width: 28px; height: 28px" :src="curTemplateData.logo" />
                     </span>
@@ -44,7 +44,7 @@
                     :class="{
                         selected: isSideMenuSelected
                     }"
-                    @click.stop="handleSideMenuSelect">
+                    @click="handleSideMenuSelect">
                     <bk-navigation-menu
                         ref="menu"
                         :unique-opened="false"

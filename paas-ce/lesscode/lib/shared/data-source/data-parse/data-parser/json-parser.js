@@ -13,8 +13,9 @@
  * json 操作
  */
 export class DataJsonParser {
-    constructor (datas) {
-        this.datas = JSON.parse(JSON.stringify(datas || []))
+    constructor (data) {
+        const parsedData = JSON.parse(JSON.stringify(data || []))
+        this.datas = Array.isArray(parsedData) ? parsedData : [parsedData]
     }
 
     import (that = {}) {

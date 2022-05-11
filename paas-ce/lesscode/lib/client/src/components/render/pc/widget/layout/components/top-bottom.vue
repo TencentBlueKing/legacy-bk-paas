@@ -11,9 +11,9 @@
                 slot="side-header"
                 class="component-wrapper"
                 style="display: flex"
-                @mouseenter.stop="componentWrapperMouseenterHandler"
-                @mouseleave.stop="componentWrapperMouseleaveHandler"
-                @click.stop="handleNavigationWraperClick('info', $event)">
+                @mouseenter="componentWrapperMouseenterHandler"
+                @mouseleave="componentWrapperMouseleaveHandler"
+                @click="handleNavigationWraperClick('info', $event)">
                 <span class="title-icon">
                     <img style="width: 28px; height: 28px" :src="curTemplateData.logo" />
                 </span>
@@ -25,7 +25,7 @@
                     :class="{
                         selected: isTopMenuSelected
                     }"
-                    @click.stop="handleTopMenuClick">
+                    @click="handleTopMenuClick">
                     <template v-for="topMemu in curTemplateData.topMenuList">
                         <component
                             :is="topMemu.children && topMemu.children.length > 0 ? 'bk-popover' : 'div'"

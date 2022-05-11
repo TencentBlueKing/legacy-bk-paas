@@ -13,9 +13,40 @@ import DBEngineService from './db-engine-service'
 import { LCDataService, TABLE_FILE_NAME, getDataService } from './data-service'
 import { EntitySchema, createConnection, getConnection, EventSubscriber } from 'typeorm'
 import { RequestContext } from '../middleware/request-context'
-import { decrypt } from '../util'
+import { encrypt, decrypt, uuid } from '../util'
 import { NO_LENGTH_ORM_KEY } from '../../shared/data-source'
 const dataBaseConf = require('../conf/data-source')
+
+/**
+ * 开启预览
+ * @param {*} projectId 应用id
+ */
+export const enablePerviewDb = async (projectId, dbName) => {
+    const dbInfo = {
+        projectId,
+        dbName,
+        userName: uuid(),
+        passWord: uuid()
+    }
+
+    // 创建用于预览的DB
+    const previewDbEngine = await getPreviewDbEngine()
+    await previewDbEngine.execCb(async (pool) => {
+        // 创建应用对应的预览数据库
+        await pool.query(`CREATE DATABASE \`${dbInfo.dbName}\`;`)
+        // 创建用户并授权对应的库
+        await pool.query(`CREATE USER '${dbInfo.userName}'@'%' IDENTIFIED BY '${dbInfo.passWord}';`)
+        await pool.query(`GRANT ALL ON ${dbInfo.dbName}.* TO '${dbInfo.userName}'@'%';`)
+        await pool.query('FLUSH PRIVILEGES;')
+    })
+
+    // 加密
+    dbInfo.userName = encrypt(dbInfo.userName)
+    dbInfo.passWord = encrypt(dbInfo.passWord)
+
+    // 写入数据库
+    await LCDataService.add(TABLE_FILE_NAME.PREVIEW_DB, dbInfo)
+}
 
 /**
  * 获取预览环境下的db配置
