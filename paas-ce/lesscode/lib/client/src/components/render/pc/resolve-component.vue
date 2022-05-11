@@ -35,6 +35,7 @@
     </div>
 </template>
 <script>
+    import _ from 'lodash'
     import LC from '@/element-materials/core'
     import RenderComponent from './render-component'
     import RenderSlot from './render-slot'
@@ -55,6 +56,10 @@
             default:
                 return 'block'
         }
+    }
+
+    const isNumberValue = value => {
+        return /^[-]?\d/.test(value)
     }
 
     // 记录 mousedown 状态
@@ -270,13 +275,24 @@
                 if (this.isShadowComponent) {
                     return
                 }
-                // 优先使用自定义配置的 width
-                if (this.componentData.style.width) {
-                    const widthValue = this.componentData.style.width
+                const componentDataStyle = this.componentData.style
+                // 绝对定位并且同时设置了left、right
+                if (
+                    componentDataStyle.position === 'absolute'
+                    && isNumberValue(componentDataStyle.left)
+                    && isNumberValue(componentDataStyle.right)) {
                     this.safeStyles = Object.assign({}, this.safeStyles, {
-                        width: widthValue
+                        width: componentDataStyle.width
                     })
-                    this.fixPercentStyleWidth = /%$/.test(widthValue)
+                    this.fixPercentStyleWidth = true
+                    return
+                }
+                // 优先使用自定义配置的 width
+                if (_.has(componentDataStyle, 'width')) {
+                    this.safeStyles = Object.assign({}, this.safeStyles, {
+                        width: componentDataStyle.width
+                    })
+                    this.fixPercentStyleWidth = /%$/.test(componentDataStyle.width)
                     return
                 }
 
@@ -285,7 +301,8 @@
                     if (!this.$refs.componentRoot) {
                         return
                     }
-                    const $baseComponentEl = this.$refs.componentRoot.querySelector(':scope > [lesscode-base-component]')
+                    const $baseComponentEl = this.$refs.componentRoot
+                        .querySelector(':scope > [lesscode-base-component]')
                     if ($baseComponentEl) {
                         const styleWidth = $baseComponentEl.style.width
                         if (styleWidth) {
@@ -306,14 +323,24 @@
                 if (this.isShadowComponent) {
                     return
                 }
-                
-                // 优先使用自定义配置的 height
-                if (this.componentData.style.height) {
-                    const heightValue = this.componentData.style.height
+                const componentDataStyle = this.componentData.style
+                // 绝对定位并且同时设置了top、bottom
+                if (
+                    componentDataStyle.position === 'absolute'
+                    && isNumberValue(componentDataStyle.top)
+                    && isNumberValue(componentDataStyle.bottom)) {
                     this.safeStyles = Object.assign({}, this.safeStyles, {
-                        height: heightValue
+                        height: componentDataStyle.height
                     })
-                    this.fixPercentStyleHeight = /%$/.test(heightValue)
+                    this.fixPercentStyleHeight = true
+                    return
+                }
+                // 优先使用自定义配置的 height
+                if (_.has(this.componentData.style, 'height')) {
+                    this.safeStyles = Object.assign({}, this.safeStyles, {
+                        height: componentDataStyle.height
+                    })
+                    this.fixPercentStyleHeight = /%$/.test(componentDataStyle.height)
                     return
                 }
 
@@ -322,7 +349,8 @@
                     if (!this.$refs.componentRoot) {
                         return
                     }
-                    const $baseComponentEl = this.$refs.componentRoot.querySelector(':scope > [lesscode-base-component]')
+                    const $baseComponentEl = this.$refs.componentRoot
+                        .querySelector(':scope > [lesscode-base-component]')
                     if ($baseComponentEl) {
                         const styleHeight = $baseComponentEl.style.height
                         if (styleHeight) {

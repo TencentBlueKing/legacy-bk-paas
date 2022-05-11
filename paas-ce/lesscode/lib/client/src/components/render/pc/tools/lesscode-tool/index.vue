@@ -1,5 +1,5 @@
 <template>
-    <div style="display: none">
+    <div>
         <div
             ref="hoverRef"
             :class="$style['tools-hover']"
@@ -68,11 +68,11 @@
 
     export default {
         setup () {
-            let $horizontalWrapper = null
+            // let $horizontalWrapper = null
 
             const state = reactive({
-                hoverStyles: {},
-                activeStyles: {}
+                hoverStyles: hideStyles,
+                activeStyles: hideStyles
             })
 
             const hoverRef = ref()
@@ -102,7 +102,7 @@
                 const {
                     top: containerTop,
                     left: containerLeft
-                } = $horizontalWrapper.getBoundingClientRect()
+                } = document.body.querySelector('#drawTarget').getBoundingClientRect()
                 const {
                     top,
                     left
@@ -115,9 +115,9 @@
                     left: `${left - containerLeft}px`,
                     zIndex: zIndex
                 }
-                if (hoverRef.value.parentNode !== $horizontalWrapper) {
-                    $horizontalWrapper.appendChild(hoverRef.value)
-                }
+                // if (hoverRef.value.parentNode !== $horizontalWrapper) {
+                //     $horizontalWrapper.appendChild(hoverRef.value)
+                // }
             }
             /**
              * @desc acitve状态
@@ -132,7 +132,7 @@
                     top: containerTop,
                     right: containerRight,
                     left: containerLeft
-                } = $horizontalWrapper.getBoundingClientRect()
+                } = document.body.querySelector('#drawTarget').getBoundingClientRect()
 
                 const {
                     top,
@@ -155,9 +155,9 @@
                     left: `${realLeft}px`,
                     zIndex
                 }
-                if (activeRef.value.parentNode !== $horizontalWrapper) {
-                    $horizontalWrapper.appendChild(activeRef.value)
-                }
+                // if (activeRef.value.parentNode !== $horizontalWrapper) {
+                //     $horizontalWrapper.appendChild(activeRef.value)
+                // }
             }
 
             const { activeComponentData } = useComponentActive(showActive)
@@ -169,15 +169,15 @@
             })
 
             onMounted(() => {
-                $horizontalWrapper = document.querySelector('#lesscodeDrawHorizontalWrapper')
+                // $horizontalWrapper = document.querySelector('#lesscodeDrawHorizontalWrapper')
             })
             onBeforeUnmount(() => {
-                if (activeRef.value.parentNode === $horizontalWrapper) {
-                    $horizontalWrapper.removeChild(activeRef.value)
-                }
-                if (hoverRef.value.parentNode === $horizontalWrapper) {
-                    $horizontalWrapper.removeChild(hoverRef.value)
-                }
+                // if (activeRef.value.parentNode === $horizontalWrapper) {
+                //     $horizontalWrapper.removeChild(activeRef.value)
+                // }
+                // if (hoverRef.value.parentNode === $horizontalWrapper) {
+                //     $horizontalWrapper.removeChild(hoverRef.value)
+                // }
             })
             
             return {

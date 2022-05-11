@@ -118,7 +118,6 @@
             position: relative;
             height: 100%;
             padding: 20px 0;
-            overflow: hidden;
         }
         .collapsed-left-btn,
         .collapsed-right-btn{
