@@ -94,9 +94,9 @@
                     fileTemplate: [], // 存储文件类型组件模板的值
                     imageRange: { // 上传图片的范围
                         isMin: false,
-                        minLength: 1,
+                        minNum: 1,
                         isMax: false,
-                        maxLength: 1
+                        maxNum: 1
                     },
                     deviderAttr: { // 下划线属性
                         align: 'center',
@@ -139,8 +139,8 @@
                 }
                 if (['TABLE'].includes(type)) {
                     return [
-                        { key: '', name: '' },
-                        { key: '', name: '' }
+                        { key: 'LIE1', name: '列1', choice: [], display: '' },
+                        { key: 'LIE2', name: '列2', choice: [], display: '' }
                     ]
                 }
                 return []

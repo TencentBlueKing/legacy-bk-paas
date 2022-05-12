@@ -19,7 +19,6 @@
     import { ProcessFieldItem } from '../../../common/processFormPlugin'
     import { RICHTEXT_FIELD } from '../../../common/field'
     import '../../../common/processFormPlugin.css'
-    console.log(ProcessFieldItem)
     Vue.use(ProcessFieldItem)
     export default {
         name: 'configDescCompValue',

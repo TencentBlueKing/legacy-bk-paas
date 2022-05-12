@@ -45,7 +45,7 @@
             return {
                 renderStyles: {},
                 oprationItemStyles: {
-                    height: '200px'
+                    height: '100%'
                 }
             }
         },

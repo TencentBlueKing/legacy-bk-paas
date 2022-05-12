@@ -37,6 +37,10 @@
                 <bk-form-item label="唯一标识">
                     <bk-input v-model.trim="fieldData.key" @change="change" @blur="onNameBlur"></bk-input>
                 </bk-form-item>
+                <bk-form-item label="表头配置" v-if="fieldData.type === 'TABLE'">
+                    <table-header-setting :list="fieldData.choice" @change="handleChangeTableHeader">
+                    </table-header-setting>
+                </bk-form-item>
                 <bk-form-item label="上传模板附件" :ext-cls="'input-position mt20-item'" v-if="fieldData.type === 'FILE'">
                     <bk-button :theme="'default'" title="点击上传">
                         点击上传
@@ -122,7 +126,7 @@
                                 type="number"
                                 :max="99"
                                 :min="1"
-                                v-model="fieldData.imageRange.minLength"
+                                v-model="fieldData.imageRange.minNum"
                                 @change="change">
                             </bk-input>
                             张图
@@ -141,10 +145,52 @@
                                 style="width: 80px"
                                 :max="99"
                                 :min="1"
-                                v-model="fieldData.imageRange.maxLength"
+                                v-model="fieldData.imageRange.maxNum"
                                 @change="change">
                             </bk-input>
                             张图
+                        </div>
+                    </div>
+                </bk-form-item>
+                <bk-form-item label="控制选择范围" v-if="['MULTISELECT','CHECKBOX'].includes(fieldData.type)">
+                    <div>
+                        <div>
+                            <bk-checkbox
+                                :disabled="fieldData.validate_type === 'REQUIRE'"
+                                :true-value="true"
+                                :false-value="false"
+                                v-model="fieldData.imageRange.isMin"
+                                @change="handleSelectMinChoice">
+                                至少选择
+                            </bk-checkbox>
+                            <bk-input
+                                class="up-load-input"
+                                type="number"
+                                :max="99"
+                                :min="1"
+                                v-model="fieldData.imageRange.minNum"
+                                @change="change">
+                            </bk-input>
+                            个选项
+                        </div>
+                        <div>
+                            <bk-checkbox
+                                :true-value="true"
+                                :false-value="false"
+                                v-model="fieldData.imageRange.isMax"
+                                @change="change">
+                                最多选择
+                            </bk-checkbox>
+                            <bk-input
+                                class="up-load-input"
+                                type="number"
+                                style="width: 80px"
+                                :max="99"
+                                :min="1"
+                                v-model="fieldData.imageRange.maxNum"
+                                @change="change">
+                            </bk-input>
+                            个选项
                         </div>
                     </div>
                 </bk-form-item>
@@ -231,6 +277,7 @@
     import ShowTypeDialog from './showTypeDialog.vue'
     import DataSourceDialog from './dataSourceDialog.vue'
     import ConfigDescCompValueDialog from './configDescCompValueDialog'
+    import TableHeaderSetting from './tableHeaderSetting.vue'
     import {
         FIELDS_FULL_LAYOUT,
         FIELDS_SHOW_DEFAULT_VALUE,
@@ -242,6 +289,7 @@
         name: 'formEdit',
         components: {
             DefaultValue,
+            TableHeaderSetting,
             ReadOnlyDialog,
             RequireDialog,
             ShowTypeDialog,
@@ -487,6 +535,16 @@
                 }
                 this.change()
             },
+            handleSelectMinChoice (val) {
+                if (val) {
+                    this.fieldData.validate_type = 'REQUIRE'
+                }
+                this.change()
+            },
+            handleChangeTableHeader ($event) {
+                this.fieldData.choice = $event
+                this.change()
+            },
             change () {
                 this.$emit('change', this.fieldData)
             }
@@ -552,10 +610,11 @@
   margin-top: 20px !important;
 }
 
-.up-load-input{
+.up-load-input {
   width: 80px;
   margin: 8px;
 }
+
 .input-position {
   position: relative;
 
