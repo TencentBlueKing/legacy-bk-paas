@@ -10,113 +10,141 @@
 -->
 
 <template>
-    <header class="mg-header">
-        <a :href="`${host}/${path}/main/index.html`" class="mg-logo">
-            <img class="logo" src="../images/svg/bk-logo.svg" data-src="../images/bk-logo.svg">
-            <img class="logo-text" src="../images/svg/bk-text.svg" data-src="../images/bk-text.svg">
-            <strong>MagicBox</strong>
-        </a>
-        <div class="mg-header-right">
-            <nav class="mg-nav">
-                <ul>
-                    <li class="nav-item">
-                        <a href="javascript: void(0);">组件库</a>
-                        <div class="mg-sub-nav">
-                            <ol>
-                                <dt>PC端</dt>
-                                <dd>
-                                    <a :href="`${host}/${path}/index.html`" :data-active="`${host}/${path}/index.html#detail/show\\?id=\\S+?&isPro=0`">jQuery组件1.0</a>
-                                </dd>
-                                <dd>
-                                    <a :href="`${host}/${path}/index.html#index?isPro=1`" :data-active="`${host}/${path}/index.html#detail/show\\?id=\\S+?&isPro=1`">jQuery组件2.0</a>
-                                </dd>
-                                <dd>
-                                    <a :href="`${host}/${path}/components_vue/2.0/example/index.html`" :data-active="`/components_vue/\\S+?/`">Vue组件</a>
-                                </dd>
-                            </ol>
-                            <ol>
-                                <dt>移动端</dt>
-                                <dd>
-                                    <a :href="`${host}/${path}/index.html#mobile/show`" :data-active="`${host}/${path}/index.html#mobile_detail/show\\?id=\\S+?`">jQuery组件</a>
-                                </dd>
-                                <dd>
-                                    <a target="_blank" href="https://developers.weixin.qq.com/miniprogram/dev/component/">微信小程序官方组件</a>
-                                </dd>
-                            </ol>
-                        </div>
-                    </li>
-                    <li class="nav-item active">
-                        <a href="javascript: void(0);">可视化开发</a>
-                        <div class="mg-sub-nav">
-                            <ol>
-                                <dt>PC端</dt>
-                                <dd>
-                                    <a :href="`${host}/${path}/index.html#build/show`">jQuery组件</a>
-                                </dd>
-                                <dd>
-                                    <a class="active" target="_blank" href="https://github.com/Tencent/bk-PaaS/blob/lesscode-master/paas-ce/lesscode/README.md">Vue组件</a>
-                                </dd>
-                            </ol>
-                            <ol>
-                                <dt>移动端</dt>
-                                <dd>
-                                    <a :href="`${host}/${path}/index.html#mobile_build/show`">jQuery组件</a>
-                                </dd>
-                                <dd>
-                                    <a href="https://magicbox.bk.tencent.com/static_api/v3/index.html#wx_build/show">微信小程序</a>
-                                </dd>
-                            </ol>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a :href="`${host}/${path}/index.html#templates`">套餐样例</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="javascript: void(0);">帮助</a>
-                        <div class="mg-sub-nav">
-                            <ol>
-                                <dt>规范</dt>
-                                <dd>
-                                    <a href="https://bk.tencent.com/docs/document/5.1/19/4125" target="_blank">前端规范</a>
-                                </dd>
-                                <dd>
-                                    <a href="https://bkdesign.bk.tencent.com/" target="_blank">设计规范</a>
-                                </dd>
-                                <dd>
-                                    <a :href="`${host}/${path}/index.html#css`">辅助样式</a>
-                                </dd>
-                            </ol>
-                            <ol>
-                                <dt>下载</dt>
-                                <dd>
-                                    <a :href="`${host}/${path}/index.html#about/show`">模板下载</a>
-                                </dd>
-                                <dd>
-                                    <a :href="`${host}/${path}/index.html#plugin`">组件包下载</a>
-                                </dd>
-                            </ol>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a :href="`${host}/${path}/index.html#start`">新手起步</a>
-                    </li>
-                    <li>
-                        <a href="https://bk.tencent.com/s-mart/community" target="_blank">论坛交流</a>
-                    </li>
-                </ul>
-            </nav>
-
-            <template v-if="userName">
-                <div class="mg-user" id="mg-user">
-                    <strong class="name" id="mg-name">{{userName}}</strong>
+    <div>
+        <header class="mg-home-header" v-if="homeHeaderNav">
+            <nav class="mg-home-nav">
+                <div class="logo-fixed">
+                    <div class="brand">
+                        <span class="bk-drag-icon app-logo" @click="$router.push('projects')">
+                            <svg aria-hidden="true" width="22" height="22">
+                                <use xlink:href="#bk-drag-logo"></use>
+                            </svg>
+                        </span>
+                        <h2 class="app-name">可视化开发平台</h2>
+                    </div>
                 </div>
-                <a href="javascript: void(0);" class="mg-login" @click="goLogin">退出</a>
-            </template>
-            <template v-else>
-                <a href="javascript: void(0);" class="mg-login" @click="goLogin">登录</a>
-            </template>
-        </div>
-    </header>
+                <div class="nav-container">
+                    <div class="intro-container">
+                        <span v-for="(item, index) in appTabData"
+                            @click="handlerTab(index, item.routerName)"
+                            :key="item.url" class="app-intro"
+                            :class="activeIndex === index ? 'active' : ''">{{item.name}}</span>
+                    </div>
+                    <div>
+                        <strong class="name" id="mg-name">{{userName}}</strong>
+                        <a href="javascript: void(0);" class="home-mg-login" @click="goLogin">退出</a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <header class="mg-header" v-else>
+            <a :href="`${host}/${path}/main/index.html`" class="mg-logo">
+                <img class="logo" src="../images/svg/bk-logo.svg" data-src="../images/bk-logo.svg">
+                <img class="logo-text" src="../images/svg/bk-text.svg" data-src="../images/bk-text.svg">
+                <strong>MagicBox</strong>
+            </a>
+            <div class="mg-header-right">
+                <nav class="mg-nav">
+                    <ul>
+                        <li class="nav-item">
+                            <a href="javascript: void(0);">组件库</a>
+                            <div class="mg-sub-nav">
+                                <ol>
+                                    <dt>PC端</dt>
+                                    <dd>
+                                        <a :href="`${host}/${path}/index.html`" :data-active="`${host}/${path}/index.html#detail/show\\?id=\\S+?&isPro=0`">jQuery组件1.0</a>
+                                    </dd>
+                                    <dd>
+                                        <a :href="`${host}/${path}/index.html#index?isPro=1`" :data-active="`${host}/${path}/index.html#detail/show\\?id=\\S+?&isPro=1`">jQuery组件2.0</a>
+                                    </dd>
+                                    <dd>
+                                        <a :href="`${host}/${path}/components_vue/2.0/example/index.html`" :data-active="`/components_vue/\\S+?/`">Vue组件</a>
+                                    </dd>
+                                </ol>
+                                <ol>
+                                    <dt>移动端</dt>
+                                    <dd>
+                                        <a :href="`${host}/${path}/index.html#mobile/show`" :data-active="`${host}/${path}/index.html#mobile_detail/show\\?id=\\S+?`">jQuery组件</a>
+                                    </dd>
+                                    <dd>
+                                        <a target="_blank" href="https://developers.weixin.qq.com/miniprogram/dev/component/">微信小程序官方组件</a>
+                                    </dd>
+                                </ol>
+                            </div>
+                        </li>
+                        <li class="nav-item active">
+                            <a href="javascript: void(0);">可视化开发</a>
+                            <div class="mg-sub-nav">
+                                <ol>
+                                    <dt>PC端</dt>
+                                    <dd>
+                                        <a :href="`${host}/${path}/index.html#build/show`">jQuery组件</a>
+                                    </dd>
+                                    <dd>
+                                        <a class="active" target="_blank" href="https://github.com/Tencent/bk-PaaS/blob/lesscode-master/paas-ce/lesscode/README.md">Vue组件</a>
+                                    </dd>
+                                </ol>
+                                <ol>
+                                    <dt>移动端</dt>
+                                    <dd>
+                                        <a :href="`${host}/${path}/index.html#mobile_build/show`">jQuery组件</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="https://magicbox.bk.tencent.com/static_api/v3/index.html#wx_build/show">微信小程序</a>
+                                    </dd>
+                                </ol>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a :href="`${host}/${path}/index.html#templates`">套餐样例</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="javascript: void(0);">帮助</a>
+                            <div class="mg-sub-nav">
+                                <ol>
+                                    <dt>规范</dt>
+                                    <dd>
+                                        <a href="https://bk.tencent.com/docs/document/5.1/19/4125" target="_blank">前端规范</a>
+                                    </dd>
+                                    <dd>
+                                        <a href="https://bkdesign.bk.tencent.com/" target="_blank">设计规范</a>
+                                    </dd>
+                                    <dd>
+                                        <a :href="`${host}/${path}/index.html#css`">辅助样式</a>
+                                    </dd>
+                                </ol>
+                                <ol>
+                                    <dt>下载</dt>
+                                    <dd>
+                                        <a :href="`${host}/${path}/index.html#about/show`">模板下载</a>
+                                    </dd>
+                                    <dd>
+                                        <a :href="`${host}/${path}/index.html#plugin`">组件包下载</a>
+                                    </dd>
+                                </ol>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a :href="`${host}/${path}/index.html#start`">新手起步</a>
+                        </li>
+                        <li>
+                            <a href="https://bk.tencent.com/s-mart/community" target="_blank">论坛交流</a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <template v-if="userName">
+                    <div class="mg-user" id="mg-user">
+                        <strong class="name" id="mg-name">{{userName}}</strong>
+                    </div>
+                    <a href="javascript: void(0);" class="mg-login" @click="goLogin">退出</a>
+                </template>
+                <template v-else>
+                    <a href="javascript: void(0);" class="mg-login" @click="goLogin">登录</a>
+                </template>
+            </div>
+        </header>
+    </div>
 </template>
 
 <script>
@@ -128,11 +156,28 @@
             return {
                 userName: '',
                 host: 'https://magicbox.bk.tencent.com',
-                path: 'static_api/v3'
+                path: 'static_api/v3',
+                routerNameData: ['/home', '/help'],
+                homeHeaderNav: true,
+                appTabData: [{ name: '产品介绍', url: '/', routerName: 'home' }, { name: '帮助文档', url: '/help', routerName: 'intro' }],
+                activeIndex: 0
             }
         },
         computed: {
             ...mapGetters(['user'])
+        },
+        watch: {
+            '$route': {
+                handler (value) {
+                    this.homeHeaderNav = this.routerNameData.includes(value.matched[0].path) || this.routerNameData.includes(value.fullPath + value.name)
+                    if (!value.matched[0].path) {
+                        this.activeIndex = 0
+                    } else if (value.matched[0].path === '/help') {
+                        this.activeIndex = 1
+                    }
+                },
+                immediate: true
+            }
         },
         mounted () {
             this.userName = this.user.username
@@ -140,6 +185,12 @@
         methods: {
             goLogin () {
                 window.location.href = this.user.loginRedirectUrl + '&c_url=' + encodeURIComponent(window.location.href)
+            },
+            handlerTab (i, name) {
+                this.$router.push({
+                    name
+                })
+                this.activeIndex = i
             }
         }
     }
@@ -186,6 +237,18 @@
     }
     .show {
         display:block;
+    }
+    .mg-home-header{
+        width:100%;
+        min-width:1280px;
+        height:64px;
+        background:#FFF;
+        color:#63656E;
+        padding:0 32px;
+        z-index:1000;
+        position:fixed;
+        top:0;
+        box-shadow: 0px 2px 4px 0px rgba(25,25,41,0.05);
     }
     .mg-header {
         width:100%;
@@ -342,6 +405,76 @@
     .mg-login:hover {
         color:#FFF;
     }
+
+    .mg-home-nav{
+        height:64px;
+        line-height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .logo-fixed{
+        position: fixed;
+        left: 0;
+        top: 0;
+    }
+
+    .mg-home-nav > .logo-fixed > .brand {
+        /* display: fixed; */
+        display: flex;
+        align-items: center;
+        margin-left: 20px;
+    }
+
+    .mg-home-nav > .brand .app-logo{
+        font-size: 0;
+        cursor: pointer;
+    }
+
+    .mg-home-nav >.logo-fixed > .brand .app-name{
+        font-size: 16px;
+        font-weight: normal;
+        color: #313238;
+        margin: 0;
+        padding-left: 18px;
+        white-space: nowrap;
+    }
+
+    .mg-home-nav > .nav-container .intro-container{
+        margin-left: 225px;
+    }
+
+    .mg-home-nav > .nav-container{
+        display: flex;
+        max-width: 1920px;
+        margin: 0 auto;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .mg-home-nav > .nav-container .home-mg-login {
+        color: #63656E;
+        padding-left: 30px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .mg-home-nav > .nav-container .app-intro{
+        font-size: 14px;
+        font-weight: normal;
+        color: #63656e;
+        padding-left: 56px;
+        cursor: pointer;
+    }
+
+    .mg-home-nav > .nav-container .active{
+        font-size: 14px;
+        font-weight: 700;
+        color: #3A84FF;
+        font-family: MicrosoftYaHei, MicrosoftYaHei-Bold;
+    }
+
     @media screen and (max-width:1980px) {
         body {
             background-size:55% auto;
