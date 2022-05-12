@@ -144,7 +144,7 @@
                     },
                     {
                         name: '模板库',
-                        desc: '应用模版，页面模板，自定义模板，快速生成应用'
+                        desc: '应用模板，页面模板，自定义模板，快速生成应用'
                     },
                     {
                         name: '函数库',
@@ -280,7 +280,6 @@
         margin-top: 64px;
         .banner{
             width: 100%;
-            height: 520px;
             background: linear-gradient(to right, #DAE5F1 20% , #F9F9FA 78%);
             .img-container{
                 text-align: center;
@@ -300,7 +299,7 @@
                         width: 190px;
                         height: 50px;
                         border-radius: 25px;
-                        font-size: 20px;
+                        font-size: 18px;
                     }
                     .help-btn{
                         margin-left: 17px;
@@ -327,6 +326,7 @@
                     margin-right: 16px;
                     background: #f3f3f6;
                     border-radius: 2px;
+                    height: 270px;
                     .info-title{
                         padding: 40px 0 8px 0;
                         color: #313238;

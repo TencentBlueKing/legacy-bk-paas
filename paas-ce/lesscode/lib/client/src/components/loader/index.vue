@@ -6,6 +6,7 @@
                     :is="placeholder"
                     :style="{ 'padding-top': `${offsetTop}px`, 'margin-left': `${offsetLeft}px`, 'transform-origin': 'left' }"
                     :base-width="baseWidth"
+                    :correction-width="correctionWidth"
                     :content-width="contentWidth">
                 </component>
             </template>
@@ -54,7 +55,8 @@
                 isLoaderShow: this.isLoading,
                 baseWidth: 1180,
                 contentWidth: 1180,
-                curPlaceholder: ''
+                curPlaceholder: '',
+                correctionWidth: 0
             }
         },
         watch: {
@@ -83,18 +85,20 @@
         methods: {
             initContentWidth () {
                 const winWidth = window.innerWidth
+                console.log('winWidth', winWidth)
                 if (winWidth < 1440) {
                     this.contentWidth = 980
-                    // this.baseWidth = 980
+                    this.baseWidth = winWidth
                 } else if (winWidth < 1680) {
                     this.contentWidth = 1080
-                    // this.baseWidth = 1080
+                    this.baseWidth = winWidth
                 } else if (winWidth < 1920) {
                     this.contentWidth = 1180
-                    // this.baseWidth = 1180
+                    this.baseWidth = winWidth
                 } else {
-                    this.contentWidth = 1180
-                    this.baseWidth = 1180
+                    this.contentWidth = winWidth
+                    this.baseWidth = winWidth
+                    this.correctionWidth = 370
                 }
             }
         }

@@ -4,7 +4,7 @@
             <div class="logo-fixed">
                 <div class="brand">
                     <span class="bk-drag-icon app-logo" @click="$router.push('projects')">
-                        <svg aria-hidden="true" width="22" height="22">
+                        <svg aria-hidden="true" width="32" height="22">
                             <use xlink:href="#bk-drag-logo"></use>
                         </svg>
                     </span>
@@ -18,9 +18,13 @@
                         :key="item.url" class="app-intro"
                         :class="activeIndex === index ? 'active' : ''">{{item.name}}</span>
                 </div>
-                <div>
-                    <strong class="name" id="mg-name">{{userName}}</strong>
-                    <a href="javascript: void(0);" class="home-mg-login" @click="goLogin">退出</a>
+                <div class="user-info-contain">
+                    <div class="name" id="mg-name">{{userName}}
+                        <i class="bk-drag-icon bk-drag-angle-up-fill"></i>
+                    </div>
+                    <div class="user-info">
+                        <a href="javascript:" @click="goLogin" class="home-mg-login"> 退出 </a>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -127,7 +131,7 @@
         margin-left: 20px;
     }
 
-    .mg-home-nav > .brand .app-logo{
+    .mg-home-nav > .logo-fixed >.brand .app-logo{
         font-size: 0;
         cursor: pointer;
     }
@@ -155,7 +159,6 @@
 
     .mg-home-nav > .nav-container .home-mg-login {
         color: #63656E;
-        padding-left: 30px;
         font-size: 14px;
         cursor: pointer;
     }
@@ -173,6 +176,38 @@
         font-weight: 700;
         color: #3A84FF;
         font-family: MicrosoftYaHei, MicrosoftYaHei-Bold;
+    }
+
+    .user-info-contain{
+        position: relative;
+    }
+
+    .user-info{
+        position: absolute;
+        width: 135px;
+        background: #fff;
+        text-align: center;
+        left: -40px;
+        top: 62px;
+        opacity: 0;
+        visibility: hidden;
+        border: solid 1px #eeeeee;
+        border-radius: 2px;
+        transition: all .3s;
+        box-shadow: 0 2px 5px #e5e5e5;
+    }
+
+    #mg-name{
+        cursor: pointer;
+    }
+
+    #mg-name:hover {
+        color: #3A84FF;
+    }
+
+    .user-info-contain:hover .user-info {
+        opacity: 1;
+        visibility: visible;
     }
 
 </style>
