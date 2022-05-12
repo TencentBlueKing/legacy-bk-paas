@@ -27,7 +27,7 @@
 </template>
 <script>
     import MenuItem from '../editor/menu'
-    import { generatorMenu } from '../utils'
+    import { generatorMenu } from '../../../../../../shared/util'
 
     export default {
         name: '',

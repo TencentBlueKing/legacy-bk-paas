@@ -26,7 +26,7 @@
     </div>
 </template>
 <script>
-    import { generatorMenu } from '../../utils'
+    import { generatorMenu } from '../../../../../../../shared/util'
     import MenuEdit from './edit'
 
     export default {

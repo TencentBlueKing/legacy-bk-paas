@@ -22,7 +22,9 @@ import PageVariable from './entities/page-variable'
 import FuncVariable from './entities/func-variable'
 import VariableFunc from './entities/variable-func'
 import VariableVariable from './entities/variable-variable'
+import LayoutInst from './entities/layout-inst'
 import { whereVersion } from './common'
+import { generatorMenu } from '../../shared/util'
 
 module.exports = {
     // 获取项目下可见的页面列表
@@ -85,6 +87,32 @@ module.exports = {
             const projectPage = getRepository(ProjectPage).create(projectPageData)
             await transactionalEntityManager.save(projectPage)
 
+            // 带导航布局关联到导航菜单
+            const { pageName, isAddNav } = pageData
+            if (isAddNav) {
+                const layoutInst = await getRepository(LayoutInst).findOne({
+                    where: {
+                        projectId: projectPageData.projectId,
+                        layoutId: pageData.layoutId
+                    }
+                })
+                const { routePath, content } = layoutInst
+                const templateData = JSON.parse(content)
+                const menuItem = {
+                    ...generatorMenu(pageName, pageCode),
+                    name: pageName,
+                    pageCode
+                }
+                // 通过 routePath 判定模板类型
+                if (routePath === '/side-nav') {
+                    templateData.menuList.push(menuItem)
+                } else {
+                    templateData.topMenuList.push(menuItem)
+                }
+                layoutInst.content = JSON.stringify(templateData)
+                await transactionalEntityManager.save(layoutInst)
+            }
+          
             // 创建页面路由和关联记录
             const route = getRepository(Route).create({ path: pageData.pageRoute })
             const { id: routeId } = await transactionalEntityManager.save(route)

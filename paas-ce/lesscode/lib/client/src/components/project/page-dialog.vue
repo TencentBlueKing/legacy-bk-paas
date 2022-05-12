@@ -57,6 +57,16 @@
                         </template>
                     </bk-input>
                 </bk-form-item>
+                <bk-form-item
+                    label="本页面添加到导航菜单"
+                    v-if="action === 'create' && showAddNavListSwitcher"
+                    :label-width="170"
+                    error-display-type="normal">
+                    <bk-switcher
+                        theme="primary"
+                        :value="isAddNavList"
+                        @change="(val) => isAddNavList = val" />
+                </bk-form-item>
             </bk-form>
             <div class="dialog-footer" slot="footer">
                 <bk-button
@@ -167,7 +177,8 @@
                         ]
                     }
                 },
-                selectedLayout: {}
+                selectedLayout: {},
+                isAddNavList: true
             }
         },
         computed: {
@@ -190,6 +201,9 @@
             },
             isMobile () {
                 return this.dialog.formData.pageType === 'MOBILE'
+            },
+            showAddNavListSwitcher () {
+                return !this.isMobile && this.selectedLayout.type && this.selectedLayout.type !== 'empty'
             }
         },
         watch: {
@@ -273,6 +287,10 @@
                     if (this.action === 'create') {
                         const { id, routePath } = this.layoutList.find(layout => layout.checked)
                         payload.data.layout = { id, routePath }
+
+                        if (this.showAddNavListSwitcher) {
+                            payload.data.pageData.isAddNav = this.isAddNavList
+                        }
                     }
                     const res = await this.$store.dispatch(this.requestMethod, payload)
                     if (res) {
