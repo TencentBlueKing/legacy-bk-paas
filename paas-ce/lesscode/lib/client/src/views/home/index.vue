@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     <div class="right">
-                        <img class="edu-gif" src="../../images/animation.gif" alt="">
+                        <img class="edu-gif" src="https://staticfile.qq.com/bk-magicbox/p980b75e8cd354cf89856e3e2733e2aa1/latest/animation.gif" alt="">
                     </div>
                 </div>
             </div>
