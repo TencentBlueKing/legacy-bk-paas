@@ -35,7 +35,7 @@
                     </transition-group>
                 </vue-draggable>
             </div>
-            <div v-if="hasSideMenu">
+            <div v-if="hasSideMenu" class="footer">
                 <bk-button size="small" text @click="handleAddSideMenu">继续添加</bk-button>
             </div>
         </div>
@@ -165,9 +165,9 @@
         }
         .side-menu-wraper{
             margin-bottom:  10px;
-            max-height: calc(100vh - 298px);
-            overflow-y: auto;
-            @mixin scroller;
+        }
+        .footer {
+            padding-bottom: 20px;
         }
     }
 </style>
