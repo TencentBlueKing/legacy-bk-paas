@@ -46,7 +46,7 @@
                 <div class="page-list">
                     <div class="page-item" v-for="(page, index) in renderList" :key="index">
                         <div class="item-bd">
-                            <div class="preview" @click="handleEditPage(page.id)">
+                            <div class="preview" @click="handleEditPage(page)">
                                 <page-preview-thumb alt="页面缩略预览" :page-id="page.id" />
                                 <div class="mask">
                                     <div class="operate-btns">
@@ -117,6 +117,7 @@
     import downloadDialog from '@/views/system/components/download-dialog'
     import editRouteDialog from '@/components/project/edit-route-dialog'
     import createPageDialog from '@/components/project/create-page-dialog.vue'
+    import pagePreviewThumb from '@/components/project/page-preview-thumb.vue'
     import { getRouteFullPath } from 'shared/route'
     import typeSelect from '@/components/project/type-select'
     import dayjs from 'dayjs'
@@ -131,6 +132,7 @@
             downloadDialog,
             editRouteDialog,
             createPageDialog,
+            pagePreviewThumb,
             typeSelect
         },
         data () {
@@ -299,12 +301,14 @@
             getDeletePerm (page) {
                 return this.userPerm.roleId === 1 || this.user.username === page.createUser
             },
-            handleEditPage (id) {
+            handleEditPage (page) {
+                console.log(page, 453)
+                const toPageRouteName = page.nocodeType ? 'editNocode' : 'new'
                 this.$router.push({
-                    name: 'new',
+                    name: toPageRouteName,
                     params: {
                         projectId: this.projectId,
-                        pageId: id
+                        pageId: page.id
                     }
                 })
             },

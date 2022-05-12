@@ -34,6 +34,7 @@ module.exports = {
                 'page.pageName',
                 'page.pageCode',
                 'page.pageType',
+                'page.nocodeType',
                 'page.content',
                 'page.lifeCycle',
                 'page.styleSetting',

@@ -42,13 +42,14 @@ export const createNCTable = async (dataTable) => {
         throw new Error(`已存在表名为【${dataTable.tableName}】的表`)
     }
     // 入库
-    return LCDataService.transaction(async (transactionalEntityManager) => {
+    let data = {}
+    await LCDataService.transaction(async (transactionalEntityManager) => {
         // 构造数据入库 DATA_TABLE
         const newTable = {
             ...dataTable,
             columns: JSON.stringify(dataTable.columns)
         }
-        const data = await transactionalEntityManager.add(TABLE_FILE_NAME.DATA_TABLE, newTable)
+        data = await transactionalEntityManager.add(TABLE_FILE_NAME.DATA_TABLE, newTable)
         // 构造新增表 sql
         const dataParse = new DataParse()
         const structJsonParser = new StructJsonParser(dataTable)
@@ -63,8 +64,8 @@ export const createNCTable = async (dataTable) => {
         await transactionalEntityManager.add(TABLE_FILE_NAME.DATA_TABLE_MODIFY_RECORD, tableModifyRecord)
         // 对预览环境执行 sql
         await execSqlInPreviewDb(sql, dataTable.projectId)
-        return data
     })
+    return data
 }
 
 /**
@@ -75,10 +76,11 @@ export const createNCTable = async (dataTable) => {
 export const updateNCTable = async (dataTable) => {
     return LCDataService.transaction(async (transactionalEntityManager) => {
         // 获取原始 table
-        const originData = await LCDataService.findOne(TABLE_FILE_NAME.DATA_TABLE, { id: dataTable.id })
+        const originData = await LCDataService.findOne(TABLE_FILE_NAME.DATA_TABLE, { tableName: dataTable.tableName, projectId: dataTable.projectId })
         // 构造数据入库 DATA_TABLE
         const updateTable = {
             ...dataTable,
+            id: originData.id,
             columns: JSON.stringify(dataTable.columns)
         }
         const data = await transactionalEntityManager.update(TABLE_FILE_NAME.DATA_TABLE, updateTable)
