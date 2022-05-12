@@ -40,7 +40,7 @@ export default {
                         remote_api_info: api_info.remote_api_info
                     }
                 }
-                const resp = await this.$store.dispatch('fromSetting/getSourceData', params)
+                const resp = await this.$store.dispatch('formSetting/getSourceData', params)
                 this.sourceData = resp.data.map((item) => {
                     const { key, name } = item
                     return { key, name }
@@ -68,7 +68,7 @@ export default {
                         conditions
                     }
                 }
-                const resp = await this.$store.dispatch('fromSetting/getWorksheetData', params)
+                const resp = await this.$store.dispatch('formSetting/getWorksheetData', params)
                 this.sourceData = resp.data.map((item) => {
                     const val = item[field]
                     return { key: val, name: val }
