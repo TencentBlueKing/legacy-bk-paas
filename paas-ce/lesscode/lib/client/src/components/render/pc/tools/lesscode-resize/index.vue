@@ -22,16 +22,19 @@
         </div>
         <div
             ref="fullWidthRef"
-            v-bk-tooltips="'占满整行'"
+            v-bk-tooltips="'宽度撑满'"
+            :class="$style['btn']"
             :style="fullWidthStyles"
             @click="handleFullWidth">
-            <i class="bk-drag-icon bk-drag-stretch" />
+            <i class="bk-drag-icon bk-drag-zuoyouchengkai" />
         </div>
         <div
-            v-bk-tooltips="'高度由内容撑开'"
+            ref="autoHeightRef"
+            v-bk-tooltips="'高度随内容自适应'"
+            :class="$style['btn']"
             :style="autoHeightStyles"
             @click="handleAutoHeight">
-            <i class="bk-drag-icon bk-drag-undo" />
+            <i class="bk-drag-icon bk-drag-xiangxiazishiying" />
         </div>
     </div>
 </template>
@@ -58,8 +61,8 @@
     }
 
     const halfDotSize = 8
-
-    const moreActionOffset = 5
+    const actionBtnSize = 24
+    const actionBtnOffset = 8
 
     export default {
         setup () {
@@ -74,6 +77,7 @@
             const resizeRef = ref()
             const tipRef = ref()
             const fullWidthRef = ref()
+            const autoHeightRef = ref()
 
             /**
              * @desc 选中状态
@@ -129,23 +133,17 @@
                 if (resizeWidthEnabel) {
                     state.dotWidthStyles = Object.assign({}, dotBaseStyle, {
                         top: `${top - containerTop + height / 2 - halfDotSize}px`,
-                        left: `${left + width - halfDotSize - containerLeft}px`,
+                        left: `${right - halfDotSize - containerLeft}px`,
                         cursor: 'ew-resize'
                     })
                     // 100% 宽度按钮的位置
-                    const {
-                        width: btnWidth
-                    } = fullWidthRef.value.getBoundingClientRect()
-                    let fullWidthBtnLeft = left + width - containerLeft + moreActionOffset
+                    let fullWidthBtnLeft = right - containerLeft + actionBtnOffset
                     if (right + 20 >= containerRight) {
-                        fullWidthBtnLeft = left + width - containerLeft - (btnWidth + moreActionOffset)
+                        fullWidthBtnLeft = right - containerLeft - (actionBtnSize + actionBtnOffset)
                     }
                     state.fullWidthStyles = Object.assign({}, dotBaseStyle, {
-                        top: `${top - containerTop + height / 2 - halfDotSize}px`,
-                        left: `${fullWidthBtnLeft}px`,
-                        fontSize: '16px',
-                        color: '#3a84ff',
-                        cursor: 'pointer'
+                        top: `${top - containerTop + height / 2 - actionBtnSize / 2}px`,
+                        left: `${fullWidthBtnLeft}px`
                     })
                 }
                 if (resizeHeightEnable) {
@@ -158,11 +156,8 @@
                     // free-layout 不支持该功能，必须给定 height
                     if (componentData.type !== 'free-layout') {
                         state.autoHeightStyles = Object.assign({}, dotBaseStyle, {
-                            top: `${top + height - containerTop + moreActionOffset}px`,
-                            left: `${left - containerLeft + width / 2 - halfDotSize}px`,
-                            fontSize: '16px',
-                            color: '#3a84ff',
-                            cursor: 'pointer'
+                            top: `${top + height - containerTop + actionBtnOffset}px`,
+                            left: `${left - containerLeft + width / 2 - actionBtnSize / 2}px`
                         })
                     }
                 }
@@ -205,6 +200,7 @@
                 resizeRef,
                 tipRef,
                 fullWidthRef,
+                autoHeightRef,
                 handleResizeWidth,
                 handleResizeHeight,
                 handleResizeBoth,
@@ -232,6 +228,22 @@
             border-radius: 50%;
             border: 1px solid #3a84ff;
             background: #fff;
+        }
+    }
+    .btn{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 24px;
+        height: 24px;
+        font-size: 10px;
+        color: #979BA5;
+        border-radius: 50%;
+        border: 1px solid #DCDEE5;
+        background: #fff;
+        cursor: pointer;
+        &:hover{
+            color: #63656E;
         }
     }
 </style>
