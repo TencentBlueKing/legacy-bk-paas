@@ -1,105 +1,107 @@
 <template>
-    <div class="home-container">
-        <div class="banner">
-            <div class="img-container">
-                <img class="banner-img" src="../../images/banner.png" alt="">
-                <div class="btn-group">
-                    <bk-button
-                        class="mt10 banner-btn"
-                        theme="primary"
-                        @click="handlerRouter('projects')"
-                    >立即体验</bk-button>
-                    <bk-button
-                        class="mt10 banner-btn help-btn"
-                        @click="handlerRouter('intro')"
-                    >帮助文档</bk-button>
-                </div>
-            </div>
-        </div>
-        <div class="product-info home-name">
-            <div class="title">产品特性</div>
-            <div class="info-list">
-                <div class="info-item" v-for="(item, index) in productList" :key="index">
-                    <div class="info-title">{{item.name}}</div>
-                    <div class="info-desc">{{item.desc}}</div>
-                    <img class="info-img" :src="item.image" alt="">
-                </div>
-            </div>
-        </div>
-        <div class="edu-info home-name">
-            <div class="title">应用搭建更简单</div>
-            <div class="edu-container">
-                <div class="left">
-                    <div class="left-title">内置丰富的组件及模板</div>
-                    <div class="item" v-for="(item, index) in leftNavList" :key="index">
-                        <div class="name">{{item.name}}</div>
-                        <div class="desc">{{item.desc}}</div>
-                    </div>
-                </div>
-                <div class="right">
-                    <img class="edu-gif" src="../../images/animation.gif" alt="">
-                </div>
-            </div>
-        </div>
-        <div class="product-info home-name">
-            <div class="title">覆盖场景更丰富</div>
-            <div class="info-list">
-                <div class="info-item" v-for="(item, index) in productList" :key="index">
-                    <div class="info-title">{{item.name}}</div>
-                    <div class="info-desc">{{item.desc}}</div>
-                    <img class="info-img" :src="item.image" alt="">
-                </div>
-            </div>
-        </div>
-        <div class="example-info home-name">
-            <div class="title">用户案例</div>
-            <div class="example-container">
-                <div class="left">
-                    <img :src="exampleImg" alt="">
-                </div>
-                <div class="right">
-                    <div class="item"
-                        :class="actionIndex === index ? 'active' : ''"
-                        v-for="(item, index) in rightNavList"
-                        :key="index"
-                        @mouseenter="handlerMouseenter(index)">
-                        <div class="name">{{item.name}}</div>
-                        <div class="desc">{{item.desc}}</div>
+    <mg-content-loader :is-loading="isLoading" placeholder="index-loading" :offset-top="0" :height="378">
+        <div :class="isLoading ? 'hide-container-height' : 'home-container'">
+            <div class="banner">
+                <div class="img-container">
+                    <img class="banner-img" src="../../images/banner.png" alt="">
+                    <div class="btn-group">
+                        <bk-button
+                            class="mt10 banner-btn"
+                            theme="primary"
+                            @click="handlerRouter('projects')"
+                        >立即体验</bk-button>
+                        <bk-button
+                            class="mt10 banner-btn help-btn"
+                            @click="handlerRouter('intro')"
+                        >帮助文档</bk-button>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="bottom-info home-name">
-            <div class="title">一站式开发管理，让开发更简单</div>
-            <div class="subtitle">简单上手</div>
-            <bk-button
-                class="mt10 bottom-btn"
-                theme="primary"
-                @click="handlerRouter('projects')"
-            >立即体验</bk-button>
-        </div>
-        <div class="footer">
-            <div class="frameList">
-                <div>常用框架</div>
-                <div class="item" v-for="(item, index) in frameList" :key="index">
-                    <img class="frame-icon" :src="item.icon" alt="">
-                    <div class="frame-name" @click="handlerToWeb">{{item.name}}</div>
+            <div class="product-info home-name">
+                <div class="title">产品特性</div>
+                <div class="info-list">
+                    <div class="info-item" v-for="(item, index) in productList" :key="index">
+                        <div class="info-title">{{item.name}}</div>
+                        <div class="info-desc">{{item.desc}}</div>
+                        <img class="info-img" :src="item.image" alt="">
+                    </div>
                 </div>
             </div>
-            <a href="http://wpa.b.qq.com/cgi/wpa.php?ln=1&key=XzgwMDgwMjAwMV80NDMwOTZfODAwODAyMDAxXzJf"
-                target="_blank"
-                class="magic-feedback"
-                title="QQ交谈">
-                <img src="../../images/qq.png" />
-                <span>QQ交谈</span>
-            </a>
-            <!-- <a href="wxwork://message/?username=BK-MagicBox" class="magic-feedback" title="蓝鲸MagicBox助手">
+            <div class="edu-info home-name">
+                <div class="title">应用搭建更简单</div>
+                <div class="edu-container">
+                    <div class="left">
+                        <div class="left-title">内置丰富的组件及模板</div>
+                        <div class="item" v-for="(item, index) in leftNavList" :key="index">
+                            <div class="name">{{item.name}}</div>
+                            <div class="desc">{{item.desc}}</div>
+                        </div>
+                    </div>
+                    <div class="right">
+                        <img class="edu-gif" src="../../images/animation.gif" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="product-info home-name">
+                <div class="title">覆盖场景更丰富</div>
+                <div class="info-list">
+                    <div class="info-item" v-for="(item, index) in productList" :key="index">
+                        <div class="info-title">{{item.name}}</div>
+                        <div class="info-desc">{{item.desc}}</div>
+                        <img class="info-img" :src="item.image" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="example-info home-name">
+                <div class="title">用户案例</div>
+                <div class="example-container">
+                    <div class="left">
+                        <img :src="exampleImg" alt="">
+                    </div>
+                    <div class="right">
+                        <div class="item"
+                            :class="actionIndex === index ? 'active' : ''"
+                            v-for="(item, index) in rightNavList"
+                            :key="index"
+                            @mouseenter="handlerMouseenter(index)">
+                            <div class="name">{{item.name}}</div>
+                            <div class="desc">{{item.desc}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-info home-name">
+                <div class="title">一站式开发管理，让开发更简单</div>
+                <div class="subtitle">简单上手</div>
+                <bk-button
+                    class="mt10 bottom-btn"
+                    theme="primary"
+                    @click="handlerRouter('projects')"
+                >立即体验</bk-button>
+            </div>
+            <div class="footer">
+                <div class="frameList">
+                    <div>常用框架</div>
+                    <div class="item" v-for="(item, index) in frameList" :key="index">
+                        <img class="frame-icon" :src="item.icon" alt="">
+                        <div class="frame-name" @click="handlerToWeb">{{item.name}}</div>
+                    </div>
+                </div>
+                <a href="http://wpa.b.qq.com/cgi/wpa.php?ln=1&key=XzgwMDgwMjAwMV80NDMwOTZfODAwODAyMDAxXzJf"
+                    target="_blank"
+                    class="magic-feedback"
+                    title="QQ交谈">
+                    <img src="../../images/qq.png" />
+                    <span>QQ交谈</span>
+                </a>
+                <!-- <a href="wxwork://message/?username=BK-MagicBox" class="magic-feedback" title="蓝鲸MagicBox助手">
                 <img src="../../images/wx-work.png" />
                 <span>蓝鲸MagicBox助手</span>
             </a> -->
-            Copyright &copy; 2012-{{currentYear}} Tencent BlueKing. All Rights Reserved. 腾讯蓝鲸 版权所有
+                Copyright &copy; 2012-{{currentYear}} Tencent BlueKing. All Rights Reserved. 腾讯蓝鲸 版权所有
+            </div>
         </div>
-    </div>
+    </mg-content-loader>
 </template>
 
 <script>
@@ -180,16 +182,16 @@
                     }
                 ],
                 rightNavList: [
-                    {
-                        name: 'TQOS 运营平台',
-                        desc: '运营类',
-                        image: require('../../images/TQOS.png')
-                    },
-                    {
-                        name: 'ijob 平台公告',
-                        desc: '运营类',
-                        image: require('../../images/TQOS.png')
-                    },
+                    // {
+                    //     name: 'TQOS 运营平台',
+                    //     desc: '运营类',
+                    //     image: require('../../images/TQOS.png')
+                    // },
+                    // {
+                    //     name: 'ijob 平台公告',
+                    //     desc: '运营类',
+                    //     image: require('../../images/TQOS.png')
+                    // },
                     {
                         name: '蓝鲸 Magicbox',
                         desc: '运营类',
@@ -243,13 +245,12 @@
             }
         },
         created () {
-            this.getHealthData()
+            
+        },
+        mounted () {
+            this.isLoading = false
         },
         methods: {
-            async getHealthData () {
-                this.data = await this.$store.dispatch('getHealthData') || []
-                this.isLoading = false
-            },
             async handlerToWeb (data) {
                 window.open(data.href, '_blank')
             },
@@ -265,6 +266,9 @@
     }
 </script>
 <style lang="postcss">
+    .hide-container-height{
+        height: 100vh;
+    }
     .home-container{
         --side-hd-height: 52px;
         --side-ft-height: 50px;
@@ -410,6 +414,7 @@
                     width: 332px;
                     padding: 24px;
                     border-radius: 2px 0px 0px 2px;
+                    text-align: left;
                     .item{
                         padding: 12px 24px;
                         cursor: pointer;

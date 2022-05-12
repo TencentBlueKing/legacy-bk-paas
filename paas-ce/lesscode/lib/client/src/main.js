@@ -34,6 +34,7 @@ import ProjectVersionSelector from '@/components/project-version-selector.vue'
 
 import targetData from '@/common/targetData.js'
 import pureAxios from '@/api/pureAxios.js'
+import MgContentLoader from '@/components/loader'
 
 import './bk-icon/style.css'
 import './bk-icon/iconcool.js'
@@ -50,6 +51,7 @@ Vue.component('app-exception', Exception)
 Vue.component('app-header', header)
 Vue.component('render-html', renderHtml)
 Vue.component('project-version-selector', ProjectVersionSelector)
+Vue.component('mg-content-loader', MgContentLoader)
 
 auth.requestCurrentUser().then(user => {
     injectCSRFTokenToHeaders()

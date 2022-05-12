@@ -229,6 +229,7 @@
     "url-loader": "~2.2.0",
     "vant": "^2.12.39",
     "vue": "~2.6.10",
+    "vue-content-loader": "~0.2.3",
     "vue-class-component": "^7.2.6",
     "vue-echarts": "^5.0.0-beta.0",
     "vue-eslint-parser": "~7.4.1",
