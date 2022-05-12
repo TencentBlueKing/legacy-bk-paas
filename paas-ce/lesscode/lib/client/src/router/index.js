@@ -115,7 +115,7 @@ const routes = [
         component: HealthPage
     },
     {
-        path: '/',
+        path: '/home',
         name: 'home',
         component: Home
     },
@@ -132,7 +132,7 @@ const routes = [
                 name: 'projects',
                 component: Projects,
                 meta: {
-                    title: '应用管理'
+                    title: '我的应用'
                 }
             },
             {

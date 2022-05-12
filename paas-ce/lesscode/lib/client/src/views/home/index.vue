@@ -38,14 +38,14 @@
                         </div>
                     </div>
                     <div class="right">
-                        <img class="edu-gif" src="../../images/animation.gif" alt="">
+                        <img class="edu-gif" src="https://staticfile.qq.com/bk-magicbox/p980b75e8cd354cf89856e3e2733e2aa1/latest/animation.gif" alt="">
                     </div>
                 </div>
             </div>
             <div class="product-info home-name">
                 <div class="title">覆盖场景更丰富</div>
                 <div class="info-list">
-                    <div class="info-item" v-for="(item, index) in productList" :key="index">
+                    <div class="info-item" v-for="(item, index) in scenesList" :key="index">
                         <div class="info-title">{{item.name}}</div>
                         <div class="info-desc">{{item.desc}}</div>
                         <img class="info-img" :src="item.image" alt="">
@@ -144,7 +144,7 @@
                     },
                     {
                         name: '模板库',
-                        desc: '应用模版，页面模板，自定义模板，快速生成应用'
+                        desc: '应用模板，页面模板，自定义模板，快速生成应用'
                     },
                     {
                         name: '函数库',
@@ -280,7 +280,6 @@
         margin-top: 64px;
         .banner{
             width: 100%;
-            height: 520px;
             background: linear-gradient(to right, #DAE5F1 20% , #F9F9FA 78%);
             .img-container{
                 text-align: center;
@@ -291,7 +290,6 @@
                 .banner-img{
                     width: 100%;
                     max-width: 1920px;
-                    height: 520px;
                 }
                 .btn-group{
                     position: absolute;
@@ -301,7 +299,7 @@
                         width: 190px;
                         height: 50px;
                         border-radius: 25px;
-                        font-size: 20px;
+                        font-size: 18px;
                     }
                     .help-btn{
                         margin-left: 17px;
@@ -328,6 +326,7 @@
                     margin-right: 16px;
                     background: #f3f3f6;
                     border-radius: 2px;
+                    height: 270px;
                     .info-title{
                         padding: 40px 0 8px 0;
                         color: #313238;
