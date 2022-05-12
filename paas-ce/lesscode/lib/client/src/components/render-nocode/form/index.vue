@@ -50,7 +50,6 @@
             }
         },
         async created () {
-            console.log(this.formId, this.pageDetail, 11889)
             try {
                 if (this.formId) {
                     this.isLoading = true
