@@ -55,27 +55,6 @@
                             <i class="bk-drag-icon bk-drag-compoment-count"></i>自定义组件数据
                         </router-link>
                     </div>
-                    <!-- <div :class="['nav-item-parent', { folded: navFolded.op }]" v-if="isPlatformAdmin">
-                        <div class="nav-item" @click="$set(navFolded, 'op', !navFolded.op)">
-                            <i class="bk-icon icon-monitors-cog"></i>运营数据
-                            <i class="bk-drag-icon bk-drag-arrow-down"></i>
-                        </div>
-                        <div class="sub-nav">
-                            <router-link tag="div" class="sub-nav-item" to="/op/stats/user">用户数据</router-link>
-                            <router-link tag="div" class="sub-nav-item" to="/op/stats/project">应用数据</router-link>
-                            <router-link tag="div" class="sub-nav-item" to="/op/stats/func">函数数据</router-link>
-                            <router-link tag="div" class="sub-nav-item" to="/op/stats/comp">自定义组件数据</router-link>
-                        </div>
-                    </div>
-                    <div :class="['nav-item-parent', { folded: navFolded.pm }]" v-if="isPlatformAdmin">
-                        <div class="nav-item" @click="$set(navFolded, 'pm', !navFolded.pm)">
-                            <i class="bk-icon icon-monitors-cog"></i>平台管理
-                            <i class="bk-drag-icon bk-drag-arrow-down"></i>
-                        </div>
-                        <div class="sub-nav">
-                            <router-link tag="div" class="sub-nav-item" to="/pm/platform/project-member">应用成员</router-link>
-                        </div>
-                    </div> -->
                 </nav>
             </div>
             <div class="side-ft">
