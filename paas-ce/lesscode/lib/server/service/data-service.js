@@ -136,7 +136,7 @@ export function getDataService (name = 'default', customEntityMap) {
                         return transactionalEntityManager.save(deleteEntityList)
                     }
                 }
-                await callBack(transactionalEntityHelper)
+                return callBack(transactionalEntityHelper)
             })
         },
 

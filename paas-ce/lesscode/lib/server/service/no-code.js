@@ -75,7 +75,12 @@ export const createNCTable = async (dataTable) => {
 export const updateNCTable = async (dataTable) => {
     return LCDataService.transaction(async (transactionalEntityManager) => {
         // 获取原始 table
-        const originData = await LCDataService.findOne(TABLE_FILE_NAME.DATA_TABLE, { id: dataTable.id })
+        const originData = await LCDataService.findOne(
+            TABLE_FILE_NAME.DATA_TABLE,
+            {
+                id: dataTable.id
+            }
+        )
         // 构造数据入库 DATA_TABLE
         const updateTable = {
             ...dataTable,
