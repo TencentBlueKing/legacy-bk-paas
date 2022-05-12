@@ -57,8 +57,7 @@
                 ],
                 routerNameData: ['/home', '/help'],
                 homeHeaderNav: true,
-                appTabData: [{ name: '产品介绍', url: '/', routerName: 'home' }, { name: '帮助文档', url: '/help', routerName: 'intro' }],
-                activeIndex: 0
+                appTabData: [{ name: '产品介绍', url: '/', routerName: 'home' }, { name: '帮助文档', url: '/help', routerName: 'intro' }]
             }
         },
 
@@ -84,11 +83,6 @@
                 handler (value) {
                     if (value.matched[0]) {
                         this.homeHeaderNav = this.routerNameData.includes(value.matched[0].path) || this.routerNameData.includes(value.fullPath + value.name)
-                        if (!value.matched[0].path) {
-                            this.activeIndex = 0
-                        } else if (value.matched[0].path === '/help') {
-                            this.activeIndex = 1
-                        }
                     }
                 },
                 immediate: true
