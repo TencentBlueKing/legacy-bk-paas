@@ -56,7 +56,7 @@ export default class NocodeFormController {
                 }
             })
             return {
-                data: resData
+                ...resData
             }
         } catch (err) {
             throw new Error(err.message || err)
@@ -71,11 +71,12 @@ export default class NocodeFormController {
         try {
             const { id, tableName, projectId, content } = formData
             const dbJson = transformNCJson2LCJson(content || [])
-            await updateNCTable({ tableName, projectId, columns: dbJson })
+            const form = await LCDataService.findOne(TABLE_FILE_NAME.FORM, { id, deleteFlag: 0 })
+            await updateNCTable({ id: form.dataSourceId, tableName, projectId, columns: dbJson })
             const formItem = { id, content: JSON.stringify(content) }
-            const data = await LCDataService.update(TABLE_FILE_NAME.FORM, formItem)
+            await LCDataService.update(TABLE_FILE_NAME.FORM, formItem)
             return {
-                data
+                ...formItem
             }
         } catch (err) {
             throw new Error(err.message || err)

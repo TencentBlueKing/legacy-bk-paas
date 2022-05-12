@@ -85,7 +85,6 @@ export const updateNCTable = async (dataTable) => {
         // 构造数据入库 DATA_TABLE
         const updateTable = {
             ...dataTable,
-            id: originData.id,
             columns: JSON.stringify(dataTable.columns)
         }
         const data = await transactionalEntityManager.update(TABLE_FILE_NAME.DATA_TABLE, updateTable)
