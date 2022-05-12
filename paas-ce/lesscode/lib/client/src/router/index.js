@@ -132,7 +132,7 @@ const routes = [
                 name: 'projects',
                 component: Projects,
                 meta: {
-                    title: '应用管理'
+                    title: '我的应用'
                 }
             },
             {

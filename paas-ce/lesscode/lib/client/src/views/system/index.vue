@@ -22,7 +22,7 @@
                         应用中心
                     </div>
                     <router-link tag="div" :class="['nav-item', { 'router-link-active': $route.name === 'projects' }]" to="/projects">
-                        <i class="bk-drag-icon bk-drag-project-list"></i>应用管理
+                        <i class="bk-drag-icon bk-drag-project-list"></i>我的应用
                     </router-link>
                     <router-link tag="div" class="nav-item" to="/template-market">
                         <i class="bk-drag-icon bk-drag-template-fill"></i>模板市场<i class="red-point"></i>
