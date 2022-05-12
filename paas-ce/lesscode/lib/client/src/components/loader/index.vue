@@ -85,12 +85,16 @@
                 const winWidth = window.innerWidth
                 if (winWidth < 1440) {
                     this.contentWidth = 980
+                    // this.baseWidth = 980
                 } else if (winWidth < 1680) {
                     this.contentWidth = 1080
+                    // this.baseWidth = 1080
                 } else if (winWidth < 1920) {
                     this.contentWidth = 1180
+                    // this.baseWidth = 1180
                 } else {
-                    this.contentWidth = 1280
+                    this.contentWidth = 1180
+                    this.baseWidth = 1180
                 }
             }
         }

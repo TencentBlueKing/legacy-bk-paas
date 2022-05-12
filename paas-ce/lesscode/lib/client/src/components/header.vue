@@ -13,23 +13,27 @@
     <div>
         <header class="mg-home-header" v-if="homeHeaderNav">
             <nav class="mg-home-nav">
-                <div class="brand">
-                    <span class="bk-drag-icon app-logo" @click="$router.push('projects')">
-                        <svg aria-hidden="true" width="22" height="22">
-                            <use xlink:href="#bk-drag-logo"></use>
-                        </svg>
-                    </span>
-                    <h2 class="app-name">可视化开发平台</h2>
+                <div class="logo-fixed">
+                    <div class="brand">
+                        <span class="bk-drag-icon app-logo" @click="$router.push('projects')">
+                            <svg aria-hidden="true" width="22" height="22">
+                                <use xlink:href="#bk-drag-logo"></use>
+                            </svg>
+                        </span>
+                        <h2 class="app-name">可视化开发平台</h2>
+                    </div>
+                </div>
+                <div class="nav-container">
                     <div class="intro-container">
                         <span v-for="(item, index) in appTabData"
                             @click="handlerTab(index, item.routerName)"
                             :key="item.url" class="app-intro"
                             :class="activeIndex === index ? 'active' : ''">{{item.name}}</span>
                     </div>
-                </div>
-                <div class="user-container">
-                    <strong class="name" id="mg-name">{{userName}}</strong>
-                    <a href="javascript: void(0);" class="home-mg-login" @click="goLogin">退出</a>
+                    <div>
+                        <strong class="name" id="mg-name">{{userName}}</strong>
+                        <a href="javascript: void(0);" class="home-mg-login" @click="goLogin">退出</a>
+                    </div>
                 </div>
             </nav>
         </header>
@@ -410,7 +414,14 @@
         justify-content: space-between;
     }
 
-    .mg-home-nav > .brand {
+    .logo-fixed{
+        position: fixed;
+        left: 0;
+        top: 0;
+    }
+
+    .mg-home-nav > .logo-fixed > .brand {
+        /* display: fixed; */
         display: flex;
         align-items: center;
         margin-left: 20px;
@@ -421,7 +432,7 @@
         cursor: pointer;
     }
 
-    .mg-home-nav > .brand .app-name{
+    .mg-home-nav >.logo-fixed > .brand .app-name{
         font-size: 16px;
         font-weight: normal;
         color: #313238;
@@ -430,22 +441,26 @@
         white-space: nowrap;
     }
 
-    .mg-home-nav > .brand .intro-container{
-        margin-left: 125px;
+    .mg-home-nav > .nav-container .intro-container{
+        margin-left: 225px;
     }
 
-    .mg-home-nav > .user-container{
+    .mg-home-nav > .nav-container{
         display: flex;
+        max-width: 1920px;
+        margin: 0 auto;
+        width: 100%;
+        justify-content: space-between;
     }
 
-    .mg-home-nav > .user-container .home-mg-login {
+    .mg-home-nav > .nav-container .home-mg-login {
         color: #63656E;
         padding-left: 30px;
         font-size: 14px;
         cursor: pointer;
     }
 
-    .mg-home-nav > .brand .app-intro{
+    .mg-home-nav > .nav-container .app-intro{
         font-size: 14px;
         font-weight: normal;
         color: #63656e;
@@ -453,7 +468,7 @@
         cursor: pointer;
     }
 
-    .mg-home-nav > .brand .active{
+    .mg-home-nav > .nav-container .active{
         font-size: 14px;
         font-weight: 700;
         color: #3A84FF;
