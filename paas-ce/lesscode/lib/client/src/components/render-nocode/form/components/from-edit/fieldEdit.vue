@@ -169,7 +169,7 @@
                     const params = {
                         type: this.fieldData.type
                     }
-                    const resp = await this.$store.dispatch('fromSetting/getRegexList', params)
+                    const resp = await this.$store.dispatch('formSetting/getRegexList', params)
                     this.regexList = resp.data.regex_choice.map((item) => {
                         const [id, name] = item
                         return { id, name: name === '' ? '无' : name }

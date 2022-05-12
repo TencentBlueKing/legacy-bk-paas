@@ -8,6 +8,7 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     import MenuItem from '@/views/index/components/action-tool/components/menu-item'
     
     export default {
@@ -25,10 +26,39 @@
                 }
             }
         },
+        computed: {
+            ...mapGetters('page', ['pageDetail']),
+            nocodeType () {
+                return this.pageDetail.nocodeType || ''
+            },
+            projectId () {
+                return this.$route.params.projectId
+            }
+        },
         methods: {
             async handleSubmit () {
-                const fieldsList = this.$store.state.fromSetting.fieldsList
-                console.log(fieldsList)
+                if (this.nocodeType === 'FORM') {
+                    const content = this.$store.state.formSetting.fieldsList
+                    const formData = {
+                        content,
+                        tableName: this.pageDetail.pageCode,
+                        projectId: this.projectId
+                    }
+                    let action = 'updateForm'
+                    if (!this.pageDetail.formId) {
+                        action = 'createForm'
+                        Object.assign(formData, { pageId: this.pageDetail.id })
+                    } else {
+                        Object.assign(formData, { id: this.pageDetail.formId })
+                    }
+                    const res = await this.$store.dispatch(`form/${action}`, formData)
+                    if (res) {
+                        this.$bkMessage({
+                            theme: 'success',
+                            message: '保存成功'
+                        })
+                    }
+                }
             }
         }
     }

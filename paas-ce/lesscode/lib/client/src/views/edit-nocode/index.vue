@@ -29,7 +29,7 @@
                 :show-help-box="false"
             />
         </div>
-        <div class="lesscode-editor-page-content" ref="root" style="#yellow">
+        <div class="lesscode-editor-page-content" ref="root" v-if="!isContentLoading">
             <operation-area :operation="operationType" />
         </div>
     </main>
