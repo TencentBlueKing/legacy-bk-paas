@@ -115,7 +115,7 @@ const routes = [
         component: HealthPage
     },
     {
-        path: '/',
+        path: '/home',
         name: 'home',
         component: Home
     },

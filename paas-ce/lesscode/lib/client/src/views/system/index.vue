@@ -15,6 +15,12 @@
                 @mouseenter="asideHover = true"
                 @mouseleave="asideHover = false">
                 <nav class="nav-list">
+                    <a tag="div" class="nav-item product-link" href="/home" target="_blank">
+                        <i class="bk-drag-icon bk-drag-chanpinjieshao"></i>产品介绍
+                    </a>
+                    <div class="nav-parent">
+                        应用中心
+                    </div>
                     <router-link tag="div" :class="['nav-item', { 'router-link-active': $route.name === 'projects' }]" to="/projects">
                         <i class="bk-drag-icon bk-drag-project-list"></i>应用管理
                     </router-link>
@@ -24,10 +30,32 @@
                     <router-link tag="div" class="nav-item" to="/function-market">
                         <i class="bk-drag-icon bk-drag-function-fill"></i>函数市场
                     </router-link>
-                    <router-link tag="div" class="nav-item" to="/account">
-                        <i class="bk-drag-icon bk-drag-member"></i>账号管理
-                    </router-link>
-                    <div :class="['nav-item-parent', { folded: navFolded.op }]" v-if="isPlatformAdmin">
+                    <div v-if="isPlatformAdmin">
+                        <div class="nav-parent">
+                            平台管理
+                        </div>
+                        <router-link tag="div" class="nav-item" to="/pm/platform/project-member">
+                            <i class="bk-drag-icon bk-drag-member"></i>平台管理员
+                        </router-link>
+                    </div>
+                    <div v-if="isPlatformAdmin">
+                        <div class="nav-parent">
+                            运营数据
+                        </div>
+                        <router-link tag="div" class="nav-item" to="/op/stats/user">
+                            <i class="bk-drag-icon bk-drag-user-count"></i>用户数据
+                        </router-link>
+                        <router-link tag="div" class="nav-item" to="/op/stats/project">
+                            <i class="bk-drag-icon bk-drag-project-count"></i>应用数据
+                        </router-link>
+                        <router-link tag="div" class="nav-item" to="/op/stats/func">
+                            <i class="bk-drag-icon bk-drag-fc-count"></i>函数数据
+                        </router-link>
+                        <router-link tag="div" class="nav-item" to="/op/stats/comp">
+                            <i class="bk-drag-icon bk-drag-compoment-count"></i>自定义组件数据
+                        </router-link>
+                    </div>
+                    <!-- <div :class="['nav-item-parent', { folded: navFolded.op }]" v-if="isPlatformAdmin">
                         <div class="nav-item" @click="$set(navFolded, 'op', !navFolded.op)">
                             <i class="bk-icon icon-monitors-cog"></i>运营数据
                             <i class="bk-drag-icon bk-drag-arrow-down"></i>
@@ -47,7 +75,7 @@
                         <div class="sub-nav">
                             <router-link tag="div" class="sub-nav-item" to="/pm/platform/project-member">应用成员</router-link>
                         </div>
-                    </div>
+                    </div> -->
                 </nav>
             </div>
             <div class="side-ft">
@@ -271,6 +299,14 @@
         }
 
         .nav-list {
+            .nav-parent{
+                font-size: 12px;
+                text-align: left;
+                color: #979ba5;
+                height: 42px;
+                line-height: 42px;
+                padding: 0 12px 0 22px;
+            }
             .nav-item {
                 display: flex;
                 align-items: center;
@@ -303,6 +339,10 @@
                     margin-right: 0;
                     transition: all .1s linear;
                 }
+            }
+
+            .product-link{
+                color: #63656e;
             }
 
             .nav-item-parent {

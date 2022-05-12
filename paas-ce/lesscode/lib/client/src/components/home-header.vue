@@ -38,12 +38,26 @@
                 path: 'static_api/v3',
                 routerNameData: ['/home', '/help'],
                 homeHeaderNav: true,
-                appTabData: [{ name: '产品介绍', url: '/', routerName: 'home' }, { name: '帮助文档', url: '/help', routerName: 'intro' }],
+                appTabData: [{ name: '产品介绍', url: '/home', routerName: 'home' }, { name: '帮助文档', url: '/help', routerName: 'intro' }],
                 activeIndex: 0
             }
         },
         computed: {
             ...mapGetters(['user'])
+        },
+        watch: {
+            '$route': {
+                handler (value) {
+                    if (value.matched[0]) {
+                        if (value.name === 'home') {
+                            this.activeIndex = 0
+                        } else if (value.path.includes('/help')) {
+                            this.activeIndex = 1
+                        }
+                    }
+                },
+                immediate: true
+            }
         },
         mounted () {
             this.userName = this.user.username
