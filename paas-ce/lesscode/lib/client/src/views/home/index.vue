@@ -45,7 +45,7 @@
             <div class="product-info home-name">
                 <div class="title">覆盖场景更丰富</div>
                 <div class="info-list">
-                    <div class="info-item" v-for="(item, index) in productList" :key="index">
+                    <div class="info-item" v-for="(item, index) in scenesList" :key="index">
                         <div class="info-title">{{item.name}}</div>
                         <div class="info-desc">{{item.desc}}</div>
                         <img class="info-img" :src="item.image" alt="">
