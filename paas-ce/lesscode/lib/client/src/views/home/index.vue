@@ -216,11 +216,6 @@
                         href: 'https://demos.telerik.com/kendo-ui/'
                     },
                     {
-                        name: 'kendo UI Demo',
-                        icon: require('../../images/kendo.png'),
-                        href: 'http://open.oa.com/static_api/v3/assets/kendoui-2015.2.624/examples/index.html'
-                    },
-                    {
                         name: 'Vue.js',
                         icon: require('../../images/vue.png'),
                         href: 'https://cn.vuejs.org/'
