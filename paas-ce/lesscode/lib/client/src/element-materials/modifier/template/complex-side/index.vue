@@ -43,7 +43,7 @@
 </template>
 <script>
     import _ from 'lodash'
-    import { generatorMenu } from '../utils'
+    import { generatorMenu } from '../../../../../../shared/util'
     import MenuItem from '../editor/menu'
 
     export default {
