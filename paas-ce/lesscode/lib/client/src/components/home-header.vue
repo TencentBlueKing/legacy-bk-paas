@@ -8,7 +8,7 @@
                             <use xlink:href="#bk-drag-logo"></use>
                         </svg>
                     </span>
-                    <h2 class="app-name">可视化开发平台</h2>
+                    <h2 class="app-name">蓝鲸可视化开发平台</h2>
                 </div>
             </div>
             <div class="nav-container">

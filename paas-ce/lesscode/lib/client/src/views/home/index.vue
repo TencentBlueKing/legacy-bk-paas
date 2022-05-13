@@ -135,8 +135,8 @@
                 ],
                 leftNavList: [
                     {
-                        name: '基础组件',
-                        desc: 'MagicBox 组件，Element 组件，业务组件 自定义组件'
+                        name: '组件库',
+                        desc: 'MagicBox 组件、Element 组件、业务组件及自定义开发组件'
                     },
                     {
                         name: '图标库',
@@ -144,19 +144,15 @@
                     },
                     {
                         name: '模板库',
-                        desc: '应用模板，页面模板，自定义模板，快速生成应用'
+                        desc: '应用模板、页面模板、自定义模板，快速生成应用'
                     },
                     {
                         name: '函数库',
-                        desc: '丰富的事件处理函数，小白也能使用'
+                        desc: '丰富的数据处理、事件处理函数，拿来即用'
                     },
                     {
                         name: '图表库',
-                        desc: '蓝鲸自研图表，满足图表的基础需求'
-                    },
-                    {
-                        name: 'DataFlow',
-                        desc: '蓝鲸自研图表，满足图表的基础需求'
+                        desc: '集成Echarts、BKCharts，满足基础图表场景需求'
                     }
                 ],
                 scenesList: [
@@ -172,12 +168,12 @@
                     },
                     {
                         name: '门户类',
-                        desc: '支持企业门户，个人门户等多场景应用',
+                        desc: '支持各类门户场景应用搭建',
                         image: require('../../images/portal.png')
                     },
                     {
                         name: '用户 DIY',
-                        desc: '支持用户自定义各类场景建设',
+                        desc: '支持自定义各类业务场景应用搭建',
                         image: require('../../images/diy.png')
                     }
                 ],
@@ -193,13 +189,13 @@
                     //     image: require('../../images/TQOS.png')
                     // },
                     {
-                        name: '蓝鲸 Magicbox',
+                        name: '蓝鲸 MagicBox',
                         desc: '运营类',
                         image: require('../../images/Magicbox.png')
                     },
                     {
                         name: '游戏导播平台',
-                        desc: '运营类',
+                        desc: '门户类',
                         image: require('../../images/game.png')
                     },
                     {
@@ -470,7 +466,6 @@
             height: var(--footer-height);
             border-top: 1px solid #DCDEE5;
             text-align: center;
-            padding-left: var(--aside-width);
             transition: padding .2s cubic-bezier(0.4, 0, 0.2, 1);
 
             .frameList {
