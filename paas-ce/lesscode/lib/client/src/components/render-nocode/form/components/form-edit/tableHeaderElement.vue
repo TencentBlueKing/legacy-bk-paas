@@ -4,7 +4,7 @@
             <i class="bk-drag-icon bk-drag-drag-small1 item-drag" />
             <i class="bk-icon icon-close item-remove" @click="$emit('remove')"></i>
         </div>
-        <bk-form :label-width="272" form-type="vertical">
+        <bk-form :label-width="270" form-type="vertical">
             <bk-form-item label="项目名称">
                 <bk-input v-model="localValue.name" @change="change"></bk-input>
             </bk-form-item>
