@@ -83,6 +83,7 @@
             .layout-right{
                 width: 0;
                 overflow: hidden;
+                height: calc(100vh - 116px);
             }
             .collapsed-right-btn{
                 right: 0;

@@ -9,7 +9,7 @@
             @end="end">
             <field-element
                 v-for="(item, index) in fields"
-                :key="`${item.type}_${index}`"
+                :key="`${item.key}_${index}_${item.timeStamp}`"
                 :class="{ actived: selectedIndex === index }"
                 :field="item"
                 @action="handleFormAction($event, index)">
@@ -139,8 +139,8 @@
                 }
                 if (['TABLE'].includes(type)) {
                     return [
-                        { key: 'LIE1', name: '列1', choice: [], display: '' },
-                        { key: 'LIE2', name: '列2', choice: [], display: '' }
+                        { key: 'LIE1', name: '列1', choice: [], display: '', required: false },
+                        { key: 'LIE2', name: '列2', choice: [], display: '', required: false }
                     ]
                 }
                 return []

@@ -48,10 +48,12 @@
 </script>
 
 <style lang="postcss" scoped>
+@import "@/css/mixins/scroller";
 .config-panel {
   position: relative;
   width: 320px;
-  height: 100%;
+  height: calc(100vh - 126px);
+  //overflow: auto;
   background: #ffffff;
   z-index: 1;
 }
@@ -71,5 +73,6 @@
   padding: 16px 24px;
   height: calc(100% - 40px);
   overflow: auto;
+  @mixin scroller;
 }
 </style>

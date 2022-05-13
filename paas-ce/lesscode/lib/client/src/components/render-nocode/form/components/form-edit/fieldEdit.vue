@@ -38,8 +38,13 @@
                     <bk-input v-model.trim="fieldData.key" @change="change" @blur="onNameBlur"></bk-input>
                 </bk-form-item>
                 <bk-form-item label="表头配置" v-if="fieldData.type === 'TABLE'">
-                    <table-header-setting :list="fieldData.choice" @change="handleChangeTableHeader">
+                    <table-header-setting
+                        :list="fieldData.choice"
+                        @move="handleChangeTableHeader"
+                        @remove="handleRemoveChocie"
+                        @update="handleUpdateChocie">
                     </table-header-setting>
+                    <span class="add-chocie" @click="handleAddTableChoice">添加</span>
                 </bk-form-item>
                 <bk-form-item label="上传模板附件" :ext-cls="'input-position mt20-item'" v-if="fieldData.type === 'FILE'">
                     <bk-button :theme="'default'" title="点击上传">
@@ -541,8 +546,27 @@
                 }
                 this.change()
             },
-            handleChangeTableHeader ($event) {
-                this.fieldData.choice = $event
+            handleChangeTableHeader (newIndex, oldIndex) {
+                this.fieldData.timeStamp = Date.parse(new Date())
+                const field = this.fieldData.choice.splice(oldIndex, 1)
+                this.fieldData.choice.splice(newIndex, 0, field[0])
+                this.change()
+            },
+            handleRemoveChocie (index) {
+                this.fieldData.choice.splice(index, 1)
+                this.change()
+            },
+            handleUpdateChocie ($event, index) {
+                this.fieldData.choice.splice(index, 1, $event)
+                this.change()
+            },
+            handleAddTableChoice () {
+                this.fieldData.choice.push({
+                    choice: [],
+                    display: '',
+                    name: '',
+                    required: false
+                })
                 this.change()
             },
             change () {
@@ -652,6 +676,15 @@
       color: #7a7f85;
       cursor: pointer;
     }
+  }
+}
+
+.add-chocie{
+  color: #3a84ff;
+  font-size: 14px;
+  margin-top: 8px;
+  &:hover{
+    cursor: pointer;
   }
 }
 </style>
