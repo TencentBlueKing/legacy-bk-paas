@@ -3,11 +3,7 @@
         <nav class="mg-home-nav">
             <div class="logo-fixed">
                 <div class="brand">
-                    <span class="bk-drag-icon app-logo" @click="$router.push('projects')">
-                        <svg aria-hidden="true" width="32" height="22">
-                            <use xlink:href="#bk-drag-logo"></use>
-                        </svg>
-                    </span>
+                    <img class="app-logo" src="../images/logo.png" @click="$router.push('projects')" alt="">
                     <h2 class="app-name">蓝鲸可视化开发平台</h2>
                 </div>
             </div>
@@ -132,7 +128,8 @@
     }
 
     .mg-home-nav > .logo-fixed >.brand .app-logo{
-        font-size: 0;
+        width: 32px;
+        height: 22px;
         cursor: pointer;
     }
 
@@ -151,7 +148,6 @@
 
     .mg-home-nav > .nav-container{
         display: flex;
-        max-width: 1920px;
         margin: 0 auto;
         width: 100%;
         justify-content: space-between;
@@ -184,11 +180,12 @@
 
     .user-info{
         position: absolute;
-        width: 135px;
+        height: 50px;
+        width: 100px;
+        line-height: 50px;
         background: #fff;
         text-align: center;
-        left: -40px;
-        top: 62px;
+        left: -22px;
         opacity: 0;
         visibility: hidden;
         border: solid 1px #eeeeee;

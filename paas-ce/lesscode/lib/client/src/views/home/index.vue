@@ -339,8 +339,7 @@
                         padding-bottom: 26px;
                     }
                     .info-img{
-                        width: 308px;
-                        height: 149px;
+                        height: 147px;
                     }
                 }
             }
