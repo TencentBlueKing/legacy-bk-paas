@@ -85,7 +85,6 @@
         methods: {
             initContentWidth () {
                 const winWidth = window.innerWidth
-                console.log('winWidth', winWidth)
                 if (winWidth < 1440) {
                     this.contentWidth = 980
                     this.baseWidth = winWidth
