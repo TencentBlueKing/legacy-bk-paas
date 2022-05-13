@@ -241,7 +241,7 @@
             }
         },
         created () {
-            
+            console.log('1')
         },
         mounted () {
             this.isLoading = false
