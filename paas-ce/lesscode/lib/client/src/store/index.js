@@ -25,12 +25,15 @@ import projectCode from './modules/project-code'
 import release from './modules/release'
 import layout from './modules/layout'
 import member from './modules/member'
+import form from './modules/nocode/form'
+import flow from './modules/nocode/flow'
+import formSetting from './modules/nocode/form-setting'
 import logs from './modules/logs'
 import functionMarket from './modules/function-market'
 import perm from './modules/perm'
 import projectVersion from './modules/project-version'
 import dataSource from './modules/data-source'
-import formSetting from './modules/form-setting'
+
 import http from '@/api'
 import router from '../router'
 import { unifyObjectStyle, json2Query, circleJSON } from '@/common/util'
@@ -56,6 +59,8 @@ const store = new Vuex.Store({
         release,
         layout,
         member,
+        form,
+        flow,
         logs,
         functionMarket,
         perm,

@@ -1,5 +1,5 @@
 import http from '@/api'
-import regexList from '../../components/render-nocode/common/regexlist.json'
+import regexList from '@/components/render-nocode/common/regexlist.json'
 export default {
     namespaced: true,
     state: {

@@ -18,9 +18,10 @@
 export class DataParse {
     /**
      * 传入原始数据,用于比对导入前后的变化
-     * @param {*} dataList 原始数据,表格列表
+     * @param {*} data 原始数据,表格列表
      */
-    constructor (dataList = []) {
+    constructor (data = []) {
+        const dataList = Array.isArray(data) ? data : [data]
         this.originDatas = JSON.parse(JSON.stringify(dataList))
         this.finalDatas = JSON.parse(JSON.stringify(dataList))
     }

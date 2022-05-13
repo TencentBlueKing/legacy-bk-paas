@@ -24,7 +24,8 @@ export default {
         textAlign: 'left',
         fontSize: '14px',
         whiteSpace: 'pre-wrap',
-        wordBreak: 'break-all'
+        wordBreak: 'break-all',
+        verticalAlign: 'middle'
     },
     directives: [
         // {

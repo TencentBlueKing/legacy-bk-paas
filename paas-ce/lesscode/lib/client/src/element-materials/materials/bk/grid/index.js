@@ -27,9 +27,6 @@ export default {
         'pointer',
         'border'
     ],
-    renderStyles: {
-        'margin-bottom': '10px'
-    },
     props: {
     },
     slots: {

@@ -12,9 +12,9 @@
                 slot="side-header"
                 class="component-wrapper"
                 style="display: flex"
-                @mouseenter.stop="componentWrapperMouseenterHandler"
-                @mouseleave.stop="componentWrapperMouseleaveHandler"
-                @click.stop="handleSiteInfo">
+                @mouseenter="componentWrapperMouseenterHandler"
+                @mouseleave="componentWrapperMouseleaveHandler"
+                @click="handleSiteInfo">
                 <span class="title-icon">
                     <img style="width: 28px; height: 28px" :src="curTemplateData.logo" />
                 </span>
@@ -26,7 +26,7 @@
                     :class="{
                         selected: isTopMenuSelected
                     }"
-                    @click.stop="handleTopMenuClick">
+                    @click="handleTopMenuClick">
                     <div
                         v-for="(topMemu) in curTemplateData.topMenuList"
                         :key="topMemu.id"
@@ -35,7 +35,7 @@
                             selected: selectTopMenuId === topMemu.id,
                             'theme-item': !isDefaultTheme
                         }"
-                        @click.stop="handleTopMenuSelect(topMemu)">
+                        @click="handleTopMenuSelect(topMemu)">
                         {{topMemu.name}}
                     </div>
                 </div>
@@ -60,7 +60,7 @@
                     :class="{
                         selected: isSideMenuSelected
                     }"
-                    @click.stop="handleSideMenuClick">
+                    @click="handleSideMenuClick">
                     <bk-navigation-menu
                         ref="menu"
                         :unique-opened="false"
