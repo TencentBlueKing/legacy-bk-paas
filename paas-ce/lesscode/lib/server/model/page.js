@@ -23,6 +23,7 @@ import FuncVariable from './entities/func-variable'
 import VariableFunc from './entities/variable-func'
 import VariableVariable from './entities/variable-variable'
 import LayoutInst from './entities/layout-inst'
+import Layout from './entities/layout'
 import { whereVersion } from './common'
 import { generatorMenu } from '../../shared/util'
 
@@ -96,17 +97,22 @@ module.exports = {
                         layoutId: pageData.layoutId
                     }
                 })
-                const { routePath, content } = layoutInst
-                const templateData = JSON.parse(content)
+                const layoutId = pageData.layoutId
+                const { type } = await getRepository(LayoutInst).createQueryBuilder('layout_inst')
+                    .leftJoinAndSelect(Layout, 'layout', 'layout_inst.layoutId = layout.id')
+                    .select(['layout_inst.*', 'layout.type as type'])
+                    .where('layout_inst.id = :layoutId', { layoutId })
+                    .getRawOne()
+                const templateData = JSON.parse(layoutInst.content)
                 const menuItem = {
-                    ...generatorMenu(pageName, pageCode),
+                    ...generatorMenu(),
                     name: pageName,
                     pageCode
                 }
-                // 通过 routePath 判定模板类型
-                if (routePath === '/side-nav') {
+                // 通过 layout type 判定模板类型
+                if (type === 'left-right') {
                     templateData.menuList.push(menuItem)
-                } else {
+                } else if (['top-bottom', 'complex'].includes(type)) {
                     templateData.topMenuList.push(menuItem)
                 }
                 layoutInst.content = JSON.stringify(templateData)
