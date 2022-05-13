@@ -1,31 +1,49 @@
+/**
+ * Tencent is pleased to support the open source community by making 蓝鲸智云PaaS平台社区版 (BlueKing PaaS Community Edition) available.
+ * Copyright (C) 2017-2019 THL A29 Limited, a Tencent company. All rights reserved.
+ * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://opensource.org/licenses/MIT
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
+ */
 import http from '@/api'
-import regexList from '../../../components/render-nocode/common/regexlist.json'
+const perfix = '/nocode-form'
 
 export default {
     namespaced: true,
     state: {
-        fieldsList: []
     },
     mutations: {
-        setFieldsList (state, fieldsList) {
-            state.fieldsList = fieldsList || []
-        }
     },
     getters: {
     },
     actions: {
-        // 获取字段的校验方式
-        getRegexList (_, params) {
-            // return http.get('/workflow/templates/get_regex_choice/', { params }).then(response => response.data)\
-            return new Promise(resolve => resolve(regexList))
+        formDetail ({ state }, { formId }) {
+            return http.get(`${perfix}/detail`, { params: { formId } }).then(response => {
+                const detail = response.data || {}
+                return detail
+            })
         },
-        // 获取第三方接口数据
-        getSourceData (_, params) {
-            return http.post('/ticket/receipts/api_field_choices/', params).then(response => response.data)
+
+        createForm ({ state }, data) {
+            return http.post(`${perfix}/create`, data).then(response => {
+                return response.data || {}
+            })
         },
-        // 根据条件查询表单数据
-        getWorksheetData (_, params) {
-            return http.post('/engine/data/worksheet_data/', params).then(response => response.data)
+
+        updateForm ({ state }, data) {
+            return http.put(`${perfix}/update`, data).then(response => {
+                return response.data || {}
+            })
+        },
+
+        deleteForm ({ state }, id) {
+            return http.delete(`${perfix}/delete?id=${id}`).then(response => {
+                const userData = response.data || []
+                return userData
+            })
         }
     }
 }

@@ -25,6 +25,9 @@ import projectCode from './modules/project-code'
 import release from './modules/release'
 import layout from './modules/layout'
 import member from './modules/member'
+import form from './modules/nocode/form'
+import flow from './modules/nocode/flow'
+import formSetting from './modules/nocode/form-setting'
 import logs from './modules/logs'
 import functionMarket from './modules/function-market'
 import perm from './modules/perm'
@@ -55,6 +58,8 @@ const store = new Vuex.Store({
         release,
         layout,
         member,
+        form,
+        flow,
         logs,
         functionMarket,
         perm,

@@ -136,7 +136,7 @@ export function getDataService (name = 'default', customEntityMap) {
                         return transactionalEntityManager.save(deleteEntityList)
                     }
                 }
-                await callBack(transactionalEntityHelper)
+                return callBack(transactionalEntityHelper)
             })
         },
 
@@ -443,5 +443,7 @@ export const TABLE_FILE_NAME = {
     VARIABLE_FUNC: 'variable-func',
     VARIABLE_VARIABLE: 'variable-variable',
     VARIABLE: 'variable',
-    VERSION: 'version'
+    VERSION: 'version',
+    FORM: 'form',
+    FLOW: 'flow'
 }

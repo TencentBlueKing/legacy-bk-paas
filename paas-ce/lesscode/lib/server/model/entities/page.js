@@ -28,6 +28,16 @@ export default class extends Base {
     nocodeType
 
     @Column({
+        type: 'int'
+    })
+    flowId
+
+    @Column({
+        type: 'int'
+    })
+    formId
+
+    @Column({
         type: 'mediumtext',
         comment: '页面的 targetData（JSON 串）'
     })

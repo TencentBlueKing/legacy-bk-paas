@@ -1,6 +1,7 @@
 <template>
     <draw-layout
-        class="lesscode-editor-page-content">
+        class="lesscode-editor-page-content"
+        v-bkloading="{ isLoading }">
         <left-panel slot="left" @move="fieldPanelHover = true" @end="fieldPanelHover = false" />
         <layout style="margin: 20px 0;height: 100%">
             <form-content
@@ -18,6 +19,7 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     import cloneDeep from 'lodash.clonedeep'
     import DrawLayout from '@/views/index/components/draw-layout'
     import LeftPanel from './components/left-panel'
@@ -39,6 +41,26 @@
                 isEdit: false, // 判断用户是否编辑
                 crtIndex: -1, // 当前选中字段索引
                 crtField: {} // 当前选中字段
+            }
+        },
+        computed: {
+            ...mapGetters('page', ['pageDetail']),
+            formId () {
+                return this.pageDetail.formId
+            }
+        },
+        async created () {
+            try {
+                if (this.formId) {
+                    this.isLoading = true
+                    const form = await this.$store.dispatch('form/formDetail', { formId: this.formId })
+                    console.log(form, 22666)
+                    this.fieldsList = JSON.parse(form.content) || []
+                }
+            } catch (err) {
+                
+            } finally {
+                this.isLoading = false
             }
         },
         methods: {
@@ -90,7 +112,7 @@
                 this.saveFieldList()
             },
             saveFieldList () {
-                this.$store.commit('fromSetting/setFieldsList', this.fieldsList)
+                this.$store.commit('formSetting/setFieldsList', this.fieldsList)
             }
         }
     }
