@@ -30,7 +30,7 @@
         </div>
         <div
             ref="autoHeightRef"
-            v-bk-tooltips="'高度随内容自适应'"
+            v-bk-tooltips.bottom="'高度随内容自适应'"
             :class="$style['btn']"
             :style="autoHeightStyles"
             @click="handleAutoHeight">
@@ -46,7 +46,6 @@
     } from '@vue/composition-api'
     import useComponentActive from '../hooks/use-component-active'
     import useShowMenu from '../hooks/use-show-menu'
-    import useScroll from '../hooks/use-scroll'
     import useResize from './hooks/use-resize'
     import useAutoHeight from './hooks/use-auto-height'
     import useFullWidth from './hooks/use-full-width'
@@ -180,10 +179,6 @@
                 handleResizeHeight,
                 handleResizeBoth
             } = useResize()
-
-            useScroll(() => {
-                showActive(activeComponentData.value)
-            })
 
             // 显示快捷面板
             const handleShowMenu = useShowMenu()
