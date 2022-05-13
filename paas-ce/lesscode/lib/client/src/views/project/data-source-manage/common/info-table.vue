@@ -120,7 +120,7 @@
 
                 const params = { projectId }
                 isLoading.value = true
-                store.dispatch('dataSource/list', params).then((res) => {
+                store.dispatch('nocode/dataSource/list', params).then((res) => {
                     tableList = res.list
                 }).catch((err) => {
                     messageError(err.message || err)

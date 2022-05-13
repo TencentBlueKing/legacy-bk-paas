@@ -165,8 +165,8 @@
                     record
                 }
                 isSaving.value = true
-                return store.dispatch('dataSource/modifyOnlineDb', record).then(() => {
-                    return store.dispatch('dataSource/edit', postData).then(() => {
+                return store.dispatch('nocode/dataSource/modifyOnlineDb', record).then(() => {
+                    return store.dispatch('nocode/dataSource/edit', postData).then(() => {
                         messageSuccess('编辑表成功')
                         changeEdit(false)
                         goBack()
@@ -180,7 +180,7 @@
 
             const getDetail = () => {
                 isLoading.value = true
-                store.dispatch('dataSource/findOne', id).then((data) => {
+                store.dispatch('nocode/dataSource/findOne', id).then((data) => {
                     originTableStatus.basicInfo.tableName = data.tableName
                     originTableStatus.basicInfo.comment = data.comment
                     originTableStatus.data = data.columns
