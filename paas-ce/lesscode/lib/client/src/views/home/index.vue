@@ -84,7 +84,7 @@
                     <div>常用框架</div>
                     <div class="item" v-for="(item, index) in frameList" :key="index">
                         <img class="frame-icon" :src="item.icon" alt="">
-                        <div class="frame-name" @click="handlerToWeb">{{item.name}}</div>
+                        <div class="frame-name" @click="handlerToWeb(item)">{{item.name}}</div>
                     </div>
                 </div>
                 <a href="http://wpa.b.qq.com/cgi/wpa.php?ln=1&key=XzgwMDgwMjAwMV80NDMwOTZfODAwODAyMDAxXzJf"
@@ -190,7 +190,7 @@
                     // },
                     {
                         name: '蓝鲸 MagicBox',
-                        desc: '运营类',
+                        desc: '官网类',
                         image: require('../../images/Magicbox.png')
                     },
                     {
@@ -213,12 +213,17 @@
                     {
                         name: 'kendo UI',
                         icon: require('../../images/kendo.png'),
-                        href: 'https://www.telerik.com/kendo-ui'
+                        href: 'https://demos.telerik.com/kendo-ui/'
+                    },
+                    {
+                        name: 'kendo UI Demo',
+                        icon: require('../../images/kendo.png'),
+                        href: 'http://open.oa.com/static_api/v3/assets/kendoui-2015.2.624/examples/index.html'
                     },
                     {
                         name: 'Vue.js',
                         icon: require('../../images/vue.png'),
-                        href: 'https://vuejs.org/'
+                        href: 'https://cn.vuejs.org/'
                     },
                     {
                         name: 'React',
@@ -228,7 +233,7 @@
                     {
                         name: 'AngularJS',
                         icon: require('../../images/angular.png'),
-                        href: 'https://angular.io/'
+                        href: 'https://angularjs.org/'
                     }
                 ],
                 currentYear: new Date().getUTCFullYear(),
@@ -478,8 +483,6 @@
                     justify-content: center;
                     align-items: center;
                     .frame-icon{
-                        width: 36px;
-                        height: 36px;
                         margin-right: 10px;
                         margin-left: 40px;
                     }
