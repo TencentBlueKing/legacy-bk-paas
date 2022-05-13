@@ -87,17 +87,11 @@ module.exports = {
             projectPageData.pageId = pageId
             const projectPage = getRepository(ProjectPage).create(projectPageData)
             await transactionalEntityManager.save(projectPage)
-
             // 带导航布局关联到导航菜单
             const { pageName, isAddNav } = pageData
             if (isAddNav) {
-                const layoutInst = await getRepository(LayoutInst).findOne({
-                    where: {
-                        projectId: projectPageData.projectId,
-                        layoutId: pageData.layoutId
-                    }
-                })
                 const layoutId = pageData.layoutId
+                const layoutInst = await getRepository(LayoutInst).findOne({ where: { id: layoutId } })
                 const { type } = await getRepository(LayoutInst).createQueryBuilder('layout_inst')
                     .leftJoinAndSelect(Layout, 'layout', 'layout_inst.layoutId = layout.id')
                     .select(['layout_inst.*', 'layout.type as type'])
