@@ -38,6 +38,7 @@ const Basic = () => import(/* webpackChunkName: 'basic' */'@/views/project/basic
 const Logs = () => import(/* webpackChunkName: 'basic' */'@/views/project/logs')
 const Layout = () => import(/* webpackChunkName: 'layout' */'@/views/project/layout')
 const VersionManage = () => import(/* webpackChunkName: 'version' */'@/views/project/version-manage')
+const FileManage = () => import(/* webpackChunkName: 'file' */'@/views/project/file-manage')
 
 const MainEntry = () => import(/* webpackChunkName: 'index' */'@/views')
 const Index = () => import(/* webpackChunkName: 'index' */'@/views/index/index')
@@ -325,6 +326,14 @@ const routes = [
                 component: VersionManage,
                 meta: {
                     title: '版本管理'
+                }
+            },
+            {
+                path: 'file-manage',
+                name: 'fileManage',
+                component: FileManage,
+                meta: {
+                    title: '文件库'
                 }
             },
             {

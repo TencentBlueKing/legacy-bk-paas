@@ -443,5 +443,6 @@ export const TABLE_FILE_NAME = {
     VARIABLE_FUNC: 'variable-func',
     VARIABLE_VARIABLE: 'variable-variable',
     VARIABLE: 'variable',
-    VERSION: 'version'
+    VERSION: 'version',
+    FILE: 'file'
 }
