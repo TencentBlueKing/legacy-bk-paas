@@ -61,6 +61,12 @@ export default {
                 return data
             })
         },
+        getProjectVersionOptionList ({ state }, { projectId }) {
+            return http.get(`/release/getProjectVersionOptionList?projectId=${projectId}`).then(response => {
+                const data = response.data || []
+                return data
+            })
+        },
         getSucVersionList ({ state }, { projectId }) {
             return http.get(`/release/getSucVersionList?projectId=${projectId}`).then(response => {
                 const data = response.data || []

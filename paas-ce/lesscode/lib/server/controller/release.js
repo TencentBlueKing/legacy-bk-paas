@@ -132,20 +132,31 @@ const Realease = {
     async releaseProject (ctx) {
         let { releaseForm } = ctx.request.body
 
-        // 非历史版本部署（项目默认或已有版本），此时需要生成新包
+        // 非历史版本部署（应用版本）
         const isNewPackage = releaseForm.releaseType !== 'HISTORY_VERSION'
 
         let validMsg = ''
         if (!releaseForm.version) validMsg = '版本号不能为空'
-        if (releaseForm.releaseType === 'NEW_VERSION') {
+
+        if (isNewPackage) {
+            const isExist = await ReleaseModel.findOne({ projectId: releaseForm.projectId, version: releaseForm.version })
+            if (isExist && isExist.id) {
+                const result = isExist.status === 'successful' ? '成功' : (isExist.status === 'failed' ? '失败' : isExist.status)
+                validMsg = `该版本号已存在，部署结果为${result}，请重新输入`
+            }
+        }
+
+        // 如创建应用版本，需检测版本号是否重复
+        if (releaseForm.isCreateProjVersion) {
             const isExist = await projectVersionService.has(releaseForm.projectId, releaseForm.version)
             if (isExist) {
-                validMsg = '该版本号已存在，请重新输入'
+                validMsg = '该版本号已存在于应用版本，请重新输入'
             }
         }
 
         const project = await ProjectModel.findProjectDetail({ id: releaseForm.projectId }) || {}
         if (!project.appCode || !project.moduleCode) validMsg = '请先绑定蓝鲸应用及相应模块'
+
         validMsg && ctx.throwError({
             message: validMsg
         })
@@ -243,11 +254,14 @@ const Realease = {
         }
 
         try {
-            // 部署成功并且为部署新版本才创建项目版本
-            if (!catchErr && releaseForm.releaseType === 'NEW_VERSION') {
-                const { projectId, version, versionLog } = releaseForm
-                const newVersionId = await projectVersionService.create({ projectId, version, versionLog })
-                // 自动归档
+            // 部署流程无异常且选择了创建应用版本
+            if (!catchErr && releaseForm.isCreateProjVersion) {
+                const { projectId, version, versionId, versionLog } = releaseForm
+
+                // 创建应用版本，versionId应为应用版本id
+                const newVersionId = await projectVersionService.create({ projectId, version, versionId, versionLog })
+
+                // 标记为归档
                 await projectVersionService.update(newVersionId, { archiveFlag: 1 })
             }
         } catch (err) {
