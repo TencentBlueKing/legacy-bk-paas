@@ -343,14 +343,14 @@
                 return FIELDS_SOURCE_TYPE
             },
             sourceData () {
-                const { source_type, choice, meta, api_info, kv_relation } = this.fieldData
+                const { source_type: sourceType, choice, meta, api_info: apiInfo, kv_relation: kvRelation } = this.fieldData
                 let data = {}
-                switch (source_type) {
+                switch (sourceType) {
                     case 'CUSTOM':
                         data = choice
                         break
                     case 'API':
-                        data = { api_info, kv_relation }
+                        data = { apiInfo, kvRelation }
                         break
                     case 'WORKSHEET':
                         data = meta.data_config
@@ -474,14 +474,14 @@
             },
             // 数据源配置变更
             handleDataSourceChange (val) {
-                const { source_type } = this.fieldData
+                const { source_type: sourceType } = this.fieldData
                 this.dataSourceDialogShow = false
-                if (source_type === 'CUSTOM') {
+                if (sourceType === 'CUSTOM') {
                     this.fieldData.choice = val
-                } else if (source_type === 'API') {
+                } else if (sourceType === 'API') {
                     this.fieldData.api_info = val.api_info
                     this.fieldData.kv_relation = val.kv_relation
-                } else if (source_type === 'WORKSHEET') {
+                } else if (sourceType === 'WORKSHEET') {
                     this.fieldData.meta.data_config = val
                 }
                 this.change()
