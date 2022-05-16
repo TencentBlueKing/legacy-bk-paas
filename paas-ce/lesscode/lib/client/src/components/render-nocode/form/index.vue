@@ -26,6 +26,7 @@
     import RightPanel from './components/right-panel'
     import Layout from '@/components/render/pc/widget/layout'
     import FormContent from './components/form-content'
+    import { bus } from '@/common/bus'
     export default {
         components: {
             DrawLayout,
@@ -49,19 +50,17 @@
                 return this.pageDetail.formId
             }
         },
-        async created () {
-            try {
-                if (this.formId) {
-                    this.isLoading = true
-                    const form = await this.$store.dispatch('form/formDetail', { formId: this.formId })
-                    console.log(form, 22666)
-                    this.fieldsList = JSON.parse(form.content) || []
-                }
-            } catch (err) {
-                
-            } finally {
-                this.isLoading = false
-            }
+        created () {
+            this.getFieldList()
+            bus.$on('restFieldList', () => {
+                this.fieldsList = []
+                this.crtField = {}
+                this.crtIndex = -1
+            })
+        },
+       
+        beforeDestroy () {
+            bus.$off('restFieldList')
         },
         methods: {
             // 添加字段
@@ -70,6 +69,20 @@
                 this.fieldsList.splice(index, 0, field)
                 this.handleSelectField(field, index)
                 this.saveFieldList()
+            },
+            async getFieldList () {
+                try {
+                    if (this.formId) {
+                        this.isLoading = true
+                        const form = await this.$store.dispatch('form/formDetail', { formId: this.formId })
+                        console.log(form, 22666)
+                        this.fieldsList = JSON.parse(form.content) || []
+                    }
+                } catch (err) {
+
+                } finally {
+                    this.isLoading = false
+                }
             },
             // 复制字段
             handleCopyField (field, index) {
