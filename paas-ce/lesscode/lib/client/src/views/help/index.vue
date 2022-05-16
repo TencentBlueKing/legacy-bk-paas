@@ -15,13 +15,13 @@
             <aside class="main-left-sidebar">
                 <div class="main-top">
                     <div class="page-title">
-                        <span class="bk-drag-icon app-logo" @click="jump('projects')">
+                        <!-- <span class="bk-drag-icon app-logo" @click="jump('projects')">
                             <svg aria-hidden="true" width="22" height="22">
                                 <use xlink:href="#bk-drag-logo"></use>
                             </svg>
-                        </span>
+                        </span> -->
                         <div class="app-name">
-                            可视化开发帮助文档
+                            产品使用文档
                         </div>
                     </div>
                 </div>

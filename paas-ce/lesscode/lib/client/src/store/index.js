@@ -69,7 +69,12 @@ const store = new Vuex.Store({
         // 系统当前登录用户
         user: {},
         // 是否平台管理员
-        isPlatformAdmin: false
+        isPlatformAdmin: false,
+        loadingConf: {
+            speed: 2,
+            primaryColor: '#f5f6fa',
+            secondaryColor: '#FAFAFC'
+        }
     },
     // 公共 getters
     getters: {
