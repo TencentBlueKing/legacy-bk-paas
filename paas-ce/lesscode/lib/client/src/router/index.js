@@ -81,6 +81,9 @@ const OperationStatsProject = () => import(/* webpackChunkName: 'operation-stats
 const OperationStatsFunc = () => import(/* webpackChunkName: 'operation-stats-func' */'@/views/system/operation/stats/func/index.vue')
 const OperationStatsComp = () => import(/* webpackChunkName: 'operation-stats-comp' */'@/views/system/operation/stats/comp/index.vue')
 
+// 流程管理
+const FlowManage = () => import(/* webpackChunkName: 'FlowManage' */'@/views/project/flow-manage/index.vue')
+
 // 平台管理
 const PlatformManageEntry = () => import(/* webpackChunkName: 'operation-stats-entry' */'@/views/system/platform-manage/index.vue')
 const ProjectMember = () => import(/* webpackChunkName: 'operation-stats-entry' */'@/views/system/platform-manage/project-member/index.vue')
@@ -302,6 +305,14 @@ const routes = [
                 component: Layout,
                 meta: {
                     title: '布局模板实例'
+                }
+            },
+            {
+                path: 'flow-manage',
+                name: 'flowManage',
+                component: FlowManage,
+                meta: {
+                    title: '流程管理'
                 }
             },
             {

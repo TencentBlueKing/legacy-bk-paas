@@ -20,6 +20,15 @@ export default {
     getters: {
     },
     actions: {
+        // 获取项目下流程列表
+        getFlowList (state, params) {
+            return http.get('', { params }).then(response => response.data)
+        },
+
+        // 创建流程
+        createFlow (state, params) {
+            return http.post(`${perfix}`, params).then(response => response.data)
+        },
         getAllUser () {
             return http.get(`${perfix}/getAllUser`).then(response => {
                 const userData = response.data || []
