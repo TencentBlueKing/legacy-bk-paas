@@ -1,5 +1,5 @@
 <template>
-    <div style="display: none">
+    <div>
         <div
             ref="hoverRef"
             :class="$style['tools-hover']"
@@ -46,11 +46,8 @@
     import {
         reactive,
         toRefs,
-        ref,
-        onMounted,
-        onBeforeUnmount
+        ref
     } from '@vue/composition-api'
-    import useScroll from '../hooks/use-scroll'
     import useActiveParent from './hooks/use-active-parent'
     import useSaveTemplate from './hooks/use-save-template'
     import useRemove from './hooks/user-remove'
@@ -62,17 +59,13 @@
         display: 'none'
     }
 
-    let zIndex = 99
-
     const toolPositionHeight = 22
 
     export default {
         setup () {
-            let $horizontalWrapper = null
-
             const state = reactive({
-                hoverStyles: {},
-                activeStyles: {}
+                hoverStyles: hideStyles,
+                activeStyles: hideStyles
             })
 
             const hoverRef = ref()
@@ -88,51 +81,22 @@
             const handleShowMenu = useShowMenu()
 
             /**
-             * @desc hover状态
-             * @param { Node } componentData
-             */
-            const showHover = (componentData) => {
-                if (!componentData
-                    || !componentData.componentId
-                    || componentData === activeComponentData.value) {
-                    state.hoverStyles = hideStyles
-                    return
-                }
-
-                const {
-                    top: containerTop,
-                    left: containerLeft
-                } = $horizontalWrapper.getBoundingClientRect()
-                const {
-                    top,
-                    left
-                } = componentData.$elm.getBoundingClientRect()
-                
-                zIndex++
-                state.hoverStyles = {
-                    position: 'absolute',
-                    top: `${top - containerTop - toolPositionHeight}px`,
-                    left: `${left - containerLeft}px`,
-                    zIndex: zIndex
-                }
-                if (hoverRef.value.parentNode !== $horizontalWrapper) {
-                    $horizontalWrapper.appendChild(hoverRef.value)
-                }
-            }
-            /**
              * @desc acitve状态
              * @param { Node } componentData
              */
-            const showActive = (componentData) => {
+            const { activeComponentData } = useComponentActive((componentData) => {
                 if (!componentData || !componentData.componentId) {
                     state.activeStyles = hideStyles
                     return
+                }
+                if (componentData === hoverComponentData.value) {
+                    state.hoverStyles = hideStyles
                 }
                 const {
                     top: containerTop,
                     right: containerRight,
                     left: containerLeft
-                } = $horizontalWrapper.getBoundingClientRect()
+                } = document.body.querySelector('#drawTarget').getBoundingClientRect()
 
                 const {
                     top,
@@ -144,7 +108,6 @@
                     width: toolsWidth
                 } = activeRef.value.getBoundingClientRect()
 
-                zIndex++
                 let realLeft = left - containerLeft
                 if (left + toolsWidth > containerRight) {
                     realLeft = right - toolsWidth - containerLeft
@@ -153,37 +116,43 @@
                     position: 'absolute',
                     top: `${top - containerTop - toolPositionHeight}px`,
                     left: `${realLeft}px`,
-                    zIndex
+                    zIndex: 98
                 }
-                if (activeRef.value.parentNode !== $horizontalWrapper) {
-                    $horizontalWrapper.appendChild(activeRef.value)
-                }
-            }
-
-            const { activeComponentData } = useComponentActive(showActive)
-            const { hoverComponentData } = useComponentHover(showHover)
-
-            useScroll(() => {
-                showHover(hoverComponentData)
-                showActive(activeComponentData)
             })
 
-            onMounted(() => {
-                $horizontalWrapper = document.querySelector('#lesscodeDrawHorizontalWrapper')
-            })
-            onBeforeUnmount(() => {
-                if (activeRef.value.parentNode === $horizontalWrapper) {
-                    $horizontalWrapper.removeChild(activeRef.value)
+            /**
+             * @desc hover状态
+             * @param { Node } componentData
+             */
+            const { hoverComponentData } = useComponentHover((componentData) => {
+                if (!componentData
+                    || !componentData.componentId
+                    || componentData === activeComponentData.value) {
+                    state.hoverStyles = hideStyles
+                    return
                 }
-                if (hoverRef.value.parentNode === $horizontalWrapper) {
-                    $horizontalWrapper.removeChild(hoverRef.value)
+
+                const {
+                    top: containerTop,
+                    left: containerLeft
+                } = document.body.querySelector('#drawTarget').getBoundingClientRect()
+                const {
+                    top,
+                    left
+                } = componentData.$elm.getBoundingClientRect()
+                
+                state.hoverStyles = {
+                    position: 'absolute',
+                    top: `${top - containerTop - toolPositionHeight}px`,
+                    left: `${left - containerLeft}px`,
+                    zIndex: 99
                 }
             })
             
             return {
+                ...toRefs(state),
                 hoverComponentData,
                 activeComponentData,
-                ...toRefs(state),
                 hoverRef,
                 activeRef,
                 handleSaveTemplate,

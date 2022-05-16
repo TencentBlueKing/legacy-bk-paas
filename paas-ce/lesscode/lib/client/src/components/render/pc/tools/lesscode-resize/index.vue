@@ -1,26 +1,40 @@
 <template>
-    <div style="display: none">
+    <div
+        ref="resizeRef"
+        @click.stop=""
+        @contextmenu.stop="handleShowMenu">
         <div
-            ref="resizeRef"
-            @click.stop=""
-            @contextmenu.stop="handleShowMenu">
-            <div
-                :class="$style['achor']"
-                :style="dotWidthStyles"
-                @mousedown="handleResizeWidth" />
-            <div
-                :class="$style['achor']"
-                :style="dotHeightStyles"
-                @mousedown="handleResizeHeight" />
-            <div
-                :class="$style['achor']"
-                :style="dotBothStyles"
-                @mousedown="handleResizeBoth" />
-            <div
-                ref="tipRef"
-                :style="tipStyles">
-                {{ size.width }} x {{ size.height }}
-            </div>
+            :class="$style['achor']"
+            :style="dotWidthStyles"
+            @mousedown="handleResizeWidth" />
+        <div
+            :class="$style['achor']"
+            :style="dotHeightStyles"
+            @mousedown="handleResizeHeight" />
+        <div
+            :class="$style['achor']"
+            :style="dotBothStyles"
+            @mousedown="handleResizeBoth" />
+        <div
+            ref="tipRef"
+            :style="tipStyles">
+            {{ size.width }} x {{ size.height }}
+        </div>
+        <div
+            ref="fullWidthRef"
+            v-bk-tooltips="'宽度撑满'"
+            :class="$style['btn']"
+            :style="fullWidthStyles"
+            @click="handleFullWidth">
+            <i class="bk-drag-icon bk-drag-zuoyouchengkai" />
+        </div>
+        <div
+            ref="autoHeightRef"
+            v-bk-tooltips.bottom="'高度随内容自适应'"
+            :class="$style['btn']"
+            :style="autoHeightStyles"
+            @click="handleAutoHeight">
+            <i class="bk-drag-icon bk-drag-xiangxiazishiying" />
         </div>
     </div>
 </template>
@@ -28,14 +42,13 @@
     import {
         ref,
         reactive,
-        toRefs,
-        onMounted,
-        onBeforeUnmount
+        toRefs
     } from '@vue/composition-api'
     import useComponentActive from '../hooks/use-component-active'
     import useShowMenu from '../hooks/use-show-menu'
-    import useScroll from '../hooks/use-scroll'
     import useResize from './hooks/use-resize'
+    import useAutoHeight from './hooks/use-auto-height'
+    import useFullWidth from './hooks/use-full-width'
 
     const baseStyles = {
         position: 'absolute',
@@ -47,29 +60,35 @@
     }
 
     const halfDotSize = 8
+    const actionBtnSize = 24
+    const actionBtnOffset = 8
 
     export default {
         setup () {
-            let $horizontalWrapper = null
-            
             const state = reactive({
-                dotWidthStyles: {},
-                dotHeightStyles: {},
-                dotBothStyles: {}
+                dotWidthStyles: hideStyles,
+                dotHeightStyles: hideStyles,
+                dotBothStyles: hideStyles,
+                fullWidthStyles: hideStyles,
+                autoHeightStyles: hideStyles
             })
 
             const resizeRef = ref()
             const tipRef = ref()
+            const fullWidthRef = ref()
+            const autoHeightRef = ref()
 
             /**
              * @desc 选中状态
              * @param { Node } componentData
              */
             const showActive = (componentData = {}) => {
+                state.dotWidthStyles = hideStyles
+                state.dotHeightStyles = hideStyles
+                state.dotBothStyles = hideStyles
+                state.fullWidthStyles = hideStyles
+                state.autoHeightStyles = hideStyles
                 if (!componentData.componentId) {
-                    state.dotWidthStyles = hideStyles
-                    state.dotHeightStyles = hideStyles
-                    state.dotBothStyles = hideStyles
                     return
                 }
 
@@ -97,11 +116,13 @@
                 
                 const {
                     top: containerTop,
-                    left: containerLeft
-                } = $horizontalWrapper.getBoundingClientRect()
+                    left: containerLeft,
+                    right: containerRight
+                } = document.body.querySelector('#drawTarget').getBoundingClientRect()
                 const {
                     top,
                     left,
+                    right,
                     width,
                     height
                 } = componentData.$elm.getBoundingClientRect()
@@ -111,8 +132,17 @@
                 if (resizeWidthEnabel) {
                     state.dotWidthStyles = Object.assign({}, dotBaseStyle, {
                         top: `${top - containerTop + height / 2 - halfDotSize}px`,
-                        left: `${left + width - halfDotSize - containerLeft}px`,
+                        left: `${right - halfDotSize - containerLeft}px`,
                         cursor: 'ew-resize'
+                    })
+                    // 100% 宽度按钮的位置
+                    let fullWidthBtnLeft = right - containerLeft + actionBtnOffset
+                    if (right + 20 >= containerRight) {
+                        fullWidthBtnLeft = right - containerLeft - (actionBtnSize + actionBtnOffset)
+                    }
+                    state.fullWidthStyles = Object.assign({}, dotBaseStyle, {
+                        top: `${top - containerTop + height / 2 - actionBtnSize / 2}px`,
+                        left: `${fullWidthBtnLeft}px`
                     })
                 }
                 if (resizeHeightEnable) {
@@ -121,6 +151,14 @@
                         left: `${left - containerLeft + width / 2 - halfDotSize}px`,
                         cursor: 'ns-resize'
                     })
+                    // 高度自适应的按钮
+                    // free-layout 不支持该功能，必须给定 height
+                    if (componentData.type !== 'free-layout') {
+                        state.autoHeightStyles = Object.assign({}, dotBaseStyle, {
+                            top: `${top + height - containerTop + actionBtnOffset}px`,
+                            left: `${left - containerLeft + width / 2 - actionBtnSize / 2}px`
+                        })
+                    }
                 }
 
                 if (resizeWidthEnabel && resizeHeightEnable) {
@@ -130,10 +168,8 @@
                         cursor: 'nwse-resize'
                     })
                 }
-                if (resizeRef.value.parentNode !== $horizontalWrapper) {
-                    $horizontalWrapper.appendChild(resizeRef.value)
-                }
             }
+
             const { activeComponentData } = useComponentActive(showActive)
 
             const {
@@ -144,23 +180,13 @@
                 handleResizeBoth
             } = useResize()
 
-            useScroll(() => {
-                showActive(activeComponentData.value)
-            })
-
             // 显示快捷面板
             const handleShowMenu = useShowMenu()
 
-            onMounted(() => {
-                $horizontalWrapper = document.querySelector('#lesscodeDrawHorizontalWrapper')
-            })
+            const handleAutoHeight = useAutoHeight()
 
-            onBeforeUnmount(() => {
-                if (resizeRef.value.parentNode === $horizontalWrapper) {
-                    $horizontalWrapper.removeChild(resizeRef.value)
-                }
-            })
-            
+            const handleFullWidth = useFullWidth()
+
             return {
                 ...toRefs(state),
                 size,
@@ -168,10 +194,14 @@
                 activeComponentData,
                 resizeRef,
                 tipRef,
+                fullWidthRef,
+                autoHeightRef,
                 handleResizeWidth,
                 handleResizeHeight,
                 handleResizeBoth,
-                handleShowMenu
+                handleShowMenu,
+                handleAutoHeight,
+                handleFullWidth
             }
         }
     }
@@ -193,6 +223,22 @@
             border-radius: 50%;
             border: 1px solid #3a84ff;
             background: #fff;
+        }
+    }
+    .btn{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 24px;
+        height: 24px;
+        font-size: 10px;
+        color: #979BA5;
+        border-radius: 50%;
+        border: 1px solid #DCDEE5;
+        background: #fff;
+        cursor: pointer;
+        &:hover{
+            color: #63656E;
         }
     }
 </style>

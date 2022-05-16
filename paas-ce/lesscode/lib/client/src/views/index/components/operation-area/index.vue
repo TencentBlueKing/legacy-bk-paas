@@ -18,6 +18,7 @@
     </div>
 </template>
 <script>
+    import _ from 'lodash'
     import { getOffset } from '@/common/util'
     import Render from '@/components/render/index'
     import SourceCode from './components/source-code.vue'
@@ -49,7 +50,7 @@
             return {
                 renderStyles: {},
                 oprationItemStyles: {
-                    height: '200px'
+                    height: `calc(100vh - ${top}px - 20px)`
                 }
             }
         },
@@ -66,15 +67,41 @@
             }
         },
         mounted () {
-            const {
-                top
-            } = getOffset(this.$refs.root)
+            this.calcOperationItemStyles()
+            this.calcRenderStyles()
+            const resizeObserverCallback = _.throttle(() => {
+                this.calcRenderStyles()
+            }, 100)
 
-            this.renderStyles = {
-                'min-height': `calc(100vh - ${top}px - 20px)`
-            }
-            this.oprationItemStyles = {
-                'height': `calc(100vh - ${top}px - 20px)`
+            const activeResizeObserver = new ResizeObserver(resizeObserverCallback)
+            activeResizeObserver.observe(this.$refs.root)
+            this.$once('hook:beforeDestroy', () => {
+                activeResizeObserver.unobserve(this.$refs.root)
+            })
+        },
+        methods: {
+            calcRenderStyles () {
+                const {
+                    top
+                } = getOffset(this.$refs.root)
+                
+                const {
+                    width
+                } = this.$refs.root.getBoundingClientRect()
+                
+                this.renderStyles = {
+                    width: `${width - 40}px`,
+                    'min-height': `calc(100vh - ${top + 20}px)`
+                }
+            },
+            calcOperationItemStyles () {
+                const {
+                    top
+                } = getOffset(this.$refs.root)
+                
+                this.oprationItemStyles = {
+                    'height': `calc(100vh - ${top + 20}px)`
+                }
             }
         }
     }
@@ -84,14 +111,12 @@
 
     .horizontal-wrapper{
         position: relative;
+        padding: 0px 20px;
         height: 100%;
-        padding: 0 20px;
-        overflow-y: auto;
-        @mixin scroller;
+        overflow: auto;
     }
     .vertical-wrapper{
         background: #fff;
-        overflow-x: auto;
-        @mixin scroller;
+        
     }
 </style>

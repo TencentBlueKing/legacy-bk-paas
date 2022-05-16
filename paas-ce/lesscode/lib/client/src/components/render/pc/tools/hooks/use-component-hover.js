@@ -1,5 +1,6 @@
 import {
     shallowRef,
+    onMounted,
     onBeforeUnmount
 } from '@vue/composition-api'
 import _ from 'lodash'
@@ -7,31 +8,24 @@ import LC from '@/element-materials/core'
 
 export default function (callbak) {
     const componentData = shallowRef({})
-    
-    const resizeObserverCallback = _.throttle(() => {
-        callbak(componentData.value)
-    }, 100)
-    const hoverResizeObserver = new ResizeObserver(resizeObserverCallback)
 
     const componentHoverCallback = _.throttle((event) => {
         if (event.target.componentId === componentData.value.componentId) {
             return
         }
         componentData.value = event.target
-        hoverResizeObserver.observe(event.target.$elm)
         callbak(event.target)
+    }, 100)
+
+    const updateCallbak = _.throttle(() => {
+        setTimeout(() => {
+            callbak(componentData.value)
+        })
     }, 100)
 
     const componentMouserleaveCallback = () => {
         if (componentData.value.componentId) {
-            hoverResizeObserver.unobserve(componentData.value.$elm)
             componentData.value = {}
-            callbak()
-        }
-    }
-
-    const removeChildCallbak = (event) => {
-        if (event.child === componentData.value) {
             callbak()
         }
     }
@@ -41,15 +35,23 @@ export default function (callbak) {
     }
 
     LC.addEventListener('componentHover', componentHoverCallback)
+    LC.addEventListener('update', updateCallbak)
     LC.addEventListener('componentMouserleave', componentMouserleaveCallback)
-    LC.addEventListener('removeChild', removeChildCallbak)
     LC.addEventListener('reset', resetCallback)
+
+    let $drawTarget = null
+    const activeResizeObserver = new ResizeObserver(updateCallbak)
+    onMounted(() => {
+        $drawTarget = document.body.querySelector('#drawTarget')
+        activeResizeObserver.observe($drawTarget)
+    })
     
     onBeforeUnmount(() => {
+        activeResizeObserver.unobserve($drawTarget)
         LC.removeEventListener('componentHover', componentHoverCallback)
+        LC.removeEventListener('update', updateCallbak)
         LC.removeEventListener('componentMouserleave', componentMouserleaveCallback)
-        LC.removeEventListener('removeChild', removeChildCallbak)
-        LC.removeEventListener('reset', removeChildCallbak)
+        LC.removeEventListener('reset', resetCallback)
     })
 
     return {

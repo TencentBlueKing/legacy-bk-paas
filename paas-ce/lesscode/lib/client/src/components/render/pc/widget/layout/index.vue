@@ -114,9 +114,9 @@
                 .navigation-container {
                     .container-content {
                         flex: unset;
-                        height: calc(100vh - 211px);
+                        height: auto !important;
                         max-height: unset !important;
-                        @mixin scroller;
+                        overflow: unset !important
                     }
                 }
             }
