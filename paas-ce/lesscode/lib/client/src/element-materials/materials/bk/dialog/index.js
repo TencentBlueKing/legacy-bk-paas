@@ -118,14 +118,7 @@ export default {
     slots: {
         default: {
             name: ['layout'],
-            type: ['render-grid'],
-            display: 'hidden',
-            children: [
-                {
-                    name: ['layout'],
-                    type: ['render-column']
-                }
-            ]
+            type: ['render-block']
         }
     }
 }

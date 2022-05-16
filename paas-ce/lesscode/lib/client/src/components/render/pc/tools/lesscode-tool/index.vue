@@ -59,6 +59,9 @@
         display: 'none'
     }
 
+    const activeZIndex = 100000000
+    const hoverZIndex = 100000001
+
     const toolPositionHeight = 22
 
     export default {
@@ -116,7 +119,7 @@
                     position: 'absolute',
                     top: `${top - containerTop - toolPositionHeight}px`,
                     left: `${realLeft}px`,
-                    zIndex: 98
+                    zIndex: activeZIndex
                 }
             })
 
@@ -145,7 +148,7 @@
                     position: 'absolute',
                     top: `${top - containerTop - toolPositionHeight}px`,
                     left: `${left - containerLeft}px`,
-                    zIndex: 99
+                    zIndex: hoverZIndex
                 }
             })
             

@@ -62,7 +62,7 @@ const lines = setLines()
 export default class DragLine {
     constructor (options = {}) {
         this.options = Object.assign({
-            gap: 3
+            gap: 0
         }, options)
         this.setContainer(this.options.container || '')
 

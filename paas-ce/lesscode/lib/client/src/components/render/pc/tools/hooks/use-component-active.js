@@ -8,6 +8,7 @@ import LC from '@/element-materials/core'
 
 export default function (callbak) {
     const componentData = shallowRef({})
+    let $drawTarget = null
 
     const activeCallback = (event) => {
         if (event.target.componentId === componentData.value.componentId) {
@@ -15,9 +16,13 @@ export default function (callbak) {
         }
         componentData.value = event.target
         callbak(event.target)
+        hoverResizeObserver.observe($drawTarget)
     }
     
     const updateCallbak = _.throttle(() => {
+        if (!componentData.value.componentId) {
+            return
+        }
         setTimeout(() => {
             callbak(componentData.value)
         })
@@ -27,11 +32,13 @@ export default function (callbak) {
         if (componentData.value.componentId) {
             componentData.value = {}
             callbak()
+            hoverResizeObserver.unobserve($drawTarget)
         }
     }
 
     const resetCallback = () => {
         callbak()
+        hoverResizeObserver.unobserve($drawTarget)
     }
 
     LC.addEventListener('active', activeCallback)
@@ -39,7 +46,6 @@ export default function (callbak) {
     LC.addEventListener('activeClear', activeClearCallback)
     LC.addEventListener('reset', resetCallback)
     
-    let $drawTarget = null
     const hoverResizeObserver = new ResizeObserver(updateCallbak)
     onMounted(() => {
         $drawTarget = document.body.querySelector('#drawTarget')

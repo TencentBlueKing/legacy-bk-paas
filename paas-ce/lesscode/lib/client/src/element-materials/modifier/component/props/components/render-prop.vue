@@ -285,6 +285,7 @@
                 type,
                 val
             } = this.describe
+            
             const defaultValue = val !== undefined ? val : getDefaultValueByType(type)
             const valueTypeInclude = Array.isArray(type) ? type : [type]
 
@@ -320,9 +321,11 @@
                 const lastValueType = Array.isArray(this.lastValue.valueType)
                     ? this.lastValue.valueType[0]
                     : this.lastValue.valueType
+                // fix: 错误数据转换，表达式类型的 format 包存成了 value
+                const isFixedComputeFormat = this.lastValue.format === 'value' && /=/.test(this.lastValue.code)
                 this.formData = Object.freeze({
                     ...this.formData,
-                    format: this.lastValue.format,
+                    format: isFixedComputeFormat ? 'expression' : this.lastValue.format,
                     code: this.lastValue.code,
                     valueType: lastValueType
                 })
@@ -353,7 +356,8 @@
                 }
 
                 this.$emit('on-change', this.name, {
-                    ...this.formData
+                    ...this.formData,
+                    modifiers: this.describe.modifiers || []
                 })
             },
             /**

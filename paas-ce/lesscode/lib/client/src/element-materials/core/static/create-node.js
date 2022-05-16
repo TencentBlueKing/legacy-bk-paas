@@ -19,6 +19,13 @@ const parseTemplateTree = (templateRoot) => {
     templateRoot.renderProps && node.setRenderProps(templateRoot.renderProps)
     templateRoot.renderDirectives && node.setRenderDirectives(templateRoot.renderDirectives)
     templateRoot.renderEvents && node.setRenderEvents(templateRoot.renderEvents)
+    if (templateRoot.renderProps) {
+        // prop 通过 merge 的方式加载
+        // 兼容组件 prop 扩展的场景
+        Object.keys(templateRoot.renderProps).forEach(key => {
+            node.renderProps[key] = templateRoot.renderProps[key]
+        })
+    }
     
     // 当前组件是布局类型的组件才会解析下一次 template 配置
     if (node.layoutType && Array.isArray(templateRoot.children)) {

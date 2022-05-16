@@ -52,7 +52,7 @@
 
     const baseStyles = {
         position: 'absolute',
-        zIndex: 99
+        zIndex: 100000002
     }
 
     const hideStyles = {

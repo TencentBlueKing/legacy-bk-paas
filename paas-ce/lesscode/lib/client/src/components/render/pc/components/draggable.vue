@@ -51,26 +51,34 @@
             }
         },
         created () {
-            const dragableCheck = (event) => {
-                /**
-                 * 交互式组件状态更新
-                 * @description 当交互式组件激活时，不属于交互式组件的drag area不可拖动
-                 *  只有关闭后，才可以继续拖拽
-                 */
-                if (event.interactiveShow
-                    && !this.attachToInteractiveComponent) {
-                    this.dragGroup = Object.freeze({
-                        pull: false,
-                        put: false
-                    })
-                } else {
-                    this.dragGroup = this.group
+            if (!this.attachToInteractiveComponent) {
+                const dragableCheck = (event) => {
+                    /**
+                     * 交互式组件状态更新
+                     * @description 当交互式组件激活时，不属于交互式组件的drag area不可拖动
+                     *  只有关闭后，才可以继续拖拽
+                     */
+                    if (event.interactiveShow) {
+                        this.dragGroup = Object.freeze({
+                            pull: false,
+                            put: false
+                        })
+                    } else {
+                        this.dragGroup = this.group
+                    }
                 }
+                const removeChildCallback = (event) => {
+                    if (event.child.interactiveShow) {
+                        this.dragGroup = this.group
+                    }
+                }
+                LC.addEventListener('removeChild', removeChildCallback)
+                LC.addEventListener('toggleInteractive', dragableCheck)
+                this.$once('hook:beforeDestroy', () => {
+                    LC.removeEventListener('removeChild', removeChildCallback)
+                    LC.removeEventListener('toggleInteractive', dragableCheck)
+                })
             }
-            LC.addEventListener('toggleInteractive', dragableCheck)
-            this.$once('hook:beforeDestroy', () => {
-                LC.removeEventListener('toggleInteractive', dragableCheck)
-            })
         },
         mounted () {
             setTimeout(() => {
