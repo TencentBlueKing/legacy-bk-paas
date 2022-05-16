@@ -76,9 +76,7 @@
              */
             applyPageSetting () {
                 const pageStyle = LC.pageStyle
-                this.style = {
-                    'min-width': pageStyle['min-width'] || ''
-                }
+                this.style = {}
                 const $pageContentTarget = document.querySelector('.lesscode-editor-layout .container-content')
                 $pageContentTarget && Object.keys(pageStyle).forEach(key => {
                     if (key !== 'min-width') {
