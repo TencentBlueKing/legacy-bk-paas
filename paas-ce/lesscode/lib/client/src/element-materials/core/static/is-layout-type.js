@@ -10,6 +10,7 @@ export default function (type) {
         'render-column',
         'render-block',
         'free-layout',
-        'widget-form'
+        'widget-form',
+        'widget-form-item'
     ].includes(type)
 }
