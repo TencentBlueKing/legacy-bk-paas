@@ -24,7 +24,7 @@
 
     const baseStyles = {
         position: 'absolute',
-        zIndex: 99,
+        zIndex: 100000001,
         borderWidth: '0px',
         borderColor: '#3a84ff',
         pointer: 'none'

@@ -155,6 +155,12 @@ export default class Node {
      */
     get style () {
         const style = {}
+        Object.keys(this.renderStyles).forEach(key => {
+            if (key === 'customStyle') {
+                return
+            }
+            style[toHyphenate(key)] = unitFilter(this.renderStyles[key])
+        })
         const {
             customStyle = {}
         } = this.renderStyles
@@ -162,11 +168,8 @@ export default class Node {
         Object.keys(customStyle).forEach(key => {
             style[toHyphenate(key)] = customStyle[key]
         })
-        Object.keys(this.renderStyles).forEach(key => {
-            style[toHyphenate(key)] = unitFilter(this.renderStyles[key])
-        })
         
-        return Object.seal(Object.assign(style, customStyle))
+        return Object.seal(style)
     }
     /**
      * @desc 组件 props
