@@ -273,7 +273,7 @@
                         }),
                         this.$store.dispatch('layout/getPageLayout', { pageId: this.pageId }),
                         this.$store.dispatch('components/componentNameMap'),
-                        this.$store.dispatch('nocode/dataSource/list', { projectId: this.projectId })
+                        this.$store.dispatch('dataSource/list', { projectId: this.projectId })
                     ])
 
                     await this.$store.dispatch('page/getPageSetting', {

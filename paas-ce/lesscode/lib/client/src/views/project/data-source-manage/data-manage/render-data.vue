@@ -258,7 +258,7 @@
                     pageSize: dataStatus.pagination.limit
                 }
                 dataStatus.isLoading = true
-                return store.dispatch('nocode/dataSource/getOnlineTableDatas', queryData).then((res) => {
+                return store.dispatch('dataSource/getOnlineTableDatas', queryData).then((res) => {
                     dataStatus.dataList = res.list?.map(normalizeData)
                     dataStatus.pagination.count = res.count
                 }).catch((error) => {
@@ -390,7 +390,7 @@
 
             const modifyOnlineDb = (sql) => {
                 const apiData = { environment: environment.value.key, projectId, sql }
-                return store.dispatch('nocode/dataSource/modifyOnlineDb', apiData)
+                return store.dispatch('dataSource/modifyOnlineDb', apiData)
             }
 
             const exportAllDatas = (fileType) => {

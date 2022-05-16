@@ -78,7 +78,7 @@
 
             const getDetail = () => {
                 isLoading.value = true
-                store.dispatch('nocode/dataSource/findOne', id).then((data) => {
+                store.dispatch('dataSource/findOne', id).then((data) => {
                     tableStatus.basicInfo.tableName = data.tableName
                     tableStatus.basicInfo.comment = data.comment
                     tableStatus.data = data.columns

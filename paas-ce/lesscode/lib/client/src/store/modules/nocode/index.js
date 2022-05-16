@@ -1,6 +1,5 @@
 import form from './form.js'
 import flow from './flow.js'
-import dataSource from './data-source.js'
 import formSetting from './form-setting'
 
 export default {
@@ -8,7 +7,6 @@ export default {
     modules: {
         form,
         flow,
-        dataSource,
         formSetting
     }
 }

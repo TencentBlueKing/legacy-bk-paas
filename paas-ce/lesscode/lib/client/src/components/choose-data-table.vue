@@ -44,7 +44,7 @@
                     environment: 'preview',
                     tableName
                 }
-                store.dispatch('nocode/dataSource/getOnlineTableDatas', queryData).then((data) => {
+                store.dispatch('dataSource/getOnlineTableDatas', queryData).then((data) => {
                     const table = tableList.find((table) => table.tableName === tableName)
                     emit('update:value', tableName)
                     emit('choose', tableName, data, table)

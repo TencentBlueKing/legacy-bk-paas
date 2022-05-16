@@ -724,7 +724,7 @@
                             timeRange: [new Date(releaseInfo.createTime)],
                             projectId: this.projectId
                         }
-                        this.$store.dispatch('nocode/dataSource/tableRecordList', postData).then((res) => {
+                        this.$store.dispatch('dataSource/tableRecordList', postData).then((res) => {
                             resolve(res)
                         }).catch(reject)
                     }

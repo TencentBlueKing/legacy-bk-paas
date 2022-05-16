@@ -103,7 +103,7 @@
                     timeRange: recordStatus.timeRange.map(x => timeFormatter(null, null, x)),
                     createUser: recordStatus.createUser
                 }
-                store.dispatch('nocode/dataSource/tableRecordList', filterData).then((data) => {
+                store.dispatch('dataSource/tableRecordList', filterData).then((data) => {
                     recordStatus.list = data
                 }).catch((error) => {
                     messageError(error.message || error)

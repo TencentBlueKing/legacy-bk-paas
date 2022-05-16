@@ -136,7 +136,7 @@
                     pageSize: listStatus.pagination.limit,
                     page: listStatus.pagination.current
                 }
-                return store.dispatch('nocode/dataSource/list', params).then((res) => {
+                return store.dispatch('dataSource/list', params).then((res) => {
                     listStatus.list = res.list
                     listStatus.pagination.count = res.count
                 }).catch((err) => {
@@ -208,8 +208,8 @@
                     projectId,
                     sql: listStatus.sql
                 }
-                return store.dispatch('nocode/dataSource/modifyOnlineDb', execPerviewSql).then(() => {
-                    return store.dispatch('nocode/dataSource/delete', listStatus.deleteData).then(() => {
+                return store.dispatch('dataSource/modifyOnlineDb', execPerviewSql).then(() => {
+                    return store.dispatch('dataSource/delete', listStatus.deleteData).then(() => {
                         listStatus.showConfirmDialog = false
                         getTableList()
                     })

@@ -181,7 +181,7 @@
             showSql ({ releaseSqlIds, env }) {
                 this.isShowSql = true
                 this.isLoadingSql = true
-                this.$store.dispatch('nocode/dataSource/getSqlRecords', { ids: releaseSqlIds }).then((res) => {
+                this.$store.dispatch('dataSource/getSqlRecords', { ids: releaseSqlIds }).then((res) => {
                     this.sqlDetail = (res || []).reduce((acc, cur) => {
                         acc += `${cur.sql}\r\n`
                         return acc

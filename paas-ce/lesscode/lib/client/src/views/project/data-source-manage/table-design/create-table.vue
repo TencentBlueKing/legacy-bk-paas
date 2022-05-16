@@ -152,8 +152,8 @@
                 }
                 isLoading.value = true
                 return enableDataSource().then(() => {
-                    return store.dispatch('nocode/dataSource/modifyOnlineDb', record).then(() => {
-                        return store.dispatch('nocode/dataSource/add', postData).then(() => {
+                    return store.dispatch('dataSource/modifyOnlineDb', record).then(() => {
+                        return store.dispatch('dataSource/add', postData).then(() => {
                             messageSuccess('新增表成功')
                             changeEdit(false)
                             goBack()
@@ -172,7 +172,7 @@
                 if (isEnableDataSource) {
                     return Promise.resolve()
                 } else {
-                    return store.dispatch('nocode/dataSource/enable', projectId).then(() => {
+                    return store.dispatch('dataSource/enable', projectId).then(() => {
                         projectInfo.isEnableDataSource = 1
                     })
                 }

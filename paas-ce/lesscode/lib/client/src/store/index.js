@@ -31,6 +31,7 @@ import logs from './modules/logs'
 import functionMarket from './modules/function-market'
 import perm from './modules/perm'
 import projectVersion from './modules/project-version'
+import dataSource from './modules/data-source'
 import nocode from './modules/nocode'
 import http from '@/api'
 import router from '../router'
@@ -63,6 +64,7 @@ const store = new Vuex.Store({
         functionMarket,
         perm,
         projectVersion,
+        dataSource,
         nocode
     },
     // 公共 store

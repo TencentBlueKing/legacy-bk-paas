@@ -146,7 +146,7 @@
                     environment: pageStatus.activeEnvironment?.key,
                     projectId
                 }
-                store.dispatch('nocode/dataSource/getOnlineTableList', queryData).then((data) => {
+                store.dispatch('dataSource/getOnlineTableList', queryData).then((data) => {
                     pageStatus.tableList = data || []
                     const activeTable = data.find(x => x.tableName === tableName)
                     setActiveTable(activeTable)
