@@ -38,7 +38,7 @@
         methods: {
             async handleSubmit () {
                 if (this.nocodeType === 'FORM') {
-                    const content = this.$store.state.formSetting.fieldsList || []
+                    const content = this.$store.state.nocode.formSetting.fieldsList || []
                     if (content.length < 1) {
                         this.$bkMessage({
                             theme: 'error',
