@@ -186,7 +186,8 @@ export const apply = async (ctx) => {
                         const { id, createTime, createUser, updateTime, updateUser, ...other } = func
                         const newFunc = Object.assign(other, {
                             versionId,
-                            funcGroupId: defaultFuncGroupId
+                            funcGroupId: defaultFuncGroupId,
+                            projectId: belongProjectId
                         })
                         const createFunc = getRepository(Func).create(newFunc)
                         saveQueue.push(transactionalEntityManager.save(createFunc))
@@ -262,10 +263,11 @@ export const importTemplate = async (ctx) => {
             }
             if (funcList.length) {
                 await Promise.all(funcList.map(async func => {
-                    const { id, createTime, createUser, updateTime, updateUser, pages, ...other } = func
+                    const { id, createTime, createUser, updateTime, updateUser, funcGroupName, pages, ...other } = func
                     const newFunc = Object.assign(other, {
                         versionId,
                         funcGroupId: defaultFuncGroupId,
+                        projectId: belongProjectId,
                         remoteParams: (other.remoteParams || []).join(', '),
                         funcParams: (other.funcParams || []).join(', ')
                     })
@@ -338,7 +340,6 @@ const filterFuncAndVars = async ({ projectId, versionId, valList, funcList }) =>
     const defaultFuncGroupId = projectFuncGroupList[0] && projectFuncGroupList[0].id
     funcList = funcList.filter(item => !projectFuncList.find(func => func.funcCode === item.funcCode))
     valList = valList.filter(item => !projectValList.find(val => val.variableCode === item.variableCode))
-    
     return { valList, funcList, defaultFuncGroupId }
 }
 
