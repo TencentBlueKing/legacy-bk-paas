@@ -163,7 +163,6 @@
                         effectiveRange: 0
                     }))) || []
                     Object.assign(this.templateJson, { belongProjectId: this.projectId, versionId: this.versionId, template, vars: newVars })
-                    
                     const res = await this.$store.dispatch('pageTemplate/import', this.templateJson)
                     if (res) {
                         this.$bkMessage({
