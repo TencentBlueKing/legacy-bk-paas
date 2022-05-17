@@ -76,6 +76,7 @@
                 <edit-func-form
                     ref="functionForm"
                     :func-data="chosenFunction"
+                    :event-data="eventData"
                     @success-save="handleSuccessSave"
                     @close="handleCloseDialog"
                 />
@@ -110,6 +111,10 @@
                 default: ''
             },
             insertFunction: {
+                type: Object,
+                default: undefined
+            },
+            eventData: {
                 type: Object,
                 default: undefined
             }

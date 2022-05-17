@@ -44,7 +44,7 @@
                     :value="type"
                     v-for="type in describe.type"
                     :key="type">
-                    {{ type | capFirstLetter }}
+                    {{ type | renderTypeText }}
                 </bk-radio-button>
             </bk-radio-group>
         </template>
