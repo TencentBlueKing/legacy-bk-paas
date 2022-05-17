@@ -61,7 +61,7 @@
                     </bk-round-progress>
                     <div v-if="file.status === UPLOAD_STATUS.FAIL" class="fail-content">
                         <i class="bk-drag-icon bk-drag-close-circle-fill"></i>
-                        <div class="fail-text">上传失败</div>
+                        <div class="fail-text">{{ file.statusText || '上传失败'}}</div>
                     </div>
                 </div>
             </div>

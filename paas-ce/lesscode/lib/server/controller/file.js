@@ -8,6 +8,8 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+
+import path from 'path'
 import FileType from 'file-type'
 import md5 from 'md5'
 import { LCDataService, TABLE_FILE_NAME } from '../service/data-service'
@@ -62,13 +64,26 @@ export default class FileController {
         @Ctx({ name: 'request' }) request
     ) {
         const files = request.files || {}
-        const file = files.file || {}
+        const file = files.file
+
+        if (!file) {
+            throw Error('未找到文件')
+        }
 
         const filePath = file.path
 
         const fileKey = md5(`${userInfo.username}${projectId}${filePath}${Date.now()}`)
 
-        const { ext, mime } = await FileType.fromFile(filePath)
+        const noStrictExts = ['doc', 'xls', 'ppt', 'msi', 'csv', '.svg']
+
+        let ext = path.extname(file.name).slice(1)
+        let mime = file.type
+
+        if (!noStrictExts.includes(ext)) {
+            const typeResult = await FileType.fromFile(filePath)
+            ext = typeResult.ext
+            mime = typeResult.mime
+        }
 
         const uploadPath = `/${projectId}/file-lib/${fileKey}.${ext}`
 

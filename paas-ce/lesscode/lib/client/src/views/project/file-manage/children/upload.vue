@@ -29,6 +29,14 @@
                 type: Number,
                 default: 10
             },
+            maxImageSize: {
+                type: Number,
+                default: 5
+            },
+            maxFileSize: {
+                type: Number,
+                default: 10
+            },
             multiple: {
                 type: Boolean,
                 default: true
@@ -73,11 +81,17 @@
                     uploadFiles = uploadFiles.slice(0, 1)
                 }
 
-                for (const file of files) {
+                for (let i = 0, l = files.length; i < l; i++) {
+                    const file = files[i]
                     const rawFile = file as UploadRawFile
                     rawFile.uid = genFileId()
 
-                    props.onStart(rawFile)
+                    const error = props.onStart(rawFile)
+
+                    if (error) {
+                        emit('file-error', error, rawFile, uploadFiles)
+                        continue
+                    }
 
                     if (props.autoUpload) {
                         sendFile(rawFile)
@@ -141,7 +155,7 @@
             <bk-button theme="primary">点击上传</bk-button>
             <input ref="inputFileEl" type="file" multiple accept="image/*" @change="handleChangeFiles">
         </div>
-        <div class="tip">支持上传图片大小 2M 以内，格式支持 jpg，png，gif，svg 等</div>
+        <div class="tip">支持上传图片大小 {{maxImageSize}}M 以内，格式支持 jpg，png，gif，svg 等</div>
     </div>
 </template>
 

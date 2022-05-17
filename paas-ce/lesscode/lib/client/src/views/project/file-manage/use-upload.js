@@ -63,6 +63,8 @@ export default (props, uploadRef) => {
 
         const isImage = file.type.startsWith('image/')
 
+        let error = null
+
         // 图片缩略图处理
         if (isImage) {
             try {
@@ -73,8 +75,22 @@ export default (props, uploadRef) => {
             uploadFile.isPic = true
         }
 
+        if (isImage && file.size > (props.maxImageSize * 1024 ** 2)) {
+            uploadFile.status = 'fail'
+            uploadFile.statusText = '超过限制大小'
+            error = new Error(uploadFile.statusText)
+        }
+
+        if (!isImage && file.size > (props.maxFileSize * 1024 ** 2)) {
+            uploadFile.status = 'fail'
+            uploadFile.statusText = '超过限制大小'
+            error = new Error(uploadFile.statusText)
+        }
+
         uploadFiles.value.unshift(uploadFile)
         props?.onChange?.(uploadFile, uploadFiles.value)
+
+        return error
     }
 
     const handleRemove = async (file) => {

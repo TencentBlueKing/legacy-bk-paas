@@ -72,7 +72,13 @@
 
             const baseUploadProps = reactive({
                 fileList: displayList,
+                maxImageSize: 5,
+                maxFileSize: 10,
                 beforeRemove: async (file) => {
+                    if (!file.id) {
+                        return
+                    }
+
                     try {
                         await store.dispatch('file/del', { ...paramsData.value, fileId: file.id })
                         messageSuccess('删除成功')
@@ -95,6 +101,8 @@
 
             const uploadProps = computed(() => ({
                 params: paramsData.value,
+                maxImageSize: baseUploadProps.maxImageSize,
+                maxFileSize: baseUploadProps.maxFileSize,
                 onStart: handleStart,
                 onProgress: handleProgress,
                 onSuccess: handleSuccess,
