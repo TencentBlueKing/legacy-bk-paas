@@ -1,22 +1,7 @@
 <template>
-    <div
-        v-hover="{ type: 'page', deletable: false, click: handleCompClick }"
-        class="data-manage-content">
+    <div class="data-manage-content">
         <div class="operating-buttons">
-            <bk-button
-                v-for="(item, index) in operatingButtons"
-                v-hover="{ type: 'operatingBtn', index, click: handleCompClick, delete: handleCompDel }"
-                :key="index"
-                class="btn-item"
-                size="small">
-                {{ item.name }}
-            </bk-button>
-            <bk-button
-                icon="plus"
-                size="small"
-                @click.stop="addOpBtn">
-                {{ operatingButtons.length > 0 ? '' : '添加功能' }}
-            </bk-button>
+            <button-group />
         </div>
         <div class="data-filter-area">
             <bk-form class="filters-form" form-type="vertical">
@@ -40,21 +25,16 @@
         </div>
         <div class="data-table-edit">
             <bk-table :data="tableConfig">
-                <bk-table-column label="操作">
-                    <template slot-scope="prop">
-                        <div class="table-actions-wrapper">
-                            <bk-button
-                                v-for="(item, index) in prop.row.innerActions"
-                                v-hover="{ type: 'tableAction', index, click: handleCompClick, delete: handleCompDel }"
-                                class="table-action-btn"
-                                size="small"
-                                :key="index"
-                                :text="true">
-                                {{ item.name }}
-                            </bk-button>
-                            <i class="bk-icon icon-plus add-action-btn" @click.stop="addTableAction"></i>
-                        </div>
-                    </template>
+                <bk-table-column type="selection" width="60"></bk-table-column>
+                <bk-table-column
+                    v-for="field in fieldList"
+                    :key="field.id"
+                    :label="field.name"
+                    :prop="field.key"
+                >
+                </bk-table-column>
+                <bk-table-column label="操作" :label-width="150">
+                    <table-action-group />
                 </bk-table-column>
             </bk-table>
         </div>
@@ -63,11 +43,16 @@
 </template>
 <script>
     import hoverDiretive from './hover-directive.js'
-
+    import ButtonGroup from './buttonGroup'
+    import TableActionGroup from './tableActionGroup'
+    import mockData from '../../common/mockFormData.json'
     export default {
         name: 'DataPage',
+        components: { TableActionGroup, ButtonGroup },
         directives: {
-            hover: hoverDiretive
+            hover: hoverDiretive,
+            ButtonGroup,
+            TableActionGroup
         },
         data () {
             return {
@@ -78,7 +63,8 @@
                 hoverComp: {
                     el: null,
                     data: {}
-                }
+                },
+                fieldList: mockData
             }
         },
         methods: {
@@ -132,16 +118,5 @@
             }
         }
     }
-    .table-actions-wrapper {
-        display: flex;
-        align-items: center;
-        .table-action-btn {}
-        .add-action-btn {
-            font-size: 20px;
-            cursor: pointer;
-            &:hover {
-                color: #3a84ff;
-            }
-        }
-    }
+
 </style>
