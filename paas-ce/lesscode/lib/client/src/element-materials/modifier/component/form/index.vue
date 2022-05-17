@@ -26,7 +26,8 @@
             style="margin: 20px 0 10px;">
             表单内容配置
         </div>
-        <div class="form-item-list">
+        <div
+            class="form-item-list">
             <vue-draggable
                 ghost-class="block-item-ghost"
                 :list="componentNode.children"

@@ -42,12 +42,22 @@ export default function (callbak) {
         activeResizeObserver.unobserve($drawTarget)
     }
 
+    const componentDragStartCallbak = () => {
+        callbak()
+    }
+
+    const componentDragEndCallbak = () => {
+        callbak(componentData.value)
+    }
+
     const activeResizeObserver = new ResizeObserver(updateCallbak)
 
     LC.addEventListener('componentHover', componentHoverCallback)
     LC.addEventListener('update', updateCallbak)
     LC.addEventListener('componentMouserleave', componentMouserleaveCallback)
     LC.addEventListener('reset', resetCallback)
+    LC.addEventListener('componentDragStart', componentDragStartCallbak)
+    LC.addEventListener('componentDragEnd', componentDragEndCallbak)
     
     onMounted(() => {
         $drawTarget = document.body.querySelector('#drawTarget')
@@ -60,6 +70,8 @@ export default function (callbak) {
         LC.removeEventListener('update', updateCallbak)
         LC.removeEventListener('componentMouserleave', componentMouserleaveCallback)
         LC.removeEventListener('reset', resetCallback)
+        LC.removeEventListener('componentDragStart', componentDragStartCallbak)
+        LC.removeEventListener('componentDragEnd', componentDragEndCallbak)
     })
 
     return {

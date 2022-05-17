@@ -418,7 +418,7 @@
             /**
              * @desc 切换鼠标按下状态
              */
-            handleMouseup () {
+            handleMouseup (event) {
                 setMousedown(false)
             },
             /**

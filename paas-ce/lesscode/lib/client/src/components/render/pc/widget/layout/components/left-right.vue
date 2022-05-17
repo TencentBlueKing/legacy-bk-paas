@@ -184,7 +184,6 @@
                 bus.$off('on-template-change', this.handleTemplateChange)
             })
             this.refreshKey = Date.now()
-            console.log(this.curTemplateData, this.pageDetail, 899)
         },
         mounted () {
             this.handleOpenMenu()
