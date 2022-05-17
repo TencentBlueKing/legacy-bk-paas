@@ -117,7 +117,7 @@
                         workflow: this.flowId,
                         state: this.nodeId
                     }
-                    const res = await this.$store.dispatch('formSetting/getNodeVars', params)
+                    const res = await this.$store.dispatch('nocode/formSetting/getNodeVars', params)
                     this.fieldList = res.data.map(item => {
                         const { key, name } = item
                         return { key: `\${params_${key}}`, name }
