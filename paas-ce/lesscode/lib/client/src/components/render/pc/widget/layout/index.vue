@@ -61,9 +61,9 @@
             this.projectId = this.$route.params.projectId
             this.fetchPageList()
             
-            LC.addEventListener('set-page-style', this.applyPageSetting)
+            LC.addEventListener('setPageStyle', this.applyPageSetting)
             this.$once('hook:beforeDestroy', () => {
-                LC.removeEventListener('set-page-style', this.applyPageSetting)
+                LC.removeEventListener('setPageStyle', this.applyPageSetting)
             })
         },
         mounted () {
