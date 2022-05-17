@@ -41,10 +41,20 @@ export default function (callbak) {
         hoverResizeObserver.unobserve($drawTarget)
     }
 
+    const componentDragStartCallbak = () => {
+        callbak()
+    }
+
+    const componentDragEndCallbak = () => {
+        callbak(componentData.value)
+    }
+
     LC.addEventListener('active', activeCallback)
     LC.addEventListener('update', updateCallbak)
     LC.addEventListener('activeClear', activeClearCallback)
     LC.addEventListener('reset', resetCallback)
+    LC.addEventListener('componentDragStart', componentDragStartCallbak)
+    LC.addEventListener('componentDragEnd', componentDragEndCallbak)
     
     const hoverResizeObserver = new ResizeObserver(updateCallbak)
     onMounted(() => {
@@ -57,6 +67,8 @@ export default function (callbak) {
         LC.removeEventListener('update', updateCallbak)
         LC.removeEventListener('activeClear', activeClearCallback)
         LC.removeEventListener('reset', resetCallback)
+        LC.removeEventListener('componentDragStart', componentDragStartCallbak)
+        LC.removeEventListener('componentDragEnd', componentDragEndCallbak)
     })
 
     return {

@@ -108,12 +108,15 @@
              * @param { Object } dragEvent
              */
             handleStart (event) {
+                LC.triggerEventListener('componentDragStart', {
+                    type: 'componentDragStart'
+                })
                 this.$emit('start', event)
-                LC.triggerEventListener('componentMouserleave')
-                const activeNode = LC.getActiveNode()
-                if (activeNode) {
-                    activeNode.activeClear()
-                }
+                // LC.triggerEventListener('componentMouserleave')
+                // const activeNode = LC.getActiveNode()
+                // if (activeNode) {
+                //     activeNode.activeClear()
+                // }
             },
             /**
              * @desc 结束拖拽
@@ -122,6 +125,9 @@
             handleEnd (event) {
                 this.styles = {}
                 setMousedown(false)
+                LC.triggerEventListener('componentDragEnd', {
+                    type: 'componentDragEnd'
+                })
                 this.$emit('end', event)
             },
             /**
@@ -129,6 +135,8 @@
              * @param { Object } dragEvent
              */
             handleAdd (event) {
+                // fix: vue-draggable 内部索引不更新的问题
+                this.$refs.draggable.computeIndexes()
                 setMousedown(false)
                 this.$emit('add', event)
             },
