@@ -10,17 +10,38 @@
                     v-hover="{ type: 'filters', index, click: handleCompClick, delete: handleCompDel }"
                     :key="index"
                     style="width: 230px; margin-right: 16px;"
-                    label="字段">
-                    <bk-input size="small" style="pointer-events: none;" />
+                    :label="item.name">
+                    <bk-input size="small" style="pointer-events: none;" :placeholder="`请输入${item.name}`" />
                 </bk-form-item>
-                <div class="add-filter-btn">
-                    <bk-button
-                        icon="plus"
-                        size="small"
-                        @click.stop="addFilterForm">
-                        {{ filters.length > 0 ? '' : '筛选条件' }}
-                    </bk-button>
-                </div>
+                <bk-dropdown-menu
+                    @show="dropdownShow"
+                    @hide="dropdownHide"
+                    v-if="selectList.length > 0"
+                    ref="dropdown"
+                    ext-cls="dropdown">
+                    <div class="add-search" slot="dropdown-trigger">
+                        <div class="add-filter-btn">
+                            <bk-button
+                                icon="plus"
+                                size="small">
+                                筛选条件
+                            </bk-button>
+                        </div>
+                    </div>
+                    <ul class="bk-dropdown-list" slot="dropdown-content">
+                        <li v-for="(ele,index) in selectList" :key="ele.key">
+                            <a @click="triggerHandler(ele,index)">{{ ele.name }}</a>
+                        </li>
+                    </ul>
+                </bk-dropdown-menu>
+                <!--                <div class="add-filter-btn">-->
+                <!--                    <bk-button-->
+                <!--                        icon="plus"-->
+                <!--                        size="small"-->
+                <!--                        @click.stop="addFilterForm">-->
+                <!--                        {{ filters.length > 0 ? '' : '筛选条件' }}-->
+                <!--                    </bk-button>-->
+                <!--                </div>-->
             </bk-form>
         </div>
         <div class="data-table-edit">
@@ -46,6 +67,7 @@
     import ButtonGroup from './buttonGroup'
     import TableActionGroup from './tableActionGroup'
     import mockData from '../../common/mockFormData.json'
+    import cloneDeep from 'lodash.clonedeep'
     export default {
         name: 'DataPage',
         components: { TableActionGroup, ButtonGroup },
@@ -64,15 +86,17 @@
                     el: null,
                     data: {}
                 },
-                fieldList: mockData
+                fieldList: cloneDeep(mockData),
+                selectList: this.getSelectList(mockData)
             }
         },
         methods: {
-            addOpBtn () {
-                this.operatingButtons.push({ name: '默认', type: '', id: '' })
-            },
-            addFilterForm () {
-                this.filters.push({ name: '', type: '', id: '' })
+            // addFilterForm () {
+            //     this.filters.push({ name: '', type: '', id: '' })
+            // },
+            getSelectList (data) {
+                const UN_SEARCH_ABLE_ARR = ['TABLE', 'RICHTEXT', 'FILE', 'LINK', 'IMAGE']
+                return data.filter(item => !UN_SEARCH_ABLE_ARR.includes(item.type))
             },
             addTableAction () {
                 this.tableConfig[0].innerActions.push({ name: '默认', type: '' })
@@ -81,7 +105,21 @@
                 console.log('click', data)
             },
             handleCompDel (data) {
-                console.log('delete', data)
+                const { index } = data
+                this.selectList.push(this.filters[index])
+                this.filters.splice(index, 1)
+                // console.log('delete', data)
+            },
+            dropdownShow () {
+                this.isDropdownShow = true
+            },
+            dropdownHide () {
+                this.isDropdownShow = false
+            },
+            triggerHandler (item, index) {
+                this.filters.push(item)
+                this.selectList.splice(index, 1)
+                this.$emit('change', item)
             }
         }
     }
