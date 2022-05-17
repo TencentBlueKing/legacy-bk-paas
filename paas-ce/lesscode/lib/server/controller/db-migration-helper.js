@@ -1168,11 +1168,6 @@ async function syncFuncData () {
         const funcGroupList = await funcGroupRepository.find({
             projectId: IsNull()
         })
-        const allFuncGroupList = await funcGroupRepository.find()
-        const funcGroupMap = allFuncGroupList.reduce((acc, cur) => {
-            acc[cur.id] = cur.groupName
-            return acc
-        }, {})
 
         const projectFuncGroupRepository = getRepository(ProjectFuncGroup)
         const projectFuncGroupList = await projectFuncGroupRepository.find()
@@ -1192,7 +1187,6 @@ async function syncFuncData () {
                     id: funcData.id
                 }, {
                     projectId: funcGroupProjectMap[funcData.funcGroupId],
-                    funcGroupName: funcGroupMap[funcData.funcGroupId],
                     versionId: versionGroupMap[funcData.funcGroupId],
                     updateTime: funcData.updateTime,
                     updateUser: funcData.updateUser

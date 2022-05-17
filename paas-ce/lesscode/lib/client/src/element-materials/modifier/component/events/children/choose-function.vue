@@ -34,44 +34,50 @@
                                 behavior="simplicity"
                                 v-model="searchFunctionName"
                             ></bk-input>
-                            <ul
-                                class="function-list"
-                                v-if="functionType === 'functionList'"
-                            >
-                                <li
-                                    class="function-group"
-                                    :key="funcGroup.groupName"
-                                    v-for="funcGroup in computedFunctionData"
+                            <template v-if="functionType === 'functionList'">
+                                <ul class="function-list">
+                                    <li
+                                        class="function-group"
+                                        :key="funcGroup.groupName"
+                                        v-for="funcGroup in computedFunctionData"
+                                    >
+                                        <span class="function-group-name">
+                                            {{ funcGroup.groupName }}（{{ funcGroup.children.length }}）
+                                        </span>
+                                        <ul class="group-function-list">
+                                            <li
+                                                v-bk-tooltips="{
+                                                    content: functionData.funcSummary,
+                                                    disabled: !functionData.funcSummary,
+                                                    placements: ['left-start'],
+                                                    width: 200,
+                                                    boundary: 'window'
+                                                }"
+                                                v-for="functionData in funcGroup.children"
+                                                :class="{
+                                                    'select': value.methodCode === functionData.funcCode,
+                                                    'function-item': true
+                                                }"
+                                                :key="functionData.funcName"
+                                                @click="handleChooseFunction(functionData)"
+                                            >
+                                                <span class="function-item-name" v-bk-overflow-tips>{{ functionData.funcCode }}</span>
+                                                <i
+                                                    class="bk-icon icon-edit-line function-tool mt10"
+                                                    @click.stop="handleEditFunction(functionData)"
+                                                ></i>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                <bk-button
+                                    class="function-add"
+                                    text
+                                    @click="handleShowFunction"
                                 >
-                                    <span class="function-group-name">
-                                        {{ funcGroup.groupName }}（{{ funcGroup.children.length }}）
-                                    </span>
-                                    <ul class="group-function-list">
-                                        <li
-                                            v-bk-tooltips="{
-                                                content: functionData.funcSummary,
-                                                disabled: !functionData.funcSummary,
-                                                placements: ['left-start'],
-                                                width: 200,
-                                                boundary: 'window'
-                                            }"
-                                            v-for="functionData in funcGroup.children"
-                                            :class="{
-                                                'select': value.methodCode === functionData.funcCode,
-                                                'function-item': true
-                                            }"
-                                            :key="functionData.funcName"
-                                            @click="handleChooseFunction(functionData)"
-                                        >
-                                            <span class="function-item-name" v-bk-overflow-tips>{{ functionData.funcName }}</span>
-                                            <i
-                                                class="bk-icon icon-edit-line function-tool mt10"
-                                                @click.stop="handleEditFunction(functionData)"
-                                            ></i>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
+                                    <i class="bk-icon icon-plus-circle"></i>新增
+                                </bk-button>
+                            </template>
                             <ul class="function-list" v-else>
                                 <li
                                     class="function-item"
@@ -107,6 +113,7 @@
             :show.sync="isShowEditFunctionDialog"
             :select-func-code="selectFuncCode"
             :insert-function="insertFunctionData"
+            :event-data="eventData"
         />
     </section>
 </template>
@@ -115,6 +122,7 @@
     import { mapActions, mapGetters } from 'vuex'
     import EditFunctionDialog from '@/components/methods/edit-function-dialog/index.vue'
     import { getDefaultFunction } from 'shared/function'
+    import LC from '@/element-materials/core'
 
     export default {
         components: {
@@ -135,7 +143,7 @@
                 functionTypeList: [
                     { name: 'eventTemplate', label: '事件模板' },
                     { name: 'functionMarket', label: '函数市场' },
-                    { name: 'functionList', label: '已有函数' }
+                    { name: 'functionList', label: '应用函数库' }
                 ],
                 searchFunctionName: '',
                 functionType: 'functionList',
@@ -143,7 +151,8 @@
                 isLoading: false,
                 isShowEditFunctionDialog: false,
                 selectFuncCode: '',
-                insertFunctionData: undefined
+                insertFunctionData: undefined,
+                eventData: undefined
             }
         },
 
@@ -201,20 +210,41 @@
             },
 
             handleEditFunction (functionData) {
+                this.clearStatus()
                 this.selectFuncCode = functionData.funcCode
-                this.insertFunctionData = undefined
-                this.isShowEditFunctionDialog = true
+                this.showFunctionDialog()
+                this.handleClose()
+            },
+
+            handleShowFunction () {
+                this.clearStatus()
+                this.showFunctionDialog()
                 this.handleClose()
             },
 
             handleCreateFunction ({ id, ...functionData }) {
+                this.clearStatus()
                 this.insertFunctionData = {
                     ...getDefaultFunction(),
                     ...functionData,
                     projectId: this.$route.params.projectId
                 }
-                this.isShowEditFunctionDialog = true
+                this.showFunctionDialog()
                 this.handleClose()
+            },
+
+            clearStatus () {
+                this.selectFuncCode = undefined
+                this.insertFunctionData = undefined
+                this.eventData = undefined
+            },
+
+            showFunctionDialog () {
+                this.eventData = {
+                    eventName: this.config.name,
+                    componentId: LC.getActiveNode()?.componentId
+                }
+                this.isShowEditFunctionDialog = true
             },
 
             handleClose () {
@@ -248,7 +278,23 @@
             max-height: 350px;
             overflow-y: auto;
             padding-bottom: 8px;
+            background: #fff;
             @mixin scroller;
+        }
+        .function-add {
+            width: 100%;
+            padding: 0 16px;
+            border-radius: 0 0 1px 1px;
+            border-top: 1px solid #dcdee5;
+            background: #fafbfd;
+            line-height: 32px;
+            height: 32px;
+            text-align: left;
+            font-size: 12px;
+            .icon-plus-circle {
+                margin-right: 4px;
+                vertical-align: text-bottom;
+            }
         }
         .function-group {
             font-size: 12px;

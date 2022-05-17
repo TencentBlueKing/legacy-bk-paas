@@ -448,13 +448,12 @@ export default {
                     groupName: '默认分类',
                     projectId
                 })
-                const { id: funcGroupId, groupName: funcGroupName } = await transactionalEntityManager.save(funcGroup)
+                const { id: funcGroupId } = await transactionalEntityManager.save(funcGroup)
                 const curCtx = RequestContext.getCurrentCtx()
                 const defaultFunc = getDefaultFunc(
                     {
                         projectId,
-                        funcGroupId,
-                        funcGroupName
+                        funcGroupId
                     },
                     curCtx.origin
                 )
