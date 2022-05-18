@@ -1,22 +1,7 @@
 <template>
-    <div
-        v-hover="{ type: 'page', deletable: false, click: handleCompClick }"
-        class="data-manage-content">
+    <div class="data-manage-content">
         <div class="operating-buttons">
-            <bk-button
-                v-for="(item, index) in operatingButtons"
-                v-hover="{ type: 'operatingBtn', index, click: handleCompClick, delete: handleCompDel }"
-                :key="index"
-                class="btn-item"
-                size="small">
-                {{ item.name }}
-            </bk-button>
-            <bk-button
-                icon="plus"
-                size="small"
-                @click.stop="addOpBtn">
-                {{ operatingButtons.length > 0 ? '' : '添加功能' }}
-            </bk-button>
+            <button-group />
         </div>
         <div class="data-filter-area">
             <bk-form class="filters-form" form-type="vertical">
@@ -25,36 +10,52 @@
                     v-hover="{ type: 'filters', index, click: handleCompClick, delete: handleCompDel }"
                     :key="index"
                     style="width: 230px; margin-right: 16px;"
-                    label="字段">
-                    <bk-input size="small" style="pointer-events: none;" />
+                    :label="item.name">
+                    <bk-input size="small" style="pointer-events: none;" :placeholder="`请输入${item.name}`" />
                 </bk-form-item>
-                <div class="add-filter-btn">
-                    <bk-button
-                        icon="plus"
-                        size="small"
-                        @click.stop="addFilterForm">
-                        {{ filters.length > 0 ? '' : '筛选条件' }}
-                    </bk-button>
-                </div>
+                <bk-dropdown-menu
+                    @show="dropdownShow"
+                    @hide="dropdownHide"
+                    v-if="selectList.length > 0"
+                    ref="dropdown"
+                    ext-cls="dropdown">
+                    <div class="add-search" slot="dropdown-trigger">
+                        <div class="add-filter-btn">
+                            <bk-button
+                                icon="plus"
+                                size="small">
+                                筛选条件
+                            </bk-button>
+                        </div>
+                    </div>
+                    <ul class="bk-dropdown-list" slot="dropdown-content">
+                        <li v-for="(ele,index) in selectList" :key="ele.key">
+                            <a @click="triggerHandler(ele,index)">{{ ele.name }}</a>
+                        </li>
+                    </ul>
+                </bk-dropdown-menu>
+                <!--                <div class="add-filter-btn">-->
+                <!--                    <bk-button-->
+                <!--                        icon="plus"-->
+                <!--                        size="small"-->
+                <!--                        @click.stop="addFilterForm">-->
+                <!--                        {{ filters.length > 0 ? '' : '筛选条件' }}-->
+                <!--                    </bk-button>-->
+                <!--                </div>-->
             </bk-form>
         </div>
         <div class="data-table-edit">
             <bk-table :data="tableConfig">
-                <bk-table-column label="操作">
-                    <template slot-scope="prop">
-                        <div class="table-actions-wrapper">
-                            <bk-button
-                                v-for="(item, index) in prop.row.innerActions"
-                                v-hover="{ type: 'tableAction', index, click: handleCompClick, delete: handleCompDel }"
-                                class="table-action-btn"
-                                size="small"
-                                :key="index"
-                                :text="true">
-                                {{ item.name }}
-                            </bk-button>
-                            <i class="bk-icon icon-plus add-action-btn" @click.stop="addTableAction"></i>
-                        </div>
-                    </template>
+                <bk-table-column type="selection" width="60"></bk-table-column>
+                <bk-table-column
+                    v-for="field in fieldList"
+                    :key="field.id"
+                    :label="field.name"
+                    :prop="field.key"
+                >
+                </bk-table-column>
+                <bk-table-column label="操作" :label-width="150">
+                    <table-action-group />
                 </bk-table-column>
             </bk-table>
         </div>
@@ -63,11 +64,17 @@
 </template>
 <script>
     import hoverDiretive from './hover-directive.js'
-
+    import ButtonGroup from './buttonGroup'
+    import TableActionGroup from './tableActionGroup'
+    import mockData from '../../common/mockFormData.json'
+    import cloneDeep from 'lodash.clonedeep'
     export default {
         name: 'DataPage',
+        components: { TableActionGroup, ButtonGroup },
         directives: {
-            hover: hoverDiretive
+            hover: hoverDiretive,
+            ButtonGroup,
+            TableActionGroup
         },
         data () {
             return {
@@ -78,15 +85,18 @@
                 hoverComp: {
                     el: null,
                     data: {}
-                }
+                },
+                fieldList: cloneDeep(mockData),
+                selectList: this.getSelectList(mockData)
             }
         },
         methods: {
-            addOpBtn () {
-                this.operatingButtons.push({ name: '默认', type: '', id: '' })
-            },
-            addFilterForm () {
-                this.filters.push({ name: '', type: '', id: '' })
+            // addFilterForm () {
+            //     this.filters.push({ name: '', type: '', id: '' })
+            // },
+            getSelectList (data) {
+                const UN_SEARCH_ABLE_ARR = ['TABLE', 'RICHTEXT', 'FILE', 'LINK', 'IMAGE']
+                return data.filter(item => !UN_SEARCH_ABLE_ARR.includes(item.type))
             },
             addTableAction () {
                 this.tableConfig[0].innerActions.push({ name: '默认', type: '' })
@@ -95,7 +105,21 @@
                 console.log('click', data)
             },
             handleCompDel (data) {
-                console.log('delete', data)
+                const { index } = data
+                this.selectList.push(this.filters[index])
+                this.filters.splice(index, 1)
+                // console.log('delete', data)
+            },
+            dropdownShow () {
+                this.isDropdownShow = true
+            },
+            dropdownHide () {
+                this.isDropdownShow = false
+            },
+            triggerHandler (item, index) {
+                this.filters.push(item)
+                this.selectList.splice(index, 1)
+                this.$emit('change', item)
             }
         }
     }
@@ -132,16 +156,5 @@
             }
         }
     }
-    .table-actions-wrapper {
-        display: flex;
-        align-items: center;
-        .table-action-btn {}
-        .add-action-btn {
-            font-size: 20px;
-            cursor: pointer;
-            &:hover {
-                color: #3a84ff;
-            }
-        }
-    }
+
 </style>

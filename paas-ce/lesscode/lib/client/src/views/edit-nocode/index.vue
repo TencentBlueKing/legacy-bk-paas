@@ -27,6 +27,7 @@
             </div>
             <extra-links
                 :show-help-box="false"
+                create-form-page
             />
         </div>
         <div class="lesscode-editor-page-content" ref="root" v-if="!isContentLoading">

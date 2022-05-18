@@ -1,11 +1,11 @@
 <template>
     <div
         :class="{
-            [$style['draw-layout']]: true,
+            [$style['draw-layout']]: nocodeType !== 'FORM_MANAGE',
             [$style['is-left-collapsed']]: isLeftCollapse,
             [$style['is-right-collapsed']]: isRightCollapse
         }">
-        <div :class="$style['layout-left']">
+        <div :class="$style['layout-left']" v-if="nocodeType !== 'FORM_MANAGE'">
             <slot name="left" />
         </div>
         <div
@@ -13,10 +13,11 @@
             :class="$style['layout-center']">
             <slot />
         </div>
-        <div :class="$style['layout-right']">
+        <div :class="$style['layout-right']" v-if="nocodeType !== 'FORM_MANAGE'">
             <slot name="right" />
         </div>
         <div
+            v-if="nocodeType !== 'FORM_MANAGE'"
             :class="$style['collapsed-left-btn']"
             v-bk-tooltips.right="{
                 content: '查看所有组件',
@@ -26,6 +27,7 @@
             <i class="bk-drag-icon bk-drag-angle-left" />
         </div>
         <div
+            v-if="nocodeType !== 'FORM_MANAGE'"
             :class="$style['collapsed-right-btn']"
             v-bk-tooltips.right="{
                 content: '查看组件配置',
@@ -37,12 +39,20 @@
     </div>
 </template>
 <script>
+    import { mapGetters } from 'vuex'
+
     export default {
         name: '',
         data () {
             return {
                 isLeftCollapse: false,
                 isRightCollapse: false
+            }
+        },
+        computed: {
+            ...mapGetters('page', ['pageDetail']),
+            nocodeType () {
+                return this.pageDetail.nocodeType || ''
             }
         },
         methods: {

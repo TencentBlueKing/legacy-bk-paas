@@ -179,10 +179,10 @@
             }
         },
         created () {
-            const { api_info } = this.value
+            const { api_info: apiInfo } = this.value
             this.getSystems()
-            if (api_info.remote_system_id !== '') {
-                this.getSystemApis(api_info.remote_system_id, true)
+            if (apiInfo.remote_system_id !== '') {
+                this.getSystemApis(apiInfo.remote_system_id, true)
             }
         },
         methods: {
@@ -312,9 +312,9 @@
             validate () {
                 this.$refs.resForm.validate()
                 this.$refs.sourceForm.validate()
-                const { remote_system_id, remote_api_id, rsp_data } = this.localVal.api_info
+                const { remote_system_id: remoteSystemId, remote_api_id: remoteApiID, rsp_data: rspData } = this.localVal.api_info
                 const { key, name } = this.localVal.kv_relation
-                return [remote_system_id, remote_api_id, rsp_data, key, name].every(item => item !== '')
+                return [remoteSystemId, remoteApiID, rspData, key, name].every(item => item !== '')
             }
         }
     }

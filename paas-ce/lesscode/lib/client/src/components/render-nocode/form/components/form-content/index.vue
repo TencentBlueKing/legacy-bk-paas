@@ -124,10 +124,18 @@
                     this.$emit('copy', field, index)
                     this.selectedIndex = index + 1
                 } else if (type === 'delete') {
-                    this.$emit('delete', index)
-                    if (this.selectedIndex === index) {
-                        this.selectedIndex = -1
-                    }
+                    this.$bkInfo({
+                        title: '确认删除？',
+                        type: 'warning',
+                        subTitle: '删除字段将会同时删除已存在该字段下的数据，你还要继续吗？',
+                        theme: 'primary',
+                        confirmFn: async () => {
+                            this.$emit('delete', index)
+                            if (this.selectedIndex === index) {
+                                this.selectedIndex = -1
+                            }
+                        }
+                    })
                 }
             },
             getDefaultChoice (type) {

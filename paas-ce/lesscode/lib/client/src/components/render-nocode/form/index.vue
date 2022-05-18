@@ -14,6 +14,7 @@
             />
         </layout>
         <right-panel slot="right" :field="crtField" :list="fieldsList" @update="handleUpdateField" />
+        <create-page-dialog ref="createPageDialog" :platform="createPlatform" :nocode-type="createNocodeType" />
     </draw-layout>
 
 </template>
@@ -26,6 +27,7 @@
     import RightPanel from './components/right-panel'
     import Layout from '@/components/render/pc/widget/layout'
     import FormContent from './components/form-content'
+    import CreatePageDialog from '@/components/project/create-page-dialog.vue'
     import { bus } from '@/common/bus'
     export default {
         components: {
@@ -33,12 +35,15 @@
             LeftPanel,
             RightPanel,
             Layout,
-            FormContent
+            FormContent,
+            CreatePageDialog
         },
         data () {
             return {
                 fieldsList: [],
                 fieldPanelHover: false,
+                createPlatform: 'PC',
+                createNocodeType: 'FORM_MANAGE',
                 isEdit: false, // 判断用户是否编辑
                 crtIndex: -1, // 当前选中字段索引
                 crtField: {} // 当前选中字段
@@ -57,10 +62,13 @@
                 this.crtField = {}
                 this.crtIndex = -1
             })
+            bus.$on('openCreatPageFrom', () => {
+                this.$refs.createPageDialog.isShow = true
+            })
         },
-       
         beforeDestroy () {
             bus.$off('restFieldList')
+            bus.$off('openCreatPageFrom')
         },
         methods: {
             // 添加字段
