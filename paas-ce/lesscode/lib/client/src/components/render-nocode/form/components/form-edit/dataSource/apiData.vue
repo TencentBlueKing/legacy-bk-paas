@@ -179,10 +179,10 @@
             }
         },
         created () {
-            const { api_info } = this.value
+            const { api_info: apiInfo } = this.value
             this.getSystems()
-            if (api_info.remote_system_id !== '') {
-                this.getSystemApis(api_info.remote_system_id, true)
+            if (apiInfo.remote_system_id !== '') {
+                this.getSystemApis(apiInfo.remote_system_id, true)
             }
         },
         methods: {
@@ -190,7 +190,7 @@
             async getSystems () {
                 try {
                     this.systemListLoading = true
-                    const res = await this.$store.dispatch('formSetting/getRemoteSystem')
+                    const res = await this.$store.dispatch('nocode/formSetting/getRemoteSystem')
                     this.systemList = res.data.filter(item => item.is_activated)
                 } catch (e) {
                     console.error(e)
@@ -209,7 +209,7 @@
                 try {
                     this.systemApisLoading = true
                     this.apiList = []
-                    const res = await this.$store.dispatch('formSetting/getSystemApis', { remote_system: val })
+                    const res = await this.$store.dispatch('nocode/formSetting/getSystemApis', { remote_system: val })
                     this.apiList = res.data.filter(item => item.is_activated)
                     if (init) {
                         this.setFormData(this.localVal.api_info.remote_api_id)
@@ -312,9 +312,9 @@
             validate () {
                 this.$refs.resForm.validate()
                 this.$refs.sourceForm.validate()
-                const { remote_system_id, remote_api_id, rsp_data } = this.localVal.api_info
+                const { remote_system_id: remoteSystemId, remote_api_id: remoteApiID, rsp_data: rspData } = this.localVal.api_info
                 const { key, name } = this.localVal.kv_relation
-                return [remote_system_id, remote_api_id, rsp_data, key, name].every(item => item !== '')
+                return [remoteSystemId, remoteApiID, rspData, key, name].every(item => item !== '')
             }
         }
     }

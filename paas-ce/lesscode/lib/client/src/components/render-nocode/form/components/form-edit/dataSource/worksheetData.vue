@@ -214,7 +214,7 @@
             async getAppList () {
                 try {
                     this.appListLoading = true
-                    const res = await this.$store.dispatch('formSetting/getProjectGranted', { project_key: this.appId })
+                    const res = await this.$store.dispatch('nocode/formSetting/getProjectGranted', { project_key: this.appId })
                     this.appList = res.data
                 } catch (e) {
                     console.error(e)
@@ -229,7 +229,7 @@
                         project_key: this.localVal.target.project_key,
                         page_size: 10000
                     }
-                    const res = await this.$store.dispatch('formSetting/getFormList', params)
+                    const res = await this.$store.dispatch('nocode/formSetting/getFormList', params)
                     this.formList = res.data.items
                     this.formListLoading = false
                 } catch (e) {
@@ -239,7 +239,7 @@
             async getFieldList () {
                 try {
                     this.fieldListLoading = true
-                    const res = await this.$store.dispatch('formSetting/getFormFields', this.localVal.target.worksheet_id)
+                    const res = await this.$store.dispatch('nocode/formSetting/getFormFields', this.localVal.target.worksheet_id)
                     this.fieldList = res.data
                     this.fieldListLoading = false
                 } catch (e) {
@@ -253,7 +253,7 @@
                         workflow: this.flowId,
                         state: this.nodeId
                     }
-                    const res = await this.$store.dispatch('formSetting/getNodeVars', params)
+                    const res = await this.$store.dispatch('nocode/formSetting/getNodeVars', params)
                     this.relationList = res.data.map((item) => {
                         const { key, name } = item
                         return { key, name }
