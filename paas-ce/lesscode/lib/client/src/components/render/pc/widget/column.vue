@@ -13,7 +13,8 @@
     <div
         :class="{
             [$style['column']]: true,
-            [$style['empty']]: componentData.slot.default.length < 1
+            [$style['render-grid-empty']]: renderGrid.isColumnEmpty,
+            [$style['empty']]: componentData.children.length < 1
         }">
         <draggable
             ref="draggable"
@@ -34,30 +35,9 @@
                 :key="slotComponentData.renderKey"
                 :component-data="slotComponentData" />
         </draggable>
-        <template v-if="componentData.isActived">
-            <div
-                :class="$style['insert-before']"
-                key="insert-before"
-                role="insert-before"
-                v-bk-tooltips.top-start="'在左侧新建一列'"
-                @click="handleInsertBefore"
-                data-render-drag="disabled">
-                <img src="../../../../images/svg/add-line.svg" />
-            </div>
-            <div
-                :class="$style['insert-after']"
-                key="insert-after"
-                role="insert-after"
-                v-bk-tooltips.top-end="'在右侧新建一列'"
-                @click="handleInsertAfter"
-                data-render-drag="disabled">
-                <img src="../../../../images/svg/add-line.svg" />
-            </div>
-        </template>
     </div>
 </template>
 <script>
-    import _ from 'lodash'
     import LC from '@/element-materials/core'
     import Draggable from '../components/draggable'
     import ResolveComponent from '../resolve-component'
@@ -69,85 +49,62 @@
             ResolveComponent
         },
         inheritAttrs: false,
+        inject: ['renderGrid'],
         props: {
             componentData: {
                 type: Object,
                 default: () => ({})
             }
         },
+        computed: {
+            defaultMargin () {
+                return LC.platform === 'PC' ? '10px' : '20rpx'
+            }
+        },
         created () {
             const nodeCallback = (event) => {
                 if (event.target.componentId === this.componentData.componentId) {
                     this.$forceUpdate()
-                    // 需要同时触发父级 grid 更新
-                    this.autoType()
+                    setTimeout(() => {
+                        this.autoType(event.child)
+                    }, 20)
                 }
             }
 
             LC.addEventListener('appendChild', nodeCallback)
-            LC.addEventListener('removeChild', nodeCallback)
-            
+            LC.addEventListener('moveChild', nodeCallback)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('appendChild', nodeCallback)
-                LC.removeEventListener('removeChild', nodeCallback)
+                LC.removeEventListener('moveChild', nodeCallback)
             })
         },
         methods: {
-            handleInsertBefore () {
-                if (this.componentData.parentNode.children.length >= 12) {
-                    this.messageWarn('最多支持12栅格')
-                    return
-                }
-                this.componentData.parentNode.insertBefore(LC.createNode('render-column'), this.componentData)
-            },
-            handleInsertAfter () {
-                if (this.componentData.parentNode.children.length >= 12) {
-                    this.messageWarn('最多支持12栅格')
-                    return
-                }
-                this.componentData.parentNode.insertAfter(LC.createNode('render-column'), this.componentData)
-            },
             /**
              * @desc 自动排版子组件
              */
-            autoType: _.throttle(function () {
-                setTimeout(() => {
-                    if (!this.$refs.component) {
-                        return
-                    }
-                    const {
-                        width: boxWidth,
-                        left: boxLeft
-                    } = this.$refs.draggable.$el.getBoundingClientRect()
-                    const sepMarginLeft = 5
-                    
-                    // 计算 marginRight
-                    this.$refs.component.forEach(componentInstance => {
-                        const $el = componentInstance.$el
-                        const {
-                            left: componentLeft,
-                            width: componentWidth
-                        } = $el.getBoundingClientRect()
-                        const {
-                            marginLeft,
-                            marginBottom
-                        } = componentInstance.componentData.style
-                        if (componentInstance.componentData.layoutType
-                            || marginBottom === 'unset') {
-                            componentInstance.componentData.setStyle('marginBottom', '10px')
-                            return
-                        }
-                        if (!marginLeft || marginLeft === 'unset') {
-                            if (componentLeft + componentWidth + sepMarginLeft < boxLeft + boxWidth) {
-                                componentInstance.componentData.setStyle('marginRight', '10px')
-                            }
-                        }
-                        if (!marginBottom || marginBottom === 'unset') {
-                            componentInstance.componentData.setStyle('marginBottom', '10px')
-                        }
-                    })
-                })
-            }, 20)
+            autoType (childNode) {
+                if (this._isDestroyed) {
+                    return
+                }
+                const {
+                    top: boxTop,
+                    left: boxLeft
+                } = this.$refs.draggable.$el.getBoundingClientRect()
+
+                const $childEl = childNode.$elm
+
+                const {
+                    top: componentTop,
+                    left: componentLeft
+                } = $childEl.getBoundingClientRect()
+                
+                if (componentTop > boxTop) {
+                    childNode.setStyle('marginTop', '10px')
+                }
+                if (componentLeft > boxLeft) {
+                    childNode.setStyle('marginLeft', '10px')
+                }
+            }
         }
     }
 </script>
@@ -156,8 +113,10 @@
         position: relative;
         width: 100% !important;
         height: 100% !important;
+        &.render-grid-empty{
+            min-height: 34px !important;
+        }
         &.empty{
-            min-height: 64px !important;
             background: #FAFBFD;
             &::before{
                 content: "请拖入组件";
@@ -173,32 +132,6 @@
                 color: #C4C6CC;
                 pointer-events: all;
             }
-        }
-        .insert-before,
-        .insert-after{
-            position: absolute;
-            top: 50%;
-            z-index: 11;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #3A84FF;
-            cursor: pointer;
-            pointer-events: all;
-            transform: translateY(-50%);
-            :global(img){
-                width: 14px;
-                height: 14px;
-            }
-        }
-        .insert-before{
-            left: -10px;
-        }
-        .insert-after{
-            right: -10px;
         }
     }
 </style>

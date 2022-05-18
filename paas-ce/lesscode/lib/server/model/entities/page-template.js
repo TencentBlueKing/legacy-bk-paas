@@ -15,6 +15,9 @@ export default class extends Base {
     })
     templateCode
 
+    @Column({ type: 'varchar', comment: '模板类型：PC 或 MOBILE' })
+    templateType
+
     @Column({
         type: 'varchar',
         comment: '来源pageCode'

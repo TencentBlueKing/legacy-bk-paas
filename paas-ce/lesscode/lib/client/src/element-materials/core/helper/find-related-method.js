@@ -6,13 +6,11 @@ export const findRelatedMethodFromRenderProps = (renderProps) => {
 
         // prop 的format 配置为 value 并且 valueType 为 remote 表示选择的是远程函数
         if (prop.format === 'value' && prop.valueType === 'remote') {
-            if (prop.payload
-                && prop.payload.methodData
-                && prop.payload.methodData.methodCode) {
+            if (prop.payload && prop.payload.methodCode) {
                 methodMap[`prop.${propName}`] = {
                     source: 'prop',
                     key: propName,
-                    code: `${prop.payload.methodData.methodCode}`
+                    code: `${prop.payload.methodCode}`
                 }
             }
         }
@@ -42,18 +40,21 @@ export const findRelatedMethodFromRenderSlot = (renderSlots) => {
     const methodMap = {}
     Object.keys(renderSlots).forEach(slotName => {
         const slot = renderSlots[slotName]
-        // slot 的format 配置为 value 并且 valueType 为 remote 表示选择的是远程函数
-        if (slot.format === 'value' && slot.valueType === 'remote') {
-            if (slot.payload
+        const formatSlot = Array.isArray(slot) ? slot : [slot]
+        formatSlot.forEach((slot) => {
+            // slot 的format 配置为 value 并且 valueType 为 remote 表示选择的是远程函数
+            if (slot.format === 'value' && slot.valueType === 'remote') {
+                if (slot.payload
                 && slot.payload.methodData
                 && slot.payload.methodData.methodCode) {
-                methodMap[`slot.${slotName}`] = {
-                    source: 'slot',
-                    key: slotName,
-                    code: `${slot.payload.methodData.methodCode}`
+                    methodMap[`slot.${slotName}`] = {
+                        source: 'slot',
+                        key: slotName,
+                        code: `${slot.payload.methodData.methodCode}`
+                    }
                 }
             }
-        }
+        })
     })
     return methodMap
 }

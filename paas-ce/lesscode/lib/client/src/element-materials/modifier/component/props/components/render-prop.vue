@@ -85,6 +85,7 @@
     import TypeFreeLayoutItem from './strategy/free-layout-item.vue'
     import TypeSlotWrapper from './strategy/slot-wrapper'
     import TypeIcon from './strategy/icon'
+    import TypeVanIcon from './strategy/van-icon'
     import TypeColor from './strategy/color'
     import TypleElProps from './strategy/el-props'
     import TypeDataSource from './strategy/data-source.vue'
@@ -165,6 +166,7 @@
                     'slot-html': TypeSlot,
                     'free-layout-item': TypeFreeLayoutItem,
                     'icon': TypeIcon,
+                    'van-icon': TypeVanIcon,
                     'color': TypeColor,
                     'step': TypeSlotWrapper,
                     'function': TypeFunction,
@@ -197,6 +199,7 @@
                     'free-layout-item': 'free-layout-item',
                     'bread-crumb': 'bread-crumb',
                     'icon': 'icon',
+                    'van-icon': 'van-icon',
                     'form-item': 'form-item',
                     'color': 'color',
                     'step': 'step',
@@ -216,6 +219,7 @@
                     'html': 'string',
                     'json': 'object',
                     'icon': 'string',
+                    'van-icon': 'string',
                     'float': 'number'
                 }
 
@@ -281,6 +285,7 @@
                 type,
                 val
             } = this.describe
+            
             const defaultValue = val !== undefined ? val : getDefaultValueByType(type)
             const valueTypeInclude = Array.isArray(type) ? type : [type]
 
@@ -316,9 +321,11 @@
                 const lastValueType = Array.isArray(this.lastValue.valueType)
                     ? this.lastValue.valueType[0]
                     : this.lastValue.valueType
+                // fix: 错误数据转换，表达式类型的 format 包存成了 value
+                const isFixedComputeFormat = this.lastValue.format === 'value' && /=/.test(this.lastValue.code)
                 this.formData = Object.freeze({
                     ...this.formData,
-                    format: this.lastValue.format,
+                    format: isFixedComputeFormat ? 'expression' : this.lastValue.format,
                     code: this.lastValue.code,
                     valueType: lastValueType
                 })
@@ -349,7 +356,8 @@
                 }
 
                 this.$emit('on-change', this.name, {
-                    ...this.formData
+                    ...this.formData,
+                    modifiers: this.describe.modifiers || []
                 })
             },
             /**

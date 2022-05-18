@@ -14,46 +14,29 @@
         ref="componentRoot"
         :class="{
             [$style['component']]: true,
-            [$style['selected']]: componentData.isActived,
-            [$style['hover']]: isHover,
             [$style['precent-width']]: fixPercentStyleWidth,
             [$style['precent-height']]: fixPercentStyleHeight,
             'bk-layout-custom-component-wrapper': componentData.isCustomComponent
         }"
         role="component-root"
-        :data-component-id="`${componentData.componentId}`"
-        :data-layout="componentData.layoutType"
         :style="Object.assign({}, componentData.style, safeStyles)"
+        v-bind="{
+            [componentData.componentId]: ''
+        }"
         @mousedown.stop="handleMousedown"
         @mousemove="handleMousemove"
         @mouseup="handleMouseup"
         @click.stop="handleClick"
+        @dblclick.stop="handleDBClick"
         @contextmenu.stop="handleShowContextmenu">
         <render-component
             :ref="componentData.componentId"
             :component-data="componentData" />
-        <template v-if="componentData.isActived || isHover">
-            <div :class="$style['line-top']" key="lineTop" role="line-top" />
-            <div :class="$style['line-right']" key="lineRight" role="line-right" />
-            <div :class="$style['line-bottom']" key="lineBottom" role="line-bottom" />
-            <div :class="$style['line-left']" key="lineLeft" role="line-left" />
-        </template>
-        <div
-            v-if="componentData.isActived"
-            :class="$style['tools']">
-            <div :class="$style['tools-btn']">
-                {{ componentData.componentId }}
-            </div>
-            <save-to-template
-                v-if="componentData.layoutType
-                    && componentData.parentNode.layoutType" />
-        </div>
     </div>
 </template>
 <script>
     import _ from 'lodash'
     import LC from '@/element-materials/core'
-    import SaveToTemplate from './components/save-to-template'
     import RenderComponent from './render-component'
     import RenderSlot from './render-slot'
 
@@ -75,10 +58,17 @@
         }
     }
 
-    // 记录鼠标 hover 组件的 id
-    let hoverComponentId = ''
+    const isNumberValue = value => {
+        return /^[-]?\d/.test(value)
+    }
+
     // 记录 mousedown 状态
+    // mousedown时不响应mousemove
     let isMousedown = false
+
+    export const setMousedown = value => {
+        isMousedown = value
+    }
 
     const safeStyles = {
         // fix: 影响子元素排版
@@ -152,12 +142,12 @@
             FreeLayout: () => import('./widget/free-layout'),
             RenderGrid: () => import('./widget/grid'),
             RenderColumn: () => import('./widget/column'),
+            RenderBlock: () => import('./widget/block.vue'),
             WidgetForm: () => import('./widget/form'),
             WidgetFormItem: () => import('./widget/form-item'),
             ResolveComponent: () => import('./resolve-component'),
             RenderComponent,
-            RenderSlot,
-            SaveToTemplate
+            RenderSlot
         },
         inheritAttrs: false,
         props: {
@@ -178,7 +168,6 @@
                 }
             }
             return {
-                isHover: false,
                 // 默认会继承组件的 style 配置，如果直接继承有些样式会造成排版问题需要重置
                 safeStyles: Object.assign({}, safeStyles),
                 // 百分比宽度时需要修正相对父级的值
@@ -212,51 +201,29 @@
             // 编辑更新
             const updateCallback = (event) => {
                 if (event.target.componentId === this.componentData.componentId) {
-                    console.log(`\n${new Date()}`)
-                    console.log('record event : ', event)
-                    this.safeStylesWithDisplay()
-                    this.safeStyleWithWidth()
-                    this.safeStyleWithHeight()
+                    this.safeStylesOfDisplay()
+                    this.safeStyleOfWidth()
+                    this.safeStyleOfHeight()
                     this.$forceUpdate()
                     this.$emit('component-update')
                 }
             }
-            
-            const componentHoverCallback = _.throttle(() => {
-                this.isHover = hoverComponentId === this.componentData.componentId
-            }, 20)
-
-            const componentMouseleaveCallback = () => {
-                hoverComponentId = ''
-                this.isHover = false
-            }
 
             LC.addEventListener('update', updateCallback)
-            LC.addEventListener('active', updateCallback)
-            LC.addEventListener('activeClear', updateCallback)
-            LC.addEventListener('componentHover', componentHoverCallback)
-            LC.addEventListener('componentMouserleave', componentMouseleaveCallback)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('update', updateCallback)
-                LC.removeEventListener('active', updateCallback)
-                LC.removeEventListener('activeClear', updateCallback)
-                LC.removeEventListener('componentHover', componentHoverCallback)
-                LC.removeEventListener('componentMouserleave', componentMouseleaveCallback)
             })
         },
         mounted () {
-            this.safeStylesWithDisplay()
-            this.safeStyleWithWidth()
-            this.safeStyleWithHeight()
+            this.safeStylesOfDisplay()
+            this.safeStyleOfWidth()
+            this.safeStyleOfHeight()
             this.setDefaultStyleWithAttachToFreelayout()
             this.componentData.mounted(this.$refs.componentRoot)
             this.$emit('component-mounted')
         },
         beforeDestroy () {
-            if (hoverComponentId === this.componentData.componentId) {
-                hoverComponentId = ''
-                isMousedown = false
-            }
+            setMousedown(false)
             // 销毁时如果组件被激活，取消激活状态
             if (this.componentData.isActived) {
                 this.componentData.activeClear()
@@ -266,7 +233,7 @@
             /**
              * @desc 保证组件的 display 配置和渲染正确
              */
-            safeStylesWithDisplay () {
+            safeStylesOfDisplay () {
                 if (this.isShadowComponent) {
                     return
                 }
@@ -289,7 +256,7 @@
                 }
                 
                 // 继承组件渲染结果的 display
-                const $baseComponentEl = this.$refs.componentRoot.querySelector('[data-base-component="true"]')
+                const $baseComponentEl = this.$refs.componentRoot.querySelector(':scope > [lesscode-base-component]')
                 if ($baseComponentEl) {
                     const {
                         display
@@ -304,13 +271,28 @@
              *
              * 某些组件可能是通过 prop 配置 width 而不是直接配置 css 的 width
              */
-            safeStyleWithWidth () {
+            safeStyleOfWidth () {
                 if (this.isShadowComponent) {
                     return
                 }
+                const componentDataStyle = this.componentData.style
+                // 绝对定位并且同时设置了left、right
+                if (
+                    componentDataStyle.position === 'absolute'
+                    && isNumberValue(componentDataStyle.left)
+                    && isNumberValue(componentDataStyle.right)) {
+                    this.safeStyles = Object.assign({}, this.safeStyles, {
+                        width: componentDataStyle.width
+                    })
+                    this.fixPercentStyleWidth = true
+                    return
+                }
                 // 优先使用自定义配置的 width
-                if (this.componentData.style.width) {
-                    this.fixPercentStyleWidth = /%$/.test(this.componentData.style.width)
+                if (_.has(componentDataStyle, 'width')) {
+                    this.safeStyles = Object.assign({}, this.safeStyles, {
+                        width: componentDataStyle.width
+                    })
+                    this.fixPercentStyleWidth = /%$/.test(componentDataStyle.width)
                     return
                 }
 
@@ -319,7 +301,8 @@
                     if (!this.$refs.componentRoot) {
                         return
                     }
-                    const $baseComponentEl = this.$refs.componentRoot.querySelector('[data-base-component="true"]')
+                    const $baseComponentEl = this.$refs.componentRoot
+                        .querySelector(':scope > [lesscode-base-component]')
                     if ($baseComponentEl) {
                         const styleWidth = $baseComponentEl.style.width
                         if (styleWidth) {
@@ -336,14 +319,28 @@
              *
              * 某些组件可能是通过 prop 配置 height 而不是直接配置 css 的 height
              */
-            safeStyleWithHeight () {
+            safeStyleOfHeight () {
                 if (this.isShadowComponent) {
                     return
                 }
-                
+                const componentDataStyle = this.componentData.style
+                // 绝对定位并且同时设置了top、bottom
+                if (
+                    componentDataStyle.position === 'absolute'
+                    && isNumberValue(componentDataStyle.top)
+                    && isNumberValue(componentDataStyle.bottom)) {
+                    this.safeStyles = Object.assign({}, this.safeStyles, {
+                        height: componentDataStyle.height
+                    })
+                    this.fixPercentStyleHeight = true
+                    return
+                }
                 // 优先使用自定义配置的 height
-                if (this.componentData.style.height) {
-                    this.fixPercentStyleHeight = /%$/.test(this.componentData.style.height)
+                if (_.has(this.componentData.style, 'height')) {
+                    this.safeStyles = Object.assign({}, this.safeStyles, {
+                        height: componentDataStyle.height
+                    })
+                    this.fixPercentStyleHeight = /%$/.test(componentDataStyle.height)
                     return
                 }
 
@@ -352,7 +349,8 @@
                     if (!this.$refs.componentRoot) {
                         return
                     }
-                    const $baseComponentEl = this.$refs.componentRoot.querySelector('[data-base-component="true"]')
+                    const $baseComponentEl = this.$refs.componentRoot
+                        .querySelector(':scope > [lesscode-base-component]')
                     if ($baseComponentEl) {
                         const styleHeight = $baseComponentEl.style.height
                         if (styleHeight) {
@@ -368,9 +366,16 @@
              * @desc 当组件在 freelayout 布局中时需要设置一些默认样式
              */
             setDefaultStyleWithAttachToFreelayout () {
-                if (!this.attachToFreelayout) {
+                if (this.componentData._isMounted
+                    || !this.attachToFreelayout) {
                     return
                 }
+                this.componentData.setStyle('position', 'absolute')
+                let maxZIndex = 0
+                this.componentData.parentNode.children.forEach(childrenNode => {
+                    maxZIndex = Math.max(maxZIndex, ~~childrenNode.style['z-index'])
+                })
+                this.componentData.setStyle('z-index', maxZIndex)
                 const defaultStyle = {
                     width: {
                         'bk-tag-input': '200px',
@@ -397,32 +402,24 @@
              */
             handleClick () {
                 LC.clearMenu()
-                if (this.componentData.isActived) {
-                    return
-                }
                 this.componentData.active()
             },
-            /**
-             * @desc 鼠标右键——选中组件、弹出菜单
-             * @param { Object } event
-             */
-            handleShowContextmenu (event) {
-                this.componentData.active()
-                LC.showMenu(event)
+            handleDBClick () {
+                console.log('dbdbdb')
             },
             /**
              * @desc 记录鼠标按下状态，抛出 component-mousedown 事件
              * @param {Object} event 事件对象
              */
             handleMousedown (event) {
-                isMousedown = true
+                setMousedown(true)
                 this.$emit('component-mousedown', event)
             },
             /**
              * @desc 切换鼠标按下状态
              */
-            handleMouseup () {
-                isMousedown = false
+            handleMouseup (event) {
+                setMousedown(false)
             },
             /**
              * @desc 组件 wrapper mousemove 事件回调
@@ -439,17 +436,28 @@
                 event.stopImmediatePropagation()
                 event.stopPropagation()
                 event.preventDefault()
-                hoverComponentId = this.componentData.componentId
-                LC.triggerEventListener('componentHover')
+                LC.triggerEventListener('componentHover', {
+                    type: 'componentHover',
+                    target: this.componentData
+                })
+            },
+            /**
+             * @desc 鼠标右键——选中组件、弹出菜单
+             * @param { Object } event
+             */
+            handleShowContextmenu (event) {
+                this.componentData.active()
+                LC.showMenu(event)
             }
         }
     }
 </script>
 <style lang="postcss" module>
     .component {
+        position: relative;
+        min-height: 10px;
         pointer-events: auto !important;
         cursor: pointer;
-        min-height: 10px;
         &.precent-width{
             & > * {
                 width: 100% !important;
@@ -459,78 +467,6 @@
             & > * {
                 height: 100% !important;
             }
-        }
-        &.hover{
-            position: relative;
-            > .line-top,
-            > .line-right,
-            > .line-bottom,
-            > .line-left {
-                border-style: dashed;
-            }
-        }
-        &.selected{
-            position: relative;
-            > .line-top,
-            > .line-right,
-            > .line-bottom,
-            > .line-left {
-                border-style: solid;
-            }
-        }
-        
-        .line-top,
-        .line-right,
-        .line-bottom,
-        .line-left{
-            position: absolute;
-            z-index: 9999999;
-            border-width: 0;
-            border-color: #3a84ff;
-        }
-        .line-top {
-            top: 0;
-            right: 0;
-            left: 0;
-            border-top-width: 1px;
-        }
-        .line-right{
-            top: 0;
-            right: 0;
-            bottom: 0;
-            border-right-width: 1px;
-        }
-        .line-bottom{
-            right: 0;
-            bottom: 0;
-            left: 0;
-            border-bottom-width: 1px;
-        }
-        .line-left{
-            top: 0;
-            bottom: 0;
-            left: 0;
-            border-left-width: 1px;
-        }
-        .tools{
-            position: absolute;
-            top: -22px;
-            left: 0;
-            display: flex;
-            & > * {
-                flex: 0 0 auto;
-            }
-        }
-        .tools-btn{
-            height: 20px;
-            padding: 0 7px;
-            margin-right: 4px;
-            line-height: 20px;
-            text-align: center;
-            background: #3A84FF;
-            border-radius: 2px;
-            color: #fff;
-            text-align: center;
         }
     }
 </style>

@@ -75,7 +75,7 @@ export default {
         }
     },
     actions: {
-        // 项目详情
+        // 应用详情
         getProjectDetail ({ commit, state }) {
             return Store.dispatch('project/detail', {
                 projectId: state.projectId
@@ -83,7 +83,7 @@ export default {
                 commit('setProjectDetail', data)
             })
         },
-        // 项目完整路由配置
+        // 应用完整路由配置
         getProjectRouteGroup ({ commit, state }) {
             return Store.dispatch('project/detail', {
                 projectId: state.projectId
@@ -91,14 +91,14 @@ export default {
                 commit('setProjectRouteGroup', data)
             })
         },
-        // 项目下的完整函数数据
+        // 应用下的完整函数数据
         getProjectFuntionGroup ({ commit, state }) {
-            return Store.dispatch('functions/getAllGroupFuncs', state.projectId)
+            return Store.dispatch('functions/getAllGroupAndFunction', state.projectId)
                 .then(data => {
                     commit('setProjectFunctionGroup', data)
                 })
         },
-        // 项目下的完整布局列表
+        // 应用下的完整布局列表
         getProjectLayoutList ({ commit, state }) {
             return Store.dispatch('layout/getList', {
                 projectId: state.projectId
@@ -110,7 +110,7 @@ export default {
                     })))
                 })
         },
-        // 项目下的所有页面
+        // 应用下的所有页面
         getProjectPageList ({ commit, state }) {
             return Store.dispatch('page/getList', {
                 projectId: state.projectId

@@ -2,7 +2,10 @@
     <div class="render-list">
         <div class="header">
             <bk-button theme="primary" @click="handleShowOperation">新建</bk-button>
-            <a class="download-demo" href="/help/custom" target="_blank">组件开发指引</a>
+            <div class="header-right">
+                <type-select class="type-select" @select-change="handleSelectChange"></type-select>
+                <a class="download-demo" href="/help/custom" target="_blank">组件开发指引</a>
+            </div>
         </div>
         <div class="component-list-content" v-bkloading="{ isLoading }">
             <bk-table
@@ -11,9 +14,15 @@
                 :header-cell-style="{ background: '#f0f1f5' }"
                 :data="data"
                 :row-class-name="rowClassMethod"
-                :pagination="pagination">
+                :pagination="pagination"
+                @page-change="handlePageChange"
+                @page-limit-change="handlePageLimitChange">
                 <bk-table-column label="组件名称" prop="name" align="left" min-width="150" show-overflow-tooltip>
                     <template slot-scope="{ row }">
+                        <span class="comp-type">
+                            <i v-if="row.compType === 'MOBILE'" class="bk-drag-icon bk-drag-mobilephone"> </i>
+                            <i v-else class="bk-drag-icon bk-drag-pc"> </i>
+                        </span>
                         <span class="component-name">{{ row.displayName }}({{ row.name }})</span>
                         <img
                             v-if="row.status === 1"
@@ -80,13 +89,15 @@
     import Operation from './operation'
     import VersionLog from '@/components/version-log'
     import PublicScope from '../../public-scope'
+    import typeSelect from '@/components/project/type-select'
 
     export default {
         name: '',
         components: {
             Operation,
             VersionLog,
-            PublicScope
+            PublicScope,
+            typeSelect
         },
         props: {
             categoryId: {
@@ -110,10 +121,17 @@
                 pagination: {
                     count: 0,
                     limit: 10,
-                    current: 1
+                    current: 1,
+                    limitList: [
+                        10,
+                        20,
+                        50,
+                        100
+                    ]
                 },
                 componentId: 0,
-                editInfo: {}
+                editInfo: {},
+                compType: ''
             }
         },
         watch: {
@@ -133,7 +151,8 @@
                     belongProjectId: parseInt(this.$route.params.projectId),
                     categoryId: this.categoryId,
                     limit: this.pagination.limit,
-                    current: this.pagination.current
+                    current: this.pagination.current,
+                    compType: this.compType
                 })
                 this.data = Object.freeze(res.data)
                 this.pagination.count = res.count
@@ -192,14 +211,14 @@
             },
             getPublicScope (compId) {
                 let scope
-                // 是否公开给所有项目
+                // 是否公开给所有应用
                 const isAll = this.publicScope.all.findIndex(item => item.id === compId) !== -1
                 if (isAll) {
-                    scope = ['所有项目', 1]
+                    scope = ['所有应用', 1]
                 } else if (this.publicScope.specify[compId]) {
                     scope = [this.publicScope.specify[compId], -1]
                 } else {
-                    scope = ['仅本项目', 0]
+                    scope = ['仅本应用', 0]
                 }
                 this.componentScope[compId] = scope
                 return scope
@@ -209,6 +228,20 @@
                     return scope.map(item => item.projectName).join('，')
                 }
                 return scope
+            },
+            handleSelectChange (type) {
+                this.compType = type === 'ALL' ? '' : type
+                this.pagination.current = 1
+                this.fetchData()
+            },
+            handlePageChange (current) {
+                this.pagination.current = current
+                this.fetchData()
+            },
+            handlePageLimitChange (limit) {
+                this.pagination.current = 1
+                this.pagination.limit = limit
+                this.fetchData()
             }
         }
     }
@@ -220,10 +253,16 @@
             display: flex;
             align-items: flex-end;
             margin-bottom: 12px;
-            .download-demo{
+            .header-right{
                 margin-left: auto;
+                display: flex;
+                align-items: center;
+            }
+            .download-demo{
                 font-size: 12px;
                 color: #3a84ff;
+            }
+            .type-select{
             }
         }
         .component-off-flag{
@@ -279,6 +318,12 @@
         }
         .component-list-content{
             min-height: calc(100vh - 250px);
+        
+            .comp-type {
+                font-size: 16px;
+                color: #979ba5;
+                margin-right: 10px;
+            }
         }
         .component-list-empty{
             font-size: 14px;

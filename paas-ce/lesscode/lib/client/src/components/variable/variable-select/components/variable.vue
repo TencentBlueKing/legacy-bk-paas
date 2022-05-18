@@ -84,7 +84,7 @@
                     title="primary"
                     @click="handleGoGlobalVariableManage">
                     <i class="bk-drag-icon bk-drag-jump-link"></i>
-                    管理项目级公共变量
+                    管理应用级公共变量
                 </bk-button>
             </footer>
         </div>
@@ -104,6 +104,7 @@
     import _ from 'lodash'
     import { mapGetters, mapActions } from 'vuex'
     import remoteExample from '@/element-materials/modifier/component/props/components/strategy/remote-example'
+    import { VARIABLE_TYPE, VARIABLE_VALUE_TYPE } from 'shared/variable/index.js'
 
     const typeEnum = {
         0: 'string',
@@ -188,10 +189,10 @@
             getVariableDefaultValue (row) {
                 const valList = {}
                 const defaultVal = row.defaultValue || {}
-                const showKeyList = row.defaultValueType === 0 ? ['all'] : ['prod', 'stag']
+                const showKeyList = row.defaultValueType === VARIABLE_VALUE_TYPE.SAME ? ['all'] : ['prod', 'stag']
                 showKeyList.forEach((key) => {
                     let val = defaultVal[key]
-                    if (![3, 4].includes(row.valueType)) val = JSON.stringify(val)
+                    if (![VARIABLE_TYPE.ARRAY.VAL, VARIABLE_TYPE.OBJECT.VAL].includes(row.valueType)) val = JSON.stringify(val)
                     valList[key] = val
                 })
                 return valList
@@ -201,16 +202,8 @@
              * @returns { String }
              */
             getVariableTypeText ({ valueType }) {
-                const valueTypeMap = {
-                    0: 'String',
-                    1: 'Number',
-                    2: 'Boolean',
-                    3: 'Array',
-                    4: 'Object',
-                    5: '图片地址',
-                    6: '计算变量'
-                }
-                return valueTypeMap[valueType]
+                const variableType = Object.keys(VARIABLE_TYPE).find((variableTypeKey) => VARIABLE_TYPE[variableTypeKey].VAL === valueType)
+                return variableType.NAME
             },
             /**
              * @desc 变量列表行样式
@@ -265,17 +258,17 @@
                 this.$refs.tooltipsHtml._tippy.hide()
 
                 const getVariableValue = ({ valueType, defaultValueType, defaultValue }) => {
-                    if (valueType === 6) {
-                        return undefined
+                    if (valueType === VARIABLE_TYPE.COMPUTED.VAL) {
+                        return this.formData.renderValue
                     }
 
                     let value
-                    if (defaultValueType === 0) {
+                    if (defaultValueType === VARIABLE_VALUE_TYPE.SAME) {
                         value = defaultValue.all
-                    } else if (defaultValueType === 1) {
+                    } else if (defaultValueType === VARIABLE_VALUE_TYPE.DIFFERENT) {
                         value = defaultValue.stag
                     }
-                    if ([3, 4].includes(valueType)) {
+                    if ([VARIABLE_TYPE.ARRAY.VAL, VARIABLE_TYPE.OBJECT.VAL].includes(valueType)) {
                         return JSON.parse(value)
                     }
                     return value

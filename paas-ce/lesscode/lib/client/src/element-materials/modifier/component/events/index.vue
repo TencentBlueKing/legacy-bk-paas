@@ -10,106 +10,114 @@
 -->
 
 <template>
-    <section>
-        <template v-if="config.length">
-            <h3 class="event-tip">可以添加函数执行参数，执行的时候会把事件相关的实参放在自定义参数后传入</h3>
-            <ul>
-                <li
-                    v-for="event in config"
-                    :key="event.name"
-                    class="event-item">
-                    <h3 class="event-title">
-                        <span
-                            v-if="event.tips"
-                            class="label"
-                            v-bk-tooltips="transformTipsWidth(event.tips)">
-                            {{ event.name }}
-                        </span>
-                        <span v-else>{{ event.name }}</span>
-                    </h3>
-                    <select-func
-                        :value="lastEvents[event.name]"
-                        @change="(value) => handleChange(value, event.name)" />
-                </li>
-            </ul>
-        </template>
-        <!-- <div class="no-event" v-else>
-            <span>该组件暂无事件</span>
-        </div> -->
+    <section v-if="configEvents.length">
+        <h3
+            class="empty-event"
+            v-if="Object.keys(renderEvents).length <= 0"
+        >
+            <img src="../../../../images/empty-event.png" />
+            <span class="event-tip">可添加丰富的事件，以实现复杂的业务需求</span>
+        </h3>
+        <ul>
+            <render-event
+                v-for="(eventValue, eventName) in renderEvents"
+                :key="eventName"
+                :event-name="eventName"
+                :event-value="eventValue"
+                :event-config="getEventConfig(eventName)"
+                @update="handleUpdateEvent"
+                @minus="handleMinusEvent"
+            />
+        </ul>
+        <plus-event
+            :config-events="configEvents"
+            :render-events="renderEvents"
+            @plus-event="handlePlusEvent"
+        />
     </section>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
     import LC from '@/element-materials/core'
-    import { transformTipsWidth } from '@/common/util'
-    import selectFunc from '@/components/methods/select-func'
+    import PlusEvent from './children/plus-event.vue'
+    import RenderEvent from './children/render-event.vue'
 
     export default {
         name: 'modifier-events',
+
         components: {
-            selectFunc
+            PlusEvent,
+            RenderEvent
         },
         
         data () {
             return {
-                config: [],
-                transformTipsWidth
+                configEvents: [],
+                renderEvents: {}
             }
         },
-        computed: {
-            ...mapGetters('functions', ['funcGroups'])
-        },
+
         created () {
-            this.lastEvents = {}
             this.currentComponentNode = LC.getActiveNode()
             const {
                 material,
                 renderEvents
             } = this.currentComponentNode
-            this.config = Object.freeze(material.events || [])
-            this.lastEvents = Object.assign({}, renderEvents)
+            this.configEvents = Object.freeze(material.events || [])
+            this.renderEvents = Object.assign({}, renderEvents)
         },
+
         methods: {
-            handleChange (value, eventName) {
-                const renderEvents = {
-                    ...this.lastEvents,
-                    [eventName]: value
+            getEventConfig (eventName) {
+                return this.configEvents.find(configEvent => configEvent.name === eventName) || {}
+            },
+
+            handlePlusEvent (event) {
+                this.renderEvents = {
+                    ...this.renderEvents,
+                    [event.name]: {
+                        methodCode: '',
+                        params: []
+                    }
                 }
-                this.lastEvents = renderEvents
-                this.currentComponentNode.setRenderEvents({
+                this.updateTargetData()
+            },
+
+            handleMinusEvent (eventName) {
+                this.$delete(this.renderEvents, eventName)
+                this.updateTargetData()
+            },
+
+            handleUpdateEvent (renderEvents) {
+                this.renderEvents = {
+                    ...this.renderEvents,
                     ...renderEvents
-                })
+                }
+                this.updateTargetData()
+            },
+
+            updateTargetData () {
+                this.currentComponentNode.setRenderEvents(this.renderEvents)
             }
         }
     }
 </script>
 
 <style lang='postcss' scoped>
-    .event-item {
-        margin: 10px 10px 0;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        .event-title {
-            height: 32px;
-            line-height: 32px;
-            font-size: 14px;
-            font-weight: normal;
-            color: #63656E;
-            word-break: keep-all;
-            margin: 0;
-            padding: 0;
-            .label {
-                border-bottom: 1px dashed #979ba5;
-                cursor: pointer;
-            }
-        }
-    }
     .event-tip {
         margin: 10px;
         padding: 0;
         font-size: 12px;
         font-weight: normal;
+    }
+    .empty-event {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        margin: 21px 0 6px;
+        img {
+            width: 66px;
+            height: 66px;
+        }
     }
 </style>

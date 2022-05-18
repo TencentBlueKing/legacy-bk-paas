@@ -18,6 +18,7 @@ import '@/common/bkui-vue-complex'
 import renderHtml from '@/components/html'
 ${importElementLib}
 import pureAxios from '@/api/pureAxios.js'
+${importVantLib}
 // 用户调用接口使用，无业务逻辑，直接返回数据
 Vue.prototype.$http = pureAxios
 
@@ -67,3 +68,4 @@ auth.requestCurrentUser().then(user => {
 
     document.write(content)
 })
+${remJs}

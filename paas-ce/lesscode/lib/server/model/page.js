@@ -22,7 +22,10 @@ import PageVariable from './entities/page-variable'
 import FuncVariable from './entities/func-variable'
 import VariableFunc from './entities/variable-func'
 import VariableVariable from './entities/variable-variable'
+import LayoutInst from './entities/layout-inst'
+import Layout from './entities/layout'
 import { whereVersion } from './common'
+import { generatorMenu } from '../../shared/util'
 
 module.exports = {
     // 获取项目下可见的页面列表
@@ -33,6 +36,7 @@ module.exports = {
                 'page.id',
                 'page.pageName',
                 'page.pageCode',
+                'page.pageType',
                 'page.content',
                 'page.lifeCycle',
                 'page.styleSetting',
@@ -43,7 +47,8 @@ module.exports = {
             .where('t.projectId = :projectId', { projectId })
             .andWhere(whereVersion(versionId))
             .andWhere('page.deleteFlag = 0')
-            .orderBy('page.id', 'DESC')
+            .orderBy('CASE page.pageType WHEN "MOBILE" THEN "PC" END')
+            .addOrderBy('page.id', 'DESC')
             .getMany()
     },
 
@@ -82,7 +87,32 @@ module.exports = {
             projectPageData.pageId = pageId
             const projectPage = getRepository(ProjectPage).create(projectPageData)
             await transactionalEntityManager.save(projectPage)
-
+            // 带导航布局关联到导航菜单
+            const { pageName, isAddNav } = pageData
+            if (isAddNav) {
+                const layoutId = pageData.layoutId
+                const layoutInst = await getRepository(LayoutInst).findOne({ where: { id: layoutId } })
+                const { type } = await getRepository(LayoutInst).createQueryBuilder('layout_inst')
+                    .leftJoinAndSelect(Layout, 'layout', 'layout_inst.layoutId = layout.id')
+                    .select(['layout_inst.*', 'layout.type as type'])
+                    .where('layout_inst.id = :layoutId', { layoutId })
+                    .getRawOne()
+                const templateData = JSON.parse(layoutInst.content)
+                const menuItem = {
+                    ...generatorMenu(),
+                    name: pageName,
+                    pageCode
+                }
+                // 通过 layout type 判定模板类型
+                if (type === 'left-right') {
+                    templateData.menuList.push(menuItem)
+                } else if (['top-bottom', 'complex'].includes(type)) {
+                    templateData.topMenuList.push(menuItem)
+                }
+                layoutInst.content = JSON.stringify(templateData)
+                await transactionalEntityManager.save(layoutInst)
+            }
+          
             // 创建页面路由和关联记录
             const route = getRepository(Route).create({ path: pageData.pageRoute })
             const { id: routeId } = await transactionalEntityManager.save(route)

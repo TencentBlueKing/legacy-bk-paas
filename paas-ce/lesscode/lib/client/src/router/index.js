@@ -18,6 +18,9 @@ import preload from '@/common/preload'
 
 Vue.use(VueRouter)
 
+// 首页
+const Home = () => import(/* webpackChunkName: 'home' */'@/views/home')
+
 const SystemEntry = () => import(/* webpackChunkName: 'index' */'@/views/system')
 const Projects = () => import(/* webpackChunkName: 'projects' */'@/views/system/projects')
 const Account = () => import(/* webpackChunkName: 'account' */'@/views/system/account')
@@ -33,6 +36,7 @@ const VariableManage = () => import(/* webpackChunkName: 'index' */'@/views/proj
 const ProjectEntry = () => import(/* webpackChunkName: 'projectEntry' */'@/views/project')
 const Page = () => import(/* webpackChunkName: 'page' */'@/views/project/page')
 const RouterManage = () => import(/* webpackChunkName: 'route' */'@/views/project/router-manage')
+const Release = () => import(/* webpackChunkName: 'release' */'@/views/project/release')
 const Basic = () => import(/* webpackChunkName: 'basic' */'@/views/project/basic')
 const Logs = () => import(/* webpackChunkName: 'basic' */'@/views/project/logs')
 const Layout = () => import(/* webpackChunkName: 'layout' */'@/views/project/layout')
@@ -41,6 +45,7 @@ const VersionManage = () => import(/* webpackChunkName: 'version' */'@/views/pro
 const MainEntry = () => import(/* webpackChunkName: 'index' */'@/views')
 const Index = () => import(/* webpackChunkName: 'index' */'@/views/index/index')
 const PreviewTemplate = () => import(/* webpackChunkName: 'previewTemplate' */'@/views/preview/preview-template')
+const PreviewMobile = () => import(/* webpackChunkName: 'previewMobile' */'@/views/preview/preview-mobile')
 const NotFound = () => import(/* webpackChunkName: 'none' */'@/views/status/404')
 
 const HealthPage = () => import(/* webpackChunkName: 'none' */'@/views/system/health')
@@ -84,6 +89,7 @@ const ProjectMember = () => import(/* webpackChunkName: 'operation-stats-entry' 
 const routes = [
     {
         path: '/help',
+        name: 'help',
         component: MainHelpEntry,
         children: [
             { path: 'custom', name: 'custom', component: Custom },
@@ -109,6 +115,11 @@ const routes = [
         component: HealthPage
     },
     {
+        path: '/home',
+        name: 'home',
+        component: Home
+    },
+    {
         path: '/',
         components: {
             default: SystemEntry,
@@ -121,7 +132,7 @@ const routes = [
                 name: 'projects',
                 component: Projects,
                 meta: {
-                    title: '项目列表'
+                    title: '我的应用'
                 }
             },
             {
@@ -167,7 +178,7 @@ const routes = [
                         name: 'op-stats-project',
                         component: OperationStatsProject,
                         meta: {
-                            title: '项目数据'
+                            title: '应用数据'
                         }
                     },
                     {
@@ -199,7 +210,7 @@ const routes = [
                         name: 'pm-project-member',
                         component: ProjectMember,
                         meta: {
-                            title: '项目成员'
+                            title: '应用成员'
                         }
                     }
                 ]
@@ -244,7 +255,7 @@ const routes = [
                 name: 'templateManage',
                 component: TemplateManage,
                 meta: {
-                    title: '模板库'
+                    title: '页面模板库'
                 }
             },
             {
@@ -299,6 +310,14 @@ const routes = [
                 component: Layout,
                 meta: {
                     title: '布局模板实例'
+                }
+            },
+            {
+                path: 'release',
+                name: 'release',
+                component: Release,
+                meta: {
+                    title: '发布部署'
                 }
             },
             {
@@ -365,6 +384,14 @@ const routes = [
         component: PreviewTemplate,
         meta: {
             title: '模板预览'
+        }
+    },
+    {
+        path: '/preview-mobile/project/:projectId',
+        name: 'previewMobile',
+        component: PreviewMobile,
+        meta: {
+            title: '移动端预览'
         }
     },
     {

@@ -29,12 +29,12 @@ export default () => {
     const route = useRoute()
 
     const isLoading = ref(false)
-    const funcGroups = computed(() => store.getters['functions/funcGroups'])
+    const functionList = computed(() => store.getters['functions/functionList'])
     const variableList = computed(() => store.getters['variable/variableList'])
     const curTemplateData = computed(() => store.getters['drag/curTemplateData'])
     const pageDetail = computed(() => store.getters['page/pageDetail'])
-    const versionId = computed(() => store.getters['projectVersion/versionId'])
-    
+    const versionId = computed(() => store.getters['projectVersion/currentVersionId'])
+
     const currentInstance = getCurrentInstance()
 
     const submit = () => {
@@ -75,17 +75,24 @@ export default () => {
         // 遍历 node tree 收集组件中 variable、method 的引用信息
         recTree(LC.getRoot())
 
+        // 收集生命周期中的函数
+        Object.keys(pageDetail.value.lifeCycle).forEach((key) => {
+            const value = pageDetail.value.lifeCycle[key]
+            const methodCode = typeof value === 'object' ? value.methodCode : value
+            if (methodCode) {
+                relatedMethodCodeMap[methodCode] = methodCode
+            }
+        })
+
         const errorStack = []
-        // 项目中所有变量，以 variableCode 作为索引 key
+        // 应用中所有变量，以 variableCode 作为索引 key
         const projectVarialbeCodeMap = variableList.value.reduce((result, variableData) => {
             result[variableData.variableCode] = variableData
             return result
         }, {})
-        // 项目中所有函数，以 funcCode 作为索引 key
-        const projectMethodCodeMap = funcGroups.value.reduce((result, methodGroup) => {
-            methodGroup.functionList.forEach(methodData => {
-                result[methodData.funcCode] = methodData
-            })
+        // 应用中所有函数，以 funcCode 作为索引 key
+        const projectMethodCodeMap = functionList.value.reduce((result, methodData) => {
+            result[methodData.funcCode] = methodData
             return result
         }, {})
 
@@ -133,7 +140,7 @@ export default () => {
                 errorStack.push(`页面中标识为【${variableCode}】的函数与标识为【${variableCode}】的变量存在冲突`)
             }
         })
-        
+
         // 错误提示
         if (errorStack.length > 0) {
             const h = currentInstance.proxy.$createElement
@@ -161,6 +168,7 @@ export default () => {
             layoutType,
             logo,
             siteName,
+            theme,
             menuList = [],
             topMenuList = [],
             renderProps = {}
@@ -169,6 +177,7 @@ export default () => {
         const templateData = layoutType === 'empty' ? {} : {
             logo,
             siteName,
+            theme,
             menuList,
             topMenuList,
             renderProps
@@ -196,7 +205,7 @@ export default () => {
                 from: '',
                 projectId: route.params.projectId,
                 pageCode: pageDetail.value.pageCode,
-                versionId: versionId.vlaue,
+                versionId: versionId.value,
                 pageData: {
                     id: parseInt(route.params.pageId),
                     content: JSON.stringify(LC.getRoot().toJSON().renderSlots.default)

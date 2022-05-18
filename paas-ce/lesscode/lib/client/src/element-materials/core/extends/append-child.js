@@ -1,4 +1,4 @@
-import isNode from '../is-node'
+import isNode from '../static/is-node'
 
 /**
  * @desc 指定的 slot 追加子节点

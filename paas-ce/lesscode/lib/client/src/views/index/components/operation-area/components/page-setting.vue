@@ -192,13 +192,13 @@
         computed: {
             ...mapGetters('projectVersion', { versionId: 'currentVersionId' }),
             ...mapGetters('page', {
+                platform: 'platform',
                 page: 'pageDetail',
                 pageRoute: 'pageRoute',
                 layoutList: 'layoutList',
                 routeGroup: 'routeGroup',
                 styleSetting: 'styleSetting'
             }),
-            ...mapGetters('functions', ['funcGroups']),
             disabled () {
                 const { errors, editField, getFieldValue } = this
                 return (errors[editField.field.id] || []).length > 0 || editField.value === getFieldValue(editField.field)
@@ -272,7 +272,7 @@
                                 clearable: false
                             },
                             editable: true,
-                            children: this.layoutList.map((layout) => {
+                            children: this.layoutList.filter(item => item.layoutType === this.platform).map((layout) => {
                                 return {
                                     id: layout.id,
                                     type: 'option',
@@ -326,13 +326,13 @@
                             from: 'style',
                             type: 'background',
                             editable: true
-                        },
-                        {
-                            id: 'StyleCustom',
-                            name: '自定义样式',
-                            from: 'style',
-                            type: 'custom'
                         }
+                        // {
+                        //     id: 'StyleCustom',
+                        //     name: '自定义样式',
+                        //     from: 'style',
+                        //     type: 'custom'
+                        // }
                     ]
                 }
 
@@ -343,9 +343,9 @@
                 const margin = []
                 const padding = []
                 for (const i in style) {
-                    if (i.startsWith('margin')) {
+                    if (i.startsWith('margin') && i !== 'margin') {
                         margin.push({ key: styleSettingMap[i], value: style[i] ? style[i] : '--' })
-                    } else if (i.startsWith('padding')) {
+                    } else if (i.startsWith('padding') && i !== 'padding') {
                         padding.push({ key: styleSettingMap[i], value: style[i] ? style[i] : '--' })
                     }
                 }
@@ -354,7 +354,7 @@
                     margin: margin,
                     padding: padding,
                     backgroundColor: this.page.styleSetting.backgroundColor,
-                    hasCustomStyle: Object.keys(this.page.styleSetting.customStyle).length !== 0
+                    hasCustomStyle: Object.keys(this.page.styleSetting.customStyle || {}).length !== 0
                 }
             }
         },
@@ -632,7 +632,8 @@
 <style lang="postcss" scoped>
     .page-setting {
         padding: 5px 40px 30px;
-        height: 100%;
+        overflow: auto;
+        /* border: 1px solid #DCDEE5; */
 
         .title {
             font-size: 14px;

@@ -1,5 +1,5 @@
 function getVal (val) {
-    if (typeof val === 'object') val = JSON.stringify(val).replace(/'/g, "\\'").replace(/"/g, '\'')
+    if (typeof val === 'object') val = JSON.stringify(val).replace(/'/g, '\\\'').replace(/"/g, '\'')
     return val
 }
 
@@ -83,7 +83,7 @@ const bkRenderMap = {
                     :sortable="item.sortable"
                     :type="item.type"
                     :width="item.width"
-                    :key="index"
+                    :key="item.templateCol"
                 >
                     <template slot-scope="props">
                         <render-html

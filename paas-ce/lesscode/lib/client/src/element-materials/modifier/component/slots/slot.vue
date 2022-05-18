@@ -44,7 +44,7 @@
                     :value="type"
                     v-for="type in describe.type"
                     :key="type">
-                    {{ type | capFirstLetter }}
+                    {{ type | renderTypeText }}
                 </bk-radio-button>
             </bk-radio-group>
         </template>
@@ -209,9 +209,11 @@
             }
 
             if (this.lastValue && this.lastValue.valueType) {
+                // fix: 错误数据转换，表达式类型的 format 包存成了 value
+                const isFixedComputeFormat = this.lastValue.format === 'value' && /=/.test(this.lastValue.code)
                 this.formData = Object.freeze({
                     ...this.formData,
-                    format: this.lastValue.format,
+                    format: isFixedComputeFormat ? 'expression' : this.lastValue.format,
                     component: this.lastValue.component,
                     code: this.lastValue.code,
                     payload: this.lastValue.payload || {},

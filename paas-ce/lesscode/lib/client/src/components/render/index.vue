@@ -1,32 +1,20 @@
 <template>
-    <div class="canvas-wrapper">
-        <component :is="canvas"></component>
-    </div>
+    <component :is="canvas" />
 </template>
 
 <script>
     import PC from './pc/index.vue'
     import Mobile from './mobile/index.vue'
+    import LC from '@/element-materials/core'
     export default {
         components: {
             PC,
             Mobile
         },
-        props: {
-            platform: {
-                type: String,
-                default: 'pc'
-            }
-        },
         computed: {
             canvas () {
-                return this.platform === 'pc' ? PC : Mobile
+                return LC.platform === 'MOBILE' ? Mobile : PC
             }
         }
     }
 </script>
-.<style lang="postcss" scoped>
-.canvas-wrapper {
-    height: 100%;
-}
-</style>

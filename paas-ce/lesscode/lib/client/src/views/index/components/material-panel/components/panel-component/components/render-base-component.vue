@@ -41,7 +41,7 @@
             baseComponent: {
                 type: String,
                 validator: function (value) {
-                    return ['bk', 'element'].includes(value)
+                    return ['bk', 'element', 'vant'].includes(value)
                 }
             }
         },
@@ -59,7 +59,8 @@
             groupList () {
                 const groupNameMap = {
                     bk: 'bkComponentGroupList',
-                    element: 'elementComponentGroupList'
+                    element: 'elementComponentGroupList',
+                    vant: 'vantComponentGroupList'
                 }
                 return MaterialConfig[groupNameMap[this.baseComponent]]
             },
@@ -89,7 +90,7 @@
                 }, {})
 
                 this.componentList.forEach(component => {
-                    if (component.display === 'none') {
+                    if (component.display === 'none' || !component.group) {
                         return
                     }
                     searchList.push(component)

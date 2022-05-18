@@ -9,10 +9,8 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import grid1 from './grid/column1'
-import grid2 from './grid/column2'
-import grid3 from './grid/column3'
-import grid4 from './grid/column4'
+import block from './block'
+import grid from './grid'
 import column from './column'
 
 import input from './input'
@@ -81,10 +79,8 @@ import sideslider from './sideslider'
 // 是为了要保证 Array.from(new Set(bkComponents.map(item => item.group))) 得到的结果是
 // ['布局', '基础', '表单', '导航', '数据', '反馈', '图表']
 const bkComponents = Object.seal([
-    grid1,
-    grid2,
-    grid3,
-    grid4,
+    block,
+    grid,
     column,
     paragraph,
     button,
@@ -148,4 +144,9 @@ const bkComponents = Object.seal([
 
 export default bkComponents
 
-export const bkComponentGroupList = Array.from(new Set(bkComponents.map(item => item.group)))
+export const bkComponentGroupList = Object.keys(bkComponents.reduce((result, item) => {
+    if (item.group) {
+        result[item.group] = true
+    }
+    return result
+}, {}))

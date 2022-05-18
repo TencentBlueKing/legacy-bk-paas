@@ -18,6 +18,7 @@
             </bk-exception>
             <vue-draggable
                 v-else
+                :options="dragOptions"
                 class="group-content"
                 :list="list"
                 :sort="false"
@@ -36,26 +37,8 @@
 <script>
     import { mapGetters } from 'vuex'
     import LC from '@/element-materials/core'
-    import {
-        createGrid2,
-        createGrid3,
-        createGrid4,
-        createBkIcon,
-        createElIcon,
-        createCharts,
-        createBkRadioGroup
-    } from './hacker'
-
-    const hackerQueue = [
-        createGrid2,
-        createGrid3,
-        createGrid4,
-        createBkIcon,
-        createElIcon,
-        createCharts,
-        createBkRadioGroup
-    ]
-
+    import * as createHacker from './hacker'
+    
     export default {
         props: {
             list: Array,
@@ -66,7 +49,11 @@
             // 为空，通过组件 type 动态计算 group 的值
             group: String,
             // 选中组件时的回调
-            createFallback: Function
+            createFallback: Function,
+            dragOptions: {
+                type: Object,
+                default: () => ({})
+            }
         },
         data () {
             return {
@@ -99,9 +86,10 @@
                     this.newNode = this.createFallback(this.list, event.oldIndex)
                 } else {
                     const materialConfig = this.list[event.oldIndex]
+                    // debugger
                     const node = LC.createNode(materialConfig.type)
 
-                    hackerQueue.forEach(task => task(node, materialConfig))
+                    Object.values(createHacker).forEach(task => task(node, materialConfig))
 
                     // 自定义组件
                     if (this.curNameMap[node.type]) {
@@ -116,11 +104,7 @@
                 
                 let groupName = ''
                 
-                if ([
-                    'free-layout',
-                    'render-grid',
-                    'widget-form'
-                ].includes(this.newNode.type)) {
+                if (LC.isLayoutType(this.newNode.type)) {
                     groupName = 'layout'
                 } else if (LC.isInteractiveType(this.newNode.type)) {
                     groupName = 'interactive'
@@ -212,10 +196,13 @@
                     margin-top: 1px;
                     width: 100%;
                     overflow: hidden;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
+                    display: -webkit-box;
+                    overflow: hidden;
                     text-overflow: ellipsis;
-                    white-space: nowrap;
-                    word-break: break-all;
                     white-space: normal;
+                    word-break: break-all;
                 }
             }
             .render-drag-icon-item{

@@ -110,7 +110,6 @@
         created () {
             this.eventData = {}
             const showCallback = (event) => {
-                console.log('from save templaet = ', event)
                 this.isShow = true
                 this.eventData = event
             }
@@ -143,6 +142,7 @@
                                 templateName: this.dialog.formData.templateName,
                                 categoryId: this.dialog.formData.categoryId,
                                 belongProjectId: this.projectId,
+                                templateType: this.pageDetail.pageType,
                                 versionId: this.versionId,
                                 fromPageCode: this.pageDetail && this.pageDetail.pageCode,
                                 content: JSON.stringify(this.eventData.value),

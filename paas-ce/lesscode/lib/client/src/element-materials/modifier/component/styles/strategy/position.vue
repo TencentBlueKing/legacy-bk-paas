@@ -48,6 +48,7 @@
     import SizeInput from '@/components/modifier/size-input'
     import { splitValueAndUnit } from '@/common/util'
     import { getCssProperties } from '../common/util'
+    import defaultUnitMixin from '@/common/defaultUnit.mixin'
 
     const posConfig = [
         {
@@ -79,6 +80,7 @@
             AppendSelect,
             SizeInput
         },
+        mixins: [defaultUnitMixin],
         props: {
             value: {
                 type: Object,
@@ -108,12 +110,12 @@
             handleInitValueList () {
                 let result = getCssProperties(posConfig, this.include, this.exclude)
                 const that = this
-                result = result.map(function (item) {
+                result = result.map((item) => {
                     if (item.key === 'zIndex') {
                         item['value'] = that.value[item.key] || ''
                     } else {
                         item['value'] = splitValueAndUnit('value', that.value[item.key])
-                        item['unit'] = splitValueAndUnit('unit', that.value[item.key]) || 'px'
+                        item['unit'] = splitValueAndUnit('unit', that.value[item.key]) || this.defaultUnit
                     }
                     return item
                 })

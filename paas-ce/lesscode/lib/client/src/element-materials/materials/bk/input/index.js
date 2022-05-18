@@ -77,6 +77,9 @@ export default {
         'pointer',
         'opacity'
     ],
+    renderStyles: {
+        width: '300px'
+    },
     directives: [
         {
             type: 'v-model',

@@ -3,13 +3,13 @@
         <div class="info-flexible" v-show="!pageLoading">
             <div class="title">基本信息</div>
             <bk-form class="info-list" :label-width="100">
-                <bk-form-item label="项目名称：">
+                <bk-form-item label="应用名称：">
                     {{projectDetail.projectName}}
                 </bk-form-item>
-                <bk-form-item label="项目ID：">
+                <bk-form-item label="应用ID：">
                     {{projectDetail.projectCode}}
                 </bk-form-item>
-                <bk-form-item label="项目简介：">
+                <bk-form-item label="应用简介：">
                     {{projectDetail.projectDesc}}
                 </bk-form-item>
                 <bk-form-item label="创建人：">
@@ -28,23 +28,23 @@
         <bk-dialog v-model="dialog.edit.visible"
             render-directive="if"
             theme="primary"
-            title="编辑项目"
+            title="编辑应用"
             width="600"
             :mask-close="false"
             :auto-close="false"
             header-position="left">
             <bk-form ref="editForm" :label-width="90" :rules="dialog.edit.formRules" :model="dialog.edit.formData">
-                <bk-form-item label="项目名称" required property="projectName">
+                <bk-form-item label="应用名称" required property="projectName">
                     <bk-input maxlength="60" v-model.trim="dialog.edit.formData.projectName"
-                        placeholder="请输入项目名称，60个字符以内">
+                        placeholder="请输入应用名称，60个字符以内">
                     </bk-input>
                 </bk-form-item>
-                <bk-form-item label="项目ID" required property="projectCode">
+                <bk-form-item label="应用ID" required property="projectCode">
                     <bk-input disabled maxlength="60" v-model.trim="dialog.edit.formData.projectCode"
                         placeholder="请输入，由全小写字母组成，该ID将作为自定义组件前缀，创建后不可更改">
                     </bk-input>
                 </bk-form-item>
-                <bk-form-item label="项目简介" required property="projectDesc">
+                <bk-form-item label="应用简介" required property="projectDesc">
                     <bk-input
                         v-model.trim="dialog.edit.formData.projectDesc"
                         :type="'textarea'"
@@ -67,7 +67,7 @@
             render-directive="if"
             theme="primary"
             ext-cls="delete-dialog-wrapper"
-            title="确认删除该项目？"
+            title="确认删除该应用？"
             width="500"
             footer-position="center"
             :mask-close="false"
@@ -78,7 +78,7 @@
                     <bk-input
                         maxlength="60"
                         v-model.trim="dialog.delete.formData.projectName"
-                        placeholder="请输入项目名称">
+                        placeholder="请输入应用名称">
                     </bk-input>
                 </bk-form-item>
             </bk-form>
@@ -212,7 +212,7 @@
 
                     await this.$store.dispatch('project/update', { data })
 
-                    this.messageSuccess('项目编辑成功')
+                    this.messageSuccess('应用编辑成功')
                     this.dialog.edit.visible = false
 
                     this.projectDetail = { ...this.projectDetail, ...data.fields }

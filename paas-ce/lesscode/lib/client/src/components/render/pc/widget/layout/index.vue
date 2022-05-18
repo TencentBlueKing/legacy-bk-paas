@@ -61,9 +61,9 @@
             this.projectId = this.$route.params.projectId
             this.fetchPageList()
             
-            LC.addEventListener('set-page-style', this.applyPageSetting)
+            LC.addEventListener('setPageStyle', this.applyPageSetting)
             this.$once('hook:beforeDestroy', () => {
-                LC.removeEventListener('set-page-style', this.applyPageSetting)
+                LC.removeEventListener('setPageStyle', this.applyPageSetting)
             })
         },
         mounted () {
@@ -76,11 +76,9 @@
              */
             applyPageSetting () {
                 const pageStyle = LC.pageStyle
-                this.style = {
-                    'min-width': pageStyle['min-width'] || ''
-                }
+                this.style = {}
                 const $pageContentTarget = document.querySelector('.lesscode-editor-layout .container-content')
-                Object.keys(pageStyle).forEach(key => {
+                $pageContentTarget && Object.keys(pageStyle).forEach(key => {
                     if (key !== 'min-width') {
                         $pageContentTarget.style[key] = pageStyle[key] || ''
                     }
@@ -114,9 +112,9 @@
                 .navigation-container {
                     .container-content {
                         flex: unset;
-                        height: calc(100vh - 211px);
+                        height: auto !important;
                         max-height: unset !important;
-                        @mixin scroller;
+                        overflow: unset !important
                     }
                 }
             }

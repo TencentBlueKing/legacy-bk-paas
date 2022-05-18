@@ -16,7 +16,7 @@
                 class="tab-item"
                 :class="{ active: tab === 'project' }"
                 @click="handleToggleTab('project')">
-                <span class="tab-item-label">项目模板</span>
+                <span class="tab-item-label">页面模板</span>
             </div>
             <div
                 class="tab-item"
@@ -52,7 +52,7 @@
                                 theme="primary"
                                 size="small"
                                 @click.stop="handleApply(template)">
-                                应用
+                                添加到应用
                             </bk-button>
                         </div>
                     </div>
@@ -80,6 +80,7 @@
     import { bus } from '@/common/bus'
     import GroupBox from '../common/group-box'
     import SearchBox from '../common/search-box'
+    import { mapGetters } from 'vuex'
 
     export default {
         name: 'template-panel',
@@ -99,6 +100,9 @@
                 isLoading: false,
                 tab: 'project',
                 type: 'project',
+                dragOptions: {
+                    disabled: false
+                },
                 marketTemplateGroups: PAGE_TEMPLATE_TYPE,
                 projectTemplateList: [],
                 marketTemplateList: [],
@@ -110,6 +114,7 @@
             }
         },
         computed: {
+            ...mapGetters('page', ['platform']),
             renderTemplateList () {
                 return this.type === 'project' ? this.projectTemplateList : this.marketTemplateList
             }
@@ -141,14 +146,16 @@
                         type: item.templateName,
                         name: item.templateName,
                         displayName: ''
-                    }))
+                    })).filter(item => item.templateType === this.platform || (this.platform === 'PC' && !item.templateType))
+
                     const marketTemplateList = tmpMarketTemplateList.map(item => ({
                         ...item,
                         type: item.templateName,
                         name: item.templateName,
                         displayName: '',
-                        hasInstall: projectTemplateList.filter(template => template.parentId === item.id).length > 0
-                    }))
+                        hasInstall: projectTemplateList.filter(template => (template.parentId === item.id) || template.id === item.id).length > 0
+                    })).filter(item => item.templateType === this.platform || (this.platform === 'PC' && !item.templateType))
+
                     this.projectTemplateGroupList = projectTemplateGroups.map(item => ({
                         id: item.id,
                         categoryName: item.name,
@@ -161,7 +168,7 @@
                     }))
                     this.projectTemplateList = Object.freeze(projectTemplateList)
                     this.marketTemplateList = Object.freeze(marketTemplateList)
-                    this.renderGroupTemplateList = Object.freeze(this.projectTemplateGroupList)
+                    this.renderGroupTemplateList = this.type === 'project' ? Object.freeze(this.projectTemplateGroupList) : Object.freeze(this.marketTemplateGroupList)
                 } catch (err) {
                     this.$bkMessage({
                         theme: 'error',
@@ -181,7 +188,17 @@
             handleToggleTab (tab) {
                 this.tab = tab
                 this.type = tab
-                this.renderGroupTemplateList = this.type === 'project' ? Object.freeze(this.projectTemplateGroupList) : Object.freeze(this.marketTemplateGroupList)
+                if (this.type === 'project') {
+                    this.renderGroupTemplateList = Object.freeze(this.projectTemplateGroupList)
+                    this.dragOptions = {
+                        disabled: false
+                    }
+                } else {
+                    this.renderGroupTemplateList = Object.freeze(this.marketTemplateGroupList)
+                    this.dragOptions = {
+                        disabled: true
+                    }
+                }
             },
             onChoose (e, list) {
                 const contentStr = list[e.oldIndex] && list[e.oldIndex].content
@@ -323,7 +340,7 @@
                     align-items: center;
                     .apply-btn {
                         display: none;
-                        margin-left: 32px;
+                        margin-left: 23px;
                     }
                 }
             }

@@ -174,11 +174,16 @@ const Layout = {
     },
 
     async setRoutePath (ctx) {
-        const { id, projectId, versionId, routePath } = ctx.request.body
+        const { id, projectId, versionId, routePath, layoutType = 'PC' } = ctx.request.body
         try {
             const existRoutePath = await getRepository(LayoutInst).findOne({ projectId, versionId, routePath })
             if (existRoutePath) {
                 throw Error('该模板路由已存在')
+            }
+            if (layoutType !== 'MOBILE' && routePath.startsWith('/mobile')) {
+                ctx.throwError({
+                    message: 'web端路由不能以/mobile开头'
+                })
             }
 
             await getRepository(LayoutInst).update(id, { routePath })
@@ -195,7 +200,7 @@ const Layout = {
     },
 
     async checkName (ctx) {
-        const { showName, routePath, layoutCode, projectId, versionId } = ctx.request.body
+        const { showName, routePath, layoutCode, projectId, versionId, layoutType } = ctx.request.body
         try {
             if (showName) {
                 const existShowName = await getRepository(LayoutInst).findOne({ projectId, versionId, showName, deleteFlag: 0 })
@@ -220,6 +225,11 @@ const Layout = {
                 if (existRoutePath) {
                     ctx.throwError({
                         message: '该模板路由已存在'
+                    })
+                }
+                if (layoutType !== 'MOBILE' && routePath.startsWith('/mobile')) {
+                    ctx.throwError({
+                        message: 'web端路由不能以/mobile开头'
                     })
                 }
             }

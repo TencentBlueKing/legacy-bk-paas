@@ -10,14 +10,14 @@
  */
 
 import { getRepository } from 'typeorm'
-import { replaceFuncKeyword } from '../util'
+import { replaceFuncKeyword } from '../../shared/function'
 import VariableFunc from './entities/variable-func'
 import VariableVariable from './entities/variable-variable'
 import Variable from './entities/variable'
 
 module.exports = {
     async updateVariableRelation (data) {
-        const commonWhere = { projectId: data.projectId, deleteFlag: 0 }
+        const commonWhere = { projectId: data.projectId, deleteFlag: 0, versionId: data.versionId }
         const variableFuncRepository = getRepository(VariableFunc)
         const variableVariableRepository = getRepository(VariableVariable)
         const [allVariables, usedVarFuncs, usedVarVars] = await Promise.all([
@@ -27,7 +27,7 @@ module.exports = {
         ])
         const newUsedVarFunc = []
         const newUsedVarVar = []
-        const funcBody = data.variableType === 1 && data.deleteFlag !== 1 ? (JSON.parse(data.defaultValue || '{}').all || '') : ''
+        const funcBody = data.valueType === 6 && data.deleteFlag !== 1 ? (JSON.parse(data.defaultValue || '{}').all || '') : ''
         replaceFuncKeyword(funcBody, (all, first, second, dirKey, funcStr, funcCode) => {
             if (funcCode) {
                 const curUsedVarFunc = usedVarFuncs.find((func) => (func.funcCode === funcCode))

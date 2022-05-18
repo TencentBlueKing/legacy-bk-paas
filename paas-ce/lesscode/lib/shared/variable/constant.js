@@ -52,3 +52,11 @@ export const VARIABLE_EFFECTIVE_RANGE = {
     // 页面级别
     PAGE: 1
 }
+
+/**
+ * 变量在不同环境，是否同一份配置
+ */
+export const VARIABLE_VALUE_TYPE = {
+    SAME: 0,
+    DIFFERENT: 1
+}

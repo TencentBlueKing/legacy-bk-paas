@@ -11,17 +11,17 @@
 
 <template>
     <main
-        class="lessocde-draw-page"
+        class="lessocde-editor-page"
         v-bkloading="{
             isLoading: isContentLoading || isCustomComponentLoading
         }">
-        <div class="draw-page-header">
+        <div class="lesscode-editor-page-header">
             <page-list />
             <div
                 id="toolActionBox"
                 class="function-and-tool">
                 <operation-select v-model="operationType" />
-                <div style="height: 22px; width: 1px; margin: 0 5px; background-color: #dcdee5;" />
+                <div class="spilt-line" />
                 <!-- 保存、预览、快捷键等tool单独抽离 -->
                 <action-tool />
             </div>
@@ -33,16 +33,14 @@
                     placements: ['bottom']
                 }" />
         </div>
-        <template v-if="!isContentLoading && !isCustomComponentLoading">
-            <draw-layout>
-                <material-panel slot="left" />
-                <operation-area
-                    :operaion="operationType"
-                    :type="operationType" />
-                <modifier-panel slot="right" />
-            </draw-layout>
-            <novice-guide ref="guide" :data="guideStep" />
-        </template>
+        <draw-layout
+            v-if="!isContentLoading && !isCustomComponentLoading"
+            class="lesscode-editor-page-content">
+            <material-panel slot="left" />
+            <operation-area :operation="operationType" />
+            <modifier-panel slot="right" />
+        </draw-layout>
+        <novice-guide ref="guide" :data="guideStep" />
         <variable-form />
         <save-template-dialog />
     </main>
@@ -90,7 +88,7 @@
         computed: {
             ...mapGetters(['user']),
             ...mapGetters('drag', ['curTemplateData']),
-            ...mapGetters('page', ['pageDetail']),
+            ...mapGetters('page', ['pageDetail', 'platform']),
             ...mapGetters('functions', ['funcGroups']),
             ...mapGetters('layout', ['pageLayout']),
             ...mapGetters('variable', ['variableList']),
@@ -107,46 +105,48 @@
         watch: {
             curTemplateData: {
                 handler () {
-                    this.handleUpdatePreview({
-                        isGenerateNav: true,
-                        id: this.pageRoute.layoutPath,
-                        curTemplateData: this.curTemplateData,
-                        types: ['reload']
-                    })
+                    this.handleUpdateNavPerview()
                 }
             },
             layoutPageList: {
                 handler () {
-                    this.handleUpdatePreview({
-                        isGenerateNav: true,
-                        id: this.pageRoute.layoutPath,
-                        curTemplateData: this.curTemplateData,
-                        types: ['reload']
-                    })
+                    this.handleUpdateNavPerview()
                 }
             },
             variableList () {
                 // 变量发生变化的时候  reload
-                this.handleUpdatePreview()
+                this.handleUpdatePreviewContent()
             },
             funcGroups () {
                 // 函数发生变化的时候  reload
-                this.handleUpdatePreview()
+                this.handleUpdatePreviewContent()
             },
             'pageDetail.lifeCycle' () {
                 // 生命周期发生变化的时候  reload
-                this.handleUpdatePreview()
+                this.handleUpdatePreviewContent()
             },
             'pageDetail.styleSetting' () {
                 // 页面样式发生变化的时候  reload
-                this.handleUpdatePreview()
+                this.handleUpdatePreviewContent()
             }
         },
         async created () {
             this.projectId = parseInt(this.$route.params.projectId)
             this.pageId = parseInt(this.$route.params.pageId)
 
-            LC.addEventListener('update', this.handleUpdatePreview)
+            LC.addEventListener('update', this.handleUpdatePreviewContent)
+            // 更新预览区域数据
+            LC.addEventListener('ready', this.initPerviewData)
+            // 卸载的时候，清除 storage 数据
+            LC.addEventListener('unload', this.clearPerviewData)
+
+            this.$once('hook:beforeDestroy', () => {
+                LC.removeEventListener('update', this.handleUpdatePreviewContent)
+                // 更新预览区域数据
+                LC.removeEventListener('ready', this.initPerviewData)
+                // 卸载的时候，清除 storage 数据
+                LC.removeEventListener('unload', this.clearPerviewData)
+            })
 
             this.registerCustomComponent()
 
@@ -184,7 +184,7 @@
                 {
                     title: '画布编辑区',
                     content: '可在画布自由拖动组件、图标等进行页面布局',
-                    target: '#drawContent'
+                    target: '#lesscodeDrawContent'
                 },
                 {
                     title: '组件配置',
@@ -210,11 +210,7 @@
             ]
         },
         beforeDestroy () {
-            LC.removeEventListener('update', this.handleUpdatePreview)
-            LC.triggerEventListener('unload')
-            
             window.removeEventListener('beforeunload', this.beforeunloadConfirm)
-            localStorage.removeItem('ONLINE_PREVIEW')
         },
         beforeRouteLeave (to, from, next) {
             this.$bkInfo({
@@ -259,13 +255,17 @@
             async fetchData () {
                 try {
                     this.isContentLoading = true
-                    const [pageDetail, pageList, projectDetail] = await Promise.all([
+                    const [pageDetail, pageList, projectDetail, functionData] = await Promise.all([
                         this.$store.dispatch('page/detail', { pageId: this.pageId }),
                         this.$store.dispatch('page/getList', {
                             projectId: this.projectId,
                             versionId: this.versionId
                         }),
                         this.$store.dispatch('project/detail', { projectId: this.projectId }),
+                        this.$store.dispatch('functions/getAllGroupAndFunction', {
+                            projectId: this.projectId,
+                            versionId: this.versionId
+                        }),
                         this.$store.dispatch('page/pageLockStatus', { pageId: this.pageId }),
                         this.$store.dispatch('route/getProjectPageRoute', {
                             projectId: this.projectId,
@@ -273,10 +273,6 @@
                         }),
                         this.$store.dispatch('layout/getPageLayout', { pageId: this.pageId }),
                         this.$store.dispatch('components/componentNameMap'),
-                        this.$store.dispatch('functions/getAllGroupFuncs', {
-                            projectId: this.projectId,
-                            versionId: this.versionId
-                        }),
                         this.$store.dispatch('dataSource/list', { projectId: this.projectId })
                     ])
 
@@ -296,11 +292,13 @@
                     this.$store.commit('page/setPageDetail', pageDetail || {})
                     this.$store.commit('page/setPageList', pageList || [])
                     this.$store.commit('project/setCurrentProject', projectDetail || {})
+                    this.$store.commit('functions/setFunctionData', functionData)
 
                     // 设置初始targetData
                     LC.parseData(pageDetail.content)
                     LC.pageStyle = pageDetail.styleSetting
-                    this.handleUpdatePreview()
+
+                    LC.platform = this.platform
                 } catch (e) {
                     console.error(e)
                 } finally {
@@ -322,51 +320,81 @@
                 (event || window.event).returnValue = confirmationMessage
                 return confirmationMessage
             },
-            handleUpdatePreview (setting = {}) {
+            initPerviewData () {
+                // 更新导航
+                this.handleUpdateNavPerview()
+                // 更新内容区域
+                this.handleUpdatePreviewContent()
+            },
+            clearPerviewData () {
+                localStorage.removeItem('ONLINE_PREVIEW_CONTENT')
+                localStorage.removeItem('ONLINE_PREVIEW_NAV')
+            },
+            handleUpdatePreviewContent (setting = {}) {
                 const defaultSetting = {
                     isGenerateNav: false,
                     id: this.pageDetail.pageCode,
                     curTemplateData: {},
+                    storageKey: 'ONLINE_PREVIEW_CONTENT',
                     types: ['reload', 'update_style']
                 }
                 this.debounceUpdatePreview(Object.assign(defaultSetting, setting))
+            },
+            handleUpdateNavPerview (setting = {}) {
+                const defaultSetting = {
+                    isGenerateNav: true,
+                    id: this.pageRoute.layoutPath,
+                    curTemplateData: this.curTemplateData,
+                    storageKey: 'ONLINE_PREVIEW_NAV',
+                    types: ['reload']
+                }
+                this.updatePreview(Object.assign(defaultSetting, setting))
             }
         }
     }
 </script>
 <style lang="postcss">
-    $topHeight: 52px;
     $headerHeight: 64px;
+    $pageHeaderHeight: 52px;
 
-    .lessocde-draw-page {
-        min-width: 1280px;
-        height: calc(100vh - $headerHeight - 4px);
+    .lessocde-editor-page {
+        min-width: 1366px;
+        height: calc(100vh - $headerHeight);
         margin-top: $headerHeight;
-        .draw-page-header {
+    }
+    .lesscode-editor-page-header {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        height: 52px;
+        background: #fff;
+
+        &:after{
+            content: '';
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 99;
+            height: 1px;
+            box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
+        }
+        
+        .function-and-tool {
             position: relative;
             display: flex;
-            justify-content: space-between;
-            height: $topHeight;
-            background: #fff;
-
-            &:after{
-                content: '';
-                position: absolute;
-                right: 0;
-                bottom: 0;
-                left: 0;
-                z-index: 99;
-                height: 1px;
-                box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.1);
-            }
-            
-            .function-and-tool {
-                position: relative;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-
+            flex: 1;
+            justify-content: center;
+            align-items: center;
         }
+        .spilt-line {
+            height: 22px;
+            width: 1px;
+            margin: 0 5px;
+            background-color: #dcdee5;
+        }
+    }
+    .lesscode-editor-page-content{
+        height: calc(100vh - $headerHeight - $pageHeaderHeight);
     }
 </style>

@@ -23,7 +23,7 @@ module.exports = {
             where[0].effectiveRange = effectiveRange
         }
         if (pageCode) {
-            where.push({ projectId, effectiveRange: 1, pageCode, deleteFlag: 0 })
+            where.push({ projectId, effectiveRange: 1, pageCode, deleteFlag: 0, versionId: whereVersionLiteral(versionId) })
         }
         const variableList = await getRepository(Variable).find({ where, order: { updateTime: 'DESC' } }) || []
         const variableIds = variableList.map((variable) => (variable.id))

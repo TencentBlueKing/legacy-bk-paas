@@ -73,7 +73,7 @@
             return {
                 chart: {
                     base: {
-                        title: '按时间新增项目个数',
+                        title: '按时间新增应用个数',
                         inst: null,
                         data: []
                     }
@@ -100,7 +100,7 @@
                     { id: 'count', name: '数量' }
                 ],
                 totalColumns: [
-                    { id: 'project', name: '项目总数' },
+                    { id: 'project', name: '应用总数' },
                     { id: 'page', name: '页面总数' }
                 ]
             }

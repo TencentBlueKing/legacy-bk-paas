@@ -1,8 +1,5 @@
 export default {
     computed: {
-        exportFields () {
-            return this.columns.map(({ id, name }) => ({ id, name }))
-        },
         tableDynamicHeader () {
             return this.columns.filter(item => item.dynamic)
         }

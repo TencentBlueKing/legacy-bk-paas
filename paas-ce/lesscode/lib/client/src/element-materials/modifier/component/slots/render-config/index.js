@@ -1,7 +1,8 @@
 import bkRenderMap from './bk'
 import elementRenderMap from './element'
+import vantRenderMap from './vant'
 
-const html2Escape = html => {
+const html2Escape = (html = '') => {
     return html.replace(/[<>&"]/g, (c) => {
         return { '<': '&lt;', '>': '&gt;', '&': '&amp;', '"': '&quot;' }[c]
     })
@@ -37,6 +38,7 @@ const baseRenderMap = {
 const renderMap = {
     ...bkRenderMap,
     ...elementRenderMap,
+    ...vantRenderMap,
     ...baseRenderMap
 }
 

@@ -11,6 +11,7 @@ import { invalidPageIds } from '../conf/system'
 import { getConnection, getRepository } from 'typeorm'
 import OperationLogger from '../service/operation-logger'
 import { POST_PAGE_CREATE, PUT_PAGE_UPDATE } from '../conf/operate-log'
+import { whereVersionLiteral } from '../model/common'
 
 const fs = require('fs')
 
@@ -21,7 +22,7 @@ export const getPageList = async (ctx) => {
 
         let list = res
         if (lite) {
-            list = list.map(({ id, pageCode, pageName }) => ({ id, pageCode, pageName }))
+            list = list.map(({ id, pageCode, pageName, pageType }) => ({ id, pageCode, pageName, pageType }))
         }
 
         ctx.send({
@@ -89,7 +90,8 @@ export const createDefaultPage = async (projectId) => {
         const pageData = {
             pageName: 'home',
             pageCode: 'home',
-            pageRoute: '/'
+            pageRoute: '/',
+            pageType: 'PC'
         }
 
         pageData.pageRoute = formatRoutePath(pageData.pageRoute)
@@ -246,7 +248,9 @@ export const updatePage = async (ctx) => {
             // 页面与变量关联更新
             if (usedVariableMap) {
                 const variableIds = Object.keys(usedVariableMap || {})
-                const exitsUsedVariables = await getRepository(PageVariable).find({ where: { projectId, versionId, pageCode } }) || []
+                const exitsUsedVariables = await getRepository(PageVariable).find({
+                    where: { projectId, versionId: whereVersionLiteral(versionId), pageCode }
+                }) || []
                 // 新增部分
                 const addUsedVariables = variableIds.filter((id) => exitsUsedVariables.findIndex(x => x.id === id) < 0)
                 const addUsedVariableValues = getRepository(PageVariable).create(addUsedVariables.map(variableId => ({

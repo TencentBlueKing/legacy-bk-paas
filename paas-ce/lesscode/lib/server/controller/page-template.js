@@ -4,7 +4,9 @@ import * as TemplateCategoryModel from '../model/page-template-category'
 import * as PageTemplateModel from '../model/page-template'
 import Func from '../model/entities/func'
 import Variable from '../model/entities/variable'
-import FuncModel from '../model/function'
+import {
+    getAllGroupAndFunction
+} from '../service/function'
 import VariableModel from '../model/variable'
 import FuncVariable from '../model/entities/func-variable'
 
@@ -137,13 +139,13 @@ export const checkIsExist = async (ctx) => {
 // 应用模板
 export const apply = async (ctx) => {
     try {
-        const { id, fromProjectId, templateInfo, valList = [], funcList = [] } = ctx.request.body
+        const { id, fromProjectId, templateInfo, varList = [], funcList = [] } = ctx.request.body
         const preTemplate = await PageTemplateModel.findById(id) || {}
 
-        const { content, previewImg, fromPageCode, templateName } = preTemplate
+        const { content, previewImg, fromPageCode, templateName, templateType } = preTemplate
 
         await Promise.all(templateInfo.map(async fromTemplate => {
-            const { categoryId, belongProjectId } = fromTemplate
+            const { categoryId, belongProjectId, versionId } = fromTemplate
             const newTemplate = {
                 content,
                 previewImg,
@@ -151,12 +153,14 @@ export const apply = async (ctx) => {
                 offcialType: '',
                 categoryId,
                 templateName: fromTemplate.templateName || templateName,
+                templateType,
                 parentId: id,
                 belongProjectId,
+                versionId,
                 fromPageCode
             }
 
-            const { varIds, funcIds, defaultFuncGroupId } = await getRealVarAndFunc({ projectId: belongProjectId, fromProjectId, valList, funcList })
+            const { varIds, funcIds, defaultFuncGroupId } = await getRealVarAndFunc({ projectId: belongProjectId, fromProjectId, versionId, valList: varList, funcList })
             console.log(belongProjectId, varIds, funcIds, defaultFuncGroupId, 'ids')
             await getConnection().transaction(async transactionalEntityManager => {
                 const createTemplate = getRepository(PageTemplate).create(newTemplate)
@@ -168,6 +172,7 @@ export const apply = async (ctx) => {
                         const { id, createTime, createUser, updateTime, updateUser, ...other } = val
                         const newVal = Object.assign(other, {
                             projectId: belongProjectId,
+                            versionId,
                             pageCode: '',
                             effectiveRange: 0
                         })
@@ -180,7 +185,9 @@ export const apply = async (ctx) => {
                         const func = await getRepository(Func).findOne(funcId)
                         const { id, createTime, createUser, updateTime, updateUser, ...other } = func
                         const newFunc = Object.assign(other, {
-                            funcGroupId: defaultFuncGroupId
+                            versionId,
+                            funcGroupId: defaultFuncGroupId,
+                            projectId: belongProjectId
                         })
                         const createFunc = getRepository(Func).create(newFunc)
                         saveQueue.push(transactionalEntityManager.save(createFunc))
@@ -202,9 +209,24 @@ export const apply = async (ctx) => {
     }
 }
 
+export const getProjectFuncAndVar = async (ctx) => {
+    const { projectId, versionId, pageCode } = ctx.query
+    const variableList = await VariableModel.getAll({ projectId, versionId, effectiveRange: 0, pageCode })
+    const funcGroups = await getAllGroupAndFunction(projectId, versionId)
+    const data = {
+        variableList,
+        funcGroups
+    }
+    ctx.send({
+        code: 0,
+        message: 'success',
+        data
+    })
+}
+
 export const importTemplate = async (ctx) => {
     try {
-        const { belongProjectId, template = {}, vars = [], functions = [] } = ctx.request.body
+        const { belongProjectId, versionId, template = {}, vars = [], functions = [] } = ctx.request.body
 
         // 校验模板名称是否重复
         const record = await PageTemplateModel.getOne({
@@ -219,7 +241,7 @@ export const importTemplate = async (ctx) => {
         const { id, createTime, createUser, updateTime, updateUser, ...newTemplate } = template
 
         // 过滤掉该项目中已存在的variableCode或functionCode
-        const { valList, funcList, defaultFuncGroupId } = await filterFuncAndVars({ projectId: belongProjectId, fromProjectId: 0, valList: vars, funcList: functions })
+        const { valList, funcList, defaultFuncGroupId } = await filterFuncAndVars({ projectId: belongProjectId, versionId, fromProjectId: 0, valList: vars, funcList: functions })
         
         await getConnection().transaction(async transactionalEntityManager => {
             const createTemplate = getRepository(PageTemplate).create(newTemplate)
@@ -230,6 +252,7 @@ export const importTemplate = async (ctx) => {
                     const { id, createTime, createUser, updateTime, updateUser, userInfo, ...other } = val
                     const newVal = Object.assign(other, {
                         projectId: belongProjectId,
+                        versionId,
                         pageCode: '',
                         effectiveRange: 0,
                         defaultValue: JSON.stringify(other.defaultValue)
@@ -240,9 +263,11 @@ export const importTemplate = async (ctx) => {
             }
             if (funcList.length) {
                 await Promise.all(funcList.map(async func => {
-                    const { id, createTime, createUser, updateTime, updateUser, pages, ...other } = func
+                    const { id, createTime, createUser, updateTime, updateUser, funcGroupName, pages, ...other } = func
                     const newFunc = Object.assign(other, {
+                        versionId,
                         funcGroupId: defaultFuncGroupId,
+                        projectId: belongProjectId,
                         remoteParams: (other.remoteParams || []).join(', '),
                         funcParams: (other.funcParams || []).join(', ')
                     })
@@ -270,10 +295,10 @@ const getRealVarAndFunc = async ({ projectId, fromProjectId, valList, funcList }
     const funcIds = []
     const funcCodes = []
     const projectValList = await VariableModel.getAll({ projectId, effectiveRange: 0 })
-    const projectFuncGroupList = await FuncModel.allGroupFuncDetail(projectId)
+    const projectFuncGroupList = await getAllGroupAndFunction(projectId)
     const projectFuncList = []
     projectFuncGroupList.map(item => {
-        projectFuncList.splice(0, 0, ...item.functionList)
+        projectFuncList.splice(0, 0, ...item.children)
     })
     const defaultFuncGroupId = projectFuncGroupList[0] && projectFuncGroupList[0].id
     funcList.map(func => {
@@ -292,10 +317,11 @@ const getRealVarAndFunc = async ({ projectId, fromProjectId, valList, funcList }
     })
     // 直接绑定的变量和函数使用到的变量放在变量列表
     funcVarList.map(item => {
-        valList.push({ id: item.variableId.toString() })
+        valList.push({ id: item.variableId })
     })
+    // 如果项目中已经存在相同的variableCode的项目级变量，则不重复添加
     valList.map(val => {
-        if (projectValList.filter(item => item.id === val.id).length === 0) {
+        if (projectValList.filter(item => item.variableCode === val.variableCode).length === 0) {
             varIds.push(val.id)
         }
     })
@@ -304,17 +330,16 @@ const getRealVarAndFunc = async ({ projectId, fromProjectId, valList, funcList }
     return { varIds, funcIds, defaultFuncGroupId }
 }
 
-const filterFuncAndVars = async ({ projectId, valList, funcList }) => {
-    const projectValList = await VariableModel.getAll({ projectId, effectiveRange: 0 })
-    const projectFuncGroupList = await FuncModel.allGroupFuncDetail(projectId)
+const filterFuncAndVars = async ({ projectId, versionId, valList, funcList }) => {
+    const projectValList = await VariableModel.getAll({ projectId, versionId, effectiveRange: 0 })
+    const projectFuncGroupList = await getAllGroupAndFunction(projectId, versionId)
     const projectFuncList = []
     projectFuncGroupList.map(item => {
-        projectFuncList.splice(0, 0, ...item.functionList)
+        projectFuncList.splice(0, 0, ...item.children)
     })
     const defaultFuncGroupId = projectFuncGroupList[0] && projectFuncGroupList[0].id
     funcList = funcList.filter(item => !projectFuncList.find(func => func.funcCode === item.funcCode))
     valList = valList.filter(item => !projectValList.find(val => val.variableCode === item.variableCode))
-    
     return { valList, funcList, defaultFuncGroupId }
 }
 
@@ -365,7 +390,7 @@ export const categoryCount = async (ctx) => {
     try {
         const belongProjectId = parseInt(ctx.query.projectId)
         if (!belongProjectId) {
-            throw new Error('项目id不能为空')
+            throw new Error('应用id不能为空')
         }
         const res = await getRepository(PageTemplate)
             .createQueryBuilder()

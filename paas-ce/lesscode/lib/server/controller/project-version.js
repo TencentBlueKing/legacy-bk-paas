@@ -18,7 +18,7 @@ module.exports = {
         try {
             const has = await projectVersionService.has(projectId, version)
             if (has) {
-                ctx.throw(400, '项目版本已存在', { code: CODE.BIZ.PROJECT_VERSION_EXISTED })
+                ctx.throw(400, '应用版本已存在', { code: CODE.BIZ.PROJECT_VERSION_EXISTED })
             }
 
             const newVersionId = await projectVersionService.create({
@@ -72,6 +72,20 @@ module.exports = {
             ctx.send({
                 code: 0,
                 data: list,
+                message: 'success'
+            })
+        } catch (e) {
+            ctx.throw(e)
+        }
+    },
+
+    async releaseEnvMap (ctx) {
+        const { versions } = ctx.request.body
+        try {
+            const envMap = await projectVersionService.getVersionReleaseEnvMap(versions)
+            ctx.send({
+                code: 0,
+                data: envMap,
                 message: 'success'
             })
         } catch (e) {

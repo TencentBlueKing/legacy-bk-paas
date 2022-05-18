@@ -11,84 +11,16 @@
 
 import { messageSuccess } from '@/common/bkmagic'
 import domToImage from './dom-to-image'
-import store from '@/store'
 import Vue from 'vue'
-
-/***
- * 遍历targetData
- * parentCallBack 是遍历到grid时候的回调
- * childCallBack  是遍历到组件节点的回调
- */
-export function walkGrid (children, grid, childCallBack, parentCallBack, index, columnIndex, parentGrid) {
-    if (parentCallBack) parentCallBack(grid, children, index, parentGrid, columnIndex)
-    const interactiveComponents = store.getters['components/interactiveComponents']
-    const renderSlots = grid.renderSlots || {}
-    const slots = renderSlots.default || {}
-    let columns = slots.val && Array.isArray(slots.val) ? slots.val : []
-    let isLayoutSupportDialog = false
-    if (interactiveComponents.includes(grid.type)) { // 交互式组件特殊处理
-        const slot = grid.type === 'bk-sideslider' ? (((grid.renderSlots || {}).content || {}).val || {}) : (((grid.renderSlots || {}).default || {}).val || {})
-        columns = typeof slot === 'string' ? [] : (((slot.renderSlots || {}).default || {}).val || [])
-        isLayoutSupportDialog = typeof slot !== 'string'
-    }
-
-    columns.forEach((column, columnIndex) => {
-        const children = column.children || []
-        children.forEach((component, index) => {
-            const renderSlots = component.renderSlots || {}
-            const slotKeys = Object.keys(renderSlots)
-            if (component.type === 'render-grid' || component.type === 'free-layout' || (component.name === 'dialog' && isLayoutSupportDialog)) { // 如果是旧数据，dialog不做遍历，新dialog支持layout插槽，需要遍历
-                walkGrid(children, component, childCallBack, parentCallBack, index, columnIndex, grid)
-            } else if (Array.isArray(renderSlots.default && renderSlots.default.val)) {
-                childCallBack(component, children, index, grid, columnIndex)
-                if (renderSlots.default.val.length && renderSlots.default.val[0] && renderSlots.default.val[0].componentId) {
-                    renderSlots.default.val.forEach((item, slotIndex) => {
-                        walkGrid({}, item, childCallBack, childCallBack, slotIndex)
-                    })
-                }
-            } else if (slotKeys.some(key => renderSlots[key].name === 'layout')) {
-                slotKeys.forEach((key) => {
-                    const slot = renderSlots[key]
-                    childCallBack(component, children, index, grid, columnIndex)
-                    walkGrid([], slot.val, childCallBack, parentCallBack, index, columnIndex)
-                })
-            } else {
-                if (childCallBack) childCallBack(component, children, index, grid, columnIndex)
-            }
-        })
-
-        // form-item, 没有column.children
-        if (!column.children && column.componentId) {
-            childCallBack(column, columns, columnIndex, grid, index)
-        }
-    })
-}
-
-export function findComponentParentGrid (targetData, id) {
-    let componentParentGrid = null
-    targetData.forEach((grid, index) => {
-        const callBack = (data, parent, index, parentGrid) => {
-            if (data.componentId === id) componentParentGrid = parentGrid
-        }
-        walkGrid(targetData, grid, callBack, callBack, index)
-    })
-    return componentParentGrid
-}
 
 /**
  * 将html转换为Vnode
  * @param {*} html html字符串
  */
 export function transformHtmlToVnode (html) {
-    const htmlComponent = Vue.compile(html)
-    const globalComponent = global.mainComponent
-    const { $options, $createElement } = globalComponent
-    const _staticRenderFns = $options.staticRenderFns
-
-    $options.staticRenderFns = htmlComponent.staticRenderFns
-    const htmlVnode = htmlComponent.render.call(globalComponent, $createElement)
-    $options.staticRenderFns = _staticRenderFns
-    return htmlVnode
+    const { render, staticRenderFns } = Vue.compile(html)
+    const htmlComponent = new Vue({ render, staticRenderFns })
+    return htmlComponent._render()
 }
 
 /**
@@ -555,16 +487,6 @@ export function splitValueAndUnit (type, string) {
     return resultMap[type]
 }
 
-export const findComponent = (target, componentId) => {
-    let res = ''
-    target.forEach((grid, index) => {
-        const callBack = (data) => {
-            if (data.componentId === componentId) res = data
-        }
-        walkGrid(target, grid, callBack, callBack, index)
-    })
-    return res
-}
 export const findComponentParentRow = (target, componentId) => {
     const len = target.length
     for (let i = 0; i < len; i++) {
@@ -977,6 +899,11 @@ export const getContextOffset = node => {
         }
 }
 
+/**
+ * 判断输入是否为 js 关键字
+ * @param { String } val
+ * @returns Boolean
+ */
 export const isJsKeyWord = (val) => {
     const jsKeyWords = [
         'await', 'break', 'case', 'catch', 'class', 'const', 'continue', 'debugger', 'default', 'delete',

@@ -1,21 +1,22 @@
-import Node from './Node'
-
-import parseData from './parse-data'
-import parseTemplate from './parse-template'
-import getRoot from './get-root'
-import getActiveNode from './get-active-node'
-import getNodeById from './get-node-by-id'
-import getNodesByType from './get-nodes-by-type'
-import createNode from './create-node'
-import { registerMaterial, unregisterMaterial } from './get-material'
-import isNode from './is-node'
-import isInteractiveType from './is-interactive-type'
+import parseData from './static/parse-data'
+import parseTemplate from './static/parse-template'
+import getRoot from './static/get-root'
+import getActiveNode from './static/get-active-node'
+import getNodeById from './static/get-node-by-id'
+import getNodesByType from './static/get-nodes-by-type'
+import createNode from './static/create-node'
+import reset from './static/reset'
+import { registerMaterial, unregisterMaterial } from './static/get-material'
+import isNode from './static/is-node'
+import isInteractiveType from './static/is-interactive-type'
+import isLayoutType from './static/is-layout-type'
 
 import cloneNode from './extends/clone-node'
 import appendChild from './extends/append-child'
 import removeChild from './extends/remove-child'
 
 import {
+    resetEventListener,
     addEventListener,
     removeEventListener,
     triggerEventListener
@@ -33,11 +34,6 @@ import {
     setPageStyle
 } from './page-style'
 
-export const root = new Node({
-    name: 'root',
-    type: 'root'
-})
-
 function core (id) {
     if (!id) {
         return getRoot()
@@ -51,8 +47,9 @@ function core (id) {
     return node
 }
 
-// isReady 标记 api 数据加载完毕
-core.isReady = false
+core.__isReady = false
+core.__isUnloaded = false
+core.__isMounted = false
 // 数据解析 JSON -> NodeTree
 core.parseData = parseData
 core.parseTemplate = parseTemplate
@@ -65,7 +62,9 @@ core.getNodeById = getNodeById
 core.getNodesByType = getNodesByType
 core.isNode = isNode
 core.isInteractiveType = isInteractiveType
+core.isLayoutType = isLayoutType
 core.createNode = createNode
+core.reset = reset
 core.cloneNode = cloneNode
 core.appendChild = appendChild
 core.removeChild = removeChild
@@ -81,17 +80,35 @@ core.clearMenu = clearMenu
 // 执行快捷命令
 core.execCommand = execCommand
 
-core.addEventListener('ready', () => {
-    core.isReady = true
-})
+// platform: 'PC' | 'MOBILE'
+core.platform = 'PC'
 
-core.addEventListener('unload', () => {
-    core.isReady = false
-    // 重置 Node Tree
-    parseData([])
+core._ready = () => {
+    core.__isUnloaded = false
+    core.__isReady = true
+    triggerEventListener('ready')
+}
+
+core._unload = () => {
+    if (core.__isUnloaded) {
+        return
+    }
+    core.__isReady = false
+    core.__isMounted = false
+    core.__isUnloaded = true
+    // 销毁画布
+    reset()
     // 卸载时需要移除所有动态注册的 material
     unregisterMaterial()
-})
+    // 卸载时需要移除所有事件监听
+    resetEventListener()
+    triggerEventListener('unload')
+}
+
+core._mounted = () => {
+    core.__isMounted = true
+    triggerEventListener('mounted')
+}
 
 Object.defineProperty(core, 'pageStyle', {
     set (value) {

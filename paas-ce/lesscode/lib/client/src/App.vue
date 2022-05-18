@@ -15,7 +15,8 @@
     </section>
     <section v-else-if="authed">
         <div id="app" :class="systemCls">
-            <app-header></app-header>
+            <home-header v-if="homeHeaderNav"></home-header>
+            <app-header v-else></app-header>
             <router-view :name="topView" v-show="!mainContentLoading" />
         </div>
         <bk-fixed-navbar v-if="!isCanvas"
@@ -53,14 +54,17 @@
                             window.open('https://github.com/Tencent/bk-PaaS/labels/lesscode')
                         }
                     }
-                ]
+                ],
+                routerNameData: ['/home', '/help'],
+                homeHeaderNav: true,
+                appTabData: [{ name: '产品介绍', url: '/', routerName: 'home' }, { name: '帮助文档', url: '/help', routerName: 'intro' }]
             }
         },
 
         computed: {
             ...mapGetters(['mainContentLoading']),
             emptyPage () {
-                return this.$route.name === 'preview' || this.$route.name === 'previewTemplate'
+                return this.$route.name === 'preview' || this.$route.name === 'previewTemplate' || this.$route.name === 'previewMobile'
             },
             authed () {
                 return this.$route.meta.authed
@@ -71,6 +75,17 @@
             },
             isCanvas () {
                 return this.$route.name === 'new'
+            }
+        },
+
+        watch: {
+            '$route': {
+                handler (value) {
+                    if (value.matched[0]) {
+                        this.homeHeaderNav = this.routerNameData.includes(value.matched[0].path) || this.routerNameData.includes(value.fullPath + value.name)
+                    }
+                },
+                immediate: true
             }
         },
 

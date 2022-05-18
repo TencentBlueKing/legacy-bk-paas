@@ -9,6 +9,20 @@
  * specific language governing permissions and limitations under the License.
  */
 
+import _ from 'lodash'
+
+export const generatorMenu = (() => {
+    let i = 0
+    return (icon = 'icon-block-shape') => ({
+        name: `默认导航${++i}`,
+        id: `${_.random(10, 99).toString(16)}${i}${Date.now().toString(16)}${_.random(10, 99).toString(16)}`,
+        icon,
+        pageCode: '',
+        link: '',
+        children: []
+    })
+})()
+
 /**
  * 生成 uuid
  *
@@ -84,4 +98,19 @@ export function throttle (fn, delay = 200) {
             valid = true
         }, delay)
     }
+}
+
+/**
+ * 单位过滤，如果是rpx转为rem，否则直接输出
+ * 此处将屏幕分为20份， 即20rem = 750rpx = 100%屏幕宽度
+ * @param {String} value 需要过滤的值
+ * @returns
+ */
+export function unitFilter (value) {
+    if (/\d+rpx$/.test(value)) {
+        const sizeNumber = (/(\d+)rpx$/.exec(value)[1] / 750 * 20).toFixed(2)
+        const result = sizeNumber + 'rem'
+        return result
+    }
+    return value
 }

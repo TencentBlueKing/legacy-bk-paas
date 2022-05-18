@@ -5,7 +5,7 @@
                 <bk-input
                     class="filter-item search-input"
                     clearable
-                    placeholder="按项目名/ID搜索"
+                    placeholder="按应用名/应用Code搜索"
                     right-icon="bk-icon icon-search"
                     @clear="handleKeywordClear"
                     @enter="handleKeywordEnter"
@@ -43,7 +43,7 @@
                                 class="mr5"
                                 theme="primary"
                                 @click="editManager(row.id)"
-                            >编辑项目成员</bk-button>
+                            >编辑应用管理员</bk-button>
                         </template>
                         
                     </bk-table-column>
@@ -51,9 +51,9 @@
             </div>
         </div>
         <bk-sideslider :is-show.sync="sideObj.isShow" :title="sideObj.title" quick-close :width="796" @hidden="clearForm">
-            <bk-form :label-width="120" :model="sideObj.form" class="member-form" slot="content">
-                <bk-form-item label="项目成员" :required="true" property="users">
-                    <member-selector class="member-form-select" v-model="sideObj.form.users" :user-list.sync="filterUserList"></member-selector>
+            <bk-form :label-width="130" :model="sideObj.form" class="member-form" slot="content">
+                <bk-form-item label="应用管理员" :required="true" property="users">
+                    <member-selector class="member-form-select" @clear="clearForm" v-model="sideObj.form.users" :user-list.sync="filterUserList"></member-selector>
                 </bk-form-item>
                 <bk-form-item>
                     <bk-button ext-cls="mr5" theme="primary" title="提交" @click="submitMember" :loading="sideObj.isLoading">提交</bk-button>
@@ -70,6 +70,7 @@
     import sharedMixin from '../shared-mixin.js'
     import tableListMixin from '../table-list-mixin.js'
     import memberSelector from '@/components/member-selector'
+    import _ from 'lodash'
 
     export default {
         components: {
@@ -86,8 +87,9 @@
                     limit: 10
                 },
                 columns: [
-                    { id: 'projectName', name: '项目名' },
-                    { id: 'projectCode', name: '项目ID' }
+                    { id: 'id', name: '应用ID' },
+                    { id: 'projectCode', name: '应用Code' },
+                    { id: 'projectName', name: '应用名' }
                 ],
                 filters: {
                     keyword: ''
@@ -99,12 +101,13 @@
                 sideObj: {
                     isShow: false,
                     isLoading: false,
-                    title: '编辑项目管理员',
+                    title: '编辑应用管理员',
                     form: {
                         users: []
                     }
                 },
                 memberList: [],
+                memberUserNameList: [],
                 userList: [],
                 name: ''
             }
@@ -113,9 +116,9 @@
             params () {
                 const params = {
                     q: this.filters.keyword,
-                    time: this.timeParam, // mixin
                     pageSize: this.pagination.limit,
-                    pageNum: this.pagination.current
+                    pageNum: this.pagination.current,
+                    excludeDemo: false
                 }
                 return params
             },
@@ -128,13 +131,10 @@
                 }
             }
         },
-        created () {
-            this.fetchData()
+        async created () {
+            this.getProjectBase()
         },
         methods: {
-            fetchData () {
-                this.getProjectBase()
-            },
             async getProjectBase () {
                 this.fetching.base = true
                 try {
@@ -173,9 +173,10 @@
                 }
             },
 
-            editManager (projectId) {
+            async editManager (projectId) {
                 this.projectId = projectId
                 this.sideObj.isShow = true
+                await this.$store.dispatch('member/setCurUserPermInfo', { id: this.projectId, needCheckAdmin: true })
                 this.getMember()
             },
 
@@ -186,43 +187,42 @@
                     name: this.name
                 }
                 this.$store.dispatch('member/getMember', queryObj).then((res) => {
-                    this.memberList = res || []
-                    this.sideObj.form.users = res.reduce((p, v) => {
+                    this.memberList = (res || []).filter(e => e.roleId === 1)
+                    this.sideObj.form.users = this.memberList.reduce((p, v) => {
                         p.push(v.username)
                         return p
                     }, [])
+                    this.memberUserNameList = _.cloneDeep(this.sideObj.form.users)
                 }).catch((err) => {
                     this.$bkMessage({ message: err.message || err, theme: 'error' })
                 }).finally(() => {
                     this.isLoading = false
                 })
             },
-            
+
             // 提交
-            submitMember () {
-                const payload = {
-                    users: this.sideObj.form.users,
-                    projectId: this.projectId
-                }
-                this.sideObj.isLoading = true
-                this.$store.dispatch('member/addMembers', payload).then(() => {
-                    this.handleDeleteMembers()
+            async submitMember () {
+                const needDeleteMembersIds = this.memberList.filter(user => !this.sideObj.form.users.includes(user.username)).map(e => e.id)
+                const needAddMembersData = this.sideObj.form.users.filter(userName => !this.memberUserNameList.includes(userName))
+                try {
+                    if (needDeleteMembersIds.length) {
+                        await this.$store.dispatch('member/deleteMultipleMember', needDeleteMembersIds)
+                    }
+                    if (needAddMembersData.length) {
+                        const payload = {
+                            roleId: 1, // 应用管理员
+                            users: needAddMembersData,
+                            projectId: this.projectId
+                        }
+                        await this.$store.dispatch('member/addMembers', payload)
+                    }
                     this.$bkMessage({ message: '操作成功', theme: 'success' })
                     this.sideObj.isShow = false
-                }).catch((err) => {
+                } catch (err) {
                     this.$bkMessage({ message: err.message || err, theme: 'error' })
-                }).finally(() => {
+                } finally {
                     this.sideObj.isLoading = false
-                })
-            },
-
-            // 删除管理员
-            handleDeleteMembers () {
-                const needDeleteMembers = this.memberList.filter(user => !this.sideObj.form.users.includes(user.username))
-                // 接口只能传一个id, 最好是能改成传数组
-                needDeleteMembers.forEach(e => {
-                    this.$store.dispatch('member/deleteMember', e.id)
-                })
+                }
             },
 
             clearForm () {

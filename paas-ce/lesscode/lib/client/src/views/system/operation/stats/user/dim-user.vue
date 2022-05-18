@@ -71,7 +71,7 @@
                 orderBy: undefined,
                 columns: [
                     { id: 'username', name: '用户名', width: '360' },
-                    { id: 'projectCount', name: '项目数', sortable: 'custom', dynamic: true, type: 'number' },
+                    { id: 'projectCount', name: '应用数', sortable: 'custom', dynamic: true, type: 'number' },
                     { id: 'pageCount', name: '页面数', sortable: 'custom', dynamic: true, type: 'number' }
                 ],
                 filters: {

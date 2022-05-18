@@ -1,16 +1,16 @@
 <template>
     <menu-item :item="item">
-        <methods :show.sync="isShowFun" />
+        <edit-function-dialog :show.sync="isShowFun" />
     </menu-item>
 </template>
 <script>
     import MenuItem from './menu-item'
-    import Methods from '@/components/methods'
+    import EditFunctionDialog from '@/components/methods/edit-function-dialog/index.vue'
     
     export default {
         components: {
             MenuItem,
-            Methods
+            EditFunctionDialog
         },
         data () {
             return {

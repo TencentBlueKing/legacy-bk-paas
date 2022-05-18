@@ -21,24 +21,36 @@ export const list = async (ctx) => {
     try {
         const {
             categoryId,
-            belongProjectId
+            belongProjectId,
+            compType
         } = ctx.query
         const params = {}
+        const query = {
+            condition: [],
+            conParams: {}
+        }
+
         if (categoryId) {
             params.categoryId = categoryId
         }
         if (belongProjectId) {
             params.belongProjectId = belongProjectId
         }
+        if (compType === 'MOBILE') {
+            params.compType = compType
+        } else if (compType === 'PC') {
+            query.condition = 'comp.compType != :q'
+            query.conParams = { q: 'MOBILE' }
+        }
 
         const onlineList = await ComponentModel.all({
             ...params,
             status: 0
-        })
+        }, query.condition, query.conParams)
         const offlineList = await ComponentModel.all({
             ...params,
             status: 1
-        })
+        }, query.condition, query.conParams)
         // 每页条数
         const length = parseInt(ctx.query.limit)
         // 当前页面，从1开始
@@ -49,7 +61,7 @@ export const list = async (ctx) => {
             start = (Math.abs(Number(current)) - 1) * length
         }
         const all = [...onlineList, ...offlineList]
-        const pageList = all.slice(start, length).map(item => ({
+        const pageList = all.slice(start, length * current).map(item => ({
             ...item,
             createTime: item.createTime ? dayjs(item.createTime).format('YYYY-MM-DD HH:mm:ss') : '--',
             updateTime: item.updateTime ? dayjs(item.updateTime).format('YYYY-MM-DD HH:mm:ss') : '--'
@@ -103,7 +115,7 @@ export const useing = async (ctx) => {
     try {
         const { belongProjectId, projectVersionId } = ctx.query
         if (!belongProjectId) {
-            throw new Error('项目id不能为空')
+            throw new Error('应用id不能为空')
         }
         const useingCompList = await PageCompModel.getAll({
             projectId: belongProjectId,
@@ -203,10 +215,11 @@ export const create = async (ctx) => {
             isPublic,
             description,
             log,
-            belongProjectId
+            belongProjectId,
+            compType
         } = ctx.request.body
 
-        const checkFileds = ['name', 'displayName', 'type', 'dest', 'version', 'categoryId', 'description', 'log', 'belongProjectId']
+        const checkFileds = ['name', 'displayName', 'type', 'dest', 'version', 'categoryId', 'description', 'log', 'belongProjectId', 'compType']
         for (let i = 0; i < checkFileds.length; i++) {
             const currentfield = checkFileds[i]
             const currentFieldValue = ctx.request.body[currentfield]
@@ -255,6 +268,7 @@ export const create = async (ctx) => {
                 type,
                 categoryId,
                 belongProjectId,
+                compType,
                 isPublic: isPublic,
                 createTime: nowDate,
                 createUser: currentUser.username,
@@ -562,11 +576,11 @@ export const upload = async (ctx) => {
 
     const id = Number(ctx.query.id)
     const belongProjectId = Number(ctx.query.belongProjectId)
-    let operateTarget = `项目ID：${belongProjectId}`
+    let operateTarget = `应用ID：${belongProjectId}`
 
     try {
         if (!belongProjectId) {
-            throw new Error('项目 ID 不能为空')
+            throw new Error('应用 ID 不能为空')
         }
         const uploadComponent = ctx.request.files.upload_file
 
@@ -625,7 +639,7 @@ export const upload = async (ctx) => {
         })
         const currentProjectCode = currentProject.length > 0 ? currentProject[0].projectCode : ''
         if (!currentProjectCode) {
-            throw new Error('项目不存在')
+            throw new Error('应用不存在')
         }
         // 验证组件名是否合法
         const { name, displayName, type } = componentConfig
@@ -697,7 +711,7 @@ export const categoryCount = async (ctx) => {
     try {
         const belongProjectId = parseInt(ctx.query.belongProjectId)
         if (!belongProjectId) {
-            throw new Error('项目id不能为空')
+            throw new Error('应用id不能为空')
         }
         const res = await getRepository(Comp)
             .createQueryBuilder()
