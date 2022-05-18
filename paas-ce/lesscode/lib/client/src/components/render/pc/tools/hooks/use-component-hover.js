@@ -15,6 +15,9 @@ export default function (callbak) {
         if (event.target.componentId === componentData.value.componentId) {
             return
         }
+        if (!document.body.querySelector('#drawTarget')) {
+            return
+        }
         componentData.value = event.target
         callbak(event.target)
         activeResizeObserver.observe($drawTarget)
@@ -25,6 +28,9 @@ export default function (callbak) {
             return
         }
         setTimeout(() => {
+            if (!document.body.querySelector('#drawTarget')) {
+                return
+            }
             callbak(componentData.value)
         })
     }, 100)
