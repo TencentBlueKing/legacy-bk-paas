@@ -26,10 +26,10 @@
     params: []
   }
  })
- 
+
 */
 
-export default function (node, params1, params2 = '') {
+export default function (node, params1, params2) {
     let eventData = {}
     if (Object.prototype.toString.call(params1) === '[object String]') {
         eventData[params1] = params2
