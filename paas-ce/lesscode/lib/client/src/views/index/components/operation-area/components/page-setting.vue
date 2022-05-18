@@ -326,13 +326,13 @@
                             from: 'style',
                             type: 'background',
                             editable: true
-                        },
-                        {
-                            id: 'StyleCustom',
-                            name: '自定义样式',
-                            from: 'style',
-                            type: 'custom'
                         }
+                        // {
+                        //     id: 'StyleCustom',
+                        //     name: '自定义样式',
+                        //     from: 'style',
+                        //     type: 'custom'
+                        // }
                     ]
                 }
 
@@ -343,9 +343,9 @@
                 const margin = []
                 const padding = []
                 for (const i in style) {
-                    if (i.startsWith('margin')) {
+                    if (i.startsWith('margin') && i !== 'margin') {
                         margin.push({ key: styleSettingMap[i], value: style[i] ? style[i] : '--' })
-                    } else if (i.startsWith('padding')) {
+                    } else if (i.startsWith('padding') && i !== 'padding') {
                         padding.push({ key: styleSettingMap[i], value: style[i] ? style[i] : '--' })
                     }
                 }
@@ -354,7 +354,7 @@
                     margin: margin,
                     padding: padding,
                     backgroundColor: this.page.styleSetting.backgroundColor,
-                    hasCustomStyle: Object.keys(this.page.styleSetting.customStyle).length !== 0
+                    hasCustomStyle: Object.keys(this.page.styleSetting.customStyle || {}).length !== 0
                 }
             }
         },

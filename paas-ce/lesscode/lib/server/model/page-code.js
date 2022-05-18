@@ -392,19 +392,28 @@ class PageCode {
         // 页面级样式设置
         const styleSetting = typeof this.styleSetting === 'string' ? JSON.parse(this.styleSetting) : this.styleSetting
         let pageStyle = ''
-        for (const i in styleSetting) {
-            if (i === 'customStyle') {
-                for (const key in styleSetting[i]) {
-                    pageStyle += `${key}: ${styleSetting[i][key]};\n`
+
+        // const paddingArr = ['padding', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom']
+        const defaultPadding = { 'padding-left': '24px', 'padding-right': '24px', 'padding-top': '20px', 'padding-bottom': '0px' }
+        const pageSetting = Object.assign({}, defaultPadding, styleSetting)
+        const styleSettings = this.handleRenderStyles(pageSetting)
+
+        const hasStyle = Object.keys(styleSettings).length > 0
+        console.log(styleSettings, 'settings')
+        if (hasStyle) {
+            for (const i in styleSettings) {
+                if (styleSettings[i] !== '') {
+                    pageStyle += `${paramCase(i)}: ${styleSettings[i]};\n`
                 }
-            } else if (styleSetting[i] !== '') {
-                pageStyle += `${paramCase(i)}: ${styleSetting[i]};\n`
             }
+            !styleSettings['height'] && (pageStyle += 'height: 100%')
+        } else {
+            pageStyle = 'padding: 20px 24px 0px;\n'
         }
  
-        let head = this.hasLayOut || this.layoutType === 'empty' ? '<style lang="css" scoped>' : '<style type="text/css">'
+        let head = '<style lang="css" scoped>'
         head += `.container-${this.uniqueKey} {
-                 ${this.layoutType === 'empty' ? pageStyle : ''}
+                 ${pageStyle}
              }
              .bk-layout-row-${this.uniqueKey} {
                  display: flex;
@@ -476,6 +485,9 @@ class PageCode {
                  }
                  .bk-navigation .bk-navigation-wrapper {
                      height:calc(100vh - 252px)!important;
+                 }
+                 .bk-navigation-wrapper .navigation-container .container-content {
+                    padding: 0px;
                  }
                  .navigation-header {
                      -webkit-box-flex:1;
@@ -652,12 +664,6 @@ class PageCode {
                      }
                  `
             }
-        }
- 
-        if (!this.isEmpty && this.layoutType !== 'empty') {
-            head += `.bk-navigation-wrapper .navigation-container .container-content{
-                 ${pageStyle}
-             }`
         }
         // if (this.isGenerateNav) {
         //     head += `.bk-layout-custom-component-wrapper .page-container {
