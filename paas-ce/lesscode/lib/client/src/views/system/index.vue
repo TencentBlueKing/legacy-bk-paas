@@ -18,7 +18,7 @@
                     <a tag="div" class="nav-item product-link" href="/home" target="_blank">
                         <i class="bk-drag-icon bk-drag-chanpinjieshao"></i>产品介绍
                     </a>
-                    <div class="nav-parent">
+                    <div class="nav-parent" v-if="!asideFolded || asideHover">
                         应用中心
                     </div>
                     <router-link tag="div" :class="['nav-item', { 'router-link-active': $route.name === 'projects' }]" to="/projects">
@@ -31,7 +31,7 @@
                         <i class="bk-drag-icon bk-drag-function-fill"></i>函数市场
                     </router-link>
                     <div v-if="isPlatformAdmin">
-                        <div class="nav-parent">
+                        <div class="nav-parent" v-if="!asideFolded || asideHover">
                             平台管理
                         </div>
                         <router-link tag="div" class="nav-item" to="/pm/platform/project-member">
@@ -39,7 +39,7 @@
                         </router-link>
                     </div>
                     <div v-if="isPlatformAdmin">
-                        <div class="nav-parent">
+                        <div class="nav-parent" v-if="!asideFolded || asideHover">
                             运营数据
                         </div>
                         <router-link tag="div" class="nav-item" to="/op/stats/user">
