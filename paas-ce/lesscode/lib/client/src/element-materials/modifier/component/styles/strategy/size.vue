@@ -12,7 +12,10 @@
 <template>
     <style-layout title="尺寸">
         <template v-for="item in sizeConfigRender">
-            <style-item v-if="item.key === 'display' || (item.key !== 'display' && !isInline)" :name="item.name" :key="item.key">
+            <style-item
+                v-if="item.key === 'display' || (item.key !== 'display' && !isInline)"
+                :name="item.name"
+                :key="item.key">
                 <bk-select
                     v-if="item.key === 'display'"
                     :value="item.value"
@@ -25,8 +28,13 @@
                     <bk-option id="inline-block" name="inline-block" />
                     <bk-option id="unset" name="unset" />
                 </bk-select>
-                <size-input v-else :value="item.value" @change="handleInputChange(item, $event)">
-                    <append-select :value="item.unit" @change="handleSelectChange(item, $event)" />
+                <size-input
+                    v-else
+                    :value="item.value"
+                    @change="handleInputChange(item, $event)">
+                    <append-select
+                        :value="item.unit"
+                        @change="handleSelectChange(item, $event)" />
                 </size-input>
             </style-item>
         </template>
@@ -108,34 +116,47 @@
                 return display.length && display[0].value === 'inline'
             }
         },
-        mounted () {
-            this.handleInitValueList()
+        watch: {
+            value: {
+                handler (value) {
+                    if (this.isInnerChange) {
+                        this.isInnerChange = false
+                        return
+                    }
+                    let result = getCssProperties(sizeConfig, this.include, this.exclude)
+                    result = result.map((item) => {
+                        if (item.key === 'display') {
+                            item['value'] = value.display || ''
+                        } else {
+                            item['value'] = splitValueAndUnit('value', value[item.key])
+                            item['unit'] = splitValueAndUnit('unit', value[item.key]) || this.defaultUnit
+                        }
+                        return item
+                    })
+                    this.sizeConfigRender = result
+                },
+                immediate: true
+            }
+        },
+        created () {
+            this.isInnerChange = false
         },
         methods: {
-            handleInitValueList () {
-                let result = getCssProperties(sizeConfig, this.include, this.exclude)
-                const that = this
-                result = result.map(function (item) {
-                    if (item.key === 'display') {
-                        item['value'] = that.value.display || ''
-                    } else {
-                        item['value'] = splitValueAndUnit('value', that.value[item.key])
-                        item['unit'] = splitValueAndUnit('unit', that.value[item.key]) || that.defaultUnit
-                    }
-                    return item
-                })
-                this.sizeConfigRender = result
+            triggerChange (key, value) {
+                this.isInnerChange = true
+                this.$emit('change', key, value)
             },
             handleInputChange (item, val) {
                 const newValue = val === '' ? '' : val + item.unit
                 item.value = val
-                this.change(item.key, newValue)
+                
+                this.triggerChange(item.key, newValue)
             },
             handleSelectChange (item, unit) {
                 item.unit = unit
                 if (item.value !== '') {
                     item.value = Math.min(item.value, unit === '%' ? 100 : item.value)
-                    this.change(item.key, item.value + unit)
+                    this.triggerChange(item.key, item.value + unit)
                 }
             },
             handleDisplayChange (item, val) {
@@ -149,7 +170,7 @@
                         }
                     })
                 }
-                this.change('display', val)
+                this.triggerChange('display', val)
             }
         }
     }
