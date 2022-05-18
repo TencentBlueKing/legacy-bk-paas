@@ -45,6 +45,7 @@ const vantRenderMap = {
                 :key="index"
                 :name="item.name"
                 :title="item.title"
+                :disabled="item.disabled"
                 :dot="item.dot"
                 :url="item.url"
                 :to="item.to">
