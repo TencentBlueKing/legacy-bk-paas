@@ -72,7 +72,7 @@
                 if (jsonSafeStringify(this.renderEvents) === jsonSafeStringify(this.currentComponentNode.renderEvents)) {
                     return
                 }
-                this.renderEvents = Object.freeze(_.cloneDeep(this.currentComponentNode.renderEvents))
+                this.renderEvents = _.cloneDeep(this.currentComponentNode.renderEvents)
             }, 100)
 
             LC.addEventListener('mergeRenderEvents', updateCallback)
