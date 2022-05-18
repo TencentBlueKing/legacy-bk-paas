@@ -29,12 +29,6 @@
             }
         },
 
-        watch: {
-            lastSlots () {
-                this.renderSlots = this.lastSlots
-            }
-        },
-
         created () {
             this.isInnerChange = false
             this.componentNode = LC.getActiveNode()
