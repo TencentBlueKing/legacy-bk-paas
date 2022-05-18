@@ -144,7 +144,7 @@
         methods: {
             triggerChange (key, value) {
                 this.isInnerChange = true
-                this.$emit('change', key, value)
+                this.change(key, value)
             },
             handleInputChange (item, val) {
                 const newValue = val === '' ? '' : val + item.unit
