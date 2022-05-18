@@ -117,7 +117,6 @@
         .layout-center{
             position: relative;
             height: 100%;
-            padding: 20px 0;
         }
         .collapsed-left-btn,
         .collapsed-right-btn{
