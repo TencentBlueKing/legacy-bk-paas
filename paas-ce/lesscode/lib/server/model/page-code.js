@@ -243,6 +243,10 @@ class PageCode {
                     delete styles[style]
                 }
             })
+            if (styles.height && styles.height.endsWith('%')) {
+                css += ` height: ${styles.height};`
+                styles.height = '100%'
+            }
         }
         if (item.name && item.name.startsWith('chart-')) {
             this.generateCharts(item)
@@ -308,7 +312,7 @@ class PageCode {
                     renderValue: styles.fontSize
                 }
             }
-  
+ 
             const { width } = styles
             if (inFreeLayout && width && width.endsWith('%')) {
                 styles.width = '100%'
@@ -403,7 +407,6 @@ class PageCode {
         const styleSettings = this.handleRenderStyles(pageSetting)
 
         const hasStyle = Object.keys(styleSettings).length > 0
-        console.log(styleSettings, 'settings')
         if (hasStyle) {
             for (const i in styleSettings) {
                 if (styleSettings[i] !== '') {
@@ -440,7 +443,6 @@ class PageCode {
                  width: 100%;
                  display: inline-block;
                  position: relative;
-                 z-index: 10;
              }
              .bk-free-layout-item-inner-${this.uniqueKey} {
                  height: 100%;
@@ -1030,25 +1032,25 @@ class PageCode {
             if (templateDirective) code += `\n<template ${templateDirective}>`
             if (item.type === 'render-grid') {
                 /* eslint-disable no-unused-vars, indent */
-                  const { itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
-                  code += `
-                      ${itemClass ? `\n<div class="bk-layout-row-${this.uniqueKey} ${item.componentId}" ${vueDirective} ${propDirective}>` : `<div class="bk-layout-row-${this.uniqueKey}" ${vueDirective} ${propDirective}>`}
-                          ${item.renderSlots && item.renderSlots.default && item.renderSlots.default.map(col => {
-                              const { itemClass = '' } = this.getItemStyles(col.componentId, col.renderStyles, col.renderProps)
-                      return `<div class="bk-layout-col-${this.uniqueKey} ${col.componentId}">
-                                          ${col.renderSlots.default.length ? `${this.generateCode(col.renderSlots.default)}` : ''}
-                                      </div>`
-                  }).join('\n')}
-                      </div>
-                  `
-              } else if (item.type === 'free-layout') {
-                  const { itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
-                  code += `
-                      ${itemClass ? `\n<div class="bk-free-layout-${this.uniqueKey} ${item.componentId}" ${vueDirective} ${propDirective}>` : `<div class="bk-free-layout-${this.uniqueKey}" ${vueDirective} ${propDirective}>`}
-                          ${this.generateCode(item.renderSlots.default || [], true)}
-                  </div>
-                  `
-                  /* eslint-enable no-unused-vars, indent */
+                 const { itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
+                 code += `
+                     ${itemClass ? `\n<div class="bk-layout-row-${this.uniqueKey} ${item.componentId}" ${vueDirective} ${propDirective}>` : `<div class="bk-layout-row-${this.uniqueKey}" ${vueDirective} ${propDirective}>`}
+                         ${item.renderSlots && item.renderSlots.default && item.renderSlots.default.map(col => {
+                             const { itemClass = '' } = this.getItemStyles(col.componentId, col.renderStyles, col.renderProps)
+                     return `<div class="bk-layout-col-${this.uniqueKey} ${col.componentId}">
+                                         ${col.renderSlots.default.length ? `${this.generateCode(col.renderSlots.default)}` : ''}
+                                     </div>`
+                 }).join('\n')}
+                     </div>
+                 `
+             } else if (item.type === 'free-layout') {
+                 const { itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
+                 code += `
+                     ${itemClass ? `\n<div class="bk-free-layout-${this.uniqueKey} ${item.componentId}" ${vueDirective} ${propDirective}>` : `<div class="bk-free-layout-${this.uniqueKey}" ${vueDirective} ${propDirective}>`}
+                         ${this.generateCode(item.renderSlots.default || [], true)}
+                 </div>
+                 `
+                 /* eslint-enable no-unused-vars, indent */
             } else {
                 if (item.type === 'widget-form-item') item.type = 'bk-form-item'
                 code += this.generateComponment(item, vueDirective, propDirective, inFreeLayout)
@@ -1088,6 +1090,10 @@ class PageCode {
                   
                 const { format, valueType: type, code: val, modifiers = [] } = props[i]
    
+                // 特殊处理兼容tab的active属性
+                if (i === 'active' && componentType === 'bk-tab' && !modifiers.includes('sync')) {
+                    modifiers.push('sync')
+                }
                 const propVar = format !== 'value' ? val : compId
                 const propName = format !== 'value' && modifiers && modifiers.length ? `${i}.${modifiers.join('.')}` : i
                 const curPropStr = `${val === undefined ? '' : ':'}${propName}="${propVar}" `

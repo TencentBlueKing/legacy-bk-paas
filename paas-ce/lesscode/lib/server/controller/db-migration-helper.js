@@ -14,7 +14,7 @@ import FuncGroup from '../model/entities/func-group'
 import Func from '../model/entities/func'
 
 // 将函数名称写到这个数组里，函数会自动执行，返回成功则后续不会再执行
-const apiArr = ['setDefaultPageTemplateCategory', 'updateCardSlot', 'fixCardsSlots', 'templateCardsSlots', 'setProjectMobileLayoutInst', 'syncPageData', 'syncFuncData']
+const apiArr = ['setDefaultPageTemplateCategory', 'updateCardSlot', 'fixCardsSlots', 'templateCardsSlots', 'setProjectMobileLayoutInst', 'syncPageData', 'syncFuncData', 'modifyPageData0518']
 
 export const executeApi = async () => {
     const apiRecords = await getRepository(ApiMigraion).find()
@@ -1207,6 +1207,116 @@ async function syncFuncData () {
         return {
             code: 0,
             message: `fix func data success：${(new Date()).toString()}`,
+            data: null
+        }
+    } catch (error) {
+        console.dir(error)
+        return {
+            code: -1,
+            message: error,
+            data: null
+        }
+    }
+}
+
+async function modifyPageData0518 () {
+    try {
+        const modifyData = (node) => {
+            if (Array.isArray(node)) {
+                node.forEach(modifyData)
+            } else if (Object.prototype.toString.apply(node) === '[object Object]') {
+                Object.keys(node).forEach((key) => {
+                    const nodeValue = node[key]
+                    if (key === 'renderEvents') {
+                        const eventKeys = Object.keys(nodeValue)
+                        eventKeys.forEach((eventKey) => {
+                            const eventValue = nodeValue[eventKey]
+                            if (typeof eventValue === 'string') {
+                                nodeValue[eventKey] = {
+                                    methodCode: eventValue,
+                                    params: []
+                                }
+                            }
+                        })
+                    } else {
+                        modifyData(nodeValue)
+                    }
+                })
+            }
+        }
+        const pageRepository = getRepository(Page)
+        const pageList = await pageRepository.find()
+
+        const PageTemplateRepository = getRepository(PageTemplate)
+        const pageTemplateList = await PageTemplateRepository.find()
+        
+        await getConnection().transaction(async transactionalEntityManager => {
+            const taskList = pageList.map(pageData => {
+                let targetData = []
+                try {
+                    targetData = JSON.parse(pageData.content || '[]')
+                    if (!Array.isArray(targetData)) {
+                        targetData = []
+                    }
+                } catch (err) {
+                    targetData = []
+                }
+                const dataVersion = checkPageDataVersion(targetData)
+                if (dataVersion === 'v0') {
+                    targetData = []
+                } else if (dataVersion === 'v1') {
+                    try {
+                        modifyData(targetData)
+                    } catch (error) {
+                        console.dir(error)
+                        return Promise.reject(new Error(`error page ==== ${pageData.id}`))
+                    }
+                }
+                
+                return transactionalEntityManager.update(Page, {
+                    id: pageData.id
+                }, {
+                    content: JSON.stringify(targetData),
+                    updateTime: pageData.updateTime,
+                    updateUser: pageData.updateUser
+                })
+            })
+            const templateTaskList = pageTemplateList.map(templateData => {
+                let targetData = []
+                try {
+                    targetData = JSON.parse(templateData.content || '{}')
+                    if (Object.prototype.toString.call(targetData) !== '[object Object]') {
+                        targetData = {}
+                    }
+                } catch (err) {
+                    targetData = {}
+                }
+                targetData = [targetData]
+                const dataVersion = checkPageDataVersion(targetData)
+                if (dataVersion === 'v1') {
+                    try {
+                        modifyData(targetData)
+                    } catch (error) {
+                        console.dir(error)
+                        return Promise.reject(new Error(`error template ==== ${templateData.id}`))
+                    }
+                    
+                    return transactionalEntityManager.update(PageTemplate, {
+                        id: templateData.id
+                    }, {
+                        content: JSON.stringify(targetData[0]),
+                        updateTime: templateData.updateTime,
+                        updateUser: templateData.updateUser
+                    })
+                } else {
+                    return Promise.resolve()
+                }
+            })
+            await Promise.all([...taskList, ...templateTaskList])
+        })
+        return {
+            code: 0,
+            message: `sync page data success：${(new Date()).toString()}`,
             data: null
         }
     } catch (error) {
