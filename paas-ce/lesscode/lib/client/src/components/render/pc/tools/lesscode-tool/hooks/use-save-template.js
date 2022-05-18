@@ -1,7 +1,7 @@
 import LC from '@/element-materials/core'
 
-export default function (event) {
-    return () => {
+export default function () {
+    return (event) => {
         event.stopPropagation()
         event.preventDefault()
         const activeNode = LC.getActiveNode()

@@ -56,7 +56,19 @@
             </form-monaco>
         </section>
         <footer class="main-footer">
-            <bk-button theme="primary" @click="handleSaveFunction" :loading="isSubmitting" :disabled="!formChanged">保存</bk-button>
+            <bk-button
+                class="mr5"
+                theme="primary"
+                :loading="isSubmitting"
+                :disabled="!formChanged"
+                @click="handleSaveFunction"
+            >保存</bk-button>
+            <bk-button
+                v-if="eventData"
+                :loading="isSubmitting"
+                :disabled="!formChanged"
+                @click="handleSaveChooseFunction"
+            >保存并使用</bk-button>
         </footer>
     </main>
 </template>
@@ -64,10 +76,15 @@
 <script>
     import mixins from './form-mixins'
     import { mapGetters, mapActions } from 'vuex'
+    import LC from '@/element-materials/core'
 
     export default {
         mixins: [mixins],
-        
+
+        props: {
+            eventData: Object
+        },
+
         data () {
             return {
                 isSubmitting: false
@@ -107,6 +124,19 @@
                 } else {
                     confirmFn()
                 }
+            },
+
+            handleSaveChooseFunction () {
+                this.handleSaveFunction().then(() => {
+                    // 设置 event
+                    LC(this.eventData.componentId).mergeRenderEvents({
+                        [this.eventData.eventName]: {
+                            methodCode: this.form.funcCode
+                        }
+                    })
+                    // 关闭弹框
+                    this.handleClose()
+                })
             },
 
             handleSaveFunction () {

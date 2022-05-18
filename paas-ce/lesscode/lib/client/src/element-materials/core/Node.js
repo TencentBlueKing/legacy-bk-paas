@@ -20,6 +20,8 @@ import setRenderStyles from './extends/set-render-styles'
 import setRenderDirectives from './extends/set-render-directives'
 import setStyle from './extends/set-style'
 import setProp from './extends/set-prop'
+import setEvent from './extends/set-event'
+import mergeRenderEvents from './extends/merge-render-events'
 
 import {
     notify,
@@ -483,6 +485,29 @@ export default class Node {
     @notify
     setProp (params1, params2) {
         setProp(this, params1, params2)
+        return this
+    }
+    /**
+     * @desc 设置 event
+     * @param { String | Object } params1
+     * @param { Object | null } params2
+     * @returns { Node }
+     */
+    @readonly
+    @notify
+    setEvent (params1, params2) {
+        setEvent(this, params1, params2)
+        return this
+    }
+    /**
+     * @desc 增量设置事件
+     * @param { Array } events
+     * @returns { Node }
+     */
+    @readonly
+    @notify
+    mergeRenderEvents (events = {}) {
+        mergeRenderEvents(this, events)
         return this
     }
 }
