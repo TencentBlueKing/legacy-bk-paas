@@ -170,6 +170,37 @@
                 }
             }
         },
+        watch: {
+            lastValue: {
+                handler (lastValue) {
+                    if (this.isInnerChange) {
+                        this.isInnerChange = false
+                        return
+                    }
+                    if (lastValue && lastValue.valueType) {
+                        // setTimeout 让 watch 第一次执行时在 created 之后
+                        setTimeout(() => {
+                            // fix: 错误数据转换，表达式类型的 format 包存成了 value
+                            const isFixedComputeFormat = lastValue.format === 'value' && /=/.test(lastValue.code)
+                            this.formData = Object.freeze({
+                                ...this.formData,
+                                format: isFixedComputeFormat ? 'expression' : lastValue.format,
+                                component: lastValue.component,
+                                code: lastValue.code,
+                                payload: lastValue.payload || {},
+                                valueType: lastValue.valueType
+                            })
+                            this.slotTypeValueMemo[this.formData.valueType] = {
+                                val: this.formData.code,
+                                payload: this.formData.payload,
+                                component: this.formData.component
+                            }
+                        })
+                    }
+                },
+                immediate: true
+            }
+        },
         created () {
             const {
                 val,
@@ -207,24 +238,6 @@
                     component: this.formData.component
                 }
             }
-
-            if (this.lastValue && this.lastValue.valueType) {
-                // fix: 错误数据转换，表达式类型的 format 包存成了 value
-                const isFixedComputeFormat = this.lastValue.format === 'value' && /=/.test(this.lastValue.code)
-                this.formData = Object.freeze({
-                    ...this.formData,
-                    format: isFixedComputeFormat ? 'expression' : this.lastValue.format,
-                    component: this.lastValue.component,
-                    code: this.lastValue.code,
-                    payload: this.lastValue.payload || {},
-                    valueType: this.lastValue.valueType
-                })
-                this.slotTypeValueMemo[this.formData.valueType] = {
-                    val: this.formData.code,
-                    payload: this.formData.payload,
-                    component: this.formData.component
-                }
-            }
         },
         methods: {
             /**
@@ -237,7 +250,7 @@
                     payload: this.formData.payload,
                     component: this.formData.component
                 }
-
+                this.isInnerChange = true
                 this.$emit('on-change', this.name, {
                     ...this.formData
                 })
