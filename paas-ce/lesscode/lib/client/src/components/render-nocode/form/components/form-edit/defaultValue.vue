@@ -14,7 +14,7 @@
             :value="field.value"
             :disabled="disabled"
             @change="$emit('change', $event)"></bk-input>
-        <process-field-item
+        <field-item
             v-else
             :field="field"
             :use-fixed-data-source="true"
@@ -22,19 +22,19 @@
             :disabled="disabled"
             :show-label="false"
             @change="$emit('change', $event)">
-        </process-field-item>
+        </field-item>
     </div>
 </template>
 <script>
 // 表单字段编辑时填写默认值组件
     import cloneDeep from 'lodash.clonedeep'
-    import Vue from 'vue'
-    import { ProcessFieldItem } from '../../../common/processFormPlugin'
-    import '../../../common/processFormPlugin.css'
-    Vue.use(ProcessFieldItem)
+    import FieldItem from '@/components/nocode-form/fieldItem.vue'
 
     export default {
         name: 'DefaultValue',
+        components: {
+            FieldItem
+        },
         props: {
             field: {
                 type: Object,

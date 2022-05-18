@@ -154,9 +154,9 @@
                     {
                         title: '流程管理',
                         icon: 'data-source-manage',
-                        url: 'flowManage',
+                        url: 'flowList',
                         toPath: {
-                            name: 'flowManage'
+                            name: 'flowList'
                         }
                     },
                     {

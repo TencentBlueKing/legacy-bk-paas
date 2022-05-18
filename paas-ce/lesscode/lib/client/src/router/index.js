@@ -81,8 +81,10 @@ const OperationStatsProject = () => import(/* webpackChunkName: 'operation-stats
 const OperationStatsFunc = () => import(/* webpackChunkName: 'operation-stats-func' */'@/views/system/operation/stats/func/index.vue')
 const OperationStatsComp = () => import(/* webpackChunkName: 'operation-stats-comp' */'@/views/system/operation/stats/comp/index.vue')
 
-// 流程管理
+// 流程列表
 const FlowManage = () => import(/* webpackChunkName: 'FlowManage' */'@/views/project/flow-manage/index.vue')
+const FlowList = () => import(/* webpackChunkName: 'FlowList' */'@/views/project/flow-manage/list.vue')
+const FlowEdit = () => import(/* webpackChunkName: 'FlowEdit' */'@/views/project/flow-manage/edit/index.vue')
 
 // 平台管理
 const PlatformManageEntry = () => import(/* webpackChunkName: 'operation-stats-entry' */'@/views/system/platform-manage/index.vue')
@@ -308,12 +310,24 @@ const routes = [
                 }
             },
             {
-                path: 'flow-manage',
-                name: 'flowManage',
+                path: 'flow',
                 component: FlowManage,
+                redirect: { name: 'flowList' },
                 meta: {
                     title: '流程管理'
-                }
+                },
+                children: [
+                    {
+                        path: '',
+                        name: 'flowList',
+                        component: FlowList
+                    },
+                    {
+                        path: ':id',
+                        name: 'flowEdit',
+                        component: FlowEdit
+                    }
+                ]
             },
             {
                 path: 'release',

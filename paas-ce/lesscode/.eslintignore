@@ -1,3 +1,4 @@
 lib/server/model/migrations/
 lib/client/src/bk-cion/
 lib/client/src/components/render-nocode/common/
+lib/client/src/components/flow/flow-canvas/*.js

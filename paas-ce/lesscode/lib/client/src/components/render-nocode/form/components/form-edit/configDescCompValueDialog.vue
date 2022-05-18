@@ -10,18 +10,19 @@
         :value="show"
         @confirm="onConfirm"
         @cancel="$emit('update:show', false)">
-        <process-field-item :field="field" @change="handleChangeValue"></process-field-item>
+        <field-item :field="field" @change="handleChangeValue"></field-item>
     </bk-dialog>
 </template>
 
 <script>
-    import Vue from 'vue'
-    import { ProcessFieldItem } from '../../../common/processFormPlugin'
+    import FieldItem from '@/components/nocode-form/fieldItem.vue'
     import { RICHTEXT_FIELD } from '../../../common/field'
-    import '../../../common/processFormPlugin.css'
-    Vue.use(ProcessFieldItem)
+
     export default {
         name: 'configDescCompValue',
+        components: {
+            FieldItem
+        },
         props: {
             show: {
                 type: Boolean,

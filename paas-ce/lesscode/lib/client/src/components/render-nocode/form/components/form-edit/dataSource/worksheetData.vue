@@ -123,7 +123,7 @@
 </template>
 <script>
     import cloneDeep from 'lodash.clonedeep'
-    import { getFieldConditions } from '../../../../common/from'
+    import { getFieldConditions } from '../../../../common/form'
     import FieldValue from '../fieldValue'
 
     export default {

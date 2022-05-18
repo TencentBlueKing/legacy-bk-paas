@@ -11,7 +11,7 @@
         </transition>
         <div class="field-container">
             <div class="mask"></div>
-            <process-field-item :field="field"></process-field-item>
+            <field-item :field="field"></field-item>
         </div>
         <transition name="slide-left">
             <div v-show="isHover" class="actions-area">
@@ -22,12 +22,13 @@
     </div>
 </template>
 <script>
-    import Vue from 'vue'
-    import { ProcessFieldItem } from '../../../common/processFormPlugin'
-    import '../../../common/processFormPlugin.css'
-    Vue.use(ProcessFieldItem)
+    import FieldItem from '@/components/nocode-form/fieldItem.vue'
+
     export default {
         name: 'FieldElement',
+        components: {
+            FieldItem
+        },
         props: {
             field: {
                 type: Object,
