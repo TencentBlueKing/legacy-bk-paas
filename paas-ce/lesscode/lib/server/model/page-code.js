@@ -243,6 +243,10 @@ class PageCode {
                     delete styles[style]
                 }
             })
+            if (styles.height && styles.height.endsWith('%')) {
+                css += ` height: ${styles.height};`
+                styles.height = '100%'
+            }
         }
         if (item.name && item.name.startsWith('chart-')) {
             this.generateCharts(item)
@@ -309,13 +313,17 @@ class PageCode {
                 }
             }
  
+            const { width } = styles
+            if (inFreeLayout && width && width.endsWith('%')) {
+                styles.width = '100%'
+            }
             const itemProps = this.getItemProps(item.type, item.renderProps, item.componentId, item.renderDirectives, item.renderSlots)
             const { itemStyles = '', itemClass = '' } = this.getItemStyles(item.componentId, styles, item.renderProps)
             const itemEvents = this.getItemEvents(item.renderEvents)
             let componentCode = ''
             if (inFreeLayout) {
                 if (styles.width) {
-                    css += ` width: ${styles.width};`
+                    css += ` width: ${width};`
                 } else {
                     // 自由布局中的表格，如果不设置宽度，那么宽度会一直增大，表格组件本身的缺陷
                     if (item.type === 'bk-table' || item.type === 'el-table') {
@@ -436,7 +444,6 @@ class PageCode {
                  width: 100%;
                  display: inline-block;
                  position: relative;
-                 z-index: 10;
              }
              .bk-free-layout-item-inner-${this.uniqueKey} {
                  height: 100%;
@@ -1041,11 +1048,7 @@ class PageCode {
                  const { itemClass = '' } = this.getItemStyles(item.componentId, item.renderStyles, item.renderProps)
                  code += `
                      ${itemClass ? `\n<div class="bk-free-layout-${this.uniqueKey} ${item.componentId}" ${vueDirective} ${propDirective}>` : `<div class="bk-free-layout-${this.uniqueKey}" ${vueDirective} ${propDirective}>`}
-                     <div class="bk-free-layout-item-inner-${this.uniqueKey}">
                          ${this.generateCode(item.renderSlots.default || [], true)}
-  
-  
-                     </div>
                  </div>
                  `
                  /* eslint-enable no-unused-vars, indent */
