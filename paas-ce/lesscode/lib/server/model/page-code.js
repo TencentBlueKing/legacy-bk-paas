@@ -407,7 +407,6 @@ class PageCode {
         const styleSettings = this.handleRenderStyles(pageSetting)
 
         const hasStyle = Object.keys(styleSettings).length > 0
-        console.log(styleSettings, 'settings')
         if (hasStyle) {
             for (const i in styleSettings) {
                 if (styleSettings[i] !== '') {
