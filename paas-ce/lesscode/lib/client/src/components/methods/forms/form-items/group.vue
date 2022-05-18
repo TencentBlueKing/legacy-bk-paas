@@ -76,10 +76,9 @@
                 }
             },
 
-            handleSelectCategory (funcGroupId, { name: funcGroupName }) {
+            handleSelectCategory (funcGroupId) {
                 this.updateValue({
-                    funcGroupId,
-                    funcGroupName
+                    funcGroupId
                 })
             }
         }

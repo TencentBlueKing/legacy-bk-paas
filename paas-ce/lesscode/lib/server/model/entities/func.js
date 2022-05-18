@@ -42,10 +42,6 @@ export default class extends Base {
     @Column({ type: 'int' })
     funcGroupId
 
-    // 函数分类名字
-    @Column({ type: 'varchar', length: 255 })
-    funcGroupName
-
     // 函数简介
     @Column({ type: 'tinytext' })
     funcSummary

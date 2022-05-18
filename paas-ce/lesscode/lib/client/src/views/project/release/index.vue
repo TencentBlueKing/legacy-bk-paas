@@ -9,7 +9,7 @@
             <div class="release-page-tab">
                 <div class="tab-item" :class="{ active: page === 'publish' }" @click="handlePage('publish')">发布部署</div>
                 <div class="tab-item" :class="{ active: page === 'history' }" @click="handlePage('history')">部署历史</div>
-                <div class="tab-item" :class="{ active: page === 'package' }" @click="handlePage('package')">版本包管理</div>
+                <!-- <div class="tab-item" :class="{ active: page === 'package' }" @click="handlePage('package')">版本包管理</div> -->
             </div>
             <section class="release-page-content">
                 <component :is="pageCom" />

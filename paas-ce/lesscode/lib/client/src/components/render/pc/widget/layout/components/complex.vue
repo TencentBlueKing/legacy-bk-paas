@@ -396,6 +396,7 @@
                 border: 1px solid #3a84ff;
             }
             &.item-active {
+                color: #fff;
                 opacity: 1;
             }
         }

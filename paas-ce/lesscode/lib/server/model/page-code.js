@@ -396,74 +396,84 @@ class PageCode {
         // 页面级样式设置
         const styleSetting = typeof this.styleSetting === 'string' ? JSON.parse(this.styleSetting) : this.styleSetting
         let pageStyle = ''
-        for (const i in styleSetting) {
-            if (i === 'customStyle') {
-                for (const key in styleSetting[i]) {
-                    pageStyle += `${key}: ${styleSetting[i][key]};\n`
+
+        // const paddingArr = ['padding', 'padding-left', 'padding-right', 'padding-top', 'padding-bottom']
+        const defaultPadding = { 'padding-left': '24px', 'padding-right': '24px', 'padding-top': '20px', 'padding-bottom': '0px' }
+        const pageSetting = Object.assign({}, defaultPadding, styleSetting)
+        const styleSettings = this.handleRenderStyles(pageSetting)
+
+        const hasStyle = Object.keys(styleSettings).length > 0
+        console.log(styleSettings, 'settings')
+        if (hasStyle) {
+            for (const i in styleSettings) {
+                if (styleSettings[i] !== '') {
+                    pageStyle += `${paramCase(i)}: ${styleSettings[i]};\n`
                 }
-            } else if (styleSetting[i] !== '') {
-                pageStyle += `${paramCase(i)}: ${styleSetting[i]};\n`
             }
+            !styleSettings['height'] && (pageStyle += 'height: 100%')
+        } else {
+            pageStyle = 'padding: 20px 24px 0px;\n'
         }
-  
-        let head = this.hasLayOut || this.layoutType === 'empty' ? '<style lang="css" scoped>' : '<style type="text/css">'
+ 
+        let head = '<style lang="css" scoped>'
         head += `.container-${this.uniqueKey} {
-                  ${this.layoutType === 'empty' ? pageStyle : ''}
-              }
-              .bk-layout-row-${this.uniqueKey} {
-                  display: flex;
-              }
-              .bk-layout-row-${this.uniqueKey}:after {
-                  display: block;
-                  clear: both;
-                  content: "";
-                  font-size: 0;
-                  height: 0;
-                  visibility: hidden;
-              }
-              .bk-layout-col-${this.uniqueKey} {
-                  float: left;
-                  position: relative;
-                  min-height: 1px;
-              }
-              .bk-free-layout-${this.uniqueKey} {
-                  height: 500px;
-                  width: 100%;
-                  display: inline-block;
-                  position: relative;
-              }
-              .bk-free-layout-item-inner-${this.uniqueKey} {
-                  height: 100%;
-                  position: relative;
-              }
-              .bk-form-radio {
-                  margin-right: 20px;
-              }
-              .bk-form-checkbox {
-                  margin-right: 20px;
-              }
-              .echarts {
-                  width: 100%;
-                  height: 100%;
-              }
-              /* 设置 bk-exception 组件宽度为 100% */
-              .bk-layout-col-${this.uniqueKey} .bk-exception-img {
-                  width: 100%;
-              }
-              .bk-form-item {
-                  margin: 10px;
-              }
-              .bk-sideslider {
-                  margin: 0;
-              }
-              /* 设置 .bk-form-control 组件宽度为 auto */
-              .bk-form-control {
-                  width: auto;
-              }
-              .bk-form-control .bk-input-text {
-                  font-size: 12px;
-              }
-          `
+                 ${pageStyle}
+             }
+             .bk-layout-row-${this.uniqueKey} {
+                 display: flex;
+             }
+             .bk-layout-row-${this.uniqueKey}:after {
+                 display: block;
+                 clear: both;
+                 content: "";
+                 font-size: 0;
+                 height: 0;
+                 visibility: hidden;
+             }
+             .bk-layout-col-${this.uniqueKey} {
+                 float: left;
+                 position: relative;
+                 min-height: 1px;
+             }
+             .bk-free-layout-${this.uniqueKey} {
+                 height: 500px;
+                 width: 100%;
+                 display: inline-block;
+                 position: relative;
+                 z-index: 10;
+             }
+             .bk-free-layout-item-inner-${this.uniqueKey} {
+                 height: 100%;
+                 position: relative;
+             }
+             .bk-form-radio {
+                 margin-right: 20px;
+             }
+             .bk-form-checkbox {
+                 margin-right: 20px;
+             }
+             .echarts {
+                 width: 100%;
+                 height: 100%;
+             }
+             /* 设置 bk-exception 组件宽度为 100% */
+             .bk-layout-col-${this.uniqueKey} .bk-exception-img {
+                 width: 100%;
+             }
+             .bk-form-item {
+                 margin: 10px;
+             }
+             .bk-sideslider {
+                 margin: 0;
+             }
+             /* 设置 .bk-form-control 组件宽度为 auto */
+             .bk-form-control {
+                 width: auto;
+             }
+             .bk-form-control .bk-input-text {
+                 font-size: 12px;
+             }
+         `
         if (this.isEmpty) {
             head += `.bk-exception {
                       margin-top:50px;
@@ -472,141 +482,144 @@ class PageCode {
         }
         if (this.hasLayOut) {
             head += `
-                  .bk-navigation {
-                      width:auto;
-                      height:100vh;
-                      outline:1px solid #ebebeb;
-                  }
-                  .bk-navigation .bk-navigation-wrapper {
-                      height:calc(100vh - 252px)!important;
-                  }
-                  .navigation-header {
-                      -webkit-box-flex:1;
-                      -ms-flex:1;
-                      flex:1;
-                      height:100%;
-                      display:-webkit-box;
-                      display:-ms-flexbox;
-                      display:flex;
-                      -webkit-box-align:center;
-                      -ms-flex-align:center;
-                      align-items:center;
-                      font-size:14px;
-                  }
-                  .navigation-header .header-nav {
-                      display:-webkit-box;
-                      display:-ms-flexbox;
-                      display:flex;
-                      padding:0;
-                      margin:0;
-                  }
-                  .navigation-header .header-title {
-                      font-size:16px;
-                  }
-                  .navigation-header .header-nav-item {
-                      list-style:none;
-                      height:50px;
-                      display:-webkit-box;
-                      display:-ms-flexbox;
-                      display:flex;
-                      -webkit-box-align:center;
-                      -ms-flex-align:center;
-                      align-items:center;
-                      margin-right:40px;
-                      color:#96A2B9;
-                      min-width:56px
-                  }
-                  .navigation-header .header-nav-item:hover {
-                      cursor:pointer;
-                      color:#D3D9E4;
-                  }
-                  .navigation-header .header-nav-item.item-active {
-                      color:#FFFFFF !important;
-                  }
-                  .navigation-head-nav {
-                      width:150px;
-                      display:-webkit-box;
-                      display:-ms-flexbox;
-                      display:flex;
-                      -webkit-box-orient:vertical;
-                      -webkit-box-direction:normal;
-                      -ms-flex-direction:column;
-                      flex-direction:column;
-                      background:#FFFFFF;
-                      border:1px solid #E2E2E2;
-                      -webkit-box-shadow:0px 3px 4px 0px rgba(64,112,203,0.06);
-                      box-shadow:0px 3px 4px 0px rgba(64,112,203,0.06);
-                      padding:6px 0;
-                      margin:0;
-                      color:#63656E;
-                  }
-                  .navigation-head-nav .nav-item {
-                      -webkit-box-flex:0;
-                      -ms-flex:0 0 32px;
-                      flex:0 0 32px;
-                      display:-webkit-box;
-                      display:-ms-flexbox;
-                      display:flex;
-                      -webkit-box-align:center;
-                      -ms-flex-align:center;
-                      align-items:center;
-                      padding:0 20px;
-                      list-style:none
-                  }
-                  .navigation-head-nav .nav-item:hover {
-                      color:#3A84FF;
-                      cursor:pointer;
-                      background-color:#F0F1F5;
-                  }
-                  .tippy-popper .tippy-tooltip.navigation-message-theme {
-                      padding:0;
-                      border-radius:0;
-                      -webkit-box-shadow:none;
-                      box-shadow:none;
-                  }
-                  .nav-sign-out {
-                      display: inline-block;
-                      cursor: pointer;
-                      background: #FFFFFF;
-                      border: 1px solid #E2E2E2;
-                      box-shadow: 0px 3px 4px 0px rgb(64 112 203 / 6%);
-                      padding: 0 25px;
-                      line-height: 30px;
-                  }
-                  .nav-sign-out:hover {
-                      color:#3A84FF;
-                      background-color:#F0F1F5;
-                  }
-                  .header-user {
-                      height:100%;
-                      display:flex;
-                      align-items:center;
-                      justify-content:center;
-                      color:#96A2B9;
-                  }
-                  .header-user:hover {
-                      color:#D3D9E4;
-                  }
-                  .header-user .bk-icon {
-                      margin-left:5px;
-                      font-size:12px;
-                  }
-                  .white-theme .header-user {
-                      color: #63656e;
-                  }
-                  .white-theme .header-user:hover {
-                      color: #3a84ff;
-                  }
-                  .nav-head-right {
-                      color: #d3d9e4;
-                      margin-left: auto;
-                      display: flex;
-                      align-items: center;
-                      cursor: pointer;
-                  }
-                 
-              `
-  
+                 .bk-navigation {
+                     width:auto;
+                     height:100vh;
+                     outline:1px solid #ebebeb;
+                 }
+                 .bk-navigation .bk-navigation-wrapper {
+                     height:calc(100vh - 252px)!important;
+                 }
+                 .bk-navigation-wrapper .navigation-container .container-content {
+                    padding: 0px;
+                 }
+                 .navigation-header {
+                     -webkit-box-flex:1;
+                     -ms-flex:1;
+                     flex:1;
+                     height:100%;
+                     display:-webkit-box;
+                     display:-ms-flexbox;
+                     display:flex;
+                     -webkit-box-align:center;
+                     -ms-flex-align:center;
+                     align-items:center;
+                     font-size:14px;
+                 }
+                 .navigation-header .header-nav {
+                     display:-webkit-box;
+                     display:-ms-flexbox;
+                     display:flex;
+                     padding:0;
+                     margin:0;
+                 }
+                 .navigation-header .header-title {
+                     font-size:16px;
+                 }
+                 .navigation-header .header-nav-item {
+                     list-style:none;
+                     height:50px;
+                     display:-webkit-box;
+                     display:-ms-flexbox;
+                     display:flex;
+                     -webkit-box-align:center;
+                     -ms-flex-align:center;
+                     align-items:center;
+                     margin-right:40px;
+                     color:#96A2B9;
+                     min-width:56px
+                 }
+                 .navigation-header .header-nav-item:hover {
+                     cursor:pointer;
+                     color:#D3D9E4;
+                 }
+                 .navigation-header .header-nav-item.item-active {
+                     color:#FFFFFF !important;
+                 }
+                 .navigation-head-nav {
+                     width:150px;
+                     display:-webkit-box;
+                     display:-ms-flexbox;
+                     display:flex;
+                     -webkit-box-orient:vertical;
+                     -webkit-box-direction:normal;
+                     -ms-flex-direction:column;
+                     flex-direction:column;
+                     background:#FFFFFF;
+                     border:1px solid #E2E2E2;
+                     -webkit-box-shadow:0px 3px 4px 0px rgba(64,112,203,0.06);
+                     box-shadow:0px 3px 4px 0px rgba(64,112,203,0.06);
+                     padding:6px 0;
+                     margin:0;
+                     color:#63656E;
+                 }
+                 .navigation-head-nav .nav-item {
+                     -webkit-box-flex:0;
+                     -ms-flex:0 0 32px;
+                     flex:0 0 32px;
+                     display:-webkit-box;
+                     display:-ms-flexbox;
+                     display:flex;
+                     -webkit-box-align:center;
+                     -ms-flex-align:center;
+                     align-items:center;
+                     padding:0 20px;
+                     list-style:none
+                 }
+                 .navigation-head-nav .nav-item:hover {
+                     color:#3A84FF;
+                     cursor:pointer;
+                     background-color:#F0F1F5;
+                 }
+                 .tippy-popper .tippy-tooltip.navigation-message-theme {
+                     padding:0;
+                     border-radius:0;
+                     -webkit-box-shadow:none;
+                     box-shadow:none;
+                 }
+                 .nav-sign-out {
+                     display: inline-block;
+                     cursor: pointer;
+                     background: #FFFFFF;
+                     border: 1px solid #E2E2E2;
+                     box-shadow: 0px 3px 4px 0px rgb(64 112 203 / 6%);
+                     padding: 0 25px;
+                     line-height: 30px;
+                 }
+                 .nav-sign-out:hover {
+                     color:#3A84FF;
+                     background-color:#F0F1F5;
+                 }
+                 .header-user {
+                     height:100%;
+                     display:flex;
+                     align-items:center;
+                     justify-content:center;
+                     color:#96A2B9;
+                 }
+                 .header-user:hover {
+                     color:#D3D9E4;
+                 }
+                 .header-user .bk-icon {
+                     margin-left:5px;
+                     font-size:12px;
+                 }
+                 .white-theme .header-user {
+                     color: #63656e;
+                 }
+                 .white-theme .header-user:hover {
+                     color: #3a84ff;
+                 }
+                 .nav-head-right {
+                     color: #d3d9e4;
+                     margin-left: auto;
+                     display: flex;
+                     align-items: center;
+                     cursor: pointer;
+                 }
+                
+             `
+ 
             // 设置了导航主题色 则添加以下样式
             if (this.layoutContent.theme && this.layoutContent.theme !== '#182132') {
                 head += `
@@ -655,12 +668,6 @@ class PageCode {
                       }
                   `
             }
-        }
-  
-        if (!this.isEmpty && this.layoutType !== 'empty') {
-            head += `.bk-navigation-wrapper .navigation-container .container-content{
-                  ${pageStyle}
-              }`
         }
         // if (this.isGenerateNav) {
         //     head += `.bk-layout-custom-component-wrapper .page-container {
