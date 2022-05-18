@@ -1090,6 +1090,10 @@ class PageCode {
                   
                 const { format, valueType: type, code: val, modifiers = [] } = props[i]
    
+                // 特殊处理兼容tab的active属性
+                if (i === 'active' && componentType === 'bk-tab' && !modifiers.includes('sync')) {
+                    modifiers.push('sync')
+                }
                 const propVar = format !== 'value' ? val : compId
                 const propName = format !== 'value' && modifiers && modifiers.length ? `${i}.${modifiers.join('.')}` : i
                 const curPropStr = `${val === undefined ? '' : ':'}${propName}="${propVar}" `
