@@ -1261,17 +1261,7 @@ async function modifyPageData0518 () {
                 } catch (err) {
                     targetData = []
                 }
-                const dataVersion = checkPageDataVersion(targetData)
-                if (dataVersion === 'v0') {
-                    targetData = []
-                } else if (dataVersion === 'v1') {
-                    try {
-                        modifyData(targetData)
-                    } catch (error) {
-                        console.dir(error)
-                        return Promise.reject(new Error(`error page ==== ${pageData.id}`))
-                    }
-                }
+                modifyData(targetData)
                 
                 return transactionalEntityManager.update(Page, {
                     id: pageData.id
@@ -1292,25 +1282,16 @@ async function modifyPageData0518 () {
                     targetData = {}
                 }
                 targetData = [targetData]
-                const dataVersion = checkPageDataVersion(targetData)
-                if (dataVersion === 'v1') {
-                    try {
-                        modifyData(targetData)
-                    } catch (error) {
-                        console.dir(error)
-                        return Promise.reject(new Error(`error template ==== ${templateData.id}`))
-                    }
+
+                modifyData(targetData)
                     
-                    return transactionalEntityManager.update(PageTemplate, {
-                        id: templateData.id
-                    }, {
-                        content: JSON.stringify(targetData[0]),
-                        updateTime: templateData.updateTime,
-                        updateUser: templateData.updateUser
-                    })
-                } else {
-                    return Promise.resolve()
-                }
+                return transactionalEntityManager.update(PageTemplate, {
+                    id: templateData.id
+                }, {
+                    content: JSON.stringify(targetData[0]),
+                    updateTime: templateData.updateTime,
+                    updateUser: templateData.updateUser
+                })
             })
             await Promise.all([...taskList, ...templateTaskList])
         })

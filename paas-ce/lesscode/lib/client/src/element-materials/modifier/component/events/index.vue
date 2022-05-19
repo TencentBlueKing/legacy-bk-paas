@@ -66,13 +66,25 @@
                 renderEvents
             } = this.currentComponentNode
             this.configEvents = Object.freeze(material.events || [])
-            this.renderEvents = Object.assign({}, renderEvents)
+            // 兼容老数据展示
+            Object.keys(renderEvents || {}).forEach((key) => {
+                const renderEvent = renderEvents[key]
+                if (typeof renderEvent === 'string') {
+                    this.renderEvents[key] = {
+                        methodCode: renderEvent,
+                        params: []
+                    }
+                } else {
+                    this.renderEvents[key] = renderEvent
+                }
+            })
+            // this.renderEvents = Object.assign({}, renderEvents)
 
             const updateCallback = _.debounce(() => {
                 if (jsonSafeStringify(this.renderEvents) === jsonSafeStringify(this.currentComponentNode.renderEvents)) {
                     return
                 }
-                this.renderEvents = Object.freeze(_.cloneDeep(this.currentComponentNode.renderEvents))
+                this.renderEvents = _.cloneDeep(this.currentComponentNode.renderEvents)
             }, 100)
 
             LC.addEventListener('mergeRenderEvents', updateCallback)

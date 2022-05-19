@@ -500,7 +500,7 @@
                     const templateInfo = this.dialog.page.selectedList.map(item => ({
                         belongProjectId: item.id,
                         categoryId: item.selectedCategory,
-                        versionId: ''
+                        versionId: null
                     }))
                     const data = {
                         id: fromTemplate.id,
@@ -508,11 +508,11 @@
                         templateInfo
                     }
                     const { variableList, funcGroups } = await this.getProjectFuncAndVar({ projectId: fromTemplate.belongProjectId, versionId: fromTemplate.versionId, pageCode: fromTemplate.fromPageCode })
-                    
+
                     const templateNode = LC.parseTemplate(JSON.parse(fromTemplate.content || {}))
                     // 解析出模板targetData绑定的变量和函数
-                    const { varList: valList = [], funcList = [] } = parseFuncAndVar(templateNode, variableList, funcGroups)
-                    Object.assign(data, { valList, funcList })
+                    const { varList = [], funcList = [] } = parseFuncAndVar(templateNode, variableList, funcGroups)
+                    Object.assign(data, { varList, funcList })
                     
                     const res = await this.$store.dispatch('pageTemplate/apply', data)
                     if (res) {
@@ -584,7 +584,9 @@
                 targetData.push(JSON.parse(template.content))
                 this.$store.dispatch('vueCode/getPageCode', {
                     targetData,
-                    projectId: template.belongProjectId
+                    projectId: template.belongProjectId,
+                    fromPageCode: template.fromPageCode
+
                 }).then((res) => {
                     const downlondEl = document.createElement('a')
                     const blob = new Blob([res])

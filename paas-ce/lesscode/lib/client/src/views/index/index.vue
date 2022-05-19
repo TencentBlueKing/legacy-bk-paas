@@ -336,7 +336,7 @@
             handleUpdatePreviewContent (setting = {}) {
                 const defaultSetting = {
                     isGenerateNav: false,
-                    id: this.pageDetail.pageCode,
+                    id: this.projectId + this.pageDetail.pageCode,
                     curTemplateData: {},
                     storageKey: 'ONLINE_PREVIEW_CONTENT',
                     types: ['reload', 'update_style']
@@ -346,7 +346,7 @@
             handleUpdateNavPerview (setting = {}) {
                 const defaultSetting = {
                     isGenerateNav: true,
-                    id: this.pageRoute.layoutPath,
+                    id: this.projectId + this.pageRoute.layoutPath,
                     curTemplateData: this.curTemplateData,
                     storageKey: 'ONLINE_PREVIEW_NAV',
                     types: ['reload']
