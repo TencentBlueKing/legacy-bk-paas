@@ -1082,7 +1082,7 @@ class PageCode {
             }
         }
         for (const i in props) {
-            if (dirProps.find((directive) => (directive.prop === i)) && !['remote', 'data-source', 'table-data-source'].includes(props[i].type)) continue
+            if (dirProps.find((directive) => (directive.prop === i)) && !['remote', 'data-source', 'table-data-source'].includes(props[i].valueType)) continue
   
             if (i !== 'slots' && i !== 'class') {
                 compId = `${preCompId}${camelCase(i, { transform: camelCaseTransformMerge })}`
@@ -1104,7 +1104,7 @@ class PageCode {
                     continue
                 } else if (type === 'remote') {
                     const curDir = dirProps.find((directive) => (directive.prop === i))
-                    const key = (curDir || {}).val || propVar
+                    const key = (curDir || {}).code || propVar
                     this.remoteMethodsTemplate(key, props[i].payload || {})
                     if (!curDir) {
                         this.dataTemplate(propVar, JSON.stringify([]))
@@ -1343,11 +1343,15 @@ class PageCode {
                 case 'v-html':
                     propDirectives.push(`${type}="${disPlayVal}"`)
                     break
+                case 'v-bind':
+                    propDirectives.push(`:${prop}${modifierStr}="${disPlayVal}"`)
+                    break
                 default:
                     propDirectives.push(`${type}${prop ? `:${prop}` : ''}${modifierStr}="${disPlayVal}"`)
                     break
             }
         })
+        console.log(propDirectives, 44422)
         return { vueDirectives, propDirectives, templateDirectives }
     }
   
