@@ -150,7 +150,7 @@
                     format: 'variable',
                     formatInclude: ['value', 'variable'], // v-bind 支持配置（值、变量）
                     code: '',
-                    valueTypeInclude: ['boolean'],
+                    valueTypeInclude: ['array'],
                     renderValue: 1,
                     tips: (dir) => {
                         return dir.val
