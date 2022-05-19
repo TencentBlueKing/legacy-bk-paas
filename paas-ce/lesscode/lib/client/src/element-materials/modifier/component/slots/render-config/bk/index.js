@@ -41,14 +41,17 @@ const bkRenderMap = {
             >{{item.label}}</bk-radio-button>
         `
     },
-    'bk-option' ({ val }) {
+    'bk-option' ({ val, payload }) {
         const displayVal = getVal(val)
+        const params = payload?.sourceData?.params
+        const idKey = params?.idKey || 'id'
+        const nameKey = params?.nameKey || 'name'
         return `
             <bk-option
                 v-for="item in ${displayVal}"
-                :key="item.id"
-                :id="item.id"
-                :name="item.name"
+                :key="item.${idKey}"
+                :id="item.${idKey}"
+                :name="item.${nameKey}"
             ></bk-option>
         `
     },
