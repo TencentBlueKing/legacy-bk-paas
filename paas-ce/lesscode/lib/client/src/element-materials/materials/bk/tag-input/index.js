@@ -51,7 +51,8 @@ export default {
     ],
     renderStyles: {
         display: 'inline-block',
-        width: '300px'
+        width: '300px',
+        verticalAlign: 'middle'
     },
     directives: [
         {

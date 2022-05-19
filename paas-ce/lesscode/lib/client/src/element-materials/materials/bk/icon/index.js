@@ -31,7 +31,8 @@ export default {
     ],
     renderStyles: {
         display: 'inline-block',
-        fontSize: '14px'
+        fontSize: '14px',
+        verticalAlign: 'middle'
     },
     props: {
         type: {
