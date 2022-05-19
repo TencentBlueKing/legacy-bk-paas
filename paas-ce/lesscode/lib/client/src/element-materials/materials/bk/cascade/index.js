@@ -49,14 +49,13 @@ export default {
         {
             type: 'v-model',
             prop: 'value'
+        },
+        {
+            type: 'v-bind',
+            prop: 'list',
+            format: 'variable',
+            valueTypeInclude: ['array']
         }
-        // {
-        //     type: 'v-bind',
-        //     prop: 'list',
-        //     propTypes: ['array'],
-        //     val: '',
-        //     valType: 'variable'
-        // }
     ],
     props: {
         value: {

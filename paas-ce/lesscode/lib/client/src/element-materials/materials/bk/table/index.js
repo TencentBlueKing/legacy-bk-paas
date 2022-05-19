@@ -151,14 +151,12 @@ export default {
         'opacity'
     ],
     directives: [
-        // {
-        //     type: 'v-bind',
-        //     prop: 'data',
-        //     format: 'variable',
-        //     formatInclude: ['variable'],
-        //     code: '',
-        //     renderValue: ''
-        // }
+        {
+            type: 'v-bind',
+            prop: 'data',
+            format: 'variable',
+            valueTypeInclude: ['array']
+        }
     ],
     props: {
         data: {
