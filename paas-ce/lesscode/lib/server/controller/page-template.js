@@ -290,12 +290,13 @@ export const importTemplate = async (ctx) => {
     }
 }
 
-const getRealVarAndFunc = async ({ projectId, fromProjectId, valList, funcList }) => {
+const getRealVarAndFunc = async ({ projectId, fromProjectId, versionId, valList, funcList }) => {
     let varIds = []
     const funcIds = []
     const funcCodes = []
     const projectValList = await VariableModel.getAll({ projectId, effectiveRange: 0 })
-    const projectFuncGroupList = await getAllGroupAndFunction(projectId)
+    // 应用到默认版本
+    const projectFuncGroupList = await getAllGroupAndFunction(projectId, versionId)
     const projectFuncList = []
     projectFuncGroupList.map(item => {
         projectFuncList.splice(0, 0, ...item.children)
