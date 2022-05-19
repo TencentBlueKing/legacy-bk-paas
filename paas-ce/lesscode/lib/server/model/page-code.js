@@ -1351,7 +1351,6 @@ class PageCode {
                     break
             }
         })
-        console.log(propDirectives, 44422)
         return { vueDirectives, propDirectives, templateDirectives }
     }
   

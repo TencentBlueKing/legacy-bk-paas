@@ -60,7 +60,7 @@
                         <span class="item-name">{{ template.templateName }}</span>
                         <span
                             class="preview"
-                            @click="handlePreview(template.id)">
+                            @click="handlePreview(template)">
                             预览
                         </span>
                     </div>
@@ -240,10 +240,10 @@
             },
             /**
              * @desc 预览模板
-             * @param { Number } templateId
+             * @param { Number } template
              */
-            handlePreview (templateId) {
-                window.open(`/preview-template/project/${this.projectId}/${templateId}`, '_blank')
+            handlePreview (template) {
+                window.open(`/preview-template/project/${template.belongProjectId}/${template.id}`, '_blank')
             },
 
             handleApply (template) {
