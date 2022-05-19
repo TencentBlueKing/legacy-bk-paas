@@ -106,6 +106,7 @@
             </bk-table>
         </div>
     <!-- <page-element-operate :hover="hoverData" :active="selectedData"></page-element-operate> -->
+
     </div>
 </template>
 <script>

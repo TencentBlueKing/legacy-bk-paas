@@ -9,9 +9,9 @@
         <bk-button :theme="'default'" type="submit" :title="'基础按钮'" @click="handleClick('export')" class="mr10">
             导出
         </bk-button>
-        <bk-button :theme="'default'" type="submit" :title="'基础按钮'" @click="handleClick('download')" class="mr10">
-            下载文件
-        </bk-button>
+        <!--        <bk-button :theme="'default'" type="submit" :title="'基础按钮'" @click="handleClick('download')" class="mr10">-->
+        <!--            下载文件-->
+        <!--        </bk-button>-->
         <bk-button :theme="'default'" type="submit" :title="'基础按钮'" @click="handleClick('bacthDel')" class="mr10">
             批量删除
         </bk-button>

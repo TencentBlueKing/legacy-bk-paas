@@ -10,23 +10,22 @@
                 </template>
             </bk-table-column>
             <bk-table-column label="操作">
-                <bk-button
-                    v-for="(action, index) in config.innerActions"
-                    :key="index"
-                    :text="true">
-                    {{ action.name }}
-                </bk-button>
+                <template :slot-scope="{ row }">
+                    <table-action-group @click="(action) => handleClick(row,action)" />
+                </template>
             </bk-table-column>
         </bk-table>
     </div>
 </template>
 <script>
     import tableCellValue from './table-cell-value.vue'
+    import tableActionGroup from '../page-edit/tableActionGroup'
 
     export default {
         name: 'dataManageTable',
         components: {
-            tableCellValue
+            tableCellValue,
+            tableActionGroup
         },
         props: {
             fields: {
@@ -42,7 +41,7 @@
             return {
                 dataLoading: false,
                 tableFields: [],
-                tableData: []
+                tableData: [{}]
             }
         },
         watch: {
@@ -56,6 +55,26 @@
                     this.tableFields = fields
                 },
                 immediate: true
+            }
+        },
+        methods: {
+            handleClick (row, action) {
+                console.log(row, action)
+                const ACTION_FUN_MAP = {
+                    'edit': 'handleEdit',
+                    'del': 'handleDelete',
+                    'detail': 'viewDetail'
+                }
+                this[ACTION_FUN_MAP[action]](row)
+            },
+            handleEdit (row) {
+                console.log('handleEdit')
+            },
+            handleDelete (row) {
+                console.log('handleDelete')
+            },
+            viewDetail (row) {
+                console.log('viewDetail')
             }
         }
     }
