@@ -258,6 +258,10 @@
                 height: calc(100% - 50px);
                 overflow-y: auto;
             }
+            ::v-deep .bk-tab-section {
+                padding: 0;
+                border: none;
+            }
         }
     }
     .exception-wrap-item {
