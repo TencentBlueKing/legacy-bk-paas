@@ -1389,7 +1389,7 @@ class PageCode {
                     const { methodData = {}, sourceData = {} } = slot.payload || {}
                     const type = Object.prototype.toString.call(slot.val)
                     let disPlayVal = defaultValMap[type] || ''
-                    const param = { val: disPlayVal, type: 'variable' }
+                    const param = { val: disPlayVal, type: 'variable', payload: slot.payload }
   
                     if (slot.format !== 'value') {
                         disPlayVal = this.handleUsedVariable(slot.format, slot.val, compId)

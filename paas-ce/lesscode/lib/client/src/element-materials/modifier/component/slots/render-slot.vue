@@ -74,6 +74,7 @@
     import slotText from './components/text'
     import slotTextArea from './components/textarea'
     import slotDataSource from './components/data-source.vue'
+    import slotSelectDataSource from './components/select-data-source.vue'
 
     const comMap = {
         list: slotList,
@@ -82,7 +83,8 @@
         text: slotText,
         textarea: slotTextArea,
         'table-list': slotTable,
-        'data-source': slotDataSource
+        'data-source': slotDataSource,
+        'select-data-source': slotSelectDataSource
     }
 
     const typeTextMap = {
@@ -93,7 +95,8 @@
         'remote': '远程函数',
         'data-source': '数据源',
         'list': '数据列表',
-        'table-list': '数据列表'
+        'table-list': '数据列表',
+        'select-data-source': '数据源'
     }
 
     export default {
@@ -288,7 +291,7 @@
                 if (this.slotTypeValueMemo.hasOwnProperty(valueType)) {
                     code = this.slotTypeValueMemo[valueType].val
                     payload = this.slotTypeValueMemo[valueType].payload
-                } else if (valueType === 'remote') {
+                } else if (['remote', 'data-source', 'select-data-source'].includes(valueType)) {
                     // fix: 配置远程函数类型，
                     // 接口数据没返回时使用配置文件设置的默认值
                     code = this.describe.val
