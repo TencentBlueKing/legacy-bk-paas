@@ -50,13 +50,12 @@ export default {
         'opacity'
     ],
     directives: [
-        // {
-        //     type: 'v-bind',
-        //     prop: 'data',
-        //     propTypes: ['array'],
-        //     val: '',
-        //     valType: 'variable'
-        // }
+        {
+            type: 'v-bind',
+            prop: 'data',
+            format: 'variable',
+            valueTypeInclude: ['array']
+        }
     ],
     props: {
         'node-key': {

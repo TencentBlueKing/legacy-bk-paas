@@ -34,7 +34,8 @@ export default {
         'opacity'
     ],
     renderStyles: {
-        display: 'inline-block'
+        display: 'inline-block',
+        verticalAlign: 'middle'
     },
     props: {
         title: {

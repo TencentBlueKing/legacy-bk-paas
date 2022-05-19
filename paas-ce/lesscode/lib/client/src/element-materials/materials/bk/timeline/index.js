@@ -34,13 +34,12 @@ export default {
         'opacity'
     ],
     directives: [
-        // {
-        //     type: 'v-bind',
-        //     prop: 'list',
-        //     propTypes: ['array'],
-        //     val: '',
-        //     valType: 'variable'
-        // }
+        {
+            type: 'v-bind',
+            prop: 'list',
+            format: 'variable',
+            valueTypeInclude: ['array']
+        }
     ],
     props: {
         list: {

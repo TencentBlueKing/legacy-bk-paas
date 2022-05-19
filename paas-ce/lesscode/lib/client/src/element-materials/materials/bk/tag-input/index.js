@@ -51,20 +51,20 @@ export default {
     ],
     renderStyles: {
         display: 'inline-block',
-        width: '300px'
+        width: '300px',
+        verticalAlign: 'middle'
     },
     directives: [
         {
             type: 'v-model',
             prop: 'value'
+        },
+        {
+            type: 'v-bind',
+            prop: 'list',
+            format: 'variable',
+            valueTypeInclude: ['array']
         }
-        // {
-        //     type: 'v-bind',
-        //     prop: 'list',
-        //     propTypes: ['array'],
-        //     val: '',
-        //     valType: 'variable'
-        // }
     ],
     props: {
         list: {

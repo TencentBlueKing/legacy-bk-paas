@@ -34,7 +34,8 @@ export default {
         'opacity'
     ],
     renderStyles: {
-        display: 'inline-flex'
+        display: 'inline-flex',
+        verticalAlign: 'middle'
     },
     directives: [
         {

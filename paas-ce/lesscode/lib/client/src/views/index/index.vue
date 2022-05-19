@@ -61,6 +61,7 @@
     import ModifierPanel from './components/modifier-panel'
     import OperationArea from './components/operation-area'
     import ActionTool from './components/action-tool'
+    import { syncVariableValue } from './components/utils'
 
     console.dir(LC)
 
@@ -282,7 +283,7 @@
                         versionId: this.versionId
                     })
 
-                    await this.$store.dispatch('variable/getAllVariable', {
+                    const variableList = await this.$store.dispatch('variable/getAllVariable', {
                         projectId: this.projectId,
                         pageCode: pageDetail.pageCode,
                         versionId: this.versionId,
@@ -293,6 +294,8 @@
                     this.$store.commit('page/setPageList', pageList || [])
                     this.$store.commit('project/setCurrentProject', projectDetail || {})
                     this.$store.commit('functions/setFunctionData', functionData)
+
+                    syncVariableValue(pageDetail.content, variableList)
 
                     // 设置初始targetData
                     LC.parseData(pageDetail.content)

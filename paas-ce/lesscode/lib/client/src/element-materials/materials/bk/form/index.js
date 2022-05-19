@@ -33,8 +33,8 @@ export default {
         {
             type: 'v-bind',
             prop: 'model',
-            val: '',
-            defaultVal: {}
+            format: 'variable',
+            valueTypeInclude: ['object']
         }
     ],
     props: {
