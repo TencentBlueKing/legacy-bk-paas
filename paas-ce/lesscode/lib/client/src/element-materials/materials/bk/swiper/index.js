@@ -43,12 +43,12 @@ export default {
         height: '300px'
     },
     directives: [
-        {
-            type: 'v-bind',
-            prop: 'pics',
-            format: 'variable',
-            valueTypeInclude: ['array']
-        }
+        // {
+        //     type: 'v-bind',
+        //     prop: 'pics',
+        //     format: 'variable',
+        //     valueTypeInclude: ['array']
+        // }
     ],
     props: {
         'is-loop': {

@@ -39,7 +39,7 @@ export default {
     ],
     props: {
         model: {
-            type: 'hidden',
+            type: 'object',
             val: {}
         },
         rules: {
