@@ -30,17 +30,18 @@ export default {
         'opacity'
     ],
     directives: [
-        {
-            type: 'v-bind',
-            prop: 'model',
-            format: 'variable',
-            valueTypeInclude: ['object']
-        }
+        // {
+        //     type: 'v-bind',
+        //     prop: 'model',
+        //     format: 'variable',
+        //     valueTypeInclude: ['object']
+        // }
     ],
     props: {
         model: {
             type: 'object',
-            val: {}
+            val: {},
+            tips: '配置表单项自动生成，不支持编辑'
         },
         rules: {
             type: 'hidden',
