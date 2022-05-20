@@ -72,9 +72,9 @@
                 this.lastProps = Object.freeze(_.cloneDeep(this.componentNode.renderProps))
             }, 100)
 
-            LC.addEventListener('setProp', updateCallback)
+            LC.addEventListener('update', updateCallback)
             this.$once('hook:beforeDestroy', () => {
-                LC.removeEventListener('setProp', updateCallback)
+                LC.removeEventListener('update', updateCallback)
             })
         },
         methods: {
