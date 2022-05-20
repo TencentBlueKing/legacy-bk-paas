@@ -88,13 +88,13 @@ export default {
         {
             type: 'v-model',
             prop: 'values'
-        },
-        {
-            type: 'v-bind',
-            prop: 'data',
-            format: 'variable',
-            valueTypeInclude: ['array']
         }
+        // {
+        //     type: 'v-bind',
+        //     prop: 'data',
+        //     format: 'variable',
+        //     valueTypeInclude: ['array']
+        // }
     ],
     props: {
         data: {
