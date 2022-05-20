@@ -201,7 +201,9 @@
             }),
             disabled () {
                 const { errors, editField, getFieldValue } = this
-                return (errors[editField.field.id] || []).length > 0 || editField.value === getFieldValue(editField.field)
+                const hasError = (errors[editField.field.id] || []).length > 0
+                const valueChange = editField.value === getFieldValue(editField.field)
+                return editField.field.from === 'style' ? hasError : (hasError || valueChange)
             },
             projectId () {
                 return this.$route.params.projectId

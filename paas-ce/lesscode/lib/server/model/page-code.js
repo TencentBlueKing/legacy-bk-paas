@@ -1088,8 +1088,15 @@ class PageCode {
                 compId = `${preCompId}${camelCase(i, { transform: camelCaseTransformMerge })}`
                 if (i === 'value') modelComId = compId
                   
-                const { format, valueType: type, code: val, modifiers = [] } = props[i]
-   
+                const { valueType: type, modifiers = [], renderValue } = props[i]
+                let { format, code: val } = props[i]
+                // format为value，code为空 ， 用renderValue的值
+                // format为variable,code为空，把format改为value， 用renderValue的值
+                if (!val) {
+                    val = renderValue
+                    format = 'value'
+                }
+
                 // 特殊处理兼容tab的active属性
                 if (i === 'active' && componentType === 'bk-tab' && !modifiers.includes('sync')) {
                     modifiers.push('sync')
@@ -1376,7 +1383,13 @@ class PageCode {
                 codeArr.push(slot)
                 slotStr += this.generateCode(codeArr)
             } else {
-                slot.val = slot.code
+                // 兼容code为空的情形
+                if (!slot.code) {
+                    slot.val = slot.renderValue
+                    slot.format = 'value'
+                } else {
+                    slot.val = slot.code
+                }
                 slot.name = slot.component
                 const render = slotRenderConfig[slot.name] || (() => {})
                 const slotRenderParams = []
