@@ -184,7 +184,9 @@
                         // setTimeout 让 watch 第一次执行时在 created 之后
                         setTimeout(() => {
                             // fix: 错误数据转换，表达式类型的 format 包存成了 value
-                            const isFixedComputeFormat = lastValue.format === 'value' && /=/.test(lastValue.code)
+                            const isFixedComputeFormat = lastValue.format === 'value'
+                                && /=/.test(lastValue.code)
+                                && !/</.test(lastValue.code)
                             this.formData = Object.freeze({
                                 ...this.formData,
                                 format: isFixedComputeFormat ? 'expression' : lastValue.format,
@@ -249,7 +251,7 @@
             triggerChange () {
                 // 缓存用户本地编辑值
                 this.slotTypeValueMemo[this.formData.valueType] = {
-                    val: this.formData.code,
+                    val: this.formData.code || this.formData.renderValue,
                     payload: this.formData.payload,
                     component: this.formData.component
                 }

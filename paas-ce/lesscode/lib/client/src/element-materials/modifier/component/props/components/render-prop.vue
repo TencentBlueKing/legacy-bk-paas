@@ -322,7 +322,9 @@
                     ? this.lastValue.valueType[0]
                     : this.lastValue.valueType
                 // fix: 错误数据转换，表达式类型的 format 包存成了 value
-                const isFixedComputeFormat = this.lastValue.format === 'value' && /=/.test(this.lastValue.code)
+                const isFixedComputeFormat = this.lastValue.format === 'value'
+                    && /=/.test(this.lastValue.code)
+                    && !/</.test(this.lastValue.code)
                 this.formData = Object.freeze({
                     ...this.formData,
                     format: isFixedComputeFormat ? 'expression' : this.lastValue.format,
@@ -365,11 +367,16 @@
              * @param { Object } variableSelectData
              */
             handleVariableFormatChange (variableSelectData) {
+                const {
+                    format,
+                    code,
+                    renderValue
+                } = variableSelectData
                 this.formData = Object.freeze({
                     ...this.formData,
-                    format: variableSelectData.format,
-                    code: variableSelectData.code,
-                    renderValue: variableSelectData.renderValue
+                    format,
+                    code,
+                    renderValue
                 })
                 this.triggerChange()
             },

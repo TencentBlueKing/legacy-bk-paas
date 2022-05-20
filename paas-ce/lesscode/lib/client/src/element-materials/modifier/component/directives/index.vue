@@ -204,7 +204,9 @@
                 const directiveKey = this.genDirectiveKey(directive)
                 if (lastDirectiveMap[directiveKey]) {
                     // fix: 错误数据转换，表达式类型的 format 包存成了 value
-                    const isFixedComputeFormat = directive.format === 'value' && /=/.test(directive.code)
+                    const isFixedComputeFormat = directive.format === 'value'
+                        && /=/.test(directive.code)
+                        && !/</.test(directive.code)
                     Object.assign(lastDirectiveMap[directiveKey], {
                         format: isFixedComputeFormat ? 'expression' : directive.format,
                         code: directive.code
