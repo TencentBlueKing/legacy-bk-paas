@@ -79,8 +79,8 @@
             return {
                 expanding: false,
                 conditions: [],
-                formData: {},
-                mockDataFilter: mockData.filter(item => !['TABLE', 'RICHTEXT', 'FILE', 'LINK', 'IMAGE'].includes(item.type))
+                mockDataFilter: mockData.filter(item => !['TABLE', 'RICHTEXT', 'FILE', 'LINK', 'IMAGE'].includes(item.type)),
+                tableData: []
             }
         },
         methods: {
@@ -96,7 +96,7 @@
             handleClose (condition, index) {
                 this.conditions.splice(index, 1)
                 const deleteIndex = this.mockDataFilter.findIndex(item => item.key === condition.key)
-                this.mockDataFilter.splice(deleteIndex, 1)
+                this.$set(this.mockDataFilter[deleteIndex], 'value', '')
                 const conditions = this.formatSearchCondition()
                 const searchParams = {
                     connector: 'and',
@@ -170,7 +170,7 @@
                             searchConditions.push({ key, value: item.value, type: 'const', condition: 'icontains' })
                             displayCondition.push({
                                 key,
-                                value: name.toString(),
+                                value: item.value,
                                 name: item.name
                             })
                         }
