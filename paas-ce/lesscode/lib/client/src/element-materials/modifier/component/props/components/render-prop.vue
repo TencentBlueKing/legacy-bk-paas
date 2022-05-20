@@ -39,7 +39,8 @@
             </bk-radio-group>
             <div class="prop-action">
                 <template v-for="(renderCom, index) in renderComponentList">
-                    <template v-if="selectValueType === renderCom.type">
+                    <!-- 控件类型或者值的类型匹配都将展示，如：控制类型为 src 值的类型为 string(支持src输入加选择模式之前) 都需展示 -->
+                    <template v-if="selectValueType === renderCom.type || selectValueType === renderCom.valueType">
                         <component
                             :is="renderCom.component"
                             :name="name"
@@ -90,6 +91,7 @@
     import TypleElProps from './strategy/el-props'
     import TypeDataSource from './strategy/data-source.vue'
     import TypeTableDataSource from './strategy/table-data-source.vue'
+    import TypeSrc from './strategy/src.vue'
 
     const getRealValue = (type, target) => {
         if (type === 'object') {
@@ -172,7 +174,8 @@
                     'function': TypeFunction,
                     'el-props': TypleElProps,
                     'data-source': TypeDataSource,
-                    'table-data-source': TypeTableDataSource
+                    'table-data-source': TypeTableDataSource,
+                    'src': TypeSrc
                 }
 
                 const typeMap = {
@@ -211,8 +214,11 @@
                     'el-checkbox': 'el-checkbox',
                     'el-props': 'el-props',
                     'data-source': 'data-source',
-                    'table-data-source': 'table-data-source'
+                    'table-data-source': 'table-data-source',
+                    'src': 'src'
                 }
+
+                // 属性“值”的类型映射
                 const valueMap = {
                     'text': 'string',
                     'paragraph': 'string',
@@ -220,7 +226,8 @@
                     'json': 'object',
                     'icon': 'string',
                     'van-icon': 'string',
-                    'float': 'number'
+                    'float': 'number',
+                    'src': 'string'
                 }
 
                 let realType = config.type
@@ -250,7 +257,7 @@
                     return this.name
                 }
                 const [editCom] = this.renderComponentList
-                return `${this.name}(${toPascal(editCom.type)})`
+                return `${this.name}(${toPascal(editCom.valueType)})`
             },
             /**
              * @desc 不支持的变量切换类型(variable、expression)
@@ -306,7 +313,7 @@
                 renderValue: defaultValue,
                 payload: this.lastValue.payload || {}
             })
-            
+
             // 编辑状态缓存
             this.propTypeValueMemo = {
                 [this.formData.valueType]: {
@@ -339,6 +346,7 @@
                     }
                 }
             }
+
             this.selectValueType = this.formData.valueType
         },
         methods: {
@@ -392,7 +400,7 @@
                     // 切换值类型时，通过类型获取默认值
                     code = getDefaultValueByType(valueType)
                 }
-                
+
                 this.formData = Object.freeze({
                     ...this.formData,
                     code,
@@ -400,7 +408,7 @@
                     valueType,
                     renderValue: code
                 })
-                
+
                 this.triggerChange()
             },
             /**
@@ -428,7 +436,7 @@
                         code = val
                         renderValue = val
                     }
-                    
+
                     this.formData = Object.freeze({
                         ...this.formData,
                         code,

@@ -1,15 +1,4 @@
-<!--
-  Tencent is pleased to support the open source community by making 蓝鲸智云PaaS平台社区版 (BlueKing PaaS Community Edition) available.
-  Copyright (C) 2017-2019 THL A29 Limited, a Tencent company. All rights reserved.
-  Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
-  http://opensource.org/licenses/MIT
-  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
-  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
-  specific language governing permissions and limitations under the License.
--->
-
-<script lang="ts">
+<script>
     import { computed, defineComponent, onBeforeUnmount, reactive, ref } from '@vue/composition-api'
     import { useStore } from '@/store'
     import { useRoute } from '@/router'
@@ -17,36 +6,29 @@
 
     import useUploadHandler from '@/components/filelib/use-upload-handler.js'
     import useUploadList from '@/components/filelib/use-upload-list.js'
-    import { DISPLAY_TYPES } from '@/components/filelib/helper'
 
     import Upload from '@/components/filelib/upload.vue'
     import ListCard from '@/components/filelib/list-card.vue'
-    import ListTable from '@/components/filelib/list-table.vue'
 
     export default defineComponent({
         components: {
             ListCard,
-            ListTable,
             Upload
         },
-        setup () {
+        props: {
+            isShow: {
+                type: Boolean,
+                default: false
+            }
+        },
+        setup (props, { emit }) {
             const store = useStore()
             const route = useRoute()
 
             const uploadRef = ref(null)
 
-            const displayType = ref<string>(DISPLAY_TYPES.CARD)
-
             const projectId = computed(() => route.params.projectId)
             const paramsData = computed(() => ({ projectId: projectId.value }))
-
-            const listComponent = computed(() => {
-                const compMap = {
-                    [DISPLAY_TYPES.CARD]: ListCard,
-                    [DISPLAY_TYPES.LIST]: ListTable
-                }
-                return compMap[displayType.value]
-            })
 
             const {
                 keyword,
@@ -110,106 +92,152 @@
                 onError: handleError
             }))
 
-            const handleToggleDisplayType = (type: string) => {
-                displayType.value = type
-            }
-
             onBeforeUnmount(() => {
                 uploadFiles.value.forEach(({ url }) => {
                     if (url?.startsWith('blob:')) URL.revokeObjectURL(url)
                 })
             })
 
+            const handleSelect = (file) => {
+                emit('select', file)
+            }
+            const handleView = (file) => {
+                emit('')
+                console.log(file)
+            }
+
+            const handleCancel = () => {
+                show.value = false
+            }
+
+            const show = computed({
+                get () {
+                    return props.isShow
+                },
+                set (val) {
+                    emit('update:isShow', val)
+                }
+            })
+
             return {
+                show,
                 keyword,
                 list,
                 listLoading,
                 uploadRef,
                 uploadProps,
-                displayType,
                 uploadFiles,
                 displayList,
-                DISPLAY_TYPES,
-                listComponent,
                 handleSearch,
-                handleToggleDisplayType,
-                handleRemove
+                handleRemove,
+                handleSelect,
+                handleView,
+                handleCancel
             }
         }
     })
 </script>
 
 <template>
-    <div class="page-content">
-        <div class="page-head file-manage-head">
-            <div class="buttons">
-                <upload ref="uploadRef" v-bind="uploadProps" />
-            </div>
-            <div class="search-bar">
-                <span class="total" v-show="displayList.length">共<em class="count">{{displayList.length}}</em>个文件</span>
-                <bk-input placeholder="请输入文件名"
-                    style="width: 400px"
-                    :clearable="true"
-                    right-icon="bk-icon icon-search"
-                    v-model="keyword"
-                    @input="handleSearch">
-                </bk-input>
-                <div class="display-type-toggle">
-                    <div class="icon-button" @click="handleToggleDisplayType(DISPLAY_TYPES.CARD)">
-                        <img src="@/images/svg/icon-card.svg" width="14px" alt="">
-                    </div>
-                    <div class="icon-button" @click="handleToggleDisplayType(DISPLAY_TYPES.LIST)">
-                        <img src="@/images/svg/icon-column.svg" width="14px" alt="">
-                    </div>
+    <bk-dialog v-model="show"
+        :class="'filelib-dialog'"
+        :render-directive="'if'"
+        :width="980"
+        :mask-close="false"
+        header-position="left"
+        title="文件库">
+        <div :class="$style['modal-container']">
+            <div :class="$style['modal-head']">
+                <div :class="$style['buttons']">
+                    <upload ref="uploadRef" v-bind="uploadProps" />
+                </div>
+                <div :class="$style['search-bar']">
+                    <span :class="$style['total']" v-show="displayList.length">共<em :class="$style['count']">{{displayList.length}}</em>个文件</span>
+                    <bk-input placeholder="请输入文件名"
+                        style="width: 360px"
+                        :clearable="true"
+                        right-icon="bk-icon icon-search"
+                        v-model="keyword"
+                        @input="handleSearch">
+                    </bk-input>
                 </div>
             </div>
+            <div :class="$style['modal-body']">
+                <list-card class="model-list-card" :files="uploadFiles" @remove="handleRemove" :card-height="166" :card-width="218">
+                    <template #use-action="file">
+                        <div :class="$style['use-action-inner']">
+                            <bk-button :class="$style['action-button']" theme="primary" @click="handleSelect(file)">使用</bk-button>
+                            <bk-button :class="$style['action-button']" @click="handleView(file)">查看</bk-button>
+                        </div>
+                    </template>
+                </list-card>
+            </div>
+            <div :class="$style['modal-foot']"></div>
         </div>
-        <div class="page-body file-manage-body" v-bkloading="{ isLoading: listLoading }">
-            <component :is="listComponent" :files="uploadFiles" @remove="handleRemove"></component>
-        </div>
-    </div>
+        <template #footer>
+            <div :class="$style['modal-foot']">
+                <bk-button @click="handleCancel">取消</bk-button>
+            </div>
+        </template>
+    </bk-dialog>
 </template>
 
-<style lang="postcss" scoped>
-    .file-manage-head {
-        justify-content: space-between;
+<style lang="postcss" module>
+    @import "@/css/mixins/scroller";
 
-        .search-bar {
+    .modal-container {
+        .modal-head {
             display: flex;
             align-items: center;
+            justify-content: space-between;
+            height: 52px;
 
-            .total {
-                font-size: 12px;
-                margin-right: 8px;
-                .count {
-                    font-style: normal;
-                    margin: 0 .1em;
+            .search-bar {
+                display: flex;
+                align-items: center;
+
+                .total {
+                    font-size: 12px;
+                    margin-right: 8px;
+                    .count {
+                        font-style: normal;
+                        margin: 0 .1em;
+                    }
                 }
             }
         }
+        .modal-body {
+            height: 45vh;
+            overflow-y: auto;
+            @mixin scroller;
+        }
+    }
 
-        .display-type-toggle {
-            display: flex;
-            align-items: center;
-            height: 32px;
-            padding: 0 4px;
-            margin-left: 8px;
-            background: #eaebf0;
-            border-radius: 2px;
-            .icon-button {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                width: 24px;
-                height: 24px;
-                cursor: pointer;
+    .use-action-inner {
+        .action-button {
+            margin: 0 4px;
+        }
+    }
 
-                &:hover {
-                    background: #fff;
-                }
+    .list-card.model-list-card {
+        .card-item {
+            color: bleed;
+        }
+    }
+</style>
 
-                & + .icon-button {
-                    margin-left: 8px;
+<style lang="postcss" scoped>
+    .filelib-dialog {
+        ::v-deep .bk-dialog-header {
+            padding-bottom: 8px;
+        }
+    }
+
+    .model-list-card {
+        ::v-deep {
+            .card-item {
+                &:nth-child(4n) {
+                    margin-right: 0;
                 }
             }
         }

@@ -10,18 +10,25 @@
 -->
 
 <script lang="ts">
-    import { defineComponent } from '@vue/composition-api'
+    import { computed, defineComponent } from '@vue/composition-api'
     import { execCopy } from '@/common/util'
-    import { UPLOAD_STATUS, UploadFile, getFileUrl } from '../helper'
+    import { UPLOAD_STATUS, UploadFile, getFileUrl } from './helper'
 
     export default defineComponent({
         props: {
             files: {
                 type: Array,
                 default: () => []
-            }
+            },
+            cardWidth: Number,
+            cardHeight: Number
         },
         setup (props, { emit }) {
+            const containerStyle = computed(() => ({
+                '--card-width': props.cardWidth ? `${props.cardWidth}px` : undefined,
+                '--card-height': props.cardHeight ? `${props.cardHeight}px` : undefined
+            }))
+
             const handleCopyLink = (file: UploadFile) => {
                 execCopy(getFileUrl(file, true))
             }
@@ -32,6 +39,7 @@
 
             return {
                 UPLOAD_STATUS,
+                containerStyle,
                 getFileUrl,
                 handleCopyLink,
                 handleRemove
@@ -41,47 +49,52 @@
 </script>
 
 <template>
-    <div class="list-card">
+    <div class="list-card" :style="containerStyle">
         <div class="card-item" v-for="file in files" :key="file.uid">
-            <div class="item-icon">
-                <img :src="getFileUrl(file)" :alt="file.name">
-                <div :class="['upload-status', file.status]" v-if="file.status === UPLOAD_STATUS.UPLOADING || file.status === UPLOAD_STATUS.FAIL">
-                    <bk-round-progress
-                        width="50px"
-                        :config="{
-                            strokeWidth: 10,
-                            bgColor: '#333',
-                            activeColor: '#3a84ff'
-                        }"
-                        title="上传中"
-                        :title-style="{ color: '#fff', fontSize: '12px' }"
-                        :num-style="{ color: '#fff', fontSize: '14px' }"
-                        :percent="file.percentage / 100"
-                        v-if="file.status === UPLOAD_STATUS.UPLOADING">
-                    </bk-round-progress>
-                    <div v-if="file.status === UPLOAD_STATUS.FAIL" class="fail-content">
-                        <i class="bk-drag-icon bk-drag-close-circle-fill"></i>
-                        <div class="fail-text">{{ file.statusText || '上传失败'}}</div>
+            <slot name="file" v-bind="file">
+                <div class="item-icon">
+                    <img :src="getFileUrl(file)" :alt="file.name">
+                    <div :class="['upload-status', file.status]" v-if="file.status === UPLOAD_STATUS.UPLOADING || file.status === UPLOAD_STATUS.FAIL">
+                        <bk-round-progress
+                            width="50px"
+                            :config="{
+                                strokeWidth: 10,
+                                bgColor: '#333',
+                                activeColor: '#3a84ff'
+                            }"
+                            title="上传中"
+                            :title-style="{ color: '#fff', fontSize: '12px' }"
+                            :num-style="{ color: '#fff', fontSize: '14px' }"
+                            :percent="file.percentage / 100"
+                            v-if="file.status === UPLOAD_STATUS.UPLOADING">
+                        </bk-round-progress>
+                        <div v-if="file.status === UPLOAD_STATUS.FAIL" class="fail-content">
+                            <i class="bk-drag-icon bk-drag-close-circle-fill"></i>
+                            <div class="fail-text">{{ file.statusText || '上传失败'}}</div>
+                        </div>
+                    </div>
+                    <div class="use-action" v-if="$scopedSlots['use-action'] && file.status === UPLOAD_STATUS.SUCCESS">
+                        <slot name="use-action" v-bind="file"></slot>
                     </div>
                 </div>
-            </div>
-            <div :class="['item-summary', file.status]">
-                <div class="filename">{{file.name}}</div>
-                <div class="actions">
-                    <i class="bk-drag-icon bk-drag-link"
-                        v-bk-tooltips.top="'复制链接'"
-                        @click="handleCopyLink(file)"
-                        v-show="file.status === UPLOAD_STATUS.SUCCESS">
-                    </i>
-                    <bk-popconfirm
-                        trigger="click"
-                        title="确认要删除该图片？"
-                        content="删除后不可恢复，已引用的组件将显示异常"
-                        @confirm="handleRemove(file)">
-                        <i class="bk-drag-icon bk-drag-delet" v-bk-tooltips.top="'删除'"></i>
-                    </bk-popconfirm>
+                <div :class="['item-summary', file.status]">
+                    <div class="filename" :title="file.name">{{file.name}}</div>
+                    <div class="actions">
+                        <i class="bk-drag-icon bk-drag-link"
+                            v-bk-tooltips.top="'复制链接'"
+                            @click="handleCopyLink(file)"
+                            v-show="file.status === UPLOAD_STATUS.SUCCESS">
+                        </i>
+                        <bk-popconfirm
+                            trigger="click"
+                            title="确认要删除该图片？"
+                            content="删除后不可恢复，已引用的组件将显示异常"
+                            @confirm="handleRemove(file)">
+                            <i class="bk-drag-icon bk-drag-delet" v-bk-tooltips.top="'删除'"></i>
+                        </bk-popconfirm>
+                    </div>
                 </div>
-            </div>
+            </slot>
         </div>
     </div>
 </template>
@@ -95,8 +108,8 @@
         .card-item {
             display: flex;
             flex-direction: column;
-            width: 256px;
-            height: 192px;
+            width: var(--card-width, 256px);
+            height: var(--card-height, 192px);
             padding: 8px;
             margin-right: 16px;
             margin-bottom: 16px;
@@ -106,6 +119,15 @@
 
             &:hover {
                 box-shadow: 0px 2px 4px 0px rgba(25, 25, 41, 0.05), 0px 2px 4px 0px rgba(0, 0, 0, 0.10);
+
+                .item-icon {
+                    .use-action {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        color: #fff;
+                    }
+                }
             }
 
             .item-icon {
@@ -152,6 +174,15 @@
                     }
                 }
 
+                .use-action {
+                    display: none;
+                    position: absolute;
+                    height: 100%;
+                    width: 100%;
+                    left: 0;
+                    top: 0;
+                    background: rgba(0, 0, 0, .7);
+                }
             }
             .item-summary {
                 flex: 1;
@@ -171,6 +202,7 @@
                 .actions {
                     display: flex;
                     justify-content: space-between;
+                    line-height: normal;
 
                     .bk-drag-icon {
                         width: 18px;
@@ -181,6 +213,10 @@
                         cursor: pointer;
                         position: relative;
                         top: 2px;
+
+                        &:hover {
+                            color: #3a84ff;
+                        }
                     }
                 }
 

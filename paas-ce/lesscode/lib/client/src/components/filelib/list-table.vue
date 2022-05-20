@@ -13,7 +13,7 @@
     import dayjs from 'dayjs'
     import { defineComponent } from '@vue/composition-api'
     import { execCopy } from '@/common/util'
-    import { UPLOAD_STATUS, UploadFile, getFileUrl, formatSize } from '../helper'
+    import { UPLOAD_STATUS, UploadFile, getFileUrl, formatSize } from './helper'
 
     export default defineComponent({
         filters: {

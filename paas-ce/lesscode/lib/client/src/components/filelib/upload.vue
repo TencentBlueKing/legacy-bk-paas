@@ -11,13 +11,13 @@
 
 <script lang="ts">
     import { defineComponent, ref, shallowRef } from '@vue/composition-api'
-    import { genFileId } from '../use-upload.js'
+    import { genFileId } from './use-upload-handler.js'
     import useAjaxUpload from '@/common/use-ajax-upload.js'
     import { messageError } from '@/common/bkmagic'
     import type {
         UploadRawFile,
         UploadFile
-    } from '../helper'
+    } from './helper'
 
     export default defineComponent({
         props: {
@@ -155,7 +155,11 @@
             <bk-button theme="primary">点击上传</bk-button>
             <input ref="inputFileEl" type="file" multiple accept="image/*" @change="handleChangeFiles">
         </div>
-        <div class="tip">支持上传图片大小 {{maxImageSize}}M 以内，格式支持 jpg，png，gif，svg 等</div>
+        <slot name="tip" v-bind="{ maxImageSize, maxFileSize }">
+            <div class="tip">
+                支持上传图片大小 {{maxImageSize}}M 以内，格式支持 jpg，png，gif，svg 等
+            </div>
+        </slot>
     </div>
 </template>
 
