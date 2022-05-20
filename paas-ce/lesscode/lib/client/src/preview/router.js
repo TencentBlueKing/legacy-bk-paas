@@ -56,8 +56,9 @@ module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId,
         const layout = routeGroup[key]
 
         // 父路由
-        const parentSource = layout.path === editNavData.id ? editNavData.source : layout.content
-        const parentCom = registerComponent(parentSource, projectId + layout.path)
+        const parentPreviewId = projectId + layout.path
+        const parentSource = parentPreviewId === editNavData.id ? editNavData.source : layout.content
+        const parentCom = registerComponent(parentSource, parentPreviewId)
 
         // 子路由
         const routeList = layout.children
@@ -78,9 +79,10 @@ module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId,
                     routeConifg.component = BkError
                 } else if (route.pageId !== -1) {
                 // 判断是从storage读取数据还是数据库
-                    const source = route.pageCode === editPageData.id ? editPageData.source : route.content
+                    const pagePreviewId = projectId + route.pageCode
+                    const source = pagePreviewId === editPageData.id ? editPageData.source : route.content
                     // 生成页面
-                    const childCom = registerComponent(source, projectId + route.pageCode)
+                    const childCom = registerComponent(source, pagePreviewId)
                     routeConifg.name = getRouteName(route)
                     routeConifg.component = childCom
                 } else {
