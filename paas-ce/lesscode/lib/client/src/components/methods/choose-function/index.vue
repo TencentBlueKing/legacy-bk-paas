@@ -1,5 +1,7 @@
 <template>
-    <section>
+    <section class="choose-function-main">
+        <slot name="header"></slot>
+        
         <bk-popover
             ref="mainPopoverRef"
             placement="bottom"
@@ -12,7 +14,7 @@
             <bk-input
                 class="choose-input"
                 placeholder="请选择函数"
-                :value="value.methodCode"
+                :value="renderChoosenFunction.methodCode"
                 readonly
             />
             <div slot="content">
@@ -55,11 +57,11 @@
                                                 }"
                                                 v-for="functionData in funcGroup.children"
                                                 :class="{
-                                                    'select': value.methodCode === functionData.funcCode,
+                                                    'select': renderChoosenFunction.methodCode === functionData.funcCode,
                                                     'function-item': true
                                                 }"
                                                 :key="functionData.funcName"
-                                                @click="handleChooseFunction(functionData)"
+                                                @click="handleChooseFunction(functionData.funcCode)"
                                             >
                                                 <span class="function-item-name" v-bk-overflow-tips>{{ functionData.funcCode }}</span>
                                                 <i
@@ -109,11 +111,23 @@
                 </section>
             </div>
         </bk-popover>
+
+        <template v-if="showAddParams">
+            <div class="panel-item" v-for="(panel, index) in renderChoosenFunction.params" :key="index">
+                <bk-input :value="panel.value" @change="val => handleChangeParam(index, val)" />
+                <i class="bk-icon icon-minus-circle" @click="handleDeleteParam(index)"></i>
+            </div>
+            <div class="panel-add" @click="handlePlusParam">
+                <i class="bk-icon icon-plus-circle"></i>添加函数执行参数
+            </div>
+        </template>
+
         <edit-function-dialog
             :show.sync="isShowEditFunctionDialog"
             :select-func-code="selectFuncCode"
             :insert-function="insertFunctionData"
-            :event-data="eventData"
+            :show-save-use="true"
+            @save-use="handleChooseFunction"
         />
     </section>
 </template>
@@ -122,7 +136,6 @@
     import { mapActions, mapGetters } from 'vuex'
     import EditFunctionDialog from '@/components/methods/edit-function-dialog/index.vue'
     import { getDefaultFunction } from 'shared/function'
-    import LC from '@/element-materials/core'
 
     export default {
         components: {
@@ -130,18 +143,22 @@
         },
 
         props: {
-            value: {
+            choosenFunction: {
                 type: Object
             },
-            config: {
-                type: Object
+            functionTemplates: {
+                type: Array
+            },
+            showAddParams: {
+                type: Boolean,
+                default: true
             }
         },
 
         data () {
             return {
                 functionTypeList: [
-                    { name: 'eventTemplate', label: '事件模板' },
+                    { name: 'functionTemplate', label: '事件模板' },
                     { name: 'functionMarket', label: '函数市场' },
                     { name: 'functionList', label: '应用函数库' }
                 ],
@@ -152,7 +169,7 @@
                 isShowEditFunctionDialog: false,
                 selectFuncCode: '',
                 insertFunctionData: undefined,
-                eventData: undefined
+                renderChoosenFunction: {}
             }
         },
 
@@ -162,9 +179,8 @@
             computedFunctionData () {
                 let functionData
                 switch (this.functionType) {
-                    case 'eventTemplate':
+                    case 'functionTemplate':
                         functionData = this
-                            .config
                             .functionTemplates
                             ?.filter(functionTemplate => functionTemplate.funcName?.includes(this.searchFunctionName))
                         break
@@ -192,6 +208,13 @@
             }
         },
 
+        created () {
+            this.renderChoosenFunction = {
+                methodCode: this.choosenFunction?.methodCode || '',
+                params: [...this.choosenFunction?.params || []]
+            }
+        },
+
         methods: {
             ...mapActions('functionMarket', ['getFunctionList']),
 
@@ -204,9 +227,29 @@
                 })
             },
 
-            handleChooseFunction (functionData) {
-                this.$emit('choose', functionData)
+            triggleUpdate () {
+                this.$emit('change', JSON.parse(JSON.stringify(this.renderChoosenFunction)))
+            },
+
+            handleChooseFunction (funcCode) {
+                this.renderChoosenFunction.methodCode = funcCode
+                this.triggleUpdate()
                 this.handleClose()
+            },
+
+            handleChangeParam (index, val) {
+                this.renderChoosenFunction.params[index].value = val
+                this.triggleUpdate()
+            },
+
+            handleDeleteParam (index) {
+                this.renderChoosenFunction.params.splice(index, 1)
+                this.triggleUpdate()
+            },
+
+            handlePlusParam () {
+                this.renderChoosenFunction.params.push({ value: '' })
+                this.triggleUpdate()
             },
 
             handleEditFunction (functionData) {
@@ -236,14 +279,9 @@
             clearStatus () {
                 this.selectFuncCode = undefined
                 this.insertFunctionData = undefined
-                this.eventData = undefined
             },
 
             showFunctionDialog () {
-                this.eventData = {
-                    eventName: this.config.name,
-                    componentId: LC.getActiveNode()?.componentId
-                }
                 this.isShowEditFunctionDialog = true
             },
 
@@ -258,8 +296,43 @@
     @import "@/css/mixins/scroller";
     @import "@/css/mixins/ellipsis";
 
+    .choose-function-main {
+        position: relative;
+        background: #f0f1f5;
+        border-radius: 2px;
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        &:hover {
+            box-shadow: 0px 2px 4px 0px rgb(0 0 0 / 20%);
+        }
+    }
+    .panel-item {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+        width: 100%;
+    }
+    .icon-minus-circle {
+        margin: 0 3px;
+        cursor: pointer;
+    }
+    .panel-add {
+        font-size: 12px;
+        margin: 10px 0 0;
+        line-height: 16px;
+        cursor: pointer;
+        &:hover {
+            color: #3a84ff;
+        }
+        i {
+            padding-right: 2px;
+            font-size: 16px;
+        }
+    }
     .choose-input {
-        width: 264px;
+        width: 100%;
         cursor: pointer;
         ::v-deep .bk-form-input[readonly] {
             background-color: #ffffff !important;
@@ -366,8 +439,14 @@
         ::v-deep .bk-tab-label-list li .bk-tab-label {
             font-size: 12px;
         }
+        ::v-deep .bk-tab-content {
+            background-color: #fff;
+        }
     }
     ::v-deep .tippy-active .choose-input .bk-input-text input {
         border-color: #3a84ff !important;
+    }
+    ::v-deep .bk-tooltip, ::v-deep .bk-tooltip-ref {
+        width: 100%;
     }
 </style>
