@@ -10,39 +10,34 @@
 -->
 
 <template>
-    <li class="event-item">
-        <h3 class="event-title">
-            <span
-                class="label"
-                v-bk-tooltips="{
-                    content: eventConfig.tips,
-                    disabled: !eventConfig.tips,
-                    placements: ['left-start'],
-                    width: 200,
-                    boundary: 'window'
-                }"
-            >
-                {{ eventName }}
-            </span>
-        </h3>
-        <choose-function
-            :value="eventValue"
-            :config="eventConfig"
-            @choose="handleChooseFunction"
-        />
-        <div class="panel-item" v-for="(panel, index) in eventValue.params" :key="index">
-            <bk-input :value="panel.value" @change="val => handleChangeParam(index, val)" />
-            <i class="bk-icon icon-minus-circle" @click="handleDeleteParam(index)"></i>
-        </div>
-        <div class="panel-add" @click="handlePlusParam">
-            <i class="bk-icon icon-plus-circle"></i>添加函数执行参数
-        </div>
-        <i class="bk-icon icon-close-line panel-minus" @click="handleDeleteEvent"></i>
-    </li>
+    <choose-function
+        class="choose-event"
+        :choosen-function="eventValue"
+        :function-templates="eventConfig.functionTemplates"
+        @change="handleChangeEvent"
+    >
+        <template v-slot:header>
+            <h3 class="event-title">
+                <span
+                    class="label"
+                    v-bk-tooltips="{
+                        content: eventConfig.tips,
+                        disabled: !eventConfig.tips,
+                        placements: ['left-start'],
+                        width: 200,
+                        boundary: 'window'
+                    }"
+                >
+                    {{ eventName }}
+                </span>
+            </h3>
+            <i class="bk-icon icon-close-line panel-minus" @click="handleDeleteEvent"></i>
+        </template>
+    </choose-function>
 </template>
 
 <script>
-    import ChooseFunction from './choose-function.vue'
+    import ChooseFunction from '@/components/methods/choose-function/index.vue'
 
     export default {
         name: 'render-event',
@@ -58,95 +53,40 @@
         },
 
         methods: {
-            handleChooseFunction (functionData) {
-                const eventValue = JSON.parse(JSON.stringify(this.eventValue))
-                eventValue.methodCode = functionData.funcCode
-                this.updateEvent(eventValue)
-            },
-
-            handleChangeParam (index, val) {
-                const eventValue = JSON.parse(JSON.stringify(this.eventValue))
-                eventValue.params[index].value = val
-                this.updateEvent(eventValue)
-            },
-
-            handleDeleteParam (index) {
-                const eventValue = JSON.parse(JSON.stringify(this.eventValue))
-                eventValue.params.splice(index, 1)
-                this.updateEvent(eventValue)
-            },
-
-            handlePlusParam () {
-                const eventValue = JSON.parse(JSON.stringify(this.eventValue))
-                eventValue.params.push({ value: '' })
-                this.updateEvent(eventValue)
+            handleChangeEvent (eventValue) {
+                this.$emit('update', {
+                    [this.eventName]: eventValue
+                })
             },
 
             handleDeleteEvent () {
                 this.$emit('minus', this.eventName)
-            },
-
-            updateEvent (eventValue) {
-                this.$emit('update', {
-                    [this.eventName]: eventValue
-                })
             }
         }
     }
 </script>
 
 <style lang='postcss' scoped>
-    .event-item {
-        position: relative;
-        background: #f0f1f5;
-        border-radius: 2px;
-        margin: 16px 10px 0;
-        padding: 8px;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        .event-title {
-            margin: 4px 0 8px;
-            height: 16px;
-            line-height: 16px;
-            font-size: 14px;
-            font-weight: normal;
-            color: #63656E;
-            word-break: keep-all;
-            padding: 0;
-            .label {
-                border-bottom: 1px dashed #979ba5;
-                cursor: pointer;
-            }
+    .event-title {
+        margin: 4px 0 8px;
+        height: 16px;
+        line-height: 16px;
+        font-size: 14px;
+        font-weight: normal;
+        color: #63656E;
+        word-break: keep-all;
+        padding: 0;
+        .label {
+            border-bottom: 1px dashed #979ba5;
+            cursor: pointer;
         }
+    }
+    .choose-event {
+        margin: 16px 10px 0;
         &:hover {
-            box-shadow: 0px 2px 4px 0px rgb(0 0 0 / 20%);
             .panel-minus {
                 display: block;
             }
-        }
-    }
-    .panel-item {
-        display: flex;
-        align-items: center;
-        margin-top: 10px;
-        width: 100%;
-    }
-    .icon-minus-circle {
-        margin: 0 3px;
-        cursor: pointer;
-    }
-    .panel-add {
-        font-size: 12px;
-        margin: 10px 0 0;
-        line-height: 16px;
-        cursor: pointer;
-        &:hover {
-            color: #3a84ff;
-        }
-        i {
-            padding-right: 2px;
-            font-size: 16px;
         }
     }
     .panel-minus {

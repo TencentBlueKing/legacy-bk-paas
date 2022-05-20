@@ -28,9 +28,10 @@
             </span>
         </div>
         <div class="remote-content">
-            <select-func
-                v-model="remoteData"
-                @change="changeFunc" />
+            <choose-function
+                :choosen-function="remoteData"
+                @change="changeFunc"
+            ></choose-function>
             <bk-button
                 @click="getApiData"
                 theme="primary"
@@ -47,7 +48,7 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import selectFunc from '@/components/methods/select-func'
+    import ChooseFunction from '@/components/methods/choose-function/index.vue'
     import { bus } from '@/common/bus'
     import { replaceFuncKeyword, replaceFuncParam } from 'shared/function'
     import { VARIABLE_TYPE, VARIABLE_VALUE_TYPE } from 'shared/variable'
@@ -55,7 +56,7 @@
 
     export default {
         components: {
-            selectFunc,
+            ChooseFunction,
             remoteExample
         },
         props: {
@@ -110,8 +111,9 @@
             this.remoteData = Object.assign({}, this.remoteData, this.payload)
         },
         methods: {
-            changeFunc () {
-                this.change(this.name, this.defaultValue, this.type, JSON.parse(JSON.stringify(this.remoteData)))
+            changeFunc (val) {
+                this.remoteData = Object.assign({}, val)
+                this.change(this.name, this.defaultValue, this.type, val)
                 if (this.autoGetData) {
                     this.getApiData()
                 }
@@ -302,7 +304,6 @@
                 try {
                     const sandBox = this.createSandBox(this.usedVariableMap)
                     const res = await sandBox.exec(methodStr, this.remoteData.params)
-                    
                     let message = this.remoteValidate(res)
                     if (message) {
                         message = '数据源设置成功，以下问题可能会导致组件表现异常，请检查：' + message

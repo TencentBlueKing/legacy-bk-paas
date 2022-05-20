@@ -76,7 +76,8 @@
                 <edit-func-form
                     ref="functionForm"
                     :func-data="chosenFunction"
-                    :event-data="eventData"
+                    :show-save-use="showSaveUse"
+                    @save-use="handleSaveUse"
                     @success-save="refreshStatus"
                     @close="handleCloseDialog"
                 />
@@ -114,9 +115,8 @@
                 type: Object,
                 default: undefined
             },
-            eventData: {
-                type: Object,
-                default: undefined
+            showSaveUse: {
+                type: Boolean
             }
         },
 
@@ -268,6 +268,10 @@
                 } else {
                     chooseFunction()
                 }
+            },
+
+            handleSaveUse (funcCode) {
+                this.$emit('save-use', funcCode)
             },
 
             refreshStatus () {

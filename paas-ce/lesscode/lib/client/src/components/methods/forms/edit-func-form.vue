@@ -64,7 +64,7 @@
                 @click="handleSaveFunction"
             >保存</bk-button>
             <bk-button
-                v-if="eventData"
+                v-if="showSaveUse"
                 :loading="isSubmitting"
                 :disabled="!formChanged"
                 @click="handleSaveChooseFunction"
@@ -76,13 +76,12 @@
 <script>
     import mixins from './form-mixins'
     import { mapGetters, mapActions } from 'vuex'
-    import LC from '@/element-materials/core'
 
     export default {
         mixins: [mixins],
 
         props: {
-            eventData: Object
+            showSaveUse: Boolean
         },
 
         data () {
@@ -128,12 +127,8 @@
 
             handleSaveChooseFunction () {
                 this.handleSaveFunction().then(() => {
-                    // 设置 event
-                    LC(this.eventData.componentId).mergeRenderEvents({
-                        [this.eventData.eventName]: {
-                            methodCode: this.form.funcCode
-                        }
-                    })
+                    // 触发 save-use 事件
+                    this.$emit('save-use', this.form.funcCode)
                     // 关闭弹框
                     this.handleClose()
                 })
