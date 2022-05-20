@@ -82,7 +82,7 @@
                 try {
                     if (this.formId) {
                         this.isLoading = true
-                        const form = await this.$store.dispatch('form/formDetail', { formId: this.formId })
+                        const form = await this.$store.dispatch('nocode/form/formDetail', { formId: this.formId })
                         console.log(form, 22666)
                         this.fieldsList = JSON.parse(form.content) || []
                     }
@@ -133,7 +133,7 @@
                 this.saveFieldList()
             },
             saveFieldList () {
-                this.$store.commit('formSetting/setFieldsList', this.fieldsList)
+                this.$store.commit('nocode/formSetting/setFieldsList', this.fieldsList)
             }
         }
     }

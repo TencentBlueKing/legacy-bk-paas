@@ -190,7 +190,7 @@
             async getSystems () {
                 try {
                     this.systemListLoading = true
-                    const res = await this.$store.dispatch('formSetting/getRemoteSystem')
+                    const res = await this.$store.dispatch('nocode/formSetting/getRemoteSystem')
                     this.systemList = res.data.filter(item => item.is_activated)
                 } catch (e) {
                     console.error(e)
@@ -209,7 +209,7 @@
                 try {
                     this.systemApisLoading = true
                     this.apiList = []
-                    const res = await this.$store.dispatch('formSetting/getSystemApis', { remote_system: val })
+                    const res = await this.$store.dispatch('nocode/formSetting/getSystemApis', { remote_system: val })
                     this.apiList = res.data.filter(item => item.is_activated)
                     if (init) {
                         this.setFormData(this.localVal.api_info.remote_api_id)
