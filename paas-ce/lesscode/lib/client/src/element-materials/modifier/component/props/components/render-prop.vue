@@ -39,7 +39,7 @@
             </bk-radio-group>
             <div class="prop-action">
                 <template v-for="(renderCom, index) in renderComponentList">
-                    <template v-if="selectValueType === renderCom.type">
+                    <template v-if="selectValueType === renderCom.type || selectValueType === renderCom.valueType">
                         <component
                             :is="renderCom.component"
                             :name="name"
@@ -222,7 +222,8 @@
                     'json': 'object',
                     'icon': 'string',
                     'van-icon': 'string',
-                    'float': 'number'
+                    'float': 'number',
+                    'object': 'hidden'
                 }
 
                 let realType = config.type
