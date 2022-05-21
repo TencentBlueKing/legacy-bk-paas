@@ -1,20 +1,29 @@
 <template>
     <section>
-        <div class="label">id 配置</div>
-        <bk-input
-            :value="sourceData.params.idKey"
-            @change="val => changeParams('idKey', val)"
-        />
-        <div class="label mt10">name 配置</div>
-        <bk-input
-            :value="sourceData.params.nameKey"
-            @change="val => changeParams('nameKey', val)"
-        />
-        <div class="label mt10">表</div>
+        <div
+            class="label"
+            v-bk-tooltips="{ content: '数据源管理中的表' }"
+        >表</div>
         <choose-data-table
             class="mt10"
             :value="sourceData.tableName"
             @choose="chooseTable"
+        />
+        <div
+            class="label mt20"
+            v-bk-tooltips="{ content: '用于赋值的字段名，默认为 id' }"
+        >id 配置</div>
+        <bk-input
+            :value="sourceData.params.idKey"
+            @change="val => changeParams('idKey', val)"
+        />
+        <div
+            class="label mt10"
+            v-bk-tooltips="{ content: '用于展示的字段名，默认为 name' }"
+        >name 配置</div>
+        <bk-input
+            :value="sourceData.params.nameKey"
+            @change="val => changeParams('nameKey', val)"
         />
     </section>
 </template>
@@ -65,8 +74,8 @@
                 val: [],
                 tableName: originSourceData?.tableName,
                 params: {
-                    idKey: originSourceData?.params?.idKey,
-                    nameKey: originSourceData?.params?.nameKey
+                    idKey: originSourceData?.params?.idKey || 'id',
+                    nameKey: originSourceData?.params?.nameKey || 'name'
                 }
             })
 
@@ -110,5 +119,8 @@
     .label {
         line-height: 19px;
         margin-bottom: 4px;
+        display: inline-block;
+        border-bottom: 1px dashed #979ba5;
+        cursor: pointer;
     }
 </style>

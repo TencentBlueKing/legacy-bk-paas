@@ -117,7 +117,15 @@
                 <bk-input :value="panel.value" @change="val => handleChangeParam(index, val)" />
                 <i class="bk-icon icon-minus-circle" @click="handleDeleteParam(index)"></i>
             </div>
-            <div class="panel-add" @click="handlePlusParam">
+            <div
+                class="panel-add"
+                v-bk-tooltips="{
+                    content: '配置的执行参数，会在函数执行的时候传入，且优先级最高',
+                    placements: ['left'],
+                    boundary: 'window'
+                }"
+                @click="handlePlusParam"
+            >
                 <i class="bk-icon icon-plus-circle"></i>添加函数执行参数
             </div>
         </template>
