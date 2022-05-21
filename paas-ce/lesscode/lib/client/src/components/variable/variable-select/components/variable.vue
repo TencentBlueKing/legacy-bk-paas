@@ -377,4 +377,10 @@
             -webkit-box-orient: vertical;
         }
    }
+   .remote-example {
+        color: #3a84ff;
+        cursor: pointer;
+        font-size: 12px;
+        margin-top: 5px;
+    }
 </style>
