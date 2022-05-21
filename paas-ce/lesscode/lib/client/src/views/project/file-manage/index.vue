@@ -51,6 +51,7 @@
             const {
                 keyword,
                 list,
+                isSearch,
                 loading: listLoading,
                 displayList,
                 handleSearch
@@ -123,6 +124,7 @@
             return {
                 keyword,
                 list,
+                isSearch,
                 listLoading,
                 uploadRef,
                 uploadProps,
@@ -165,7 +167,13 @@
             </div>
         </div>
         <div class="page-body file-manage-body" v-bkloading="{ isLoading: listLoading }">
-            <component :is="listComponent" :files="uploadFiles" @remove="handleRemove"></component>
+            <component
+                v-show="!listLoading"
+                :is="listComponent"
+                :files="uploadFiles"
+                :is-search="isSearch"
+                @remove="handleRemove">
+            </component>
         </div>
     </div>
 </template>
@@ -213,5 +221,9 @@
                 }
             }
         }
+    }
+
+    .file-manage-body {
+        height: calc(100% - 52px);
     }
 </style>

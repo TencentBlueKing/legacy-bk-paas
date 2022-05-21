@@ -26,7 +26,8 @@
             files: {
                 type: Array,
                 default: () => []
-            }
+            },
+            isSearch: Boolean
         },
         setup (props, { emit }) {
             const handleCopyLink = (file: UploadFile) => {
@@ -50,6 +51,7 @@
 <template>
     <div class="list-table">
         <bk-table
+            class="file-table"
             :outer-border="false"
             :header-border="false"
             :header-cell-style="{ background: '#f0f1f5' }"
@@ -106,13 +108,22 @@
                     </bk-popconfirm>
                 </template>
             </bk-table-column>
+            <template #empty>
+                <bk-exception type="empty" scene="part">
+                    <span v-if="isSearch">未找到文件</span>
+                    <span v-else>暂无文件</span>
+                </bk-exception>
+            </template>
         </bk-table>
     </div>
 </template>
 
 <style lang="postcss" scoped>
+    @import "@/css/mixins/scroller";
+
     .list-table {
         width: 100%;
+        height: 100%;
 
         .upload-status {
             ::v-deep .bk-progress {
@@ -174,6 +185,15 @@
                     color: #ea3636;
                 }
             }
+        }
+
+        .file-table {
+            height: 100%;
+        }
+        ::v-deep .bk-table-body-wrapper {
+            height: calc(100% - 43px);
+            overflow-y: auto;
+            @mixin scroller;
         }
     }
     .bk-table-row {

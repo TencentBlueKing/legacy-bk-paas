@@ -54,7 +54,7 @@ export default {
             tips: '轮播间隔'
         },
         pics: {
-            type: ['array', 'remote'],
+            type: ['srcset', 'remote'],
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'
                 const errData = data.find((item) => !item.hasOwnProperty('url'))

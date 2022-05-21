@@ -23,6 +23,8 @@ export default (props) => {
 
     const paramsData = computed(() => ({ projectId: props.projectId }))
 
+    const isSearch = computed(() => keyword.value?.length > 0)
+
     watchEffect(async () => {
         loading.value = true
         try {
@@ -46,7 +48,7 @@ export default (props) => {
 
     return {
         keyword,
-        list,
+        isSearch,
         displayList,
         loading,
         handleSearch

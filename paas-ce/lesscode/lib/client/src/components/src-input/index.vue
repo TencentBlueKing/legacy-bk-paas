@@ -39,6 +39,7 @@
                 },
                 set (val) {
                     emit('input', val)
+                    emit('change', val)
                 }
             })
 
@@ -50,6 +51,7 @@
                 state.isFileModalShow = false
 
                 emit('input', file.url)
+                emit('change', file.url)
             }
 
             function handleOpenFileModal () {
@@ -68,7 +70,7 @@
 </script>
 
 <template>
-    <div>
+    <div :class="$style['src-input']">
         <bk-input v-bind="inputPrpos" v-model="url">
             <template #append>
                 <div :class="$style['trigger']" @click="handleOpenFileModal">
@@ -83,20 +85,25 @@
 </template>
 
 <style lang="postcss" module>
-    .trigger {
-        background: #f0f1f5;
-        padding: 0 6px;
-        cursor: pointer;
+    .src-input {
+        display: flex;
+        width: 100%;
 
-        &:hover {
-            background: #eaebf0;
-        }
+        .trigger {
+            background: #f0f1f5;
+            padding: 0 6px;
+            cursor: pointer;
 
-        .trigger-text {
-            font-size: 12px;
-            color: #63656e;
-            white-space: nowrap;
-            line-height: 30px;
+            &:hover {
+                background: #eaebf0;
+            }
+
+            .trigger-text {
+                font-size: 12px;
+                color: #63656e;
+                white-space: nowrap;
+                line-height: 30px;
+            }
         }
     }
 </style>

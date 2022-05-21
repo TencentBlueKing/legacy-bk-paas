@@ -38,13 +38,23 @@
                 }
             })
 
+            const srcInputOtherProps = computed(() => {
+                const otherProps = {}
+                if (['href'].includes(props.name)) {
+                    otherProps.triggerText = '选择文件'
+                    otherProps.placeholder = '输入或选择文件作为链接地址'
+                }
+                return otherProps
+            })
+
             return {
-                url
+                url,
+                srcInputOtherProps
             }
         }
     })
 </script>
 
 <template>
-    <src-input v-model="url" />
+    <src-input v-model="url" v-bind="srcInputOtherProps" />
 </template>

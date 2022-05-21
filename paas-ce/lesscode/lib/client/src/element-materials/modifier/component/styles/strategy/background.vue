@@ -26,7 +26,7 @@
         </style-item>
         <template v-if="backgroundImageShow">
             <style-item name="url">
-                <bk-input
+                <src-input
                     :value="renderValueMap.backgroundImage"
                     @change="handleValueChange('backgroundImage', $event)"
                     style="width: 100%" />
@@ -100,6 +100,7 @@
     import StyleItem from '../layout/item'
     import AppendSelect from '@/components/modifier/append-select'
     import SizeInput from '@/components/modifier/size-input'
+    import SrcInput from '@/components/src-input/index.vue'
     import { splitValueAndUnit } from '@/common/util'
     import { getCssProperties } from '../common/util'
 
@@ -108,7 +109,8 @@
             StyleLayout,
             StyleItem,
             AppendSelect,
-            SizeInput
+            SizeInput,
+            SrcInput
         },
         props: {
             value: {

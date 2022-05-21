@@ -116,7 +116,8 @@
                     'array': '数组',
                     'remote': '远程函数',
                     'data-source': '数据源',
-                    'table-data-source': '数据源'
+                    'table-data-source': '数据源',
+                    'srcset': '图片列表'
                 }
                 return textMap[valueType] || toPascal(valueType)
             }
@@ -175,7 +176,8 @@
                     'el-props': TypleElProps,
                     'data-source': TypeDataSource,
                     'table-data-source': TypeTableDataSource,
-                    'src': TypeSrc
+                    'src': TypeSrc,
+                    'srcset': TypeSlotWrapper
                 }
 
                 const typeMap = {
@@ -215,7 +217,8 @@
                     'el-props': 'el-props',
                     'data-source': 'data-source',
                     'table-data-source': 'table-data-source',
-                    'src': 'src'
+                    'src': 'src',
+                    'srcset': 'srcset'
                 }
 
                 // 属性“值”的类型映射
@@ -227,7 +230,8 @@
                     'icon': 'string',
                     'van-icon': 'string',
                     'float': 'number',
-                    'src': 'string'
+                    'src': 'string',
+                    'srcset': 'array'
                 }
 
                 let realType = config.type

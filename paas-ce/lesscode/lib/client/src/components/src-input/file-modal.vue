@@ -32,7 +32,7 @@
 
             const {
                 keyword,
-                list,
+                isSearch,
                 loading: listLoading,
                 displayList,
                 handleSearch
@@ -122,12 +122,12 @@
             return {
                 show,
                 keyword,
-                list,
+                isSearch,
+                displayList,
                 listLoading,
                 uploadRef,
                 uploadProps,
                 uploadFiles,
-                displayList,
                 handleSearch,
                 handleRemove,
                 handleSelect,
@@ -163,7 +163,14 @@
                 </div>
             </div>
             <div :class="$style['modal-body']">
-                <list-card class="model-list-card" :files="uploadFiles" @remove="handleRemove" :card-height="166" :card-width="218">
+                <list-card
+                    class="model-list-card"
+                    :files="uploadFiles"
+                    :card-height="166"
+                    :card-width="218"
+                    :image-height="114"
+                    :is-search="isSearch"
+                    @remove="handleRemove">
                     <template #use-action="file">
                         <div :class="$style['use-action-inner']">
                             <bk-button :class="$style['action-button']" theme="primary" @click="handleSelect(file)">使用</bk-button>
@@ -183,8 +190,6 @@
 </template>
 
 <style lang="postcss" module>
-    @import "@/css/mixins/scroller";
-
     .modal-container {
         .modal-head {
             display: flex;
@@ -208,8 +213,6 @@
         }
         .modal-body {
             height: 45vh;
-            overflow-y: auto;
-            @mixin scroller;
         }
     }
 
