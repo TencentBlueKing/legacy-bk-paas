@@ -294,7 +294,7 @@ const getRealVarAndFunc = async ({ projectId, fromProjectId, versionId, valList,
     let varIds = []
     const funcIds = []
     const funcCodes = []
-    const projectValList = await VariableModel.getAll({ projectId, effectiveRange: 0 })
+    const projectValList = await VariableModel.getAll({ projectId, effectiveRange: 0, versionId })
     // 应用到默认版本
     const projectFuncGroupList = await getAllGroupAndFunction(projectId, versionId)
     const projectFuncList = []
@@ -312,6 +312,7 @@ const getRealVarAndFunc = async ({ projectId, fromProjectId, versionId, valList,
     const funcVarList = await getRepository(FuncVariable).find({
         where: {
             projectId: fromProjectId,
+            versionId,
             deleteFlag: 0,
             funcCode: In(funcCodes)
         }
