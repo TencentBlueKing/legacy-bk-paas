@@ -327,6 +327,7 @@ const getRealVarAndFunc = async ({ projectId, fromProjectId, versionId, valList,
         }
     })
     // 变量id去重
+    varIds = varIds.map(item => typeof item === 'string' ? parseInt(item) : item)
     varIds = Array.from(new Set(varIds))
     return { varIds, funcIds, defaultFuncGroupId }
 }
