@@ -23,8 +23,8 @@
         methods: {
             toggleShowTemplateDialog () {
                 const activeNode = LC.getRoot()
-                const newTemplateNode = activeNode.cloneNode()
-                const excludeInteractiveChildrenJSON = newTemplateNode.children.reduce((result, node) => {
+                
+                const excludeInteractiveChildrenJSON = activeNode.children.reduce((result, node) => {
                     if (!node.isInteractiveComponent) {
                         result.push(node.toJSON())
                     }
@@ -34,6 +34,7 @@
                     this.messageError('页面模板不能为空')
                     return
                 }
+                // 需要新建一个gird包裹整个页面
                 const girdNodeJSON = LC.createNode('render-grid').toJSON()
                 const columnNodeJSON = LC.createNode('render-column').setStyle('width', '100%').toJSON()
                 columnNodeJSON.renderSlots.default = excludeInteractiveChildrenJSON

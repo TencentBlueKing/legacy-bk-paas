@@ -41,3 +41,24 @@
 .bk-message.auto-width .bk-message-content{
     max-width: none;
 }
+
+.g-function-pop {
+    .tippy-tooltip, .bk-popconfirm-content {
+        padding: 0;
+    }
+    .popconfirm-content {
+        margin: 0;
+    }
+}
+
+.g-popover-empty-padding {
+    .tippy-tooltip {
+        padding: 0;
+    }
+}
+.mg-header{
+    right: 0;
+    left: 0;
+    width: unset !important;
+    min-width: unset !important;
+}

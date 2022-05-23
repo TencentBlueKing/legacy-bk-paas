@@ -2,7 +2,7 @@
     <bk-exception class="exception-wrap-item" type="404">
         <div>
             <span v-if="pageRoute.pageName">未找到页面，请检查页面“{{pageRoute.pageName}}”的路由配置</span>
-            <span v-else-if="pageRoute.pageCode === ''">未找到项目首页，建议将地址“/”配置为项目默认首页</span>
+            <span v-else-if="pageRoute.pageCode === ''">未找到应用首页，建议将地址“/”配置为应用默认首页</span>
             <span v-else-if="!pageRoute.pageCode">未找到页面</span>
         </div>
     </bk-exception>

@@ -11,28 +11,28 @@
         <div
             id="lesscodeDrawContent"
             :class="$style['layout-center']">
-            <div
-                :class="$style['collapsed-left-btn']"
-                v-bk-tooltips.right="{
-                    content: '查看所有组件',
-                    disabled: !isLeftCollapse
-                }"
-                @click="handleToggleLeft">
-                <i class="bk-drag-icon bk-drag-angle-left" />
-            </div>
             <slot />
-            <div
-                :class="$style['collapsed-right-btn']"
-                v-bk-tooltips.right="{
-                    content: '查看组件配置',
-                    disabled: !isRightCollapse
-                }"
-                @click="handleToggleRight">
-                <i class="bk-drag-icon bk-drag-angle-left" />
-            </div>
         </div>
         <div :class="$style['layout-right']">
             <slot name="right" />
+        </div>
+        <div
+            :class="$style['collapsed-left-btn']"
+            v-bk-tooltips.right="{
+                content: '查看所有组件',
+                disabled: !isLeftCollapse
+            }"
+            @click="handleToggleLeft">
+            <i class="bk-drag-icon bk-drag-angle-left" />
+        </div>
+        <div
+            :class="$style['collapsed-right-btn']"
+            v-bk-tooltips.right="{
+                content: '查看组件配置',
+                disabled: !isRightCollapse
+            }"
+            @click="handleToggleRight">
+            <i class="bk-drag-icon bk-drag-angle-left" />
         </div>
     </div>
 </template>
@@ -57,6 +57,9 @@
 </script>
 <style lang="postcss" module>
     @import "@/css/mixins/scroller";
+    $layoutLeftWidth: 340px;
+    $layoutRightWidth: 300px;
+
     .draw-layout{
         position: relative;
         padding-right: 300px;
@@ -69,6 +72,7 @@
                 overflow: hidden;
             }
             .collapsed-left-btn{
+                left: 0;
                 :global(.bk-drag-angle-left){
                     transform: rotate(180deg);
                 }
@@ -81,6 +85,7 @@
                 overflow: hidden;
             }
             .collapsed-right-btn{
+                right: 0;
                 :global(.bk-drag-angle-left){
                     transform: rotate(0deg);
                 }
@@ -95,8 +100,7 @@
             top: 0;
             bottom: 0;
             left: 0;
-            z-index: 1;
-            width: 340px;
+            width: $layoutLeftWidth;
             background: #fff;
             box-shadow: 2px 4px 4px 0 rgb(0 0 0 / 10%);
         }
@@ -105,15 +109,13 @@
             top: 0;
             right: 0;
             bottom: 0;
-            width: 300px;
+            width: $layoutRightWidth;
             background: #FFF;
             box-shadow: -2px 4px 4px 0px rgba(0,0,0,0.1);
         }
         .layout-center{
             position: relative;
             height: 100%;
-            overflow: auto;
-            @mixin scroller;
         }
         .collapsed-left-btn,
         .collapsed-right-btn{
@@ -138,14 +140,14 @@
             }
         }
         .collapsed-left-btn{
-            left: 0;
+            left: 340px;
             border-radius: 0 8px 8px 0;
             :global(.bk-drag-angle-left) {
                 transform: rotate(0deg);
             }
         }
         .collapsed-right-btn{
-            right: 0;
+            right: 300px;
             border-radius: 8px 0 0 8px;
             :global(.bk-drag-angle-left) {
                 transform: rotate(180deg);

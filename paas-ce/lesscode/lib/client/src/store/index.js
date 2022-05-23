@@ -69,7 +69,12 @@ const store = new Vuex.Store({
         // 系统当前登录用户
         user: {},
         // 是否平台管理员
-        isPlatformAdmin: false
+        isPlatformAdmin: false,
+        loadingConf: {
+            speed: 2,
+            primaryColor: '#f5f6fa',
+            secondaryColor: '#FAFAFC'
+        }
     },
     // 公共 getters
     getters: {
@@ -173,19 +178,20 @@ const store = new Vuex.Store({
             })
         },
 
-        updatePreview ({ state }, { isGenerateNav, id, curTemplateData, types }) {
+        updatePreview ({ state }, { isGenerateNav, id, curTemplateData, types, storageKey }) {
             let targetData = []
             try {
                 targetData = JSON.parse(circleJSON(LC.getRoot().toJSON().renderSlots.default))
             } catch (error) {
                 targetData = []
             }
+            const funcGroups = JSON.parse(circleJSON(state.functions.funcGroups || []))
+            const variableList = JSON.parse(circleJSON(state.variable.variableList || []))
             const pageData = getPageData({
-                // targetData: JSON.parse(JSON.stringify(state.drag.targetData || [])),
                 targetData,
                 pageType: 'preview',
                 platform: state.page.pageDetail?.pageType,
-                funcGroups: state.functions.funcGroups,
+                funcGroups,
                 lifeCycle: state.page.pageDetail?.lifeCycle,
                 projectId: router.currentRoute.params?.projectId,
                 pageId: router.currentRoute.params?.pageId,
@@ -193,7 +199,7 @@ const store = new Vuex.Store({
                 isGenerateNav,
                 isEmpty: false,
                 layoutType: state.drag.curTemplateData?.layoutType,
-                variableList: state.variable.variableList,
+                variableList,
                 styleSetting: state.page.pageDetail?.styleSetting,
                 user: state.user,
                 npmConf: {},
@@ -204,7 +210,7 @@ const store = new Vuex.Store({
                 source: pageData.code,
                 id
             })
-            localStorage.setItem('ONLINE_PREVIEW', payload)
+            localStorage.setItem(storageKey, payload)
         }
     }
 })

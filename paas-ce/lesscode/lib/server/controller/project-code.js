@@ -38,17 +38,17 @@ const ProjectCode = {
                     fse.remove(sourcePath)
                     fse.remove(targetPath)
                     operationLogger.success({
-                        operateTarget: `项目ID：${projectId}`
+                        operateTarget: `应用ID：${projectId}`
                     })
                 }).catch((err) => {
                     operationLogger.error(err, {
-                        operateTarget: `项目ID：${projectId}`
+                        operateTarget: `应用ID：${projectId}`
                     })
                     console.log(err)
                 })
         } catch (error) {
             operationLogger.error(error, {
-                operateTarget: `项目ID：${projectId}`
+                operateTarget: `应用ID：${projectId}`
             })
             ctx.throw(error)
         }
@@ -61,7 +61,7 @@ const ProjectCode = {
         try {
             // 参数校验
             if ([undefined, ''].includes(projectId)) {
-                throw new global.BusinessError('暂无项目ID，请在 Lesscode 上重新打开预览', 400, 400)
+                throw new global.BusinessError('暂无应用ID，请在 Lesscode 上重新打开预览', 400, 400)
             }
             // 权限验证
             const userInfo = ctx.session.userInfo || {}
@@ -70,12 +70,12 @@ const ProjectCode = {
                 projectModel.findUserProjectById(userInfo.id, projectId)
             ]).then(([temProjList, myProj]) => {
                 const isTemProj = temProjList.find(x => +x.id === +projectId)
-                if (!isTemProj && !myProj) throw new global.BusinessError('项目ID不存在或者没有该项目权限，请在 Lesscode 上重新打开预览', 403, 403)
+                if (!isTemProj && !myProj) throw new global.BusinessError('应用ID不存在或者没有该应用权限，请在 Lesscode 上重新打开预览', 403, 403)
             })
 
             const data = await ProjectCodeModel.previewCode(projectId, versionId, platform)
             operationLogger.success({
-                operateTarget: `项目ID：${projectId}`
+                operateTarget: `应用ID：${projectId}`
             })
             ctx.send({
                 code: 0,
@@ -84,7 +84,7 @@ const ProjectCode = {
             })
         } catch (error) {
             operationLogger.error(error, {
-                operateTarget: `项目ID：${projectId}`
+                operateTarget: `应用ID：${projectId}`
             })
             ctx.throw(error)
         }

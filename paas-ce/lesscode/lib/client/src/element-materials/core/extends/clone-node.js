@@ -1,6 +1,6 @@
 import _ from 'lodash'
-import isNode from '../is-node'
-import { createNode } from '../create-node'
+import isNode from '../static/is-node'
+import { createNode } from '../static/create-node'
 
 const mergeData = (newNode, oldNode, deep) => {
     newNode.renderStyles = _.cloneDeep(oldNode.renderStyles)
@@ -35,6 +35,8 @@ const mergeData = (newNode, oldNode, deep) => {
                 }
                 return renderSlots
             }, {})
+        } else {
+            newNode.renderSlots = _.cloneDeep(oldNode.renderSlots)
         }
     }
 }

@@ -61,6 +61,14 @@ export default {
                 return userData
             })
         },
+             
+        // 删除多个成员
+        deleteMultipleMember ({ state }, ids) {
+            return http.delete(`${perfix}/deleteMultipleMember?ids=${ids}`).then(response => {
+                const userData = response.data || []
+                return userData
+            })
+        },
 
         setCurUserPermInfo ({ commit }, project) {
             return http.post(`${perfix}/setCurUserPermInfo`, project).then(response => {

@@ -12,8 +12,8 @@
                 slot="side-header"
                 class="component-wrapper"
                 style="display: flex"
-                @mouseenter.stop="componentWrapperMouseenterHandler"
-                @mouseleave.stop="componentWrapperMouseleaveHandler"
+                @mouseenter="componentWrapperMouseenterHandler"
+                @mouseleave="componentWrapperMouseleaveHandler"
                 @click.stop="handleSiteInfo">
                 <span class="title-icon">
                     <img style="width: 28px; height: 28px" :src="curTemplateData.logo" />
@@ -33,7 +33,8 @@
                         class="navigation-header-item"
                         :class="{
                             selected: selectTopMenuId === topMemu.id,
-                            'theme-item': !isDefaultTheme
+                            'theme-item': !isDefaultTheme,
+                            'item-active': topMemu.pageCode === navActive
                         }"
                         @click.stop="handleTopMenuSelect(topMemu)">
                         {{topMemu.name}}
@@ -45,12 +46,12 @@
                     placement="bottom-start"
                     offset="-20, 10"
                     :tippy-options="{ 'hideOnClick': false }">
-                    <div class="message-box" :class="{ 'theme-header': !isDefaultTheme }">
+                    <div class="message-box" :class="{ 'theme-header': !isDefaultTheme }" @click.stop>
                         <span class="user-name">{{ user.username }}</span>
                         <i class="bk-icon icon-down-shape"></i>
                     </div>
                     <template slot="content">
-                        <div class="message-item" @click="handleLogout">退出</div>
+                        <div class="message-item" @click.stop="handleLogout">退出</div>
                     </template>
                 </bk-popover>
             </template>
@@ -60,7 +61,7 @@
                     :class="{
                         selected: isSideMenuSelected
                     }"
-                    @click.stop="handleSideMenuClick">
+                    @click="handleSideMenuClick">
                     <bk-navigation-menu
                         ref="menu"
                         :unique-opened="false"
@@ -73,7 +74,7 @@
                             :key="`${menuItem.id}_${refreshKey}`"
                             :has-child="menuItem.children && !!menuItem.children.length"
                             :icon="menuItem.icon"
-                            :id="menuItem.name">
+                            :id="menuItem.pageCode">
                             <span>{{menuItem.name}}</span>
                             <div slot="child">
                                 <bk-navigation-menu-item
@@ -114,7 +115,6 @@
         name: 'lesscode-layout',
         data () {
             return {
-                navActive: '首页',
                 selectTopMenuId: '',
                 activeTopMenuId: '',
                 isTopMenuSelected: false,
@@ -133,6 +133,35 @@
                     'item-hover-icon-color': '#FFFFFF',
                     'item-child-icon-active-color': '#FFFFFF',
                     'sub-menu-open-bg-color': '#272F45'
+                },
+                otherThemeColorProps: {
+                    'item-hover-bg-color': '#ffffff14',
+                    'item-hover-color': '#FFFFFF',
+                    'item-active-bg-color': '#ffffff33',
+                    'item-active-color': '#FFFFFF',
+                    'item-default-bg-color': '#1E1E1E',
+                    'item-default-color': '#ffffffad',
+                    'item-default-icon-color': '#ffffffad',
+                    'item-child-icon-default-color': '#ffffffad',
+                    'item-child-icon-hover-color': '#FFFFFF',
+                    'item-active-icon-color': '#FFFFFF',
+                    'item-hover-icon-color': '#FFFFFF',
+                    'item-child-icon-active-color': '#FFFFFF',
+                    'sub-menu-open-bg-color': '#000000e6'
+                },
+                whiteThemeColorProps: {
+                    'item-default-bg-color': 'white',
+                    'item-hover-bg-color': '#f0f1f5',
+                    'sub-menu-open-bg-color': '#f5f7fa',
+                    'item-hover-color': '#63656e',
+                    'item-active-color': '#699df4',
+                    'item-default-color': '#63656e',
+                    'item-default-icon-color': '#63656ead',
+                    'item-child-icon-default-color': '#63656ead',
+                    'item-child-icon-hover-color': '#313238',
+                    'item-active-icon-color': '#699df4',
+                    'item-hover-icon-color': '#63656e',
+                    'item-child-icon-active-color': '#699df4'
                 }
             }
         },
@@ -141,7 +170,11 @@
             ...mapGetters('drag', [
                 'curTemplateData'
             ]),
+            ...mapGetters('page', ['pageDetail']),
             ...mapGetters('layout', ['pageLayout']),
+            navActive () {
+                return this.pageDetail.pageCode
+            },
             isShowSideMenu () {
                 return this.currentSideMenuList.length > 0
             },
@@ -160,10 +193,28 @@
                 return this.curTemplateData?.theme && this.curTemplateData?.theme === '#FFFFFF'
             },
             curThemeColorProps () {
-                return !this.isWhiteTheme ? this.defaultThemeColorProps : {}
+                let props = {}
+
+                if (this.isDefaultTheme) {
+                    props = {
+                        ...this.defaultThemeColorProps,
+                        'item-active-bg-color': '#0083FF'
+                    }
+                } else if (this.isWhiteTheme) {
+                    props = {
+                        ...this.whiteThemeColorProps,
+                        'item-active-bg-color': '#e1ecff'
+                    }
+                } else {
+                    props = {
+                        ...this.otherThemeColorProps,
+                        'item-active-bg-color': this.curTemplateData.theme
+                    }
+                }
+                return props
             },
             curThemeColor () {
-                return this.isWhiteTheme ? '#ffffff' : this.curThemeColorProps['item-default-bg-color']
+                return this.isWhiteTheme ? '#ffffff' : this.isDefaultTheme ? '#2C354D' : '#1E1E1E'
             }
         },
         watch: {
@@ -188,6 +239,13 @@
                 bus.$off('on-template-change', this.handleTemplateChange)
             })
             this.refreshKey = Date.now()
+        },
+        mounted () {
+            const element = document.querySelector('.bk-navigation-header')
+            element && element.addEventListener('click', this.handleClickEvent)
+            this.$once('hook:beforeDestroy', () => {
+                element.removeEventListener('click', this.handleClickEvent)
+            })
         },
         methods: {
             ...mapMutations('drag', ['setCurTemplateData']),
@@ -285,6 +343,13 @@
             },
             handleLogout () {
                 this.messageWarn('请部署后使用本功能')
+            },
+            handleClickEvent () {
+                unselectComponent()
+                this.setCurTemplateData({
+                    ...this.curTemplateData,
+                    panelActive: 'base'
+                })
             }
         }
     }
@@ -332,17 +397,27 @@
                 color: #fff;
                 border: 1px solid #3a84ff;
             }
+            &.item-active {
+                color: #fff;
+                opacity: 1;
+            }
         }
     }
     .white-theme {
         .theme-desc {
             color: #313238;
         }
-        .navigation-header-item.theme-item {
-            color: #63656e;
-            opacity: 1;
-            &:hover {
-                color: #000000;
+        .navigation-header-item {
+            &.theme-item {
+                color: #63656e;
+                opacity: 1;
+                &:hover {
+                    color: #000000;
+                }
+            }
+            &.item-active {
+                color: #000;
+                opacity: 1;
             }
         }
         .message-box.theme-header {

@@ -8,6 +8,9 @@
                 <div :class="$style['device-phone']"></div>
             </div>
             <div :class="$style['simulator-preview']" :style="{ width: width + 'px', height: height + 'px' }">
+                <div :class="$style['simulator-header']">
+                    <span></span>
+                </div>
                 <iframe width="100%"
                     height="100%"
                     style="border: none"

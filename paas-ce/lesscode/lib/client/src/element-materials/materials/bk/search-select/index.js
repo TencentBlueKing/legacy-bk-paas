@@ -92,9 +92,8 @@ export default {
         // {
         //     type: 'v-bind',
         //     prop: 'data',
-        //     propTypes: ['array'],
-        //     val: '',
-        //     valType: 'variable'
+        //     format: 'variable',
+        //     valueTypeInclude: ['array']
         // }
     ],
     props: {
@@ -180,7 +179,7 @@ export default {
         'primary-key': {
             type: 'string',
             val: 'id',
-            tips: '项目的唯一id字段名称'
+            tips: '应用的唯一id字段名称'
         },
         condition: {
             type: 'object',

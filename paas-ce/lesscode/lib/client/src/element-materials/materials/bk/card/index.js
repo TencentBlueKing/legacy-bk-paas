@@ -17,10 +17,20 @@ export default {
     group: '反馈',
     order: 1,
     document: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/index.html#/card',
-    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     renderStyles: {
         width: '320px',
-        display: 'inline-block'
+        display: 'inline-block',
+        verticalAlign: 'middle'
     },
     props: {
         title: {
@@ -63,31 +73,27 @@ export default {
     slots: {
         header: {
             name: ['layout'],
-            type: ['free-layout'],
+            type: ['render-block'],
             renderStyles: {
                 'height': '50px'
             },
             children: [
                 {
                     name: ['text'],
-                    type: ['span'],
-                    renderStyles: {
-                        top: '0px',
-                        left: '0px'
-                    }
+                    type: ['span']
                 }
             ]
         },
         default: {
             name: ['layout'],
-            type: ['free-layout'],
+            type: ['render-block'],
             renderStyles: {
                 'height': '200px'
             }
         },
         footer: {
             name: ['layout'],
-            type: ['free-layout'],
+            type: ['render-block'],
             renderStyles: {
                 'height': '50px'
             }

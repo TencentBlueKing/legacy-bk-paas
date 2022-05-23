@@ -36,6 +36,22 @@ const vantRenderMap = {
             >
             {{item.text}}</van-step>    
         `
+    },
+    'van-tab' ({ val }) {
+        const displayVal = getVal(val)
+        return `
+            <van-tab
+                v-for="(item, index) in ${displayVal}"
+                :key="index"
+                :name="item.name"
+                :title="item.title"
+                :disabled="item.disabled"
+                :dot="item.dot"
+                :url="item.url"
+                :to="item.to">
+            
+            </van-tab>
+        `
     }
 }
 

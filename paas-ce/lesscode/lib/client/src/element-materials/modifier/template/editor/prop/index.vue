@@ -44,6 +44,7 @@
         props: {
             panelActive: String,
             theme: String,
+            layoutType: String, // top-bottom | left-right | complex
             renderProps: {
                 type: Object,
                 default: () => ({})
@@ -67,6 +68,20 @@
         created () {
             this.propList = []
             // 横向型导航布局不支持 default-open 配置
+            this.propList.push(
+                {
+                    name: '导航主题',
+                    type: 'String',
+                    tips: '导航主题',
+                    defaultValue: '#182132'
+                },
+                {
+                    name: 'head-height',
+                    type: 'Number',
+                    tips: this.layoutType === 'left-right' ? 'logo栏的高度' : '顶部导航的高度',
+                    defaultValue: 52
+                }
+            )
             if (this.panelActive !== 'topMenu') {
                 this.propList.push({
                     name: 'default-open',
@@ -75,20 +90,6 @@
                     defaultValue: false
                 })
             }
-            this.propList.push(
-                {
-                    name: 'head-height',
-                    type: 'Number',
-                    tips: '导航上侧栏的高度',
-                    defaultValue: 52
-                },
-                {
-                    name: '导航主题',
-                    type: 'String',
-                    tips: '导航主题',
-                    defaultValue: '#182132'
-                }
-            )
         },
         methods: {
             calcValue (prop) {

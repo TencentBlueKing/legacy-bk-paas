@@ -16,7 +16,7 @@
 module.exports = {
     'DELETE-/api/componentCategory/delete': {
         permCodes: ['delete_component_category'],
-        message: '删除自定义组件的分类需要删除权限，请联系项目管理员开通权限后重试'
+        message: '删除自定义组件的分类需要删除权限，请联系应用管理员开通权限后重试'
     },
     'DELETE-/api/component/delete': {
         permCodes: ['delete_component']

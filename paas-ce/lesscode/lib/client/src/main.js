@@ -29,13 +29,13 @@ import Img403 from '@/images/403.png'
 import Exception from '@/components/exception'
 import { bus } from '@/common/bus'
 import header from '@/components/header.vue'
+import homeHeader from '@/components/home-header.vue'
 import renderHtml from '@/components/render/html.vue'
 import ProjectVersionSelector from '@/components/project-version-selector.vue'
 
 import targetData from '@/common/targetData.js'
-// monaco 注入帮助文档
-import '../src/components/methods/provide-completion'
 import pureAxios from '@/api/pureAxios.js'
+import MgContentLoader from '@/components/loader'
 
 import './bk-icon/style.css'
 import './bk-icon/iconcool.js'
@@ -55,8 +55,10 @@ Vue.use(VueCompositionAPI)
 Vue.component('VueDraggable', VueDraggable)
 Vue.component('app-exception', Exception)
 Vue.component('app-header', header)
+Vue.component('home-header', homeHeader)
 Vue.component('render-html', renderHtml)
 Vue.component('project-version-selector', ProjectVersionSelector)
+Vue.component('mg-content-loader', MgContentLoader)
 
 auth.requestCurrentUser().then(user => {
     injectCSRFTokenToHeaders()

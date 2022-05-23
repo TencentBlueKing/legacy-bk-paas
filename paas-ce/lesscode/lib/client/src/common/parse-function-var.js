@@ -43,14 +43,14 @@ export function parseFuncAndVar (templateNode, variableList, funcGroups) {
     // 遍历 node tree 收集组件中 variable、method 的引用信息
     recTree(templateNode)
 
-    // 项目中所有变量，以 variableCode 作为索引 key
+    // 应用中所有变量，以 variableCode 作为索引 key
     const projectVarialbeCodeMap = variableList.reduce((result, variableData) => {
         result[variableData.variableCode] = variableData
         return result
     }, {})
-    // 项目中所有函数，以 funcCode 作为索引 key
+    // 应用中所有函数，以 funcCode 作为索引 key
     const projectMethodCodeMap = funcGroups.reduce((result, methodGroup) => {
-        methodGroup.functionList.forEach(methodData => {
+        methodGroup.children.forEach(methodData => {
             result[methodData.funcCode] = methodData
         })
         return result

@@ -6,6 +6,9 @@
                 :id="table.tableName"
                 :name="table.tableName">
             </bk-option>
+            <div slot="extension" @click="handleCreate" style="cursor: pointer;">
+                <i class="bk-icon icon-plus-circle"></i>新增
+            </div>
         </bk-select>
         <bk-button
             class="mt10"
@@ -55,11 +58,25 @@
                 })
             }
 
+            const handleCreate = () => {
+                window.open(`/project/${projectId}/data-source-manage/`, '_blank')
+            }
+
             return {
                 isLoading,
                 tableList,
-                chooseTable
+                chooseTable,
+                handleCreate
             }
         }
     })
 </script>
+
+<style lang="postcss" scoped>
+    .icon-plus-circle {
+        display: inline-block;
+        vertical-align: baseline;
+        font-size: 12px;
+        margin-right: 4px;
+    }
+</style>

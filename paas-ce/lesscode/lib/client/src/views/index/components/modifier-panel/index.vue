@@ -3,15 +3,15 @@
         id="modifierPanel"
         class="draw-page-modifier-panel">
         <div>
-            <div class="component-info">
+            <div
+                v-if="componentId"
+                class="component-info">
                 <div
                     class="component-id"
                     v-bk-overflow-tips>
                     {{ componentId || '--' }}
                 </div>
-                <div
-                    v-if="componentId"
-                    class="action-wrapper">
+                <div class="action-wrapper">
                     <i
                         v-if="!isAttachToForm"
                         class="bk-drag-icon bk-drag-shanchu mr5"

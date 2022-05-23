@@ -32,6 +32,9 @@ url("fonts/iconcool.eot?#iefix") format("embedded-opentype");
 .bk-drag-close-circle-fill:before {
 	content: "\e181";
 }
+.bk-drag-setting-fill:before {
+	content: "\e1f4";
+}
 .bk-drag-play:before {
 	content: "\e103";
 }
@@ -331,6 +334,9 @@ url("fonts/iconcool.eot?#iefix") format("embedded-opentype");
 }
 .bk-drag-pie-chart:before {
 	content: "\e161";
+}
+.bk-drag-refresh-line:before {
+	content: "\e200";
 }
 .bk-drag-nav-toggle:before {
 	content: "\e163";
@@ -644,6 +650,33 @@ url("fonts/iconcool.eot?#iefix") format("embedded-opentype");
 .bk-drag-templateline:before {
 	content: "\e1d4";
 }
+.bk-drag-shipin:before {
+	content: "\e1f5";
+}
+.bk-drag-tupian:before {
+	content: "\e1f6";
+}
+.bk-drag-wenben:before {
+	content: "\e1f7";
+}
+.bk-drag-yasuobao:before {
+	content: "\e1f8";
+}
+.bk-drag-pdf:before {
+	content: "\e1f9";
+}
+.bk-drag-yinle:before {
+	content: "\e1fa";
+}
+.bk-drag-doc-2:before {
+	content: "\e1fb";
+}
+.bk-drag-excel:before {
+	content: "\e1fc";
+}
+.bk-drag-ppt:before {
+	content: "\e1fd";
+}
 .bk-drag-cellcellgroup:before {
 	content: "\e1d5";
 }
@@ -694,4 +727,124 @@ url("fonts/iconcool.eot?#iefix") format("embedded-opentype");
 }
 .bk-drag-icon-2:before {
 	content: "\e1e5";
+}
+.bk-drag-it-new-desktop:before {
+	content: "\e1e6";
+}
+.bk-drag-set-fill:before {
+	content: "\e1e7";
+}
+.bk-drag-battery:before {
+	content: "\e1e8";
+}
+.bk-drag-wifi:before {
+	content: "\e1ea";
+}
+.bk-drag-cellular-connection:before {
+	content: "\e1e9";
+}
+.bk-drag-column:before {
+	content: "\e1eb";
+}
+.bk-drag-grid:before {
+	content: "\e1ec";
+}
+.bk-drag-info:before {
+	content: "\e1ed";
+}
+.bk-drag-page:before {
+	content: "\e1ee";
+}
+.bk-drag-picture:before {
+	content: "\e1ef";
+}
+.bk-drag-flow:before {
+	content: "\e1f0";
+}
+.bk-drag-source:before {
+	content: "\e1f1";
+}
+.bk-drag-column:before {
+	content: "\e1f2";
+}
+.bk-drag-grid:before {
+	content: "\e1f3";
+}
+.bk-drag-cardd:before {
+	content: "\e1fe";
+}
+.bk-drag-lists:before {
+	content: "\e1ff";
+}
+.bk-drag-links:before {
+	content: "\e201";
+}
+.bk-drag-compoment-count:before {
+	content: "\e202";
+}
+.bk-drag-fc-count:before {
+	content: "\e203";
+}
+.bk-drag-project-count:before {
+	content: "\e204";
+}
+.bk-drag-user-count:before {
+	content: "\e205";
+}
+.bk-drag-project:before {
+	content: "\e206";
+}
+.bk-drag-chanpinjieshao:before {
+	content: "\e207";
+}
+.bk-drag-chuizhijunfen:before {
+	content: "\e208";
+}
+.bk-drag-shuipingjunfen:before {
+	content: "\e20b";
+}
+.bk-drag-shuipingjuzhong:before {
+	content: "\e209";
+}
+.bk-drag-1_diduiqi:before {
+	content: "\e20c";
+}
+.bk-drag-1_dingduiqi:before {
+	content: "\e20a";
+}
+.bk-drag-1_juzhongduiqi:before {
+	content: "\e20f";
+}
+.bk-drag-1_youduiqi:before {
+	content: "\e20e";
+}
+.bk-drag-1_zuoduiqi:before {
+	content: "\e20d";
+}
+.bk-drag-shangxiachengkai:before {
+	content: "\e210";
+}
+.bk-drag-shangxialashen:before {
+	content: "\e211";
+}
+.bk-drag-xiangxiazishiying:before {
+	content: "\e212";
+}
+.bk-drag-youshangjiaolashen:before {
+	content: "\e213";
+}
+.bk-drag-youxiajiaolashen:before {
+	content: "\e214";
+}
+.bk-drag-yuanjiao:before {
+	content: "\e215";
+}
+.bk-drag-zuoyouchengkai:before {
+	content: "\e216";
+}
+.bk-drag-zuoyoulashen:before {
+	content: "\e217";
+}
+.bk-drag-zuoyouchengman:before {
+	content: "\e218";
 }

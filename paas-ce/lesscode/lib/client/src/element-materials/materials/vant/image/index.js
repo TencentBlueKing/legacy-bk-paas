@@ -35,7 +35,7 @@ export default {
         'position',
         {
             name: 'size',
-            include: ['display']
+            include: ['display', 'width', 'height']
         },
         'margin',
         'pointer',

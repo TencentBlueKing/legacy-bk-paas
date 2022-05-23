@@ -26,7 +26,8 @@ export default {
     styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
     renderStyles: {
         display: 'inline-block',
-        width: '60px'
+        width: '60px',
+        verticalAlign: 'middle'
     },
     props: {
         src: {

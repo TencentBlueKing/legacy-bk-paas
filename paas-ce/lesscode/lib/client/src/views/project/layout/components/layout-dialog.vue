@@ -30,7 +30,7 @@
                             <div class="group-text">/mobile</div>
                         </template>
                     </bk-input>
-                    <p class="mt5 mb0 f12" slot="tip">模板实例路由将会作为项目一级路由，请谨慎命名</p>
+                    <p class="mt5 mb0 f12" slot="tip">模板实例路由将会作为应用一级路由，请谨慎命名</p>
                 </bk-form-item>
                 <bk-form-item label="布局模板" v-if="action === 'create'" error-display-type="normal">
                     <layout-thumb-list :toolkit="['select']" :list="defaultLayoutList" @change-checked="handleLayoutChecked" />

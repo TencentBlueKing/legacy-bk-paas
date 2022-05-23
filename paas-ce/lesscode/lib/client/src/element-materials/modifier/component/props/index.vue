@@ -10,17 +10,16 @@
 -->
 
 <template>
-    <div>
-        <template v-if="hasMaterialConfig">
-            <template v-for="(item, key) in propsConfig">
-                <render-prop
-                    v-if="item.type !== 'hidden'"
-                    :describe="item"
-                    :last-value="lastProps[key]"
-                    :name="key"
-                    :key="key"
-                    @on-change="handleChange" />
-            </template>
+    <div v-if="hasMaterialConfig">
+        <template v-for="(item, key) in propsConfig">
+            <render-prop
+                v-if="item.type !== 'hidden'"
+                :component-type="componentType"
+                :describe="item"
+                :last-value="lastProps[key]"
+                :name="key"
+                :key="key"
+                @on-change="handleChange" />
         </template>
     </div>
 </template>
@@ -37,7 +36,8 @@
         },
         data () {
             return {
-                propsConfig: {}
+                propsConfig: {},
+                lastProps: {}
             }
         },
         computed: {
@@ -47,22 +47,35 @@
             }
         },
         created () {
-            this.lastProps = {}
             this.material = {}
             bus.$on('update-chart-options', this.updateChartOptions)
             this.$once('hook:beforeDestroy', () => {
                 bus.$off('update-chart-options', this.updateChartOptions)
             })
-            this.currentComponentNode = LC.getActiveNode()
-            if (this.currentComponentNode) {
+            this.componentNode = LC.getActiveNode()
+            if (this.componentNode) {
                 const {
+                    type,
                     material,
                     renderProps
-                } = this.currentComponentNode
+                } = this.componentNode
+                this.componentType = type
                 this.propsConfig = Object.freeze(material.props)
-                this.lastProps = Object.assign({}, renderProps)
+                this.lastProps = Object.freeze(_.cloneDeep(renderProps))
                 this.material = material
             }
+            const updateCallback = _.debounce((event) => {
+                if (event.target.componentId !== this.componentNode.componentId) {
+                    return
+                }
+
+                this.lastProps = Object.freeze(_.cloneDeep(this.componentNode.renderProps))
+            }, 100)
+
+            LC.addEventListener('update', updateCallback)
+            this.$once('hook:beforeDestroy', () => {
+                LC.removeEventListener('update', updateCallback)
+            })
         },
         methods: {
             // 针对chart类型，将动态返回的remoteOptions与options合并
@@ -113,7 +126,7 @@
                         sortable: false,
                         type: ''
                     }))
-                    this.currentComponentNode.setRenderSlots({
+                    this.componentNode.setRenderSlots({
                         format: 'value',
                         component: Array.isArray(slotConfig.name) ? slotConfig.name[0] : slotConfig.name,
                         code: slotValue,
@@ -130,8 +143,11 @@
              * 更新列配置并同步 slot
              */
             handleChange: _.throttle(function (propName, propData) {
-                this.lastProps[propName] = propData
-                this.currentComponentNode.setRenderProps({
+                this.lastProps = Object.freeze({
+                    ...this.lastProps,
+                    [propName]: propData
+                })
+                this.componentNode.setRenderProps({
                     ...this.lastProps,
                     [propName]: propData
                 })

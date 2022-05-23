@@ -10,46 +10,43 @@
 -->
 
 <template>
-    <section class="directive-home">
-        <template v-if="directiveList.length">
-            <h3 class="directive-tip">
-                编辑函数时，可以使用 lesscode.指令值，必须通过编辑器自动补全功能选择对应属性指令值，来获取或者修改当前页面中配置了指令的组件属性值
-            </h3>
-            <bk-form form-type="vertical" :label-width="280">
-                <bk-form-item
-                    v-for="(directive, index) in directiveList"
-                    :key="index"
-                    class="directive-item">
-                    <variable-select
-                        :options="directive"
-                        :value="lastDirectiveMap[genDirectiveKey(directive)]"
-                        :readonly="isAttachToForm"
-                        @change="value => handleVariableFormatChange(directive, value)">
-                        <template v-slot:title>
-                            <span
-                                v-bk-tooltips="{
-                                    content: directive.tips && directive.tips(directive),
-                                    disabled: !directive.tips,
-                                    width: 290
-                                }"
-                                :class="{
-                                    'under-line': directive.tips,
-                                    'directive-label': true
-                                }">
-                                {{ getLabel(directive) }}
-                            </span>
-                        </template>
-                        <bk-input
-                            :value="directive.val"
-                            @change="(val) => handleCodeChange(directive, val)"
-                            clearable />
-                    </variable-select>
-                </bk-form-item>
-            </bk-form>
-        </template>
-        <!-- <div class="no-prop" v-else>
-            该组件暂无指令
-        </div> -->
+    <section
+        v-if="directiveList.length"
+        class="directive-home">
+        <h3 class="directive-tip">
+            编辑函数时，可以使用 lesscode.指令值，必须通过编辑器自动补全功能选择对应属性指令值，来获取或者修改当前页面中配置了指令的组件属性值
+        </h3>
+        <bk-form form-type="vertical" :label-width="280">
+            <bk-form-item
+                v-for="(directive, index) in directiveList"
+                :key="index"
+                class="directive-item">
+                <variable-select
+                    :options="directive"
+                    :value="lastDirectiveMap[genDirectiveKey(directive)]"
+                    :readonly="isAttachToForm"
+                    @change="value => handleVariableFormatChange(directive, value)">
+                    <template v-slot:title>
+                        <span
+                            v-bk-tooltips="{
+                                content: directive.tips && directive.tips(directive),
+                                disabled: !directive.tips,
+                                width: 290
+                            }"
+                            :class="{
+                                'under-line': directive.tips,
+                                'directive-label': true
+                            }">
+                            {{ getLabel(directive) }}
+                        </span>
+                    </template>
+                    <bk-input
+                        :value="directive.val"
+                        @change="(val) => handleCodeChange(directive, val)"
+                        clearable />
+                </variable-select>
+            </bk-form-item>
+        </bk-form>
     </section>
 </template>
 
@@ -110,8 +107,8 @@
                 const {
                     type,
                     prop,
-                    valType,
-                    val,
+                    format,
+                    code,
                     tips
                 } = directiveConfig
                 if (propConfig[prop]) {
@@ -123,9 +120,9 @@
                         result.push({
                             type: 'v-bind',
                             prop,
-                            format: valType,
+                            format: format,
                             formatInclude: ['variable'], // v-bind 支持配置（变量）
-                            code: val,
+                            code: code,
                             valueTypeInclude,
                             renderValue,
                             tips: tips
@@ -143,8 +140,19 @@
                         })
                     }
                 }
+                if (type === 'v-html' && prop === 'slots') {
+                    result.push({
+                        type: 'v-html',
+                        prop,
+                        format: 'value',
+                        formatInclude: ['value', 'variable', 'expression'], // v-bind 支持配置（变量）
+                        code: '',
+                        tips: tips
+                    })
+                }
                 return result
             }, [])
+
             // 公共 v-for
             directiveList.unshift(
                 {
@@ -153,7 +161,7 @@
                     format: 'variable',
                     formatInclude: ['value', 'variable'], // v-bind 支持配置（值、变量）
                     code: '',
-                    valueTypeInclude: ['boolean'],
+                    valueTypeInclude: ['array'],
                     renderValue: 1,
                     tips: (dir) => {
                         return dir.val
@@ -195,8 +203,12 @@
             renderDirectives.forEach((directive) => {
                 const directiveKey = this.genDirectiveKey(directive)
                 if (lastDirectiveMap[directiveKey]) {
+                    // fix: 错误数据转换，表达式类型的 format 包存成了 value
+                    const isFixedComputeFormat = directive.format === 'value'
+                        && /=/.test(directive.code)
+                        && !/</.test(directive.code)
                     Object.assign(lastDirectiveMap[directiveKey], {
-                        format: directive.format,
+                        format: isFixedComputeFormat ? 'expression' : directive.format,
                         code: directive.code
                     })
                 }

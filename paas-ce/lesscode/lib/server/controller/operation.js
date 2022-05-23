@@ -181,6 +181,38 @@ export const getUserCountByTime = async (ctx) => {
 }
 
 /**
+ * 获取用户在指定环境部署项目数
+ */
+export const getUserDeployProjectCountList = async (ctx) => {
+    const params = ctx.request.body || {}
+    const manager = getManager()
+    try {
+        const result = await manager.query(
+            `SELECT
+                count(DISTINCT ( release_version.projectId )) AS count,
+                createUser AS username
+            FROM
+                release_version
+            WHERE
+                env = ?
+                AND createUser IN ( ? )
+            GROUP BY
+                createUser`,
+            [params.env, params.users || []]
+        )
+        ctx.send({
+            code: 0,
+            message: 'success',
+            data: result
+        })
+    } catch (err) {
+        ctx.throw({
+            message: err.message
+        })
+    }
+}
+
+/**
  * 按分页获取项目
  * @returns 项目列表与总数
  */
@@ -189,8 +221,12 @@ export const getProjectBaseList = async (ctx) => {
     const manager = getManager()
 
     // 默认去除demo项目
-    const where = [`project.projectCode != 'demo'`, `project.deleteFlag = 0`]
+    const where = [`project.deleteFlag = 0`]
+    const excludeDemo = params.excludeDemo ?? true
 
+    if (excludeDemo) {
+        where.push(`project.projectCode != 'demo'`)
+    }
     const escaped = []
     if (params.time) {
         const [timeStart, timeEnd] = params.time

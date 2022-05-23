@@ -1,6 +1,5 @@
 function getVal (val) {
-    // eslint-disable-next-line @typescript-eslint/quotes
-    if (typeof val === 'object') val = JSON.stringify(val).replace(/'/g, "\\'").replace(/"/g, '\'')
+    if (typeof val === 'object') val = JSON.stringify(val).replace(/'/g, '\\\'').replace(/"/g, '\'')
     return val
 }
 
@@ -42,14 +41,17 @@ const bkRenderMap = {
             >{{item.label}}</bk-radio-button>
         `
     },
-    'bk-option' ({ val }) {
+    'bk-option' ({ val, payload }) {
         const displayVal = getVal(val)
+        const params = payload?.sourceData?.params
+        const idKey = params?.idKey || 'id'
+        const nameKey = params?.nameKey || 'name'
         return `
             <bk-option
                 v-for="item in ${displayVal}"
-                :key="item.id"
-                :id="item.id"
-                :name="item.name"
+                :key="item.${idKey}"
+                :id="item.${idKey}"
+                :name="item.${nameKey}"
             ></bk-option>
         `
     },
@@ -84,7 +86,7 @@ const bkRenderMap = {
                     :sortable="item.sortable"
                     :type="item.type"
                     :width="item.width"
-                    :key="index"
+                    :key="item.templateCol"
                 >
                     <template slot-scope="props">
                         <render-html

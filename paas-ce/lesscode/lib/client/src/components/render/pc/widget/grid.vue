@@ -16,13 +16,6 @@
             :class="$style['col']"
             :key="slotComponentData.renderKey"
             :component-data="slotComponentData" />
-        <div
-            v-if="isShowActiveBtn || componentData.isActived"
-            :class="$style['placholder']">
-            <div :class="$style['btn']" v-bk-tooltips="`选中整行 ${componentData.componentId}`">
-                <i class="bk-drag-icon bk-drag-drag-small1" />
-            </div>
-        </div>
     </div>
 </template>
 <script>
@@ -78,6 +71,7 @@
             }
             const activeClearCallback = () => {
                 this.isShowActiveBtn = false
+                this.$forceUpdate()
             }
             LC.addEventListener('update', updateCallback)
             LC.addEventListener('active', activeCallback)
@@ -134,30 +128,6 @@
             border: 1px dashed #ccc;
             &:nth-child(n + 2) {
                 border-left: none;
-            }
-        }
-    }
-    .placholder {
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: -14px;
-        z-index: 99;
-        display: flex;
-        .btn{
-            display: flex;
-            align-content: center;
-            justify-content: center;
-            width: 14px;
-            height: 14px;
-            font-size: 14px;
-            color: #979BA5;
-            background: #EAEBF0;
-            cursor: pointer;
-            pointer-events: all;
-            &:hover{
-                color: #699DF4;
-                background: #A3C5FD;
             }
         }
     }

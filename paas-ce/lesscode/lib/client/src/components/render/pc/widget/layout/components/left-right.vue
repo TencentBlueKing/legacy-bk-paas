@@ -13,8 +13,8 @@
                 <div
                     class="component-wrapper"
                     style="display: flex"
-                    @mouseenter.stop="componentWrapperMouseenterHandler"
-                    @mouseleave.stop="componentWrapperMouseleaveHandler"
+                    @mouseenter="componentWrapperMouseenterHandler"
+                    @mouseleave="componentWrapperMouseleaveHandler"
                     @click.stop="handleSiteInfo">
                     <span class="title-icon">
                         <img style="width: 28px; height: 28px" :src="curTemplateData.logo" />
@@ -29,7 +29,7 @@
                     placement="bottom-start"
                     offset="-20, 10"
                     :tippy-options="{ 'hideOnClick': false }">
-                    <div class="message-box">
+                    <div class="message-box" @click.stop>
                         <span>{{ user.username }}</span>
                         <i class="bk-icon icon-down-shape"></i>
                     </div>
@@ -57,7 +57,7 @@
                             :key="`${menuItem.id}_${refreshKey}`"
                             :has-child="menuItem.children && !!menuItem.children.length"
                             :icon="menuItem.icon"
-                            :id="menuItem.name">
+                            :id="menuItem.pageCode">
                             <span>{{menuItem.name}}</span>
                             <div slot="child">
                                 <bk-navigation-menu-item
@@ -99,7 +99,6 @@
             return {
                 siteTitle: 'lesscode',
                 isToggle: false,
-                navActive: '首页',
                 isSideMenuSelected: false,
                 whiteThemeColorProps: {
                     'item-default-bg-color': 'white',
@@ -114,6 +113,21 @@
                     'item-active-icon-color': '#699df4',
                     'item-hover-icon-color': '#63656e',
                     'item-child-icon-active-color': '#699df4'
+                },
+                otherThemeColorProps: {
+                    'item-hover-bg-color': '#ffffff14',
+                    'item-hover-color': '#FFFFFF',
+                    'item-active-bg-color': '#ffffff33',
+                    'item-active-color': '#FFFFFF',
+                    'item-default-bg-color': '#1E1E1E',
+                    'item-default-color': '#ffffffad',
+                    'item-default-icon-color': '#ffffffad',
+                    'item-child-icon-default-color': '#ffffffad',
+                    'item-child-icon-hover-color': '#FFFFFF',
+                    'item-active-icon-color': '#FFFFFF',
+                    'item-hover-icon-color': '#FFFFFF',
+                    'item-child-icon-active-color': '#FFFFFF',
+                    'sub-menu-open-bg-color': '#000000e6'
                 }
             }
         },
@@ -122,7 +136,11 @@
             ...mapGetters('drag', [
                 'curTemplateData'
             ]),
+            ...mapGetters('page', ['pageDetail']),
             ...mapGetters('layout', ['pageLayout']),
+            navActive () {
+                return this.pageDetail.pageCode
+            },
             isDefaultTheme () {
                 return !this.curTemplateData?.theme || this.curTemplateData?.theme === '#182132'
             },
@@ -141,15 +159,16 @@
             },
             // 左侧导航主题色
             themeColor () {
-                return this.isWhiteTheme ? '#ffffff' : '#182132'
+                return this.isWhiteTheme ? '#ffffff' : this.isDefaultTheme ? '#182132' : '#1E1E1E'
             },
             themeColorProps () {
-                let props = {
-                    'item-active-bg-color': this.isWhiteTheme ? '#e1ecff' : this.activeTheme
-                }
+                let props = {}
                 if (this.isWhiteTheme) { // 白色主题需要设置以下属性
-                    props = { props, ...this.whiteThemeColorProps }
+                    props = { ...this.whiteThemeColorProps }
+                } else if (!this.isDefaultTheme) { // 非白色且非默认主题需要设置以下属性
+                    props = { ...this.otherThemeColorProps }
                 }
+                props['item-active-bg-color'] = this.isWhiteTheme ? '#e1ecff' : this.activeTheme
                 return props
             }
         },
@@ -170,6 +189,11 @@
         },
         mounted () {
             this.handleOpenMenu()
+            const element = document.querySelector('.navigation-nav')
+            element && element.addEventListener('click', this.handleClickEvent)
+            this.$once('hook:beforeDestroy', () => {
+                element.removeEventListener('click', this.handleClickEvent)
+            })
         },
         methods: {
             ...mapMutations('drag', ['setCurTemplateData']),
@@ -242,6 +266,17 @@
             },
             handleLogout () {
                 this.messageWarn('请部署后使用本功能')
+            },
+            handleClickEvent () {
+                const { panelActive } = this.curTemplateData
+                if (panelActive) {
+                    return
+                }
+                unselectComponent()
+                this.setCurTemplateData({
+                    ...this.curTemplateData,
+                    panelActive: 'base'
+                })
             }
         }
     }

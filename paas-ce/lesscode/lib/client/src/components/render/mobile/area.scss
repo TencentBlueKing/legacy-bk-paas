@@ -8,6 +8,9 @@
             font-weight: 700;
             color: #313238;
         }
+        .edit-button {
+            display: flex;
+        }
         .dropdown-text {
             cursor: pointer;
             span {
@@ -48,7 +51,7 @@
         background: #ffffff;
         border-radius: 2px;
         box-shadow: 0px 2px 6px 0px rgba(0,0,0,0.10);
-        overflow-y: auto;
+        overflow-y: scroll;
         &::-webkit-scrollbar {
             display: none;
         }

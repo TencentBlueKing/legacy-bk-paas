@@ -8,65 +8,50 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
-import { messageHtmlError } from '../../common/bkmagic'
 import http from '@/api'
 const perfix = '/function-market'
 
 export default {
     namespaced: true,
     state: {
-        funcGroups: []
     },
     mutations: {
     },
     getters: {
     },
     actions: {
-        getAllFuncFromMarket ({ state }) {
-            return http.get(`${perfix}/getFuncList`).then((res = {}) => {
+        getFunctionList ({ state }) {
+            return http.get(`${perfix}/getFunctionList`).then((res = {}) => {
                 return res.data || []
             })
         },
 
-        bulkAddFuncs (_, funcList) {
-            return http.post(`${perfix}/bulkAddFuncs`, funcList).then((res = {}) => {
-                if (res.code === 499) {
-                    messageHtmlError(res.message)
-                    return
-                }
+        bulkCreateFunction (_, funcList) {
+            return http.post(`${perfix}/bulkCreateFunction`, funcList).then((res = {}) => {
                 return res.data
             })
         },
 
-        addMarketFunc (_, func) {
-            return http.post(`${perfix}/addFunc`, func).then((res = {}) => {
-                if (res.code === 499) {
-                    messageHtmlError(res.message)
-                    return
-                }
+        createFunction (_, func) {
+            return http.post(`${perfix}/createFunction`, func).then((res = {}) => {
                 return res.data
             })
         },
 
-        updateMarketFunc (_, func) {
-            return http.put(`${perfix}/updateFunc`, func).then((res = {}) => {
-                if (res.code === 499) {
-                    messageHtmlError(res.message)
-                    return
-                }
+        updateFunction (_, func) {
+            return http.put(`${perfix}/updateFunction`, func).then((res = {}) => {
                 return res.data
             })
         },
 
-        deleteMarketFunc (_, id) {
-            return http.delete(`${perfix}/deleteFunc?id=${id}`).then((res = {}) => {
+        deleteFunction (_, id) {
+            return http.delete(`${perfix}/deleteFunction?id=${id}`).then((res = {}) => {
                 return res.data
             })
         },
 
-        addFuncToProject (_, postData) {
-            return http.post(`${perfix}/addFuncToProject`, postData).then((res = {}) => {
+        createFunctionFromMarket (_, postData) {
+            return http.post(`${perfix}/createFunctionFromMarket`, postData).then((res = {}) => {
                 return res.data
             })
         }

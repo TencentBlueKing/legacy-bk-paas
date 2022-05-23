@@ -44,7 +44,15 @@
                 type: Boolean,
                 default: false
             },
-            options: Object
+            options: {
+                type: Object,
+                default: () => ({})
+            },
+            // 函数提示， [{ label: 触发提示的字符串, documentation: 说明, insertText: 选择后写入函数中的字符串, kind: 类型 }]
+            proposals: {
+                type: Array,
+                default: () => ([])
+            }
         },
 
         data () {
@@ -54,7 +62,8 @@
                 renderWidth: this.width,
                 renderHeight: this.height,
                 isFull: false,
-                editor: {}
+                editor: {},
+                proposalsRef: {}
             }
         },
 
@@ -95,12 +104,14 @@
         mounted () {
             this.initMonaco()
             window.addEventListener('resize', this.handleFullScreen)
+            this.createDependencyProposals()
         },
 
         beforeDestroy () {
             window.removeEventListener('resize', this.handleFullScreen)
             setTimeout(() => {
-                this.editor && this.editor.dispose()
+                this.editor?.dispose?.()
+                this.proposalsRef?.dispose?.()
             }, 200)
         },
 
@@ -152,6 +163,28 @@
                 this.$nextTick(() => {
                     this.editor.setValue(this.value)
                     this.editor.getAction('editor.action.formatDocument').run()
+                })
+            },
+
+            createDependencyProposals () {
+                const proposals = this.proposals
+                this.proposalsRef = monaco.languages.registerCompletionItemProvider('javascript', {
+                    provideCompletionItems (model, position) {
+                        const word = model.getWordUntilPosition(position)
+                        const range = {
+                            startLineNumber: position.lineNumber,
+                            endLineNumber: position.lineNumber,
+                            startColumn: word.startColumn,
+                            endColumn: word.endColumn
+                        }
+                        const suggestions = proposals.map((proposal) => ({
+                            range,
+                            ...proposal
+                        }))
+                        return {
+                            suggestions
+                        }
+                    }
                 })
             },
 

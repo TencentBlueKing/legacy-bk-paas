@@ -1,9 +1,11 @@
 <template>
     <div
         ref="root"
-        id="lesscodeOperationArea"
-        :class="$style['operation-area']">
-        <div :class="$style['operation-wraper']">
+        id="lesscodeDrawHorizontalWrapper"
+        :class="$style['horizontal-wrapper']">
+        <div
+            id="lesscodeDrawVerticalWrapper"
+            :class="$style['vertical-wrapper']">
             <render
                 v-show="operation === 'edit'"
                 :style="renderStyles" />
@@ -16,6 +18,7 @@
     </div>
 </template>
 <script>
+    import _ from 'lodash'
     import { getOffset } from '@/common/util'
     import Render from '@/components/render/index'
     import SourceCode from './components/source-code.vue'
@@ -47,7 +50,7 @@
             return {
                 renderStyles: {},
                 oprationItemStyles: {
-                    height: '200px'
+                    height: `calc(100vh - ${top}px - 20px)`
                 }
             }
         },
@@ -64,15 +67,41 @@
             }
         },
         mounted () {
-            const {
-                top
-            } = getOffset(this.$refs.root)
+            this.calcOperationItemStyles()
+            this.calcRenderStyles()
+            const resizeObserverCallback = _.throttle(() => {
+                this.calcRenderStyles()
+            }, 100)
 
-            this.renderStyles = {
-                'min-height': `calc(100vh - ${top}px - 20px)`
-            }
-            this.oprationItemStyles = {
-                'height': `calc(100vh - ${top}px - 20px)`
+            const activeResizeObserver = new ResizeObserver(resizeObserverCallback)
+            activeResizeObserver.observe(this.$refs.root)
+            this.$once('hook:beforeDestroy', () => {
+                activeResizeObserver.unobserve(this.$refs.root)
+            })
+        },
+        methods: {
+            calcRenderStyles () {
+                const {
+                    top
+                } = getOffset(this.$refs.root)
+                
+                const {
+                    width
+                } = this.$refs.root.getBoundingClientRect()
+                
+                this.renderStyles = {
+                    width: `${width - 40}px`,
+                    'min-height': `calc(100vh - ${top + 20}px)`
+                }
+            },
+            calcOperationItemStyles () {
+                const {
+                    top
+                } = getOffset(this.$refs.root)
+                
+                this.oprationItemStyles = {
+                    'height': `calc(100vh - ${top + 20}px)`
+                }
             }
         }
     }
@@ -80,16 +109,14 @@
 <style lang="postcss" module>
     @import "@/css/mixins/scroller";
 
-    .operation-area{
-        height: calc(100% - 40px);
-        min-width: min-content;
-        padding: 0 20px;
-        margin: 20px 0;
+    .horizontal-wrapper{
+        position: relative;
+        padding: 20px;
+        height: 100%;
         overflow: auto;
-        @mixin scroller;
-        .operation-wraper{
-            background: #fff;
-            min-width: min-content;
-        }
+    }
+    .vertical-wrapper{
+        background: #fff;
+        
     }
 </style>

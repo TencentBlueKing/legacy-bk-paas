@@ -10,75 +10,71 @@
 -->
 
 <template>
-    <div>
-        <template v-if="config.length">
-            <p class="style-setting-tips">样式面板中设置的样式将覆盖组件自带的默认样式，请谨慎调整</p>
-            <position
-                v-if="handleConfigIsShow('position')"
-                :value="lastStyles"
-                :include="handleGetConfig('position').include"
-                :exclude="handleGetConfig('position').exclude"
-                :change="handleChange" />
-            <size
-                v-if="handleConfigIsShow('size')"
-                :value="lastStyles"
-                :include="handleGetConfig('size').include"
-                :exclude="handleGetConfig('size').exclude"
-                :change="handleChange" />
-            <padding
-                v-if="handleConfigIsShow('padding')"
-                :value="lastStyles"
-                :include="handleGetConfig('padding').include"
-                :exclude="handleGetConfig('padding').exclude"
-                :change="handleChange" />
-            <margin
-                v-if="handleConfigIsShow('margin')"
-                :value="lastStyles"
-                :include="handleGetConfig('margin').include"
-                :exclude="handleGetConfig('margin').exclude"
-                :change="handleChange" />
-            <font-config
-                v-if="handleConfigIsShow('font')"
-                :value="lastStyles"
-                :include="handleGetConfig('font').include"
-                :exclude="handleGetConfig('font').exclude"
-                :change="handleChange" />
-            <pointer
-                v-if="handleConfigIsShow('pointer')"
-                :value="lastStyles"
-                :include="handleGetConfig('pointer').include"
-                :exclude="handleGetConfig('pointer').exclude"
-                :change="handleChange" />
-            <background
-                v-if="handleConfigIsShow('background')"
-                :value="lastStyles"
-                :include="handleGetConfig('background').include"
-                :exclude="handleGetConfig('background').exclude"
-                :change="handleChange" />
-            <border
-                v-if="handleConfigIsShow('border')"
-                :value="lastStyles"
-                :include="handleGetConfig('border').include"
-                :exclude="handleGetConfig('border').exclude"
-                :change="handleChange" />
-            <opacity
-                v-if="handleConfigIsShow('opacity')"
-                :value="lastStyles"
-                :include="handleGetConfig('opacity').include"
-                :exclude="handleGetConfig('opacity').exclude"
-                :change="handleChange" />
-        </template>
+    <div v-if="config.length">
+        <p class="style-setting-tips">样式面板中设置的样式将覆盖组件自带的默认样式，请谨慎调整</p>
+        <position
+            v-if="checkConfig('position')"
+            :value="lastStyles"
+            :include="getConfig('position').include"
+            :exclude="getConfig('position').exclude"
+            :change="handleChange" />
+        <size
+            v-if="checkConfig('size')"
+            :value="lastStyles"
+            :include="getConfig('size').include"
+            :exclude="getConfig('size').exclude"
+            :change="handleChange" />
+        <padding
+            v-if="checkConfig('padding')"
+            :value="lastStyles"
+            :include="getConfig('padding').include"
+            :exclude="getConfig('padding').exclude"
+            :change="handleChange" />
+        <margin
+            v-if="checkConfig('margin')"
+            :value="lastStyles"
+            :include="getConfig('margin').include"
+            :exclude="getConfig('margin').exclude"
+            :change="handleChange" />
+        <font-config
+            v-if="checkConfig('font')"
+            :value="lastStyles"
+            :include="getConfig('font').include"
+            :exclude="getConfig('font').exclude"
+            :change="handleChange" />
+        <pointer
+            v-if="checkConfig('pointer')"
+            :value="lastStyles"
+            :include="getConfig('pointer').include"
+            :exclude="getConfig('pointer').exclude"
+            :change="handleChange" />
+        <background
+            v-if="checkConfig('background')"
+            :value="lastStyles"
+            :include="getConfig('background').include"
+            :exclude="getConfig('background').exclude"
+            :change="handleChange" />
+        <border
+            v-if="checkConfig('border')"
+            :value="lastStyles"
+            :include="getConfig('border').include"
+            :exclude="getConfig('border').exclude"
+            :change="handleChange" />
+        <opacity
+            v-if="checkConfig('opacity')"
+            :value="lastStyles"
+            :include="getConfig('opacity').include"
+            :exclude="getConfig('opacity').exclude"
+            :change="handleChange" />
         <style-custom
             v-if="isShowCustom"
             :component-id="componentId"
             :value="lastStyles"
             :change="handleChange" />
-        <!-- <div v-else class="no-style">
-            <span v-if="Object.keys(config).length">该组件暂无样式</span>
-        </div> -->
     </div>
 </template>
 <script>
+    import _ from 'lodash'
     import LC from '@/element-materials/core'
 
     import StyleLayout from './layout/index'
@@ -115,7 +111,8 @@
         data () {
             return {
                 componentId: '',
-                config: {}
+                config: {},
+                lastStyles: {}
             }
         },
         computed: {
@@ -124,6 +121,7 @@
             }
         },
         created () {
+            this.isInnerChange = false
             this.componentData = LC.getActiveNode()
             const {
                 componentId,
@@ -132,17 +130,26 @@
             } = this.componentData
             this.componentId = componentId
             this.config = Object.freeze(material.styles || {})
-            this.lastStyles = Object.assign({}, renderStyles)
+            this.lastStyles = Object.freeze(Object.assign({}, renderStyles))
+
+            const updateCallback = _.debounce((event) => {
+                if (this.isInnerChange) {
+                    this.isInnerChange = false
+                    return
+                }
+                this.lastStyles = Object.assign({}, event.target.renderStyles)
+            }, 100)
+
+            LC.addEventListener('setStyle', updateCallback)
+            this.$once('hook:beforeDestroy', () => {
+                LC.removeEventListener('setStyle', updateCallback)
+            })
         },
         methods: {
-            handleChange (key, value) {
-                this.componentData.setStyle(key, value)
-                this.lastStyles[key] = value
-            },
-            handleConfigIsShow (key) {
+            checkConfig (key) {
                 return this.config.some(item => (item.name && item.name === key) || item === key)
             },
-            handleGetConfig (key) {
+            getConfig (key) {
                 const config = {
                     include: [],
                     exclude: []
@@ -153,6 +160,14 @@
                     config.exclude = item[0].exclude || []
                 }
                 return config
+            },
+            handleChange (key, value) {
+                this.isInnerChange = true
+                this.lastStyles = Object.freeze({
+                    ...this.lastStyles,
+                    [key]: value
+                })
+                this.componentData.setStyle(key, value)
             }
         }
     }

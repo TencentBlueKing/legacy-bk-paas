@@ -104,7 +104,9 @@
                 this.$refs.tree.setData(getDataFromNodeTree(LC.getRoot().children))
                 // 还原展开状态
                 expandIdListMemo.forEach((nodeId) => {
-                    this.$refs.tree.setExpanded(nodeId)
+                    if (this.$refs.tree.getNodeById(nodeId)) {
+                        this.$refs.tree.setExpanded(nodeId)
+                    }
                 })
             }, 100)
             /**
@@ -119,9 +121,11 @@
 
                 let activeNodeParent = activeNode.parentNode
                 while (activeNodeParent && !activeNodeParent.type.root) {
-                    this.$refs.tree.setExpanded(activeNodeParent.componentId, {
-                        expanded: true
-                    })
+                    if (this.$refs.tree.getNodeById(activeNodeParent.componentId)) {
+                        this.$refs.tree.setExpanded(activeNodeParent.componentId, {
+                            expanded: true
+                        })
+                    }
                     activeNodeParent = activeNodeParent.parentNode
                 }
                 
@@ -135,7 +139,7 @@
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('update', updateCallback)
                 LC.removeEventListener('active', activeCallback)
-                LC.removeEventListener('toggleInteractive', activeCallback)
+                LC.removeEventListener('toggleInteractive', updateCallback)
             })
         },
         methods: {
@@ -227,6 +231,8 @@
                     return null
                 }
                 
+                componentData.active()
+
                 // 选中节点对应的组件是交互式组件
                 if (componentData.isInteractiveComponent) {
                     showInteractiveComponent(componentData)
@@ -242,7 +248,6 @@
                 }
 
                 // 组件被选中并滚动到视窗内
-                componentData.active()
                 componentData.$elm.scrollIntoView({
                     behavior: 'smooth',
                     block: 'center',

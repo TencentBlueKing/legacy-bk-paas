@@ -1,4 +1,5 @@
-import { getConnection, getRepository } from 'typeorm'
+import { walkGrid, uuid } from '../util'
+import { getConnection, getRepository, IsNull } from 'typeorm'
 import ApiMigraion from '../model/entities/api-migration'
 import Project from '../model/entities/project'
 import ProjectVersion from '../model/entities/project-version'
@@ -8,10 +9,12 @@ import PageTemplate from '../model/entities/page-template'
 import PageTemplateCategory from '../model/entities/page-template-category'
 import Layout from '../model/entities/layout'
 import LayoutInst from '../model/entities/layout-inst'
-import { walkGrid, uuid } from '../util'
+import ProjectFuncGroup from '../model/entities/project-func-group'
+import FuncGroup from '../model/entities/func-group'
+import Func from '../model/entities/func'
 
 // 将函数名称写到这个数组里，函数会自动执行，返回成功则后续不会再执行
-const apiArr = ['setDefaultPageTemplateCategory', 'updateCardSlot', 'fixCardsSlots', 'templateCardsSlots', 'setProjectMobileLayoutInst']
+const apiArr = ['setDefaultPageTemplateCategory', 'updateCardSlot', 'fixCardsSlots', 'templateCardsSlots', 'setProjectMobileLayoutInst', 'syncPageData', 'syncFuncData', 'modifyPageData0518']
 
 export const executeApi = async () => {
     const apiRecords = await getRepository(ApiMigraion).find()
@@ -852,7 +855,7 @@ const tansformPageData = (parentNode, data) => {
     })
 }
 
-export async function syncPageData (ctx) {
+export async function syncPageData () {
     try {
         const pageRepository = getRepository(Page)
         const pageList = await pageRepository.find()
@@ -924,18 +927,18 @@ export async function syncPageData (ctx) {
             })
             await Promise.all([...taskList, ...templateTaskList])
         })
-        ctx.send({
+        return {
             code: 0,
             message: `sync page data success：${(new Date()).toString()}`,
             data: null
-        })
+        }
     } catch (error) {
         console.dir(error)
-        ctx.send({
+        return {
             code: -1,
             message: error,
             data: null
-        })
+        }
     }
 }
 
@@ -1149,6 +1152,160 @@ async function setProjectMobileLayoutInst (apiName) {
         return {
             code: -1,
             message: `${apiName}: ${err.message || err}`
+        }
+    }
+}
+
+// eslint-disable-next-line no-unused-vars
+async function syncFuncData () {
+    try {
+        const funcRepository = getRepository(Func)
+        const funcList = await funcRepository.find({
+            projectId: IsNull()
+        })
+
+        const funcGroupRepository = getRepository(FuncGroup)
+        const funcGroupList = await funcGroupRepository.find({
+            projectId: IsNull()
+        })
+
+        const projectFuncGroupRepository = getRepository(ProjectFuncGroup)
+        const projectFuncGroupList = await projectFuncGroupRepository.find()
+        const funcGroupProjectMap = projectFuncGroupList.reduce((acc, cur) => {
+            acc[cur.funcGroupId] = cur.projectId
+            return acc
+        }, {})
+
+        const versionGroupMap = projectFuncGroupList.reduce((acc, cur) => {
+            acc[cur.funcGroupId] = cur.versionId
+            return acc
+        }, {})
+
+        await getConnection().transaction(async transactionalEntityManager => {
+            const funcTaskList = funcList.map(funcData => {
+                return transactionalEntityManager.update(Func, {
+                    id: funcData.id
+                }, {
+                    projectId: funcGroupProjectMap[funcData.funcGroupId],
+                    versionId: versionGroupMap[funcData.funcGroupId],
+                    updateTime: funcData.updateTime,
+                    updateUser: funcData.updateUser
+                })
+            })
+            const groupTaskList = funcGroupList.map(funcGroupData => {
+                return transactionalEntityManager.update(FuncGroup, {
+                    id: funcGroupData.id
+                }, {
+                    projectId: funcGroupProjectMap[funcGroupData.id],
+                    versionId: versionGroupMap[funcGroupData.id],
+                    updateTime: funcGroupData.updateTime,
+                    updateUser: funcGroupData.updateUser
+                })
+            })
+            await Promise.all([...funcTaskList, ...groupTaskList])
+        })
+        return {
+            code: 0,
+            message: `fix func data success：${(new Date()).toString()}`,
+            data: null
+        }
+    } catch (error) {
+        console.dir(error)
+        return {
+            code: -1,
+            message: error,
+            data: null
+        }
+    }
+}
+
+async function modifyPageData0518 () {
+    try {
+        const modifyData = (node) => {
+            if (Array.isArray(node)) {
+                node.forEach(modifyData)
+            } else if (Object.prototype.toString.apply(node) === '[object Object]') {
+                Object.keys(node).forEach((key) => {
+                    const nodeValue = node[key]
+                    if (key === 'renderEvents') {
+                        const eventKeys = Object.keys(nodeValue)
+                        eventKeys.forEach((eventKey) => {
+                            const eventValue = nodeValue[eventKey]
+                            if (typeof eventValue === 'string') {
+                                nodeValue[eventKey] = {
+                                    methodCode: eventValue,
+                                    params: []
+                                }
+                            }
+                        })
+                    } else {
+                        modifyData(nodeValue)
+                    }
+                })
+            }
+        }
+        const pageRepository = getRepository(Page)
+        const pageList = await pageRepository.find()
+
+        const PageTemplateRepository = getRepository(PageTemplate)
+        const pageTemplateList = await PageTemplateRepository.find()
+        
+        await getConnection().transaction(async transactionalEntityManager => {
+            const taskList = pageList.map(pageData => {
+                let targetData = []
+                try {
+                    targetData = JSON.parse(pageData.content || '[]')
+                    if (!Array.isArray(targetData)) {
+                        targetData = []
+                    }
+                } catch (err) {
+                    targetData = []
+                }
+                modifyData(targetData)
+                
+                return transactionalEntityManager.update(Page, {
+                    id: pageData.id
+                }, {
+                    content: JSON.stringify(targetData),
+                    updateTime: pageData.updateTime,
+                    updateUser: pageData.updateUser
+                })
+            })
+            const templateTaskList = pageTemplateList.map(templateData => {
+                let targetData = []
+                try {
+                    targetData = JSON.parse(templateData.content || '{}')
+                    if (Object.prototype.toString.call(targetData) !== '[object Object]') {
+                        targetData = {}
+                    }
+                } catch (err) {
+                    targetData = {}
+                }
+                targetData = [targetData]
+
+                modifyData(targetData)
+                    
+                return transactionalEntityManager.update(PageTemplate, {
+                    id: templateData.id
+                }, {
+                    content: JSON.stringify(targetData[0]),
+                    updateTime: templateData.updateTime,
+                    updateUser: templateData.updateUser
+                })
+            })
+            await Promise.all([...taskList, ...templateTaskList])
+        })
+        return {
+            code: 0,
+            message: `sync page data success：${(new Date()).toString()}`,
+            data: null
+        }
+    } catch (error) {
+        console.dir(error)
+        return {
+            code: -1,
+            message: error,
+            data: null
         }
     }
 }

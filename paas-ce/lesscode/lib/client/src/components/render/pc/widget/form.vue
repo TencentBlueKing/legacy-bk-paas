@@ -10,14 +10,13 @@
 -->
 
 <template>
-    <div :class="$style['form']">
-        <div
-            v-if="componentData.slot.default.length < 1"
-            :class="$style['empty']">
-            请在右侧配置表单项
-        </div>
+    <div
+        :class="{
+            [$style['form']]: true,
+            [$style['empty']]: componentData.slot.default.length < 1
+        }">
         <bk-form
-            v-else
+            v-if="componentData.slot.default.length > 0"
             v-bind="componentData.prop">
             <widget-form-item
                 v-for="formItemNode in componentData.slot.default"
@@ -47,13 +46,26 @@
 <style lang='postcss' module>
     .form{
         border: 1px dashed #ccc;
-    }
-    .empty{
-        height: 80px;
-        line-height: 80px;
-        font-size: 18px;
-        color: #ccc;
-        text-align: center;
-        pointer-events: all;
+        &.empty{
+            position: relative;
+            height: 80px;
+            line-height: 80px;
+            font-size: 18px;
+            background: #FAFBFD;
+            &::before{
+                content: "请在右侧配置表单项";
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 14px;
+                color: #C4C6CC;
+                pointer-events: all;
+            }
+        }
     }
 </style>

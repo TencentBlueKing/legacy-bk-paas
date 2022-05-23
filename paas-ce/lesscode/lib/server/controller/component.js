@@ -115,7 +115,7 @@ export const useing = async (ctx) => {
     try {
         const { belongProjectId, projectVersionId } = ctx.query
         if (!belongProjectId) {
-            throw new Error('项目id不能为空')
+            throw new Error('应用id不能为空')
         }
         const useingCompList = await PageCompModel.getAll({
             projectId: belongProjectId,
@@ -576,11 +576,11 @@ export const upload = async (ctx) => {
 
     const id = Number(ctx.query.id)
     const belongProjectId = Number(ctx.query.belongProjectId)
-    let operateTarget = `项目ID：${belongProjectId}`
+    let operateTarget = `应用ID：${belongProjectId}`
 
     try {
         if (!belongProjectId) {
-            throw new Error('项目 ID 不能为空')
+            throw new Error('应用 ID 不能为空')
         }
         const uploadComponent = ctx.request.files.upload_file
 
@@ -639,7 +639,7 @@ export const upload = async (ctx) => {
         })
         const currentProjectCode = currentProject.length > 0 ? currentProject[0].projectCode : ''
         if (!currentProjectCode) {
-            throw new Error('项目不存在')
+            throw new Error('应用不存在')
         }
         // 验证组件名是否合法
         const { name, displayName, type } = componentConfig
@@ -711,7 +711,7 @@ export const categoryCount = async (ctx) => {
     try {
         const belongProjectId = parseInt(ctx.query.belongProjectId)
         if (!belongProjectId) {
-            throw new Error('项目id不能为空')
+            throw new Error('应用id不能为空')
         }
         const res = await getRepository(Comp)
             .createQueryBuilder()

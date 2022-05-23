@@ -20,6 +20,8 @@ import setRenderStyles from './extends/set-render-styles'
 import setRenderDirectives from './extends/set-render-directives'
 import setStyle from './extends/set-style'
 import setProp from './extends/set-prop'
+import setEvent from './extends/set-event'
+import mergeRenderEvents from './extends/merge-render-events'
 
 import {
     notify,
@@ -43,8 +45,10 @@ import {
 import validator from './helper/validator'
 import { toHyphenate } from './helper/utils'
 
-import getRoot from './get-root'
-import getMaterial from './get-material'
+import getRoot from './static/get-root'
+import getMaterial from './static/get-material'
+
+import isLayoutType from './static/is-layout-type'
 
 export let activeNode = null
 
@@ -104,14 +108,7 @@ export default class Node {
      * @returns { Boolean }
      */
     get layoutType () {
-        return [
-            'root',
-            'render-grid',
-            'render-column',
-            'free-layout',
-            'widget-form',
-            'widget-form-item'
-        ].includes(this.type)
+        return isLayoutType(this.type)
     }
     /**
      * @desc 组件的slot支持拖拽
@@ -160,6 +157,12 @@ export default class Node {
      */
     get style () {
         const style = {}
+        Object.keys(this.renderStyles).forEach(key => {
+            if (key === 'customStyle') {
+                return
+            }
+            style[toHyphenate(key)] = unitFilter(this.renderStyles[key])
+        })
         const {
             customStyle = {}
         } = this.renderStyles
@@ -167,11 +170,8 @@ export default class Node {
         Object.keys(customStyle).forEach(key => {
             style[toHyphenate(key)] = customStyle[key]
         })
-        Object.keys(this.renderStyles).forEach(key => {
-            style[toHyphenate(key)] = unitFilter(this.renderStyles[key])
-        })
         
-        return Object.seal(Object.assign(style, customStyle))
+        return Object.seal(style)
     }
     /**
      * @desc 组件 props
@@ -485,6 +485,29 @@ export default class Node {
     @notify
     setProp (params1, params2) {
         setProp(this, params1, params2)
+        return this
+    }
+    /**
+     * @desc 设置 event
+     * @param { String | Object } params1
+     * @param { Object | null } params2
+     * @returns { Node }
+     */
+    @readonly
+    @notify
+    setEvent (params1, params2) {
+        setEvent(this, params1, params2)
+        return this
+    }
+    /**
+     * @desc 增量设置事件
+     * @param { Array } events
+     * @returns { Node }
+     */
+    @readonly
+    @notify
+    mergeRenderEvents (events = {}) {
+        mergeRenderEvents(this, events)
         return this
     }
 }

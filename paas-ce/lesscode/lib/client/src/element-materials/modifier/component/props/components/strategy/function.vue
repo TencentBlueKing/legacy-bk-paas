@@ -11,17 +11,19 @@
 
 <template>
     <section>
-        <select-func v-model="remoteData" @change="saveChange"></select-func>
+        <choose-function
+            :choosen-function="remoteData"
+            @change="saveChange"
+        ></choose-function>
     </section>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
-    import selectFunc from '@/components/methods/select-func'
+    import ChooseFunction from '@/components/methods/choose-function/index.vue'
 
     export default {
         components: {
-            selectFunc
+            ChooseFunction
         },
         props: {
             name: String,
@@ -48,17 +50,13 @@
                 usedMethodMap: {}
             }
         },
-        computed: {
-            ...mapGetters('functions', ['funcGroups']),
-            ...mapGetters('drag', ['targetData'])
-        },
         created () {
             this.remoteData = Object.assign({}, this.remoteData, this.payload)
             // this.saveChange()
         },
         methods: {
-            saveChange () {
-                this.change(this.name, this.defaultValue, this.type, JSON.parse(JSON.stringify(this.remoteData)))
+            saveChange (val) {
+                this.change(this.name, this.defaultValue, this.type, val)
             }
         }
     }

@@ -1,6 +1,6 @@
 {
   "name": "lesscode",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -90,8 +90,8 @@
     "@babel/runtime": "~7.6.3",
     "@blueking/bkcharts": "^2.0.11-alpha.5",
     "@blueking/bkui-vue-complex": "0.0.6",
-    "@blueking/bundless": "0.0.7",
-    "@blueking/bundless-plugin-vue2": "0.0.4",
+    "@blueking/bundless": "0.0.8",
+    "@blueking/bundless-plugin-vue2": "0.0.5",
     "@blueking/magicbox-header": "~1.1.30",
     "@icon-cool/bk-icon-vue-drag-vis": "^0.2.12",
     "@typescript-eslint/eslint-plugin": "^4.32.0",
@@ -229,6 +229,7 @@
     "url-loader": "~2.2.0",
     "vant": "^2.12.39",
     "vue": "~2.6.10",
+    "vue-content-loader": "~0.2.3",
     "vue-class-component": "^7.2.6",
     "vue-echarts": "^5.0.0-beta.0",
     "vue-eslint-parser": "~7.4.1",
