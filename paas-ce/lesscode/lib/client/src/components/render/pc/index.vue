@@ -49,6 +49,7 @@
             </draggable>
             <lesscode-focus />
             <lesscode-tools />
+            <lesscode-resize />
         </div>
         <div
             v-if="showNotVisibleMask"
@@ -60,10 +61,11 @@
 <script>
     import LC from '@/element-materials/core'
     import Draggable from './components/draggable'
-    import LesscodeFocus from './components/lesscode-focus'
-    import LesscodeTools from './components/lesscode-tools'
+    import LesscodeFocus from './tools/lesscode-focus'
+    import LesscodeTools from './tools/lesscode-tool'
+    import LesscodeResize from './tools/lesscode-resize'
     import Layout from './widget/layout'
-    import ResolveComponent from './resolve-component'
+    import ResolveComponent, { setMousedown } from './resolve-component'
     import ResolveInteractiveComponent from './resolve-interactive-component'
 
     export default {
@@ -72,6 +74,7 @@
             Draggable,
             LesscodeFocus,
             LesscodeTools,
+            LesscodeResize,
             Layout,
             ResolveComponent,
             ResolveInteractiveComponent
@@ -104,20 +107,20 @@
             }
             const updateLogCallback = event => {
                 console.log('\n')
-                console.log(`%c${new Date().toString().slice(0, 25)}`,
+                console.log(`%c>> ${new Date().toString().slice(0, 25)}`,
                             'background-color: #3A84FF; color: #fff; padding: 2px 5px; border-radius: 3px; font-weight: bold;')
                 console.log(`%c组件更新%c${event.target.componentId}`,
-                            'padding: 2px 5px; background: #606060; color: #fff; border-radius: 3px 0 0 3px;',
+                            'padding: 2px 5px; background: #ea3636; color: #fff; border-radius: 3px 0 0 3px;',
                             'padding: 2px 5px; background: #42c02e; color: #fff; border-radius: 0 3px 3px 0; font-weight: bold;',
                             event)
             }
             
             const activeLogCallback = event => {
                 console.log('\n')
-                console.log(`%c${new Date().toString().slice(0, 25)}`,
+                console.log(`%c>> ${new Date().toString().slice(0, 25)}`,
                             'background-color: #3A84FF; color: #fff; padding: 2px 5px; border-radius: 3px; font-weight: bold;')
                 console.log(`%c组件选中%c${event.target.componentId}`,
-                            'padding: 2px 5px; background: #606060; color: #fff; border-radius: 3px 0 0 3px;',
+                            'padding: 2px 5px; background: #ff9c01; color: #fff; border-radius: 3px 0 0 3px;',
                             'padding: 2px 5px; background: #42c02e; color: #fff; border-radius: 0 3px 3px 0; font-weight: bold;',
                             event)
             }
@@ -130,6 +133,7 @@
                     }, 20)
                 }
             }
+
             /**
              * @name interactiveCallbak
              * @description 当交互式组件的状态改变，每次更新需要监测是否显示“打开交互式组件”的提示
@@ -141,12 +145,23 @@
                 }
             }
 
+            const nodeCallback = (event) => {
+                if (event.target.componentId === this.componentData.componentId) {
+                    this.$forceUpdate()
+                    setTimeout(() => {
+                        this.autoType(event.child)
+                    }, 20)
+                }
+            }
+
             LC.addEventListener('ready', readyCallback)
             LC.addEventListener('update', updateCallback)
             LC.addEventListener('update', updateLogCallback)
             LC.addEventListener('active', interactiveCallbak)
             LC.addEventListener('active', activeLogCallback)
             LC.addEventListener('toggleInteractive', interactiveCallbak)
+            LC.addEventListener('appendChild', nodeCallback)
+            LC.addEventListener('moveChild', nodeCallback)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('ready', readyCallback)
                 LC.removeEventListener('update', updateCallback)
@@ -154,18 +169,32 @@
                 LC.removeEventListener('active', interactiveCallbak)
                 LC.removeEventListener('active', activeLogCallback)
                 LC.removeEventListener('toggleInteractive', interactiveCallbak)
+                LC.removeEventListener('appendChild', nodeCallback)
+                LC.removeEventListener('moveChild', nodeCallback)
             })
         },
         mounted () {
             this.componentData.mounted(this.$refs.root)
+            LC._mounted()
+            
+            const mousedownCallback = () => {
+                setMousedown(true)
+            }
+            const mouseupCallback = () => {
+                setMousedown(false)
+            }
             const resetCallback = () => {
                 LC.clearMenu()
             }
+            document.body.addEventListener('mousedown', mousedownCallback)
+            document.body.addEventListener('mouseup', mouseupCallback)
             document.body.addEventListener('click', resetCallback)
+            
             this.$once('hook:beforeDestroy', () => {
+                document.body.removeEventListener('mousedown', mousedownCallback)
+                document.body.removeEventListener('mouseup', mouseupCallback)
                 document.body.removeEventListener('click', resetCallback)
             })
-            LC._mounted()
         },
         beforeDestroy () {
             LC._unload()
@@ -177,21 +206,28 @@
             /**
              * @desc 自动排版子组件
              */
-            autoType () {
-                if (this._isDestroyed) {
+            autoType (childNode) {
+                if (this._isDestroyed || !childNode) {
                     return
                 }
                 const {
-                    left: parentLeft
+                    top: boxTop,
+                    left: boxLeft
                 } = this.$refs.dragArea.$el.getBoundingClientRect()
-                    
-                this.$refs.component.forEach((componentIns) => {
-                    componentIns.componentData.setStyle('margin-bottom', '10px')
-                    const { left } = componentIns.$el.getBoundingClientRect()
-                    if (left > parentLeft) {
-                        componentIns.componentData.setStyle('margin-left', '10px')
-                    }
-                })
+
+                const $childEl = childNode.$elm
+
+                const {
+                    top: componentTop,
+                    left: componentLeft
+                } = $childEl.getBoundingClientRect()
+                
+                if (componentTop > boxTop) {
+                    childNode.setStyle('marginTop', '10px')
+                }
+                if (componentLeft > boxLeft) {
+                    childNode.setStyle('marginLeft', '10px')
+                }
             },
             /**
              * @desc 鼠标离开时清除组件 hover 效果
@@ -226,7 +262,7 @@
 
     .canvas{
         position: relative;
-        z-index: 1000000000000 !important;
+        z-index: 99999999 !important;
         min-height: calc(100% - 20px) !important;
         &.empty{
             &::before{
@@ -254,7 +290,7 @@
     }
     .not-visible-mask{
         position: fixed;
-        z-index: 1000000000000;
+        z-index: 99999999;
         display: flex;
         justify-content: center;
         background: rgba(0,0,0,0.8);

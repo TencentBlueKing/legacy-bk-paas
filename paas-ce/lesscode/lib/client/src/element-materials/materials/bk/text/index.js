@@ -16,11 +16,23 @@ export default {
     icon: 'bk-drag-text',
     group: '基础',
     order: 1,
-    styles: ['position', 'size', 'margin', 'font', 'pointer', 'background', 'opacity'],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'margin',
+        'font',
+        'pointer',
+        'background',
+        'opacity'
+    ],
     renderStyles: {
         display: 'inline-block',
         textAlign: 'center',
-        fontSize: '14px'
+        fontSize: '14px',
+        verticalAlign: 'middle'
     },
     props: {
         title: {

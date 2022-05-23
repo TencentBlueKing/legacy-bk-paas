@@ -141,8 +141,7 @@
                 const newFunction = getDefaultFunction({
                     funcName: 'Untitled',
                     projectId: this.projectId,
-                    funcGroupId: this.group.id,
-                    funcGroupName: this.group.groupName
+                    funcGroupId: this.group.id
                 })
                 this.$emit('insert-function', newFunction)
                 this.isOpen = true

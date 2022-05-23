@@ -28,7 +28,16 @@ export default {
             tips: '图片索引改变时调用该事件函数，事件回调参数 (index: Number)'
         }
     ],
-    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     renderStyles: {
         width: '600px',
         height: '300px'
@@ -37,9 +46,8 @@ export default {
         // {
         //     type: 'v-bind',
         //     prop: 'pics',
-        //     propTypes: ['array'],
-        //     val: '',
-        //     valType: 'variable'
+        //     format: 'variable',
+        //     valueTypeInclude: ['array']
         // }
     ],
     props: {

@@ -143,7 +143,7 @@
                                 }
                             },
                             {
-                                title: '变量配置',
+                                title: '变量管理',
                                 url: 'variableManage',
                                 toPath: {
                                     name: 'variableManage'

@@ -24,16 +24,16 @@ export default {
         textAlign: 'left',
         fontSize: '14px',
         whiteSpace: 'pre-wrap',
-        wordBreak: 'break-all'
+        wordBreak: 'break-all',
+        verticalAlign: 'middle'
     },
     directives: [
-        // {
-        //     type: 'v-html',
-        //     prop: 'slots',
-        //     propTypes: ['string'],
-        //     val: '',
-        //     valType: 'variable'
-        // }
+        {
+            type: 'v-html',
+            prop: 'slots',
+            format: 'variable',
+            valueTypeInclude: ['string']
+        }
     ],
     props: {
         title: {

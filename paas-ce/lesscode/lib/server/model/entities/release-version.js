@@ -58,4 +58,10 @@ export default class extends Base {
 
     @Column({ type: 'tinytext', comment: '同步paas平台部署信息' })
     fromPaasInfo
+
+    @Column({ type: 'varchar', comment: '本次部署执行的Sql Id' })
+    releaseSqlIds
+
+    @Column({ type: 'varchar', comment: '来源于的应用版本' })
+    fromProjectVersion
 }

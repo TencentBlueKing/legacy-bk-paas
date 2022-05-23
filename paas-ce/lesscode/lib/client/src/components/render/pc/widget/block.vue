@@ -107,7 +107,7 @@
         position: relative;
         border: 1px dashed #ccc;
         &.empty{
-            height: 64px !important;
+            min-height: 34px !important;
             background: #FAFBFD;
             &::before{
                 content: "请拖入组件";

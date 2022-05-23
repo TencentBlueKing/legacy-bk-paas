@@ -41,10 +41,9 @@
     </menu-item>
 </template>
 <script>
-    import MenuItem from './menu-item'
-    import { getNodeWithClass } from '@/common/util'
     import LC from '@/element-materials/core'
     import { NodeHistory } from '@/element-materials/core/Node-history'
+    import MenuItem from './menu-item'
 
     export default {
         components: {
@@ -57,8 +56,6 @@
                     text: '快捷键',
                     func: () => {}
                 },
-                hasCtrl: false,
-                isInDragArea: false,
                 quickOperationList: [
                     { keys: ['Ctrl / Cmd', 'C'], name: '复制' },
                     { keys: ['Ctrl / Cmd', 'V'], name: '粘贴' },
@@ -67,123 +64,63 @@
                     // { keys: ['Ctrl / Cmd', 'Y'], name: '恢复' },
                     // { keys: ['Ctrl / Cmd', 'S'], name: '保存' },
                     { keys: ['Delete / Backspace'], name: '删除' }
-                ]
+                ],
+                isFocused: false
             }
         },
-        mounted () {
-            window.addEventListener('keydown', this.quickOperation)
-            window.addEventListener('keyup', this.judgeCtrl)
-            window.addEventListener('click', this.toggleQuickOperation, true)
-        },
-        beforeDestroy () {
-            window.removeEventListener('keydown', this.quickOperation)
-            window.removeEventListener('keyup', this.judgeCtrl)
-            window.removeEventListener('click', this.toggleQuickOperation, true)
-        },
-        methods: {
-            judgeCtrl (event) {
-                switch (event.keyCode) {
-                    case 91:
-                    case 224:
-                    case 93:
-                    case 17:
-                        this.hasCtrl = false
+        created () {
+            const focusCallback = (event) => {
+                const $drawRoot = document.querySelector('#lesscodeDrawContent')
+                this.isFocused = false
+                const $target = event.target
+                for (let i = 0; i < $target.path; i++) {
+                    if ($target.path[i] === $drawRoot) {
+                        this.isFocused = true
                         break
-                }
-            },
-
-            toggleQuickOperation (event) {
-                const mainNode = getNodeWithClass(event.target, 'target-drag-area')
-                this.isInDragArea = mainNode && mainNode.classList.contains('target-drag-area')
-            },
-
-            quickOperation (event) {
-                const vm = this
-                const funcChainMap = {
-                    stopped: false,
-                    isInDragArea: function () {
-                        if (!vm.isInDragArea) this.stopped = true
-                        return this
-                    },
-                    hasCtrl: function () {
-                        if (!vm.hasCtrl) this.stopped = true
-                        return this
-                    },
-                    preventDefault: function () {
-                        if (!this.stopped) event.preventDefault()
-                        return this
-                    },
-                    exec: function (callBack) {
-                        vm.$nextTick(() => {
-                            if (!this.stopped) callBack()
-                            return this
-                        })
                     }
                 }
+            }
 
-                switch (event.keyCode) {
-                    case 91:
-                    case 224:
-                    case 93:
-                    case 17:
-                        this.hasCtrl = true
-                        break
-                    case 67:
-                        funcChainMap.isInDragArea().exec(this.putComponentData)
-                        break
-                    // case 83:
-                    //     funcChainMap.isInDragArea().hasCtrl().preventDefault().exec(this.handleSave)
-                    //     break
-                    case 86:
-                        funcChainMap.isInDragArea().exec(this.copyComponent)
-                        break
-                    case 88:
-                        funcChainMap.isInDragArea().exec(this.cutComponent)
-                        break
-                    // case 90:
-                    //     console.log('ctrlz,撤销')
-                    //     funcChainMap.isInDragArea().hasCtrl().exec(this.backHistory)
-                    //     break
-                    // case 89:
-                    //     console.log('ctrly,恢复')
-                    //     funcChainMap.isInDragArea().hasCtrl().preventDefault().exec(this.forwardHistory)
-                    //     break
-                    case 8:
-                    case 46:
-                        funcChainMap.isInDragArea().preventDefault().exec(this.showDeleteElement)
-                        break
-                }
-            },
+            const activeCallbak = () => {
+                this.isFocused = true
+            }
+            
+            window.addEventListener('keydown', this.handleQuickOperation)
+            document.body.addEventListener('click', focusCallback)
+            LC.addEventListener('active', activeCallbak)
 
-            // 剪切
-            cutComponent () {
-                const copyNode = LC.getActiveNode()
-                if (!this.hasCtrl || !copyNode) return
-
-                NodeHistory.setCopyNode(copyNode)
-                copyNode.parentNode.removeChild(copyNode)
-            },
-
-            // 复制
-            putComponentData () {
-                const copyNode = LC.getActiveNode()
-                if (!this.hasCtrl || !copyNode) return
-                
-                NodeHistory.setCopyNode(copyNode)
-            },
-
-            // 粘贴
-            copyComponent () {
-                const activeNode = LC.getActiveNode()
-                const copyNode = NodeHistory.curCopyNode || {}
-                if (!this.hasCtrl || Object.keys(copyNode).length <= 0 || !activeNode) {
+            this.$once('hook:beforeDestroy', () => {
+                window.removeEventListener('keydown', this.handleQuickOperation)
+                document.body.removeEventListener('click', focusCallback)
+                LC.removeEventListener('active', activeCallbak)
+            })
+        },
+        
+        methods: {
+            handleQuickOperation (event) {
+                if (!this.isFocused) {
                     return
                 }
-                activeNode.pasteNode(copyNode)
-            },
-
-            showDeleteElement () {
-                LC.execCommand('remove')
+                const copyKeyCode = [67]
+                const pastKeyCode = [86]
+                const cutKeyCode = [88]
+                const removeKeyCode = [8, 46]
+                
+                if (event.metaKey) {
+                    if (pastKeyCode.includes(event.keyCode)) {
+                        LC.execCommand('paste')
+                    }
+                    if (copyKeyCode.includes(event.keyCode)) {
+                        LC.execCommand('copy')
+                    }
+                    if (cutKeyCode.includes(event.keyCode)) {
+                        LC.execCommand('cut')
+                    }
+                } else {
+                    if (removeKeyCode.includes(event.keyCode)) {
+                        LC.execCommand('remove')
+                    }
+                }
             },
 
             backHistory () {

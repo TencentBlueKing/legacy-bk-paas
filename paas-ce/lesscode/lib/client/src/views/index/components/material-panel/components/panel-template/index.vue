@@ -60,7 +60,7 @@
                         <span class="item-name">{{ template.templateName }}</span>
                         <span
                             class="preview"
-                            @click="handlePreview(template.id)">
+                            @click="handlePreview(template)">
                             预览
                         </span>
                     </div>
@@ -114,7 +114,10 @@
             }
         },
         computed: {
-            ...mapGetters('page', ['platform']),
+            ...mapGetters('page', ['platform', 'pageDetail']),
+            ...mapGetters('projectVersion', {
+                versionId: 'currentVersionId'
+            }),
             renderTemplateList () {
                 return this.type === 'project' ? this.projectTemplateList : this.marketTemplateList
             }
@@ -122,14 +125,14 @@
         created () {
             this.projectId = this.$route.params.projectId
             this.curDragingComponent = null
-            this.fetchData()
+            this.fetchData(true)
             bus.$on('update-template-list', this.fetchData)
         },
         methods: {
             /**
              * @desc 获取模板数据
              */
-            async fetchData () {
+            async fetchData (initData = true) {
                 try {
                     this.isLoading = true
                     const [
@@ -169,6 +172,23 @@
                     this.projectTemplateList = Object.freeze(projectTemplateList)
                     this.marketTemplateList = Object.freeze(marketTemplateList)
                     this.renderGroupTemplateList = this.type === 'project' ? Object.freeze(this.projectTemplateGroupList) : Object.freeze(this.marketTemplateGroupList)
+
+                    if (initData !== true) {
+                        console.log('refreshfuncandvar')
+                        const [functionData] = await Promise.all([
+                            this.$store.dispatch('functions/getAllGroupAndFunction', {
+                                projectId: this.projectId,
+                                versionId: this.versionId
+                            }),
+                            this.$store.dispatch('variable/getAllVariable', {
+                                projectId: this.projectId,
+                                pageCode: this.pageDetail.pageCode,
+                                versionId: this.versionId,
+                                effectiveRange: 0
+                            })
+                        ])
+                        this.$store.commit('functions/setFunctionData', functionData)
+                    }
                 } catch (err) {
                     this.$bkMessage({
                         theme: 'error',
@@ -220,10 +240,10 @@
             },
             /**
              * @desc 预览模板
-             * @param { Number } templateId
+             * @param { Number } template
              */
-            handlePreview (templateId) {
-                window.open(`/preview-template/project/${this.projectId}/${templateId}`, '_blank')
+            handlePreview (template) {
+                window.open(`/preview-template/project/${template.belongProjectId}/${template.id}`, '_blank')
             },
 
             handleApply (template) {

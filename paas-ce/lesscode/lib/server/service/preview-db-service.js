@@ -11,11 +11,43 @@
 
 import DBEngineService from './db-engine-service'
 import { LCDataService, TABLE_FILE_NAME, getDataService } from './data-service'
-import { EntitySchema, createConnection, getConnection, EventSubscriber } from 'typeorm'
+import { EntitySchema, createConnection, EventSubscriber } from 'typeorm'
 import { RequestContext } from '../middleware/request-context'
-import { decrypt } from '../util'
+import { encrypt, decrypt, uuid } from '../util'
 import { NO_LENGTH_ORM_KEY } from '../../shared/data-source'
+import { getAllGroupAndFunction } from './function'
 const dataBaseConf = require('../conf/data-source')
+
+/**
+ * 开启预览
+ * @param {*} projectId 项目id
+ */
+export const enablePerviewDb = async (projectId, dbName) => {
+    const dbInfo = {
+        projectId,
+        dbName,
+        userName: uuid(),
+        passWord: uuid()
+    }
+
+    // 创建用于预览的DB
+    const previewDbEngine = await getPreviewDbEngine()
+    await previewDbEngine.execCb(async (pool) => {
+        // 创建项目对应的预览数据库
+        await pool.query(`CREATE DATABASE \`${dbInfo.dbName}\`;`)
+        // 创建用户并授权对应的库
+        await pool.query(`CREATE USER '${dbInfo.userName}'@'%' IDENTIFIED BY '${dbInfo.passWord}';`)
+        await pool.query(`GRANT ALL ON ${dbInfo.dbName}.* TO '${dbInfo.userName}'@'%';`)
+        await pool.query('FLUSH PRIVILEGES;')
+    })
+
+    // 加密
+    dbInfo.userName = encrypt(dbInfo.userName)
+    dbInfo.passWord = encrypt(dbInfo.passWord)
+
+    // 写入数据库
+    await LCDataService.add(TABLE_FILE_NAME.PREVIEW_DB, dbInfo)
+}
 
 /**
  * 获取预览环境下的db配置
@@ -91,9 +123,8 @@ export const getPreviewDataService = async (projectId) => {
         acc.entityMap[cur.tableName] = entity
         return acc
     }, { entities: [], entityMap: {} })
-
     const ormConfig = {
-        name: projectId,
+        name: uuid(),
         type: 'mysql',
         host: config.host,
         port: config.port,
@@ -108,18 +139,9 @@ export const getPreviewDataService = async (projectId) => {
             connectionLimit: 5
         }
     }
-    // typeorm 使用单例操作。一处连接，多处可以使用该连接。
-    let con
-    try {
-        con = getConnection(ormConfig.name)
-    } catch (error) {
-    } finally {
-        if (!con || !con.isConnected) {
-            con = await createConnection(ormConfig)
-        }
-    }
+    const con = await createConnection(ormConfig)
     const previewDataService = {
-        ...getDataService(projectId, entityMap),
+        ...getDataService(ormConfig.name, entityMap),
         close () {
             return new Promise((resolve, reject) => {
                 if (con.isConnected) {

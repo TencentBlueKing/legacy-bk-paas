@@ -80,7 +80,7 @@ export default {
         
         // 为基础组件打上标记
         if (!context.parent.isShadowComponent) {
-            attrs['data-base-component'] = true
+            attrs['lesscode-base-component'] = ''
         }
 
         const renderSlotMap = Object.keys(componentData.slot).reduce((result, slotName) => {

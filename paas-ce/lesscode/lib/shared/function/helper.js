@@ -64,7 +64,6 @@ export const getDefaultFunction = (options = {}) => {
         funcName: '',
         funcCode: '',
         funcGroupId: '',
-        funcGroupName: '',
         funcType: FUNCTION_TYPE.EMPTY,
         funcParams: [],
         remoteParams: [],

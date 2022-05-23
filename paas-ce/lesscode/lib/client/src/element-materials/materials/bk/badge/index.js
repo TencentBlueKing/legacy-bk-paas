@@ -29,13 +29,17 @@ export default {
     ],
     styles: [
         'position',
-        'size',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
         'margin',
         'pointer',
         'opacity'
     ],
     renderStyles: {
-        display: 'inline-block'
+        display: 'inline-block',
+        verticalAlign: 'middle'
     },
     props: {
         theme: {

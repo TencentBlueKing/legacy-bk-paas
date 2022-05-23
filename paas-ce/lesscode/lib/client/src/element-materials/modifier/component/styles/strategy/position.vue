@@ -110,7 +110,7 @@
             handleInitValueList () {
                 let result = getCssProperties(posConfig, this.include, this.exclude)
                 const that = this
-                result = result.map(function (item) {
+                result = result.map((item) => {
                     if (item.key === 'zIndex') {
                         item['value'] = that.value[item.key] || ''
                     } else {

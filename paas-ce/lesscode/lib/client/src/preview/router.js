@@ -56,8 +56,9 @@ module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId,
         const layout = routeGroup[key]
 
         // 父路由
-        const parentSource = layout.path === editNavData.id ? editNavData.source : layout.content
-        const parentCom = registerComponent(parentSource, layout.path)
+        const parentPreviewId = projectId + layout.path
+        const parentSource = parentPreviewId === editNavData.id ? editNavData.source : layout.content
+        const parentCom = registerComponent(parentSource, parentPreviewId)
 
         // 子路由
         const routeList = layout.children
@@ -66,29 +67,40 @@ module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId,
                 path: route.path.replace(/^\//, '')
             }
 
-            // 与vue-router保持一致，优先使用redirect
-            if (route.redirectRoute) {
-                routeConifg.name = getRouteName(route)
-                routeConifg.redirect = {
-                    path: getRouteFullPath(route.redirectRoute)
-                }
-            } else if (route.isError) {
-                routeConifg.component = BkError
-            } else if (route.pageId !== -1) {
+            try {
+                // 与vue-router保持一致，优先使用redirect
+                if (route.redirectRoute) {
+                    routeConifg.name = getRouteName(route)
+                    routeConifg.redirect = {
+                        path: getRouteFullPath(route.redirectRoute)
+                    }
+                } else if (route.isError) {
+                    // 后端生成页面信息的时候发生错误
+                    routeConifg.component = BkError
+                } else if (route.pageId !== -1) {
                 // 判断是从storage读取数据还是数据库
-                const source = route.pageCode === editPageData.id ? editPageData.source : route.content
-                // 生成页面
-                const childCom = registerComponent(source, route.pageCode)
-                routeConifg.name = getRouteName(route)
-                routeConifg.component = childCom
-            } else {
-                routeConifg.redirect = {
-                    path: '/404'
+                    const pagePreviewId = projectId + route.pageCode
+                    const source = pagePreviewId === editPageData.id ? editPageData.source : route.content
+                    // 生成页面
+                    const childCom = registerComponent(source, pagePreviewId)
+                    routeConifg.name = getRouteName(route)
+                    routeConifg.component = childCom
+                } else {
+                    routeConifg.redirect = {
+                        path: '/404'
+                    }
                 }
-            }
-            // 携带 meta 信息
-            if (route.meta) {
-                routeConifg.meta = route.meta
+                // 携带 meta 信息
+                if (route.meta) {
+                    routeConifg.meta = route.meta
+                }
+            } catch (error) {
+                // 前端构造页面的时候发生错误
+                console.error(error)
+                routeConifg.component = BkError
+                routeConifg.meta = {
+                    message: error.message || error
+                }
             }
 
             return routeConifg

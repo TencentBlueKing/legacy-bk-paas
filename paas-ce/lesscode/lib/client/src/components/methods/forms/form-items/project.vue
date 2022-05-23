@@ -55,8 +55,7 @@
             handleSelectProject (projectId) {
                 this.updateValue({
                     projectId,
-                    funcGroupId: '',
-                    funcGroupName: ''
+                    funcGroupId: ''
                 })
             }
         }
