@@ -35,6 +35,7 @@
     </div>
 </template>
 <script>
+    import _ from 'lodash'
     import LC from '@/element-materials/core'
     import RenderComponent from './render-component'
     import RenderSlot from './render-slot'
@@ -57,8 +58,17 @@
         }
     }
 
+    const isNumberValue = value => {
+        return /^[-]?\d/.test(value)
+    }
+
     // 记录 mousedown 状态
+    // mousedown时不响应mousemove
     let isMousedown = false
+
+    export const setMousedown = value => {
+        isMousedown = value
+    }
 
     const safeStyles = {
         // fix: 影响子元素排版
@@ -191,9 +201,9 @@
             // 编辑更新
             const updateCallback = (event) => {
                 if (event.target.componentId === this.componentData.componentId) {
-                    this.safeStylesWithDisplay()
-                    this.safeStyleWithWidth()
-                    this.safeStyleWithHeight()
+                    this.safeStylesOfDisplay()
+                    this.safeStyleOfWidth()
+                    this.safeStyleOfHeight()
                     this.$forceUpdate()
                     this.$emit('component-update')
                 }
@@ -205,15 +215,15 @@
             })
         },
         mounted () {
-            this.safeStylesWithDisplay()
-            this.safeStyleWithWidth()
-            this.safeStyleWithHeight()
+            this.safeStylesOfDisplay()
+            this.safeStyleOfWidth()
+            this.safeStyleOfHeight()
             this.setDefaultStyleWithAttachToFreelayout()
             this.componentData.mounted(this.$refs.componentRoot)
             this.$emit('component-mounted')
         },
         beforeDestroy () {
-            isMousedown = false
+            setMousedown(false)
             // 销毁时如果组件被激活，取消激活状态
             if (this.componentData.isActived) {
                 this.componentData.activeClear()
@@ -223,7 +233,7 @@
             /**
              * @desc 保证组件的 display 配置和渲染正确
              */
-            safeStylesWithDisplay () {
+            safeStylesOfDisplay () {
                 if (this.isShadowComponent) {
                     return
                 }
@@ -261,13 +271,28 @@
              *
              * 某些组件可能是通过 prop 配置 width 而不是直接配置 css 的 width
              */
-            safeStyleWithWidth () {
+            safeStyleOfWidth () {
                 if (this.isShadowComponent) {
                     return
                 }
+                const componentDataStyle = this.componentData.style
+                // 绝对定位并且同时设置了left、right
+                if (
+                    componentDataStyle.position === 'absolute'
+                    && isNumberValue(componentDataStyle.left)
+                    && isNumberValue(componentDataStyle.right)) {
+                    this.safeStyles = Object.assign({}, this.safeStyles, {
+                        width: componentDataStyle.width
+                    })
+                    this.fixPercentStyleWidth = true
+                    return
+                }
                 // 优先使用自定义配置的 width
-                if (this.componentData.style.width) {
-                    this.fixPercentStyleWidth = /%$/.test(this.componentData.style.width)
+                if (_.has(componentDataStyle, 'width')) {
+                    this.safeStyles = Object.assign({}, this.safeStyles, {
+                        width: componentDataStyle.width
+                    })
+                    this.fixPercentStyleWidth = /%$/.test(componentDataStyle.width)
                     return
                 }
 
@@ -276,7 +301,8 @@
                     if (!this.$refs.componentRoot) {
                         return
                     }
-                    const $baseComponentEl = this.$refs.componentRoot.querySelector(':scope > [lesscode-base-component]')
+                    const $baseComponentEl = this.$refs.componentRoot
+                        .querySelector(':scope > [lesscode-base-component]')
                     if ($baseComponentEl) {
                         const styleWidth = $baseComponentEl.style.width
                         if (styleWidth) {
@@ -293,14 +319,28 @@
              *
              * 某些组件可能是通过 prop 配置 height 而不是直接配置 css 的 height
              */
-            safeStyleWithHeight () {
+            safeStyleOfHeight () {
                 if (this.isShadowComponent) {
                     return
                 }
-                
+                const componentDataStyle = this.componentData.style
+                // 绝对定位并且同时设置了top、bottom
+                if (
+                    componentDataStyle.position === 'absolute'
+                    && isNumberValue(componentDataStyle.top)
+                    && isNumberValue(componentDataStyle.bottom)) {
+                    this.safeStyles = Object.assign({}, this.safeStyles, {
+                        height: componentDataStyle.height
+                    })
+                    this.fixPercentStyleHeight = true
+                    return
+                }
                 // 优先使用自定义配置的 height
-                if (this.componentData.style.height) {
-                    this.fixPercentStyleHeight = /%$/.test(this.componentData.style.height)
+                if (_.has(this.componentData.style, 'height')) {
+                    this.safeStyles = Object.assign({}, this.safeStyles, {
+                        height: componentDataStyle.height
+                    })
+                    this.fixPercentStyleHeight = /%$/.test(componentDataStyle.height)
                     return
                 }
 
@@ -309,7 +349,8 @@
                     if (!this.$refs.componentRoot) {
                         return
                     }
-                    const $baseComponentEl = this.$refs.componentRoot.querySelector(':scope > [lesscode-base-component]')
+                    const $baseComponentEl = this.$refs.componentRoot
+                        .querySelector(':scope > [lesscode-base-component]')
                     if ($baseComponentEl) {
                         const styleHeight = $baseComponentEl.style.height
                         if (styleHeight) {
@@ -325,9 +366,16 @@
              * @desc 当组件在 freelayout 布局中时需要设置一些默认样式
              */
             setDefaultStyleWithAttachToFreelayout () {
-                if (!this.attachToFreelayout) {
+                if (this.componentData._isMounted
+                    || !this.attachToFreelayout) {
                     return
                 }
+                this.componentData.setStyle('position', 'absolute')
+                let maxZIndex = 0
+                this.componentData.parentNode.children.forEach(childrenNode => {
+                    maxZIndex = Math.max(maxZIndex, ~~childrenNode.style['z-index'])
+                })
+                this.componentData.setStyle('z-index', maxZIndex)
                 const defaultStyle = {
                     width: {
                         'bk-tag-input': '200px',
@@ -364,14 +412,14 @@
              * @param {Object} event 事件对象
              */
             handleMousedown (event) {
-                isMousedown = true
+                setMousedown(true)
                 this.$emit('component-mousedown', event)
             },
             /**
              * @desc 切换鼠标按下状态
              */
-            handleMouseup () {
-                isMousedown = false
+            handleMouseup (event) {
+                setMousedown(false)
             },
             /**
              * @desc 组件 wrapper mousemove 事件回调

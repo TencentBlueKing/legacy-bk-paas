@@ -1,5 +1,7 @@
 <template>
-    <section>
+    <section class="choose-function-main">
+        <slot name="header"></slot>
+        
         <bk-popover
             ref="mainPopoverRef"
             placement="bottom"
@@ -12,7 +14,7 @@
             <bk-input
                 class="choose-input"
                 placeholder="请选择函数"
-                :value="value.methodCode"
+                :value="renderChoosenFunction.methodCode"
                 readonly
             />
             <div slot="content">
@@ -34,44 +36,50 @@
                                 behavior="simplicity"
                                 v-model="searchFunctionName"
                             ></bk-input>
-                            <ul
-                                class="function-list"
-                                v-if="functionType === 'functionList'"
-                            >
-                                <li
-                                    class="function-group"
-                                    :key="funcGroup.groupName"
-                                    v-for="funcGroup in computedFunctionData"
+                            <template v-if="functionType === 'functionList'">
+                                <ul class="function-list">
+                                    <li
+                                        class="function-group"
+                                        :key="funcGroup.groupName"
+                                        v-for="funcGroup in computedFunctionData"
+                                    >
+                                        <span class="function-group-name">
+                                            {{ funcGroup.groupName }}（{{ funcGroup.children.length }}）
+                                        </span>
+                                        <ul class="group-function-list">
+                                            <li
+                                                v-bk-tooltips="{
+                                                    content: functionData.funcSummary,
+                                                    disabled: !functionData.funcSummary,
+                                                    placements: ['left-start'],
+                                                    width: 200,
+                                                    boundary: 'window'
+                                                }"
+                                                v-for="functionData in funcGroup.children"
+                                                :class="{
+                                                    'select': renderChoosenFunction.methodCode === functionData.funcCode,
+                                                    'function-item': true
+                                                }"
+                                                :key="functionData.funcName"
+                                                @click="handleChooseFunction(functionData.funcCode)"
+                                            >
+                                                <span class="function-item-name" v-bk-overflow-tips>{{ functionData.funcCode }}</span>
+                                                <i
+                                                    class="bk-icon icon-edit-line function-tool mt10"
+                                                    @click.stop="handleEditFunction(functionData)"
+                                                ></i>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                <bk-button
+                                    class="function-add"
+                                    text
+                                    @click="handleShowFunction"
                                 >
-                                    <span class="function-group-name">
-                                        {{ funcGroup.groupName }}（{{ funcGroup.children.length }}）
-                                    </span>
-                                    <ul class="group-function-list">
-                                        <li
-                                            v-bk-tooltips="{
-                                                content: functionData.funcSummary,
-                                                disabled: !functionData.funcSummary,
-                                                placements: ['left-start'],
-                                                width: 200,
-                                                boundary: 'window'
-                                            }"
-                                            v-for="functionData in funcGroup.children"
-                                            :class="{
-                                                'select': value.methodCode === functionData.funcCode,
-                                                'function-item': true
-                                            }"
-                                            :key="functionData.funcName"
-                                            @click="handleChooseFunction(functionData)"
-                                        >
-                                            <span class="function-item-name" v-bk-overflow-tips>{{ functionData.funcName }}</span>
-                                            <i
-                                                class="bk-icon icon-edit-line function-tool mt10"
-                                                @click.stop="handleEditFunction(functionData)"
-                                            ></i>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
+                                    <i class="bk-icon icon-plus-circle"></i>新增
+                                </bk-button>
+                            </template>
                             <ul class="function-list" v-else>
                                 <li
                                     class="function-item"
@@ -103,10 +111,31 @@
                 </section>
             </div>
         </bk-popover>
+
+        <template v-if="showAddParams">
+            <div class="panel-item" v-for="(panel, index) in renderChoosenFunction.params" :key="index">
+                <bk-input :value="panel.value" @change="val => handleChangeParam(index, val)" />
+                <i class="bk-icon icon-minus-circle" @click="handleDeleteParam(index)"></i>
+            </div>
+            <div
+                class="panel-add"
+                v-bk-tooltips="{
+                    content: '配置的执行参数，会在函数执行的时候传入，且优先级最高',
+                    placements: ['left'],
+                    boundary: 'window'
+                }"
+                @click="handlePlusParam"
+            >
+                <i class="bk-icon icon-plus-circle"></i>添加函数执行参数
+            </div>
+        </template>
+
         <edit-function-dialog
             :show.sync="isShowEditFunctionDialog"
             :select-func-code="selectFuncCode"
             :insert-function="insertFunctionData"
+            :show-save-use="true"
+            @save-use="handleChooseFunction"
         />
     </section>
 </template>
@@ -122,20 +151,24 @@
         },
 
         props: {
-            value: {
+            choosenFunction: {
                 type: Object
             },
-            config: {
-                type: Object
+            functionTemplates: {
+                type: Array
+            },
+            showAddParams: {
+                type: Boolean,
+                default: true
             }
         },
 
         data () {
             return {
                 functionTypeList: [
-                    { name: 'eventTemplate', label: '事件模板' },
+                    { name: 'functionTemplate', label: '事件模板' },
                     { name: 'functionMarket', label: '函数市场' },
-                    { name: 'functionList', label: '已有函数' }
+                    { name: 'functionList', label: '应用函数库' }
                 ],
                 searchFunctionName: '',
                 functionType: 'functionList',
@@ -143,7 +176,8 @@
                 isLoading: false,
                 isShowEditFunctionDialog: false,
                 selectFuncCode: '',
-                insertFunctionData: undefined
+                insertFunctionData: undefined,
+                renderChoosenFunction: {}
             }
         },
 
@@ -153,9 +187,8 @@
             computedFunctionData () {
                 let functionData
                 switch (this.functionType) {
-                    case 'eventTemplate':
+                    case 'functionTemplate':
                         functionData = this
-                            .config
                             .functionTemplates
                             ?.filter(functionTemplate => functionTemplate.funcName?.includes(this.searchFunctionName))
                         break
@@ -183,6 +216,13 @@
             }
         },
 
+        created () {
+            this.renderChoosenFunction = {
+                methodCode: this.choosenFunction?.methodCode || '',
+                params: [...this.choosenFunction?.params || []]
+            }
+        },
+
         methods: {
             ...mapActions('functionMarket', ['getFunctionList']),
 
@@ -195,26 +235,62 @@
                 })
             },
 
-            handleChooseFunction (functionData) {
-                this.$emit('choose', functionData)
+            triggleUpdate () {
+                this.$emit('change', JSON.parse(JSON.stringify(this.renderChoosenFunction)))
+            },
+
+            handleChooseFunction (funcCode) {
+                this.renderChoosenFunction.methodCode = funcCode
+                this.triggleUpdate()
                 this.handleClose()
             },
 
+            handleChangeParam (index, val) {
+                this.renderChoosenFunction.params[index].value = val
+                this.triggleUpdate()
+            },
+
+            handleDeleteParam (index) {
+                this.renderChoosenFunction.params.splice(index, 1)
+                this.triggleUpdate()
+            },
+
+            handlePlusParam () {
+                this.renderChoosenFunction.params.push({ value: '' })
+                this.triggleUpdate()
+            },
+
             handleEditFunction (functionData) {
+                this.clearStatus()
                 this.selectFuncCode = functionData.funcCode
-                this.insertFunctionData = undefined
-                this.isShowEditFunctionDialog = true
+                this.showFunctionDialog()
+                this.handleClose()
+            },
+
+            handleShowFunction () {
+                this.clearStatus()
+                this.showFunctionDialog()
                 this.handleClose()
             },
 
             handleCreateFunction ({ id, ...functionData }) {
+                this.clearStatus()
                 this.insertFunctionData = {
                     ...getDefaultFunction(),
                     ...functionData,
                     projectId: this.$route.params.projectId
                 }
-                this.isShowEditFunctionDialog = true
+                this.showFunctionDialog()
                 this.handleClose()
+            },
+
+            clearStatus () {
+                this.selectFuncCode = undefined
+                this.insertFunctionData = undefined
+            },
+
+            showFunctionDialog () {
+                this.isShowEditFunctionDialog = true
             },
 
             handleClose () {
@@ -228,8 +304,43 @@
     @import "@/css/mixins/scroller";
     @import "@/css/mixins/ellipsis";
 
+    .choose-function-main {
+        position: relative;
+        background: #f0f1f5;
+        border-radius: 2px;
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        &:hover {
+            box-shadow: 0px 2px 4px 0px rgb(0 0 0 / 20%);
+        }
+    }
+    .panel-item {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+        width: 100%;
+    }
+    .icon-minus-circle {
+        margin: 0 3px;
+        cursor: pointer;
+    }
+    .panel-add {
+        font-size: 12px;
+        margin: 10px 0 0;
+        line-height: 16px;
+        cursor: pointer;
+        &:hover {
+            color: #3a84ff;
+        }
+        i {
+            padding-right: 2px;
+            font-size: 16px;
+        }
+    }
     .choose-input {
-        width: 264px;
+        width: 100%;
         cursor: pointer;
         ::v-deep .bk-form-input[readonly] {
             background-color: #ffffff !important;
@@ -248,7 +359,23 @@
             max-height: 350px;
             overflow-y: auto;
             padding-bottom: 8px;
+            background: #fff;
             @mixin scroller;
+        }
+        .function-add {
+            width: 100%;
+            padding: 0 16px;
+            border-radius: 0 0 1px 1px;
+            border-top: 1px solid #dcdee5;
+            background: #fafbfd;
+            line-height: 32px;
+            height: 32px;
+            text-align: left;
+            font-size: 12px;
+            .icon-plus-circle {
+                margin-right: 4px;
+                vertical-align: text-bottom;
+            }
         }
         .function-group {
             font-size: 12px;
@@ -320,8 +447,14 @@
         ::v-deep .bk-tab-label-list li .bk-tab-label {
             font-size: 12px;
         }
+        ::v-deep .bk-tab-content {
+            background-color: #fff;
+        }
     }
     ::v-deep .tippy-active .choose-input .bk-input-text input {
         border-color: #3a84ff !important;
+    }
+    ::v-deep .bk-tooltip, ::v-deep .bk-tooltip-ref {
+        width: 100%;
     }
 </style>

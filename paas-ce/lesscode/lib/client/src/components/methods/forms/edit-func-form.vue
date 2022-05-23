@@ -56,7 +56,19 @@
             </form-monaco>
         </section>
         <footer class="main-footer">
-            <bk-button theme="primary" @click="handleSaveFunction" :loading="isSubmitting" :disabled="!formChanged">保存</bk-button>
+            <bk-button
+                class="mr5"
+                theme="primary"
+                :loading="isSubmitting"
+                :disabled="!formChanged"
+                @click="handleSaveFunction"
+            >保存</bk-button>
+            <bk-button
+                v-if="showSaveUse"
+                :loading="isSubmitting"
+                :disabled="!formChanged"
+                @click="handleSaveChooseFunction"
+            >保存并使用</bk-button>
         </footer>
     </main>
 </template>
@@ -67,7 +79,11 @@
 
     export default {
         mixins: [mixins],
-        
+
+        props: {
+            showSaveUse: Boolean
+        },
+
         data () {
             return {
                 isSubmitting: false
@@ -107,6 +123,15 @@
                 } else {
                     confirmFn()
                 }
+            },
+
+            handleSaveChooseFunction () {
+                this.handleSaveFunction().then(() => {
+                    // 触发 save-use 事件
+                    this.$emit('save-use', this.form.funcCode)
+                    // 关闭弹框
+                    this.handleClose()
+                })
             },
 
             handleSaveFunction () {

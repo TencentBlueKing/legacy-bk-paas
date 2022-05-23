@@ -144,4 +144,9 @@ const bkComponents = Object.seal([
 
 export default bkComponents
 
-export const bkComponentGroupList = Array.from(new Set(bkComponents.map(item => item.group)))
+export const bkComponentGroupList = Object.keys(bkComponents.reduce((result, item) => {
+    if (item.group) {
+        result[item.group] = true
+    }
+    return result
+}, {}))

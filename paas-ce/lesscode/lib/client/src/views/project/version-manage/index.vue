@@ -5,7 +5,7 @@
                 <bk-button theme="primary" @click="handleCreate">新建</bk-button>
             </div>
             <div class="search-bar">
-                <bk-input placeholder="版本号"
+                <bk-input placeholder="应用版本"
                     style="width: 400px"
                     :clearable="true"
                     right-icon="bk-icon icon-search"
@@ -22,7 +22,7 @@
                 :header-cell-style="{ background: '#f0f1f5' }"
                 :data="displayList"
                 v-show="!loading.list">
-                <bk-table-column label="版本号" prop="version" min-width="120" show-overflow-tooltip>
+                <bk-table-column label="应用版本" prop="version" min-width="120" show-overflow-tooltip>
                     <template slot-scope="{ row }">
                         <div class="component-version" @click="handleVersionDetail(row)">
                             <span>{{ row.version }}</span>
@@ -62,7 +62,7 @@
                             <bk-button v-if="row.archiveFlag === 0" text>归档</bk-button>
                         </bk-popconfirm>
                         <bk-button class="ml10" text @click="handleEdit(row)">编辑</bk-button>
-                        <bk-button v-if="row.archiveFlag === 0" text @click="handleGoPageList(row)">进入页面</bk-button>
+                        <bk-button v-if="row.archiveFlag === 0" text @click="handleGoPageList(row)">进入页面管理</bk-button>
                     </template>
                 </bk-table-column>
                 <bk-exception slot="empty" class="component-list-empty" type="empty">

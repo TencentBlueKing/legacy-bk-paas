@@ -155,9 +155,7 @@ export default {
         //     type: 'v-bind',
         //     prop: 'data',
         //     format: 'variable',
-        //     formatInclude: ['variable'],
-        //     code: '',
-        //     renderValue: ''
+        //     valueTypeInclude: ['array']
         // }
     ],
     props: {

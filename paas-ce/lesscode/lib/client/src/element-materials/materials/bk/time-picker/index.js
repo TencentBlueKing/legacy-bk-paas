@@ -38,7 +38,9 @@ export default {
         'opacity'
     ],
     renderStyles: {
-        display: 'inline-block'
+        display: 'inline-block',
+        width: '300px',
+        verticalAlign: 'middle'
     },
     directives: [
         {

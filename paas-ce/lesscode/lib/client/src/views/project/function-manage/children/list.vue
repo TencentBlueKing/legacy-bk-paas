@@ -37,7 +37,9 @@
                         <span>{{ props.row.funcCode || '--' }}</span>
                     </template>
                 </bk-table-column>
-                <bk-table-column label="所属分类" prop="funcGroupName" show-overflow-tooltip></bk-table-column>
+                <bk-table-column label="所属分类" show-overflow-tooltip>
+                    {{ groupName }}
+                </bk-table-column>
                 <bk-table-column label="简介" prop="funcSummary" show-overflow-tooltip>
                     <template slot-scope="props">
                         <span>{{ props.row.funcSummary || '--' }}</span>
@@ -204,7 +206,6 @@
                 this.funcObj.title = '新增函数'
                 this.funcObj.form = {
                     funcGroupId: this.groupId,
-                    funcGroupName: this.groupName,
                     projectId: this.projectId
                 }
             },
@@ -340,7 +341,6 @@
                     const functionList = funcList.map((fun) => ({
                         ...fun,
                         funcGroupId: this.groupId,
-                        funcGroupName: this.groupName,
                         versionId: this.versionId,
                         projectId: this.projectId
                     }))

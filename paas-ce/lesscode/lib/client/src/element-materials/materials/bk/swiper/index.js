@@ -46,9 +46,8 @@ export default {
         // {
         //     type: 'v-bind',
         //     prop: 'pics',
-        //     propTypes: ['array'],
-        //     val: '',
-        //     valType: 'variable'
+        //     format: 'variable',
+        //     valueTypeInclude: ['array']
         // }
     ],
     props: {

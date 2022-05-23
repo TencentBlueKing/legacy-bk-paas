@@ -98,7 +98,6 @@
         
         methods: {
             handleQuickOperation (event) {
-                console.log(event, this.isFocused)
                 if (!this.isFocused) {
                     return
                 }

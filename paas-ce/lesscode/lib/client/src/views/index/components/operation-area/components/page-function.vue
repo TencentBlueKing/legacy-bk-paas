@@ -26,12 +26,13 @@
                     </template>
                     <template v-else-if="!loadingState.includes(field)">
                         <div class="field-form">
-                            <bkSelectFunc
-                                :class="`form-component ${field.type}`"
-                                v-model.trim="editField.value"
+                            <choose-function
                                 v-bind="field.props"
-                                :ref="`component-${field.id}`">
-                            </bkSelectFunc>
+                                :ref="`component-${field.id}`"
+                                :class="`form-component ${field.type}`"
+                                :choosen-function="editField.value"
+                                @change="(val) => chooseFunction(editField, val)"
+                            />
                             <div class="buttons">
                                 <bk-button text size="small" theme="primary"
                                     :disabled="disabled"
@@ -49,7 +50,7 @@
 
 <script>
     import { mapGetters } from 'vuex'
-    import bkSelectFunc from '@/components/methods/select-func'
+    import ChooseFunction from '@/components/methods/choose-function/index.vue'
     import LC from '@/element-materials/core'
 
     const lifeCycleDescMap = {
@@ -66,7 +67,7 @@
 
     export default {
         components: {
-            bkSelectFunc
+            ChooseFunction
         },
         props: {
             project: {
@@ -223,13 +224,17 @@
                 return curFunc.funcName ? `${curFunc.funcName}(${params.join(', ')})` : ''
             },
             getFieldValue (field) {
-                if (field.id in this.page.lifeCycle) {
-                    return this.page.lifeCycle[field.id]
+                const defaultSetting = {
+                    methodCode: '',
+                    params: []
                 }
-                return this.page[field.id]
+                return this.page?.lifeCycle?.[field.id] || defaultSetting
             },
             unsetEditField () {
                 this.editField.field = this.$options.data.editField
+            },
+            chooseFunction (editField, val) {
+                editField.value = val
             }
         }
     }

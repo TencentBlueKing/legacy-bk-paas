@@ -105,9 +105,9 @@
 <style lang="postcss" module>
     .block{
         position: relative;
-        outline: 1px dashed #ccc;
+        border: 1px dashed #ccc;
         &.empty{
-            height: 34px !important;
+            min-height: 34px !important;
             background: #FAFBFD;
             &::before{
                 content: "请拖入组件";

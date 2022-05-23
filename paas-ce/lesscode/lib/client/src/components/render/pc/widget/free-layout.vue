@@ -81,8 +81,7 @@
             doDrag (childNode) {
                 if (!this.dragLine) {
                     this.dragLine = new DragLine({
-                        container: this.$el,
-                        offset: this.layoutOffset
+                        container: this.$el
                     })
                 }
                 const dragEle = this.$refs[childNode.componentId][0].$el

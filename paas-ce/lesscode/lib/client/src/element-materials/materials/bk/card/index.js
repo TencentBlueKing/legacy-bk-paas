@@ -29,7 +29,8 @@ export default {
     ],
     renderStyles: {
         width: '320px',
-        display: 'inline-block'
+        display: 'inline-block',
+        verticalAlign: 'middle'
     },
     props: {
         title: {
@@ -72,31 +73,27 @@ export default {
     slots: {
         header: {
             name: ['layout'],
-            type: ['free-layout'],
+            type: ['render-block'],
             renderStyles: {
                 'height': '50px'
             },
             children: [
                 {
                     name: ['text'],
-                    type: ['span'],
-                    renderStyles: {
-                        top: '0px',
-                        left: '0px'
-                    }
+                    type: ['span']
                 }
             ]
         },
         default: {
             name: ['layout'],
-            type: ['free-layout'],
+            type: ['render-block'],
             renderStyles: {
                 'height': '200px'
             }
         },
         footer: {
             name: ['layout'],
-            type: ['free-layout'],
+            type: ['render-block'],
             renderStyles: {
                 'height': '50px'
             }

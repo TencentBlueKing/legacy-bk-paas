@@ -24,6 +24,38 @@ const parseFuncBodyMethod = str => {
     return res
 }
 
+const checkValueConfig = rootNode => {
+    const errorStack = []
+    const formatMap = {
+        'variable': '变量',
+        'expression': '表达式'
+    }
+    const recTree = node => {
+        if (!node) {
+            return
+        }
+    
+        Object.keys(node.renderProps).forEach(propKey => {
+            const prop = node.renderProps[propKey]
+            if (formatMap[prop.format] && prop.code === '') {
+                errorStack.push(`组件【${node.componentId}】的属性 ${propKey} 配置为【${formatMap[prop.format]}】但没有设置具体值`)
+            }
+        })
+        Object.keys(node.renderSlots).forEach(slotKey => {
+            const slot = node.renderSlots[slotKey]
+            if (!LC.isNode(slot)) {
+                if (['variable', 'expression'].includes(slot.format)
+                && slot.code === '') {
+                    errorStack.push(`组件【${node.componentId}】的 slot ${slotKey} 配置为【${formatMap[slot.format]}】但没有设置具体值`)
+                }
+            }
+        })
+        node.children.forEach(childNode => recTree(childNode))
+    }
+    recTree(rootNode)
+    return errorStack
+}
+
 export default () => {
     const store = useStore()
     const route = useRoute()
@@ -38,6 +70,17 @@ export default () => {
     const currentInstance = getCurrentInstance()
 
     const submit = () => {
+        const valueConfigError = checkValueConfig(LC.getRoot())
+        if (valueConfigError.length > 0) {
+            const h = currentInstance.proxy.$createElement
+            currentInstance.proxy.$bkMessage({
+                theme: 'error',
+                offsetY: 80,
+                ellipsisLine: 0,
+                message: h('div', {}, valueConfigError.map(errorText => h('div', errorText)))
+            })
+            return Promise.reject(new Error('数据不完整'))
+        }
         const relatedCustomComponentMap = {}
         const relatedVariableCodeMap = {}
         const relatedMethodCodeMap = {}

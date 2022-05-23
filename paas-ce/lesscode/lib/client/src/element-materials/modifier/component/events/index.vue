@@ -38,6 +38,8 @@
 </template>
 
 <script>
+    import _ from 'lodash'
+    import jsonSafeStringify from '@/common/json-safe-stringify'
     import LC from '@/element-materials/core'
     import PlusEvent from './children/plus-event.vue'
     import RenderEvent from './children/render-event.vue'
@@ -64,7 +66,31 @@
                 renderEvents
             } = this.currentComponentNode
             this.configEvents = Object.freeze(material.events || [])
-            this.renderEvents = Object.assign({}, renderEvents)
+            // 兼容老数据展示
+            Object.keys(renderEvents || {}).forEach((key) => {
+                const renderEvent = renderEvents[key]
+                if (typeof renderEvent === 'string') {
+                    this.renderEvents[key] = {
+                        methodCode: renderEvent,
+                        params: []
+                    }
+                } else {
+                    this.renderEvents[key] = renderEvent
+                }
+            })
+            // this.renderEvents = Object.assign({}, renderEvents)
+
+            const updateCallback = _.debounce(() => {
+                if (jsonSafeStringify(this.renderEvents) === jsonSafeStringify(this.currentComponentNode.renderEvents)) {
+                    return
+                }
+                this.renderEvents = _.cloneDeep(this.currentComponentNode.renderEvents)
+            }, 100)
+
+            LC.addEventListener('mergeRenderEvents', updateCallback)
+            this.$once('hook:beforeDestroy', () => {
+                LC.removeEventListener('mergeRenderEvents', updateCallback)
+            })
         },
 
         methods: {
