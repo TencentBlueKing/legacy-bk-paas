@@ -39,6 +39,7 @@
             </bk-radio-group>
             <div class="prop-action">
                 <template v-for="(renderCom, index) in renderComponentList">
+                    <!-- 控件类型或者值的类型匹配都将展示，如：控制类型为 src 值的类型为 string(支持src输入加选择模式之前) 都需展示 -->
                     <template v-if="selectValueType === renderCom.type || selectValueType === renderCom.valueType">
                         <component
                             :is="renderCom.component"
@@ -91,6 +92,7 @@
     import TypleElProps from './strategy/el-props'
     import TypeDataSource from './strategy/data-source.vue'
     import TypeTableDataSource from './strategy/table-data-source.vue'
+    import TypeSrc from './strategy/src.vue'
 
     const getRealValue = (type, target) => {
         if (type === 'object') {
@@ -115,7 +117,8 @@
                     'array': '数组',
                     'remote': '远程函数',
                     'data-source': '数据源',
-                    'table-data-source': '数据源'
+                    'table-data-source': '数据源',
+                    'srcset': '图片列表'
                 }
                 return textMap[valueType] || toPascal(valueType)
             }
@@ -174,7 +177,9 @@
                     'function': TypeFunction,
                     'el-props': TypleElProps,
                     'data-source': TypeDataSource,
-                    'table-data-source': TypeTableDataSource
+                    'table-data-source': TypeTableDataSource,
+                    'src': TypeSrc,
+                    'srcset': TypeSlotWrapper
                 }
 
                 const typeMap = {
@@ -213,8 +218,12 @@
                     'el-checkbox': 'el-checkbox',
                     'el-props': 'el-props',
                     'data-source': 'data-source',
-                    'table-data-source': 'table-data-source'
+                    'table-data-source': 'table-data-source',
+                    'src': 'src',
+                    'srcset': 'srcset'
                 }
+
+                // 属性“值”的类型映射
                 const valueMap = {
                     'text': 'string',
                     'paragraph': 'string',
@@ -223,6 +232,8 @@
                     'icon': 'string',
                     'van-icon': 'string',
                     'float': 'number',
+                    'src': 'string',
+                    'srcset': 'array',
                     'object': 'hidden'
                 }
 
@@ -253,7 +264,7 @@
                     return this.name
                 }
                 const [editCom] = this.renderComponentList
-                return `${this.name}(${toPascal(editCom.type)})`
+                return `${this.name}(${toPascal(editCom.valueType)})`
             },
             /**
              * @desc 不支持的变量切换类型(variable、expression)
@@ -306,7 +317,7 @@
                                 code: lastValue.code,
                                 valueType: lastValueType
                             })
-                
+
                             this.propTypeValueMemo[this.formData.valueType] = {
                                 val: lastValue.code,
                                 payload: lastValue.payload || {}
@@ -324,7 +335,7 @@
                 type,
                 val
             } = this.describe
-            
+
             const defaultValue = val !== undefined ? val : getDefaultValueByType(type)
             const valueTypeInclude = Array.isArray(type) ? type : [type]
 
@@ -346,7 +357,7 @@
                 renderValue: defaultValue,
                 payload: this.lastValue.payload || {}
             })
-            
+
             // 编辑状态缓存
             this.propTypeValueMemo = {
                 [this.formData.valueType]: {
@@ -413,7 +424,7 @@
                     // 切换值类型时，通过类型获取默认值
                     code = getDefaultValueByType(valueType)
                 }
-                
+
                 this.formData = Object.freeze({
                     ...this.formData,
                     code,
@@ -421,7 +432,7 @@
                     valueType,
                     renderValue: code
                 })
-                
+
                 this.triggerChange()
             },
             /**
@@ -449,7 +460,7 @@
                         code = val
                         renderValue = val
                     }
-                    
+
                     this.formData = Object.freeze({
                         ...this.formData,
                         code,

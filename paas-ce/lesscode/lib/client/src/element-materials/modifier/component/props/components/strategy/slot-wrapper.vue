@@ -11,7 +11,7 @@
 
 <template>
     <div>
-        <div class="radio-title">{{type}}可选项配置：</div>
+        <div class="radio-title">{{type | valueTypeTextFormat}}可选项配置：</div>
         <div class="slot-card-wrapper">
             <vue-draggable
                 class="group-list"
@@ -33,6 +33,7 @@
                                 <bk-radio v-else-if="option.type === 'radio'" :checked="item[option.key]" @change="val => handleCheckChange(val, option.key, index)" />
                                 <bk-checkbox v-else-if="option.type === 'checkbox'" :checked="item[option.key]" @change="val => handleChange(val, option.key, index)" />
                                 <icon v-else-if="option.type === 'icon'" :default-value="item[option.key]" :include-number="true" :change="val => handleChange(val, option.key, index)"></icon>
+                                <src-input v-else-if="option.type === 'src-input'" :value="item[option.key]" @change="val => handleChange(val, option.key, index)" />
                             </div>
                         </section>
                     </div>
@@ -45,6 +46,8 @@
 </template>
 <script>
     import Icon from '@/components/modifier/icon-select'
+    import SrcInput from '@/components/src-input/index.vue'
+
     const configMap = {
         'radio': {
             template: [
@@ -253,12 +256,38 @@
                 'name': `carousel-${index}`,
                 content: `<h3>carousel-${index}</h3>`
             })
+        },
+        'srcset': {
+            template: [
+                {
+                    name: 'url',
+                    key: 'url',
+                    type: 'src-input'
+                }, {
+                    name: 'link',
+                    key: 'link',
+                    type: 'input'
+                }
+            ],
+            generateFunc: index => ({
+                url: '',
+                link: ''
+            })
         }
     }
     export default {
         name: '',
         components: {
-            Icon
+            Icon,
+            SrcInput
+        },
+        filters: {
+            valueTypeTextFormat (type) {
+                const textMap = {
+                    'srcset': '图片列表'
+                }
+                return textMap[type] || type
+            }
         },
         props: {
             name: {

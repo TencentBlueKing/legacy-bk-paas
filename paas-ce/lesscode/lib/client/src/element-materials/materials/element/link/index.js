@@ -48,7 +48,7 @@ export default {
             tips: '是否禁用状态'
         },
         href: {
-            type: 'string',
+            type: 'src',
             val: '',
             'v-bind': '',
             tips: '原生 href 属性'

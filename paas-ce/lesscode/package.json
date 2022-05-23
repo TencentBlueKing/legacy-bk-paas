@@ -13,7 +13,8 @@
     "dev": "better-npm-run dev",
     "stop": "cross-env FOREVER_ROOT=./ forever stop lesscode",
     "list": "cross-env FOREVER_ROOT=./ forever list",
-    "logs": "cross-env FOREVER_ROOT=./ forever logs"
+    "logs": "cross-env FOREVER_ROOT=./ forever logs",
+    "dbm:create": "npx db-migrate --config lib/server/conf/db-migrate.json -m lib/server/model/migrations -e dev create update-sql --sql-file"
   },
   "betterScripts": {
     "dll": {
@@ -145,6 +146,7 @@
     "eslint-webpack-plugin": "^2.5.4",
     "eventsource-polyfill": "~0.9.6",
     "file-loader": "~4.2.0",
+    "file-type": "^16.5.3",
     "forever": "~2.0.0",
     "friendly-errors-webpack-plugin": "~1.7.0",
     "fs-extra": "~8.1.0",
@@ -185,7 +187,7 @@
     "mini-css-extract-plugin": "~0.8.0",
     "monaco-editor": "~0.20.0",
     "monaco-editor-webpack-plugin": "~1.9.0",
-    "mysql2": "~1.7.0",
+    "mysql2": "~2.3.3",
     "node-request-context": "~1.0.5",
     "node-sql-parser": "^3.8.2",
     "node-xlsx": "^0.17.1",

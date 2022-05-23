@@ -37,7 +37,7 @@ export default {
     // },
     props: {
         'src': {
-            type: 'string',
+            type: 'src',
             val: exmapleFirstImgUrl,
             tips: '图片地址'
         }
