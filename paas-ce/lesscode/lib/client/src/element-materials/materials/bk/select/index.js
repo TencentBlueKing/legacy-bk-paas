@@ -49,6 +49,11 @@ export default {
         'pointer',
         'opacity'
     ],
+    renderStyles: {
+        display: 'inline-block',
+        width: '300px',
+        verticalAlign: 'middle'
+    },
     directives: [
         {
             type: 'v-model',
@@ -134,7 +139,7 @@ export default {
     slots: {
         default: {
             name: ['bk-option'],
-            type: ['list', 'remote', 'data-source'],
+            type: ['list', 'remote', 'select-data-source'],
             displayName: '可选项配置',
             tips: '默认插槽，填写的数据需要是数组且每个元素需包含id和name字段',
             remoteValidate (data) {

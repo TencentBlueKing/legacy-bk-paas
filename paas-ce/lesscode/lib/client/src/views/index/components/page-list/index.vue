@@ -8,7 +8,7 @@
             <span class="seperate-line">|</span>
             <span
                 class="bk-drag-icon template-logo"
-                title="返回项目列表"
+                title="返回应用列表"
                 @click="handleBackProjectList">
                 <svg
                     aria-hidden="true"
@@ -38,17 +38,31 @@
                         </div>
                         <i class="bk-select-angle bk-icon icon-angle-down" />
                     </div>
-                    <bk-option
-                        v-for="option in pageList"
-                        :key="option.id"
-                        :id="option.id"
-                        :name="option.pageName">
-                        <span>{{option.pageName}}</span>
-                        <i class="bk-drag-icon bk-drag-copy"
-                            style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%)"
-                            @click.stop="handleNewPage('copy')"
-                            title="复制页面"></i>
-                    </bk-option>
+                    <bk-option-group
+                        v-for="group in classPageList"
+                        :key="group.id"
+                        :name="group.name">
+                        <template slot="group-name">
+                            <i
+                                :class="['bk-drag-icon', group.collapse ? 'bk-drag-angle-down-fill' : 'bk-drag-angle-up-fill']"
+                                @click="group.collapse = !group.collapse"></i>
+                            <i :class="['bk-drag-icon', group.icon]"></i>
+                            <span>{{group.name}}</span>
+                        </template>
+                        <bk-option
+                            v-show="!group.collapse"
+                            v-for="option in group.children"
+                            :key="option.id"
+                            :id="option.id"
+                            :name="option.pageName">
+                            <span>{{option.pageName}}</span>
+                            <i class="bk-drag-icon bk-drag-copy"
+                                style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%)"
+                                @click.stop="handleNewPage('copy')"
+                                title="复制页面"></i>
+                        </bk-option>
+                        
+                    </bk-option-group>
                     <div slot="extension" class="extension">
                         <div
                             class="page-row"
@@ -86,7 +100,23 @@
         },
         data () {
             return {
-                newPageAction: ''
+                newPageAction: '',
+                classPageList: [
+                    {
+                        id: 'PC',
+                        name: 'PC 页面',
+                        collapse: false,
+                        icon: 'bk-drag-pc',
+                        children: []
+                    },
+                    {
+                        id: 'MOBILE',
+                        name: 'Mobile 页面',
+                        collapse: false,
+                        icon: 'bk-drag-mobilephone',
+                        children: []
+                    }
+                ]
             }
         },
         computed: {
@@ -101,13 +131,27 @@
             ]),
             ...mapGetters('projectVersion', { versionId: 'currentVersionId', versionName: 'currentVersionName', getInitialVersion: 'initialVersion' })
         },
+        watch: {
+            pageList (val) {
+                val.length && this.initClassPageList()
+            }
+        },
         created () {
             this.projectId = parseInt(this.$route.params.projectId)
             this.pageId = parseInt(this.$route.params.pageId)
         },
         methods: {
+            initClassPageList () {
+                this.pageList.forEach(page => {
+                    if (page.pageType === 'MOBILE') {
+                        this.classPageList[1].children.push(page)
+                        return
+                    }
+                    this.classPageList[0].children.push(page)
+                })
+            },
             /**
-             * @desc 返回项目页面列表
+             * @desc 返回应用页面列表
              */
             handleBackPageList () {
                 this.$router.push({
@@ -119,7 +163,7 @@
                 })
             },
             /**
-             * @desc 返回用户项目列表
+             * @desc 返回用户应用列表
              */
             handleBackProjectList () {
                 this.$router.push({
@@ -186,9 +230,7 @@
 <style lang="postcss" scoped>
     .page-select {
         display: flex;
-        min-width: 450px;
         align-items: center;
-        margin-right: 18px;
         .page-name {
             display: flex;
             align-items: center;

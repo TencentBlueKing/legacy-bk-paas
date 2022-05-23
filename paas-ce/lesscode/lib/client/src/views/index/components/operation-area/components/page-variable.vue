@@ -7,7 +7,7 @@
                     新建变量
                 </bk-button>
             </h3>
-            <span>项目级变量的修改，请跳转至
+            <span>应用级变量的修改，请跳转至
                 <a :href="`/project/${projectId}/variable-manage`" target="_blank" class="variable-header-link">
                     变量管理
                     <i class="bk-drag-icon bk-drag-jump-link"></i>
@@ -36,6 +36,9 @@
 
         computed: {
             ...mapGetters('page', ['pageDetail']),
+            ...mapGetters('projectVersion', {
+                versionId: 'currentVersionId'
+            }),
 
             projectId () {
                 return this.$route.params.projectId
@@ -54,7 +57,8 @@
                 const params = {
                     projectId: this.projectId,
                     pageCode: this.pageDetail.pageCode,
-                    effectiveRange: 0
+                    effectiveRange: 0,
+                    versionId: this.versionId
                 }
                 this.getAllVariable(params).catch((err) => {
                     this.$bkMessage({ theme: 'error', message: err.message || err })

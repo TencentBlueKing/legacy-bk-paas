@@ -107,5 +107,15 @@ module.exports = {
         const roleUser = await roleUserRepository.findOne({ where: { id } })
         roleUser.deleteFlag = 1
         await roleUserRepository.save(roleUser)
+    },
+
+    // 批量删除成员
+    async deleteMultipleMember (ids) {
+        const roleUserRepository = getRepository(UserProjectRole)
+        const roleUser = await roleUserRepository.find({ id: In(ids) })
+        roleUser.forEach(roleUserItem => {
+            roleUserItem.deleteFlag = 1
+        })
+        await roleUserRepository.save(roleUser)
     }
 }

@@ -1,4 +1,4 @@
-import isNode from '../is-node'
+import isNode from '../static/is-node'
 
 /**
  * @desc 删除指定节点的子节点

@@ -20,6 +20,12 @@ export default {
     getters: {
     },
     actions: {
+        checkConfig ({ state }) {
+            return http.get('/release/checkConfig').then(response => {
+                const data = response.data
+                return data
+            })
+        },
         applicationList ({ state }) {
             return http.get('/release/applicationList').then(response => {
                 const data = response.data || []
@@ -51,6 +57,12 @@ export default {
         },
         getList ({ state }, { projectId }) {
             return http.get(`/release/getList?projectId=${projectId}`).then(response => {
+                const data = response.data || []
+                return data
+            })
+        },
+        getProjectVersionOptionList ({ state }, { projectId }) {
+            return http.get(`/release/getProjectVersionOptionList?projectId=${projectId}`).then(response => {
                 const data = response.data || []
                 return data
             })

@@ -38,7 +38,6 @@
     </div>
 </template>
 <script>
-    import _ from 'lodash'
     import LC from '@/element-materials/core'
     import Draggable from '../components/draggable'
     import ResolveComponent from '../resolve-component'
@@ -66,60 +65,46 @@
             const nodeCallback = (event) => {
                 if (event.target.componentId === this.componentData.componentId) {
                     this.$forceUpdate()
-                    // 需要同时触发父级 grid 更新
-                    this.autoType()
+                    setTimeout(() => {
+                        this.autoType(event.child)
+                    }, 20)
                 }
             }
 
             LC.addEventListener('appendChild', nodeCallback)
-            LC.addEventListener('removeChild', nodeCallback)
+            LC.addEventListener('moveChild', nodeCallback)
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('appendChild', nodeCallback)
-                LC.removeEventListener('removeChild', nodeCallback)
+                LC.removeEventListener('moveChild', nodeCallback)
             })
         },
         methods: {
             /**
              * @desc 自动排版子组件
              */
-            autoType: _.throttle(function () {
-                setTimeout(() => {
-                    if (!this.$refs.component) {
-                        return
-                    }
-                    const {
-                        width: boxWidth,
-                        left: boxLeft
-                    } = this.$refs.draggable.$el.getBoundingClientRect()
-                    const sepMarginLeft = 5
-                    
-                    // 计算 marginRight
-                    this.$refs.component.forEach(componentInstance => {
-                        const $el = componentInstance.$el
-                        const {
-                            left: componentLeft,
-                            width: componentWidth
-                        } = $el.getBoundingClientRect()
-                        const {
-                            marginLeft,
-                            marginBottom
-                        } = componentInstance.componentData.style
-                        if (componentInstance.componentData.layoutType
-                            || marginBottom === 'unset') {
-                            componentInstance.componentData.setStyle('marginBottom', this.defaultMargin)
-                            return
-                        }
-                        if (!marginLeft || marginLeft === 'unset') {
-                            if (componentLeft + componentWidth + sepMarginLeft < boxLeft + boxWidth) {
-                                componentInstance.componentData.setStyle('marginRight', this.defaultMargin)
-                            }
-                        }
-                        if (!marginBottom || marginBottom === 'unset') {
-                            componentInstance.componentData.setStyle('marginBottom', this.defaultMargin)
-                        }
-                    })
-                })
-            }, 20)
+            autoType (childNode) {
+                if (this._isDestroyed) {
+                    return
+                }
+                const {
+                    top: boxTop,
+                    left: boxLeft
+                } = this.$refs.draggable.$el.getBoundingClientRect()
+
+                const $childEl = childNode.$elm
+
+                const {
+                    top: componentTop,
+                    left: componentLeft
+                } = $childEl.getBoundingClientRect()
+                
+                if (componentTop > boxTop) {
+                    childNode.setStyle('marginTop', '10px')
+                }
+                if (componentLeft > boxLeft) {
+                    childNode.setStyle('marginLeft', '10px')
+                }
+            }
         }
     }
 </script>
@@ -129,7 +114,7 @@
         width: 100% !important;
         height: 100% !important;
         &.render-grid-empty{
-            min-height: 64px !important;
+            min-height: 34px !important;
         }
         &.empty{
             background: #FAFBFD;
@@ -147,32 +132,6 @@
                 color: #C4C6CC;
                 pointer-events: all;
             }
-        }
-        .insert-before,
-        .insert-after{
-            position: absolute;
-            top: 50%;
-            z-index: 11;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #3A84FF;
-            cursor: pointer;
-            pointer-events: all;
-            transform: translateY(-50%);
-            :global(img){
-                width: 14px;
-                height: 14px;
-            }
-        }
-        .insert-before{
-            left: -10px;
-        }
-        .insert-after{
-            right: -10px;
         }
     }
 </style>

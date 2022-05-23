@@ -15,6 +15,7 @@ const {
     listByCategory,
     create,
     update,
+    getProjectFuncAndVar,
     apply,
     importTemplate,
     detail,
@@ -29,6 +30,7 @@ const router = new Router({
 
 router.get('/list', list)
 router.get('/listByCategory', listByCategory)
+router.get('/getProjectFuncAndVar', getProjectFuncAndVar)
 router.post('/create', create)
 router.post('/update', update)
 router.post('/apply', apply)

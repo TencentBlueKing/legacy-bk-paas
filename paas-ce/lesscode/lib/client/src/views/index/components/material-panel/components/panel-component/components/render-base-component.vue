@@ -90,7 +90,7 @@
                 }, {})
 
                 this.componentList.forEach(component => {
-                    if (component.display === 'none') {
+                    if (component.display === 'none' || !component.group) {
                         return
                     }
                     searchList.push(component)

@@ -23,11 +23,22 @@ export default {
             tips: '当前步骤变化时调用该事件函数，事件回调参数 (curProcess: Number, data: Object)'
         }
     ],
-    styles: ['position', 'size', 'margin', 'pointer', 'opacity'],
+    styles: [
+        'position',
+        {
+            name: 'size',
+            exclude: ['height', 'maxHeight', 'minHeight']
+        },
+        'margin',
+        'pointer',
+        'opacity'
+    ],
     directives: [
         // {
         //     type: 'v-bind',
         //     prop: 'list',
+        //     format: 'variable',
+        //     valueTypeInclude: ['array']
         // }
     ],
     props: {

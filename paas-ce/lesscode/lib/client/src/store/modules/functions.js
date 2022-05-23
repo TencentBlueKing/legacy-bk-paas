@@ -8,102 +8,93 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-import { messageHtmlError } from '../../common/bkmagic'
 import http from '@/api'
 const perfix = '/function'
 
 export default {
     namespaced: true,
     state: {
+        // 画布区域使用的函数数据，在画布初始化和画布函数更新的是会更新这个值
         funcGroups: []
     },
     mutations: {
+        setFunctionData (state, funcGroups) {
+            state.funcGroups = funcGroups || []
+        }
     },
     getters: {
-        funcGroups: state => state.funcGroups
+        // 分组数据（包含函数数据），只在画布区域有值，方便画布传递数据使用
+        funcGroups (state) {
+            return state.funcGroups
+        },
+        // 函数列表，只在画布区域有值，方便画布传递数据使用
+        functionList (state) {
+            return state.funcGroups.map(group => group.children).flat()
+        }
     },
     actions: {
-        getAllGroupFuncs ({ state }, params, isCommit = true) {
-            return http.get(`${perfix}/getAllGroupFunc`, { params }).then((res = {}) => {
-                isCommit && (state.funcGroups = res.data || [])
+        getAllGroupAndFunction (_, params) {
+            return http.get(`${perfix}/getAllGroupAndFunction`, { params }).then((res = {}) => {
                 return res.data || []
             })
         },
 
-        bulkAddFunc ({ state }, { groupId, funcList, varWhere }) {
-            return http.post(`${perfix}/bulkAddFunction`, { funcList, varWhere }).then((res = {}) => {
-                if (res.code === 499) {
-                    messageHtmlError(res.message)
-                    return
-                }
-                const newFuncs = res.data || []
-                const curGroup = state.funcGroups.find((group) => (group.id === groupId)) || {}
-                curGroup.functionList.unshift(...newFuncs)
-                return newFuncs
+        getGroupList (_, params) {
+            return http.get(`${perfix}/getGroupList`, { params }).then((res = {}) => {
+                return res.data || []
             })
         },
 
-        addFunc ({ state }, { groupId, func, varWhere }) {
-            return http.post(`${perfix}/addFunction`, { func, varWhere }).then((res = {}) => {
-                if (res.code === 499) {
-                    messageHtmlError(res.message)
-                    return
-                }
-                const newFunc = res.data || {}
-                const curGroup = state.funcGroups.find((group) => (group.id === groupId)) || {}
-                curGroup.functionList.unshift(newFunc)
-                return newFunc
+        getFunctionList (_, params) {
+            return http.get(`${perfix}/getFunctionList`, { params }).then((res = {}) => {
+                return res.data || []
             })
         },
 
-        deleteFunc ({ state }, { groupId, funcId, projectId, funcName }) {
-            return http.delete(`${perfix}/deleteFunction`, { params: { id: funcId, projectId, funcName } }).then(() => {
-                const groups = state.funcGroups
-                const curGroup = groups.find(x => x.id === groupId)
-                const funcIndex = curGroup.functionList.findIndex((func) => (func.id === funcId))
-                curGroup.functionList.splice(funcIndex, 1)
+        bulkCreateFunction (_, params) {
+            return http.post(`${perfix}/bulkCreateFunction`, params).then((res = {}) => {
+                return res.data || []
             })
         },
 
-        editFunc ({ state }, { func, varWhere }) {
-            return http.put(`${perfix}/editFunction`, { func, varWhere }).then((res) => {
-                if (res.code === 499) {
-                    messageHtmlError(res.message)
-                    return
-                }
-                const data = res.data || []
-                const newFunc = data[0] || {}
-                return newFunc
+        createFunction (_, func) {
+            return http.post(`${perfix}/createFunction`, func, { globalError: false }).then((res = {}) => {
+                return res.data || {}
             })
         },
 
-        addGroup ({ state }, data) {
-            return http.post(`${perfix}/addFuncGroup`, data).then((res = {}) => {
-                const newGroup = res.data || {}
-                state.funcGroups.push(...newGroup)
+        deleteFunction (_, id) {
+            return http.delete(`${perfix}/deleteFunction`, { params: { id } }).then((res) => {
+                return res.data
             })
         },
 
-        deleteGroup ({ state }, params) {
-            return http.delete(`${perfix}/deleteFuncGroup`, { params }).then(() => {
-                const index = state.funcGroups.findIndex((group) => (group.id === params.id))
-                state.funcGroups.splice(index, 1)
+        editFunction (_, func) {
+            return http.put(`${perfix}/editFunction`, func, { globalError: false }).then((res) => {
+                return res.data || {}
             })
         },
 
-        editGroups ({ state }, groups) {
-            groups = JSON.parse(JSON.stringify(groups))
-            const copyGroups = state.funcGroups
-            groups.forEach((group) => {
-                const curGroup = copyGroups.find(x => x.id === group.id)
-                Object.assign(curGroup, group)
+        createFunctionGroup (_, data) {
+            return http.post(`${perfix}/createFunctionGroup`, data).then((res = {}) => {
+                return res.data
             })
-            state.funcGroups.sort((pre, next) => (pre.order - next.order))
-            return http.put(`${perfix}/editFuncGroups`, groups)
         },
 
-        fixFunByEslint (_, func) {
-            return http.post(`${perfix}/fixFunByEslint`, func)
+        deleteFunctionGroup (_, params) {
+            return http.delete(`${perfix}/deleteFunctionGroup`, { params }).then((res) => {
+                return res.data
+            })
+        },
+
+        editFunctionGroups (_, groups) {
+            return http.put(`${perfix}/editFunctionGroups`, groups)
+        },
+
+        fixFunByEslint (_, params) {
+            return http.post(`${perfix}/fixFunByEslint`, params, { globalError: false }).then((res) => {
+                return res.data
+            })
         }
     }
 }

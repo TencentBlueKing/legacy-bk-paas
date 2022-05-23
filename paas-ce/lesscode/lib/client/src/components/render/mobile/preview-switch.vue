@@ -1,6 +1,5 @@
 <template>
     <div :class="$style['mobile-preview-switcher']">
-        <span>预览</span>
         <bk-switcher v-model="syncValue" size="small" theme="primary"></bk-switcher>
     </div>
 </template>
@@ -28,14 +27,9 @@
                     LC.triggerEventListener('componentMouserleave', {
                         type: 'componentMouserleave'
                     })
+                    LC.triggerEventListener('mobilePreviewSwitch', val)
                 }
             }
-        },
-        mounted () {
-            document.querySelector('.page-name').appendChild(this.$el)
-        },
-        destroyed () {
-            document.querySelector('.page-name').removeChild(this.$el)
         }
     }
 </script>

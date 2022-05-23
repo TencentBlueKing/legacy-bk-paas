@@ -16,7 +16,7 @@
                 class="tab-item"
                 :class="{ active: tab === 'project' }"
                 @click="handleToggleTab('project')">
-                <span class="tab-item-label">项目模板</span>
+                <span class="tab-item-label">页面模板</span>
             </div>
             <div
                 class="tab-item"
@@ -52,7 +52,7 @@
                                 theme="primary"
                                 size="small"
                                 @click.stop="handleApply(template)">
-                                应用
+                                添加到应用
                             </bk-button>
                         </div>
                     </div>
@@ -60,7 +60,7 @@
                         <span class="item-name">{{ template.templateName }}</span>
                         <span
                             class="preview"
-                            @click="handlePreview(template.id)">
+                            @click="handlePreview(template)">
                             预览
                         </span>
                     </div>
@@ -100,6 +100,9 @@
                 isLoading: false,
                 tab: 'project',
                 type: 'project',
+                dragOptions: {
+                    disabled: false
+                },
                 marketTemplateGroups: PAGE_TEMPLATE_TYPE,
                 projectTemplateList: [],
                 marketTemplateList: [],
@@ -111,7 +114,10 @@
             }
         },
         computed: {
-            ...mapGetters('page', ['platform']),
+            ...mapGetters('page', ['platform', 'pageDetail']),
+            ...mapGetters('projectVersion', {
+                versionId: 'currentVersionId'
+            }),
             renderTemplateList () {
                 return this.type === 'project' ? this.projectTemplateList : this.marketTemplateList
             }
@@ -119,14 +125,14 @@
         created () {
             this.projectId = this.$route.params.projectId
             this.curDragingComponent = null
-            this.fetchData()
+            this.fetchData(true)
             bus.$on('update-template-list', this.fetchData)
         },
         methods: {
             /**
              * @desc 获取模板数据
              */
-            async fetchData () {
+            async fetchData (initData = true) {
                 try {
                     this.isLoading = true
                     const [
@@ -150,7 +156,7 @@
                         type: item.templateName,
                         name: item.templateName,
                         displayName: '',
-                        hasInstall: projectTemplateList.filter(template => template.parentId === item.id).length > 0
+                        hasInstall: projectTemplateList.filter(template => (template.parentId === item.id) || template.id === item.id).length > 0
                     })).filter(item => item.templateType === this.platform || (this.platform === 'PC' && !item.templateType))
 
                     this.projectTemplateGroupList = projectTemplateGroups.map(item => ({
@@ -165,7 +171,24 @@
                     }))
                     this.projectTemplateList = Object.freeze(projectTemplateList)
                     this.marketTemplateList = Object.freeze(marketTemplateList)
-                    this.renderGroupTemplateList = Object.freeze(this.projectTemplateGroupList)
+                    this.renderGroupTemplateList = this.type === 'project' ? Object.freeze(this.projectTemplateGroupList) : Object.freeze(this.marketTemplateGroupList)
+
+                    if (initData !== true) {
+                        console.log('refreshfuncandvar')
+                        const [functionData] = await Promise.all([
+                            this.$store.dispatch('functions/getAllGroupAndFunction', {
+                                projectId: this.projectId,
+                                versionId: this.versionId
+                            }),
+                            this.$store.dispatch('variable/getAllVariable', {
+                                projectId: this.projectId,
+                                pageCode: this.pageDetail.pageCode,
+                                versionId: this.versionId,
+                                effectiveRange: 0
+                            })
+                        ])
+                        this.$store.commit('functions/setFunctionData', functionData)
+                    }
                 } catch (err) {
                     this.$bkMessage({
                         theme: 'error',
@@ -185,7 +208,17 @@
             handleToggleTab (tab) {
                 this.tab = tab
                 this.type = tab
-                this.renderGroupTemplateList = this.type === 'project' ? Object.freeze(this.projectTemplateGroupList) : Object.freeze(this.marketTemplateGroupList)
+                if (this.type === 'project') {
+                    this.renderGroupTemplateList = Object.freeze(this.projectTemplateGroupList)
+                    this.dragOptions = {
+                        disabled: false
+                    }
+                } else {
+                    this.renderGroupTemplateList = Object.freeze(this.marketTemplateGroupList)
+                    this.dragOptions = {
+                        disabled: true
+                    }
+                }
             },
             onChoose (e, list) {
                 const contentStr = list[e.oldIndex] && list[e.oldIndex].content
@@ -207,10 +240,10 @@
             },
             /**
              * @desc 预览模板
-             * @param { Number } templateId
+             * @param { Number } template
              */
-            handlePreview (templateId) {
-                window.open(`/preview-template/project/${this.projectId}/${templateId}`, '_blank')
+            handlePreview (template) {
+                window.open(`/preview-template/project/${template.belongProjectId}/${template.id}`, '_blank')
             },
 
             handleApply (template) {
@@ -327,7 +360,7 @@
                     align-items: center;
                     .apply-btn {
                         display: none;
-                        margin-left: 32px;
+                        margin-left: 23px;
                     }
                 }
             }

@@ -77,6 +77,11 @@ export default {
         'pointer',
         'opacity'
     ],
+    renderStyles: {
+        display: 'inline-block',
+        verticalAlign: 'middle',
+        width: '300px'
+    },
     directives: [
         {
             type: 'v-model',

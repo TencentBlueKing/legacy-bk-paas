@@ -21,13 +21,13 @@
                 </transition-group>
             </vue-draggable>
         </div>
-        <div>
+        <div class="footer">
             <bk-button size="small" text @click="handleAdd">继续添加</bk-button>
         </div>
     </div>
 </template>
 <script>
-    import { generatorMenu } from '../utils'
+    import { generatorMenu } from '../../../../../../shared/util'
     import MenuItem from '../editor/menu'
 
     export default {
@@ -82,9 +82,9 @@
     .project-complex-top-menu-modifier{
         .menu-wraper{
             margin-bottom:  10px;
-            max-height: calc(100% - 76px);
-            overflow-y: auto;
-            @mixin scroller;
+        }
+        .footer {
+            padding-bottom: 20px;
         }
     }
 </style>

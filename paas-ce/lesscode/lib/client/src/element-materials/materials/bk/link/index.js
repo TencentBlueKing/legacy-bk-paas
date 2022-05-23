@@ -39,7 +39,8 @@ export default {
     ],
     renderStyles: {
         display: 'inline-block',
-        textAlign: 'center'
+        textAlign: 'center',
+        verticalAlign: 'middle'
     },
     props: {
         theme: {

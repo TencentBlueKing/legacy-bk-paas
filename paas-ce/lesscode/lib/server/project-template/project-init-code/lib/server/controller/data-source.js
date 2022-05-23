@@ -32,7 +32,7 @@ export default class DataSourceController {
         @QueryParams({ name: 'pageSize' }) pageSize,
         @QueryParams({ name: 'page' }) page
     ) {
-        const queryParams = {
+        const result = await dataService.get({
             tableFileName,
             page,
             pageSize,
@@ -40,10 +40,7 @@ export default class DataSourceController {
                 id: 'DESC'
             },
             query: {}
-        }
-        const result = page && pageSize
-            ? await dataService.getByPage(queryParams)
-            : await dataService.get(tableFileName, {})
+        })
         return result
     }
  

@@ -13,7 +13,9 @@ import { getAll, addVariable, editVariable, deleteVariable, findById } from '../
 import { updateVariableRelation } from '../model/variable-relation'
 import fileService from '../utils/file-service/index'
 import FuncVariable from '../model/entities/func-variable'
-import { checkFuncEslint } from '../util'
+import {
+    checkEslint
+} from '../service/code-formatter.js'
 import { getRepository, In } from 'typeorm'
 import { whereVersionLiteral } from '../model/common'
 
@@ -96,14 +98,7 @@ const variable = {
             const body = ctx.request.body || {}
             const { valueType, defaultValue } = body
             if (valueType === 6) {
-                const func = {
-                    funcBody: (defaultValue || {}).all || ''
-                }
-                const errMessage = await checkFuncEslint(func)
-                if (errMessage) {
-                    // throw new global.BusinessError(errMessage)
-                    ctx.throwBusinessError(errMessage)
-                }
+                await checkEslint((defaultValue || {}).all, { lesscode: true })
             }
             const data = await addVariable(body)
             await updateVariableRelation(data)
@@ -122,13 +117,7 @@ const variable = {
             const body = ctx.request.body || {}
             const { valueType, defaultValue } = body
             if (valueType === 6) {
-                const func = {
-                    funcBody: (defaultValue || {}).all || ''
-                }
-                const errMessage = await checkFuncEslint(func)
-                if (errMessage) {
-                    throw new global.BusinessError(errMessage)
-                }
+                await checkEslint((defaultValue || {}).all, { lesscode: true })
             }
             const data = await editVariable(body)
             await updateVariableRelation(data)

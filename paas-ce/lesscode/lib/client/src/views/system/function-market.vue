@@ -40,7 +40,7 @@
                 <div slot="footer" class="foot-main">
                     <bk-button text class="foot-btn" @click.stop="handleShowSource(card)">查看源码</bk-button>
                     <bk-divider direction="vertical"></bk-divider>
-                    <bk-button text class="foot-btn" @click.stop="handleShowAddFuncFromMarket(card)">添加至项目</bk-button>
+                    <bk-button text class="foot-btn" @click.stop="handleShowAddFuncFromMarket(card)">添加至应用</bk-button>
                     <template v-if="isPlatformAdmin">
                         <bk-divider direction="vertical"></bk-divider>
                         <bk-button text class="foot-btn" @click.stop="handleShowEditFunc(card)">编辑</bk-button>
@@ -55,74 +55,50 @@
             </bk-exception>
         </section>
 
-        <bk-sideslider
+        <edit-market-func-sideslider
             :is-show.sync="showMarketFunc.isShow"
-            :quick-close="true"
-            :width="796"
+            :func-data.sync="showMarketFunc.func"
             :title="showMarketFunc.func.id ? '编辑函数' : '新建函数'"
-            :before-close="confirmClose"
-            @hidden="clearMarketSideData">
-            <func-market slot="content" ref="func" :func-data="showMarketFunc.func" :function-list="cardList"></func-market>
-            <section slot="footer" class="add-footer">
-                <bk-button theme="primary" @click="submitAddMarketFunc" :loading="showMarketFunc.loading">提交</bk-button>
-                <bk-button @click="clearMarketSideData">取消</bk-button>
-            </section>
-        </bk-sideslider>
+            :function-list="cardList"
+            @refresh="getCardList"
+        />
 
-        <bk-sideslider
-            title="添加至项目"
+        <create-func-from-market-sideslider
             :is-show.sync="showAddFuncFromMarket.isShow"
-            :quick-close="true"
-            :width="796"
-            :before-close="confirmClose"
-            @hidden="clearMarketSideData">
-            <add-func slot="content" ref="marketFunc" :func-data="showAddFuncFromMarket.func"></add-func>
-            <section slot="footer" class="add-footer">
-                <bk-button theme="primary" @click="submitAddFuncFromMarket" :loading="showAddFuncFromMarket.loading">提交</bk-button>
-                <bk-button @click="clearMarketSideData">取消</bk-button>
-            </section>
-        </bk-sideslider>
+            :func-data.sync="showAddFuncFromMarket.func"
+        />
 
-        <section v-if="showSource.isShow" class="source-function">
-            <source-func :func-data="showSource.func" class="source-code">
-                <i
-                    class="bk-drag-icon bk-drag-export icon-style"
-                    slot="tools"
-                    @click="exportMarketSingleFunc(showSource.func)"
-                    v-if="isPlatformAdmin"
-                ></i>
-                <i
-                    class="bk-drag-icon bk-drag-close-line icon-style"
-                    slot="tools"
-                    @click="showSource.isShow = false"
-                ></i>
-            </source-func>
-        </section>
+        <show-func-dialog
+            :is-show.sync="showSource.isShow"
+            :func-data="showSource.func"
+            :is-show-export="isPlatformAdmin"
+        />
 
-        <import-functions
+        <import-function-dialog
             :show.sync="importData.show"
             :loading="importData.loading"
             @import="handleImport"
         >
             <bk-button @click="exportDemoFunction">示例</bk-button>
-        </import-functions>
+        </import-function-dialog>
     </article>
 </template>
 
 <script>
     import { mapGetters, mapActions } from 'vuex'
-    import sourceFunc from '@/components/methods/func-form/source-func'
-    import funcMarket from '@/components/methods/func-form/func-market'
-    import addFunc from '@/components/methods/func-form/add-func'
-    import importFunctions from '@/components/methods/import-functions'
-    import functionHelper from '@/components/methods/function-helper'
+    import ShowFuncDialog from '@/components/methods/forms/show-func-dialog.vue'
+    import EditMarketFuncSideslider from '@/components/methods/forms/edit-market-func-sideslider'
+    import CreateFuncFromMarketSideslider from '@/components/methods/forms/create-func-from-market-sideslider'
+    import ImportFunctionDialog from '@/components/methods/import-function-dialog'
+    import { getExportFunction } from 'shared/function'
+    import { downloadFile } from '@/common/util.js'
 
     export default {
         components: {
-            sourceFunc,
-            funcMarket,
-            addFunc,
-            importFunctions
+            ShowFuncDialog,
+            EditMarketFuncSideslider,
+            CreateFuncFromMarketSideslider,
+            ImportFunctionDialog
         },
 
         data () {
@@ -132,17 +108,14 @@
                 isLoading: false,
                 showSource: {
                     isShow: false,
-                    func: {},
-                    title: ''
+                    func: {}
                 },
                 showMarketFunc: {
                     isShow: false,
-                    loading: false,
                     func: {}
                 },
                 showAddFuncFromMarket: {
                     isShow: false,
-                    loading: false,
                     func: {}
                 },
                 importData: {
@@ -165,12 +138,9 @@
 
         methods: {
             ...mapActions('functionMarket', [
-                'getAllFuncFromMarket',
-                'bulkAddFuncs',
-                'addMarketFunc',
-                'updateMarketFunc',
-                'addFuncToProject',
-                'deleteMarketFunc'
+                'getFunctionList',
+                'bulkCreateFunction',
+                'deleteFunction'
             ]),
 
             initData () {
@@ -179,7 +149,7 @@
 
             getCardList () {
                 this.isLoading = true
-                this.getAllFuncFromMarket().then((res) => {
+                this.getFunctionList().then((res) => {
                     this.cardList = res
                 }).catch((err) => {
                     this.messageError(err.message || err)
@@ -188,47 +158,8 @@
                 })
             },
 
-            submitAddMarketFunc () {
-                this.$refs.func.validate().then((postData) => {
-                    this.showMarketFunc.loading = true
-                    const curMethod = this.showMarketFunc.func.id ? this.updateMarketFunc : this.addMarketFunc
-                    curMethod(postData).then((res) => {
-                        if (!res) return
-                        this.getCardList()
-                        this.clearMarketSideData()
-                    }).catch((err) => {
-                        this.messageError(err.message || err)
-                    }).finally(() => {
-                        this.showMarketFunc.loading = false
-                    })
-                }).catch((validator) => {
-                    this.$bkMessage({ message: validator.content || validator, theme: 'error' })
-                })
-            },
-
-            submitAddFuncFromMarket () {
-                this.$refs.marketFunc.validate().then(({ projectId, id, ...rest }) => {
-                    this.showAddFuncFromMarket.loading = true
-                    const postData = {
-                        func: { ...rest },
-                        projectId,
-                        funcMarketId: id
-                    }
-                    this.addFuncToProject(postData).then((res) => {
-                        this.messageSuccess('添加成功')
-                        this.clearMarketSideData()
-                    }).catch((err) => {
-                        this.messageError(err.message || err)
-                    }).finally(() => {
-                        this.showAddFuncFromMarket.loading = false
-                    })
-                }).catch((validator) => {
-                    this.$bkMessage({ message: validator.content || validator, theme: 'error' })
-                })
-            },
-
             handleDeleteFunc (func) {
-                this.deleteMarketFunc(func.id).then(() => {
+                this.deleteFunction(func.id).then(() => {
                     this.messageSuccess('删除成功')
                     this.getCardList()
                 }).catch((err) => {
@@ -246,72 +177,36 @@
                 this.showMarketFunc.func = func
             },
 
-            clearMarketSideData () {
-                this.showMarketFunc = {
-                    isShow: false,
-                    func: {},
-                    loading: false
-                }
-                this.showAddFuncFromMarket = {
-                    isShow: false,
-                    func: {},
-                    loading: false
-                }
-            },
-
             handleShowSource (card) {
                 this.showSource.isShow = true
                 this.showSource.func = card
             },
 
-            confirmClose () {
-                if ((this.$refs.func && this.$refs.func.formChanged) || (this.$refs.marketFunc && this.$refs.marketFunc.formChanged)) {
-                    this.$bkInfo({
-                        title: '请确认是否关闭',
-                        subTitle: '存在未保存的函数，关闭后不会保存更改',
-                        confirmFn: this.clearMarketSideData
-                    })
-                } else {
-                    this.clearMarketSideData()
-                }
-            },
-
-            handleImport (funList) {
+            handleImport (funcList) {
                 try {
-                    const funcList = []
-                    const ignoreFunList = []
-                    if (funList.length <= 0) {
+                    if (funcList.length <= 0) {
                         throw new Error('JSON文件为空，暂无导入数据')
                     }
-                    funList.forEach((item) => {
-                        const isRepeatFunc = [...this.cardList, ...funcList].find((func) => (func.funcName === item.funcName))
-                        if (isRepeatFunc) {
-                            ignoreFunList.push(item)
-                        } else {
-                            funcList.push(item)
-                        }
-                    })
                     this.importData.loading = true
-                    this.bulkAddFuncs(funcList).then((res) => {
-                        if (!res) return
-                        if (ignoreFunList.length) {
-                            this.$bkMessage({ theme: 'primary', message: `【${ignoreFunList.map(x => x.funcName).join(',')}】由于重复名称取消导入`, ellipsisLine: 3 })
-                        }
-                        if (funcList.length) {
-                            this.$bkMessage({ theme: 'success', message: `【${funcList.map(x => x.funcName).join(',')}】导入成功`, ellipsisLine: 3 })
-                        }
+                    this.bulkCreateFunction(funcList).then(() => {
                         this.importData.show = false
                         this.getCardList()
+                    }).catch((err) => {
+                        if (err.code === 499) {
+                            this.messageHtmlError(err.message)
+                        } else {
+                            this.messageError(err.message || err)
+                        }
                     }).finally(() => {
                         this.importData.loading = false
                     })
                 } catch (err) {
-                    this.$bkMessage({ theme: 'error', message: err.message || err })
+                    this.messageError(err.message || err)
                 }
             },
 
             exportDemoFunction () {
-                const demoExportFunc = [{
+                const demoExportFunc = {
                     'funcName': 'getApiData',
                     'funcParams': [],
                     'funcBody': 'const data = res.data || []\r\nreturn data\r\n',
@@ -324,16 +219,12 @@
                     'remoteParams': [
                         'res'
                     ]
-                }]
-                functionHelper.exportFunction(demoExportFunc, 'lesscode-export-demo-market-func.json')
+                }
+                downloadFile(getExportFunction(demoExportFunc), 'lesscode-export-demo-market-func.json')
             },
 
             exportMarketFuncs () {
-                functionHelper.exportFunction(this.cardList, 'lesscode-market-func.json')
-            },
-
-            exportMarketSingleFunc (func) {
-                functionHelper.exportFunction([func], `${func.funcName}.json`)
+                downloadFile(getExportFunction(this.cardList), 'lesscode-market-func.json')
             }
         }
     }
@@ -411,23 +302,6 @@
                 margin: 0 !important;
                 font-size: 20px;
             }
-        }
-    }
-    .source-function {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0,0,0,0.6);
-        z-index: 500;
-        .source-code {
-            position: absolute;
-            background: #fff;
-            width: 80%;
-            height: 74%;
-            top: 13%;
-            left: 10%;
         }
     }
     .add-footer {

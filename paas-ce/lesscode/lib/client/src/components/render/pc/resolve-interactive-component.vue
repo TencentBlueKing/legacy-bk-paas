@@ -41,12 +41,13 @@
                 LC.removeEventListener('update', updateCallback)
                 LC.removeEventListener('toggleInteractive', updateCallback)
             })
-        },
-        mounted () {
+            
+            // 新拖入的交互式组件默认要显示出来
             if (!this.componentData._isMounted) {
-                this.componentData.active()
                 this.componentData.toggleInteractive(true)
-                this.componentData.mounted()
+                this.$once('hook:mounted', () => {
+                    this.componentData.active()
+                })
             }
         }
     }
@@ -54,7 +55,7 @@
 <style lang="postcss" module>
     .interactive {
         position: fixed;
-        z-index: 1000000000000;
+        z-index: 99999999;
         background: rgba(0,0,0,0.5);
         top: 0;
         right: 0;

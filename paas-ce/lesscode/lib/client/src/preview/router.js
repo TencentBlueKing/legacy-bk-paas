@@ -15,7 +15,8 @@ import VueRouter from 'vue-router'
 import Vue from 'vue'
 import Home from './children/home.vue'
 import BkNotFound from './children/404.vue'
-import { bundless } from '@blueking/bundless'
+import BkError from './children/bk-error.vue'
+import { bundless, triggleUpdate } from '@blueking/bundless'
 import bundlessPluginVue2 from '@blueking/bundless-plugin-vue2'
 
 Vue.use(VueRouter)
@@ -29,17 +30,35 @@ function registerComponent (source, id) {
     })
 }
 
+// 监听 storage 变化触发热更新
+window.addEventListener('storage', (event) => {
+    try {
+        if (['ONLINE_PREVIEW_CONTENT', 'ONLINE_PREVIEW_NAV'].includes(event.key)) {
+            const payload = JSON.parse(event.newValue)
+            if (payload) {
+                triggleUpdate(payload)
+            }
+        }
+    } catch (error) {
+        console.error(`热更新失败：${error.message || error}`)
+    }
+})
+
 // 生成路由
 module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId, platform) => {
     const routes = []
-    const curStorageData = localStorage.getItem('ONLINE_PREVIEW') || '{}'
-    const curPageData = JSON.parse(curStorageData)
+    // 当前编辑页面的内容信息
+    const editPageData = JSON.parse(localStorage.getItem('ONLINE_PREVIEW_CONTENT') || '{}')
+    // 当前编辑页面的导航信息
+    const editNavData = JSON.parse(localStorage.getItem('ONLINE_PREVIEW_NAV') || '{}')
 
     for (const key in routeGroup) {
         const layout = routeGroup[key]
 
         // 父路由
-        const parentCom = registerComponent(layout.content, layout.path)
+        const parentPreviewId = projectId + layout.path
+        const parentSource = parentPreviewId === editNavData.id ? editNavData.source : layout.content
+        const parentCom = registerComponent(parentSource, parentPreviewId)
 
         // 子路由
         const routeList = layout.children
@@ -48,23 +67,39 @@ module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId,
                 path: route.path.replace(/^\//, '')
             }
 
-            // 与vue-router保持一致，优先使用redirect
-            if (route.redirectRoute) {
-                routeConifg.name = getRouteName(route)
-                routeConifg.redirect = {
-                    path: getRouteFullPath(route.redirectRoute)
+            try {
+                // 与vue-router保持一致，优先使用redirect
+                if (route.redirectRoute) {
+                    routeConifg.name = getRouteName(route)
+                    routeConifg.redirect = {
+                        path: getRouteFullPath(route.redirectRoute)
+                    }
+                } else if (route.isError) {
+                    // 后端生成页面信息的时候发生错误
+                    routeConifg.component = BkError
+                } else if (route.pageId !== -1) {
+                // 判断是从storage读取数据还是数据库
+                    const pagePreviewId = projectId + route.pageCode
+                    const source = pagePreviewId === editPageData.id ? editPageData.source : route.content
+                    // 生成页面
+                    const childCom = registerComponent(source, pagePreviewId)
+                    routeConifg.name = getRouteName(route)
+                    routeConifg.component = childCom
+                } else {
+                    routeConifg.redirect = {
+                        path: '/404'
+                    }
                 }
-            } else if (route.pageId !== -1) {
-                const source = route.pageCode === curPageData.id
-                    ? curPageData.source
-                    : route.content
-
-                const childCom = registerComponent(source, route.pageCode)
-                routeConifg.name = getRouteName(route)
-                routeConifg.component = childCom
-            } else {
-                routeConifg.redirect = {
-                    path: '/404'
+                // 携带 meta 信息
+                if (route.meta) {
+                    routeConifg.meta = route.meta
+                }
+            } catch (error) {
+                // 前端构造页面的时候发生错误
+                console.error(error)
+                routeConifg.component = BkError
+                routeConifg.meta = {
+                    message: error.message || error
                 }
             }
 
@@ -92,7 +127,7 @@ module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId,
         }
     })
 
-    // 项目默认首页
+    // 应用默认首页
     const defaultRoute = getProjectDefaultRoute(projectPageRouteList, projectRouteList, platform)
 
     const allRoutes = [
@@ -113,7 +148,6 @@ module.exports = (routeGroup, projectPageRouteList, projectRouteList, projectId,
             redirect: { name: '404' }
         }
     ]
-
     return new VueRouter({
         mode: 'history',
         base: `/preview/project/${projectId}`,

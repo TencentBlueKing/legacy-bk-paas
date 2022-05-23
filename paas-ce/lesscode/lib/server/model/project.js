@@ -19,7 +19,6 @@ import TemplateCategory from './entities/page-template-category'
 import UserProjectRole from './entities/user-project-role'
 import CompShare from './entities/comp-share'
 import PageComp from './entities/page-comp'
-import ProjectFuncGroup from './entities/project-func-group'
 import ProjectPage from './entities/project-page'
 import ProjectFavourite from './entities/project-favourite'
 import FuncGroup from './entities/func-group'
@@ -32,7 +31,12 @@ import PageVariable from './entities/page-variable'
 import FuncVariable from './entities/func-variable'
 import VariableFunc from './entities/variable-func'
 import VariableVariable from './entities/variable-variable'
+import FuncFunc from './entities/func-func'
+import DataTable from './entities/data-table'
+import DataTableModifyRecord from './entities/data-table-modify-record'
 import { RequestContext } from '../middleware/request-context'
+import { enablePerviewDb, getPreviewDbConfig } from '../service/preview-db-service'
+import DBEngineService from '../service/db-engine-service'
 
 const projectSelectFields = [
     'project.id',
@@ -48,18 +52,15 @@ const projectSelectFields = [
     'project.isEnableDataSource'
 ]
 
-const defaultGroup = {
-    groupName: '默认分类'
-}
-
-const getDefaultFunc = function (host) {
+const getDefaultFunc = function (options, host) {
     return [
         {
             funcName: 'getMockData',
             funcBody: `return this.$http.get(\'${host}/api/data/getMockData\').then((res) => {\r\n    const data = JSON.stringify(res)\r\n    alert(data)\r\n    return res.data\r\n})\r\n`,
             funcSummary: '获取mock数据',
             funcType: 0,
-            funcCode: 'getMockData'
+            funcCode: 'getMockData',
+            ...options
         },
         {
             funcName: 'getApiData',
@@ -70,7 +71,8 @@ const getDefaultFunc = function (host) {
             funcMethod: 'get',
             funcApiUrl: `${host}/api/data/getMockData`,
             funcApiData: '{ \"page\": 1, \"pageSize\": 20 }',
-            funcCode: 'getApiData'
+            funcCode: 'getApiData',
+            ...options
         }
     ]
 }
@@ -90,7 +92,7 @@ export default {
 
         return getConnection().transaction(async transactionalEntityManager => {
             // 创建项目基本信息记录
-            const { id: projectId } = await transactionalEntityManager.save(project)
+            const { id: projectId, projectCode } = await transactionalEntityManager.save(project)
 
             // 创建用户项目角色关联记录
             userProjectRoleData.projectId = projectId
@@ -115,15 +117,16 @@ export default {
                     projectRouteCopyValues,
                     projectLayoutValues,
                     variableList,
-                    templateCategoryValues
+                    templateCategoryValues,
+                    projectDataTables
                 ] = await Promise.all([
                     getRepository(Comp)
                         .createQueryBuilder('comp')
                         .where('comp.belongProjectId = :projectId', { projectId: projectData.copyFrom })
                         .getMany(),
-                    getRepository(ProjectFuncGroup)
-                        .createQueryBuilder('projectFuncGroup')
-                        .where('projectFuncGroup.projectId = :projectId', { projectId: projectData.copyFrom })
+                    getRepository(FuncGroup)
+                        .createQueryBuilder('funcGroup')
+                        .where('funcGroup.projectId = :projectId', { projectId: projectData.copyFrom })
                         .getMany(),
                     getRepository(ProjectPage)
                         .createQueryBuilder('projectPage')
@@ -144,6 +147,10 @@ export default {
                     getRepository(TemplateCategory)
                         .createQueryBuilder('pageTemplateCategory')
                         .where('pageTemplateCategory.belongProjectId = :projectId', { projectId: projectData.copyFrom })
+                        .getMany(),
+                    getRepository(DataTable)
+                        .createQueryBuilder('dataTable')
+                        .where('dataTable.projectId = :projectId', { projectId: projectData.copyFrom })
                         .getMany()
                 ])
 
@@ -202,20 +209,17 @@ export default {
 
                 const funcIdMap = {}
                 if (projectFuncGroupCopyValues.length) {
-                    const funcGroupIdList = projectFuncGroupCopyValues.map(item => item.funcGroupId)
+                    const funcGroupIdList = projectFuncGroupCopyValues.map(item => item.id)
                     // 得到要复制的主体数据
-                    const copyFuncGroups = await getRepository(FuncGroup)
-                        .createQueryBuilder('funcGroup')
-                        .where('funcGroup.id IN (:...ids)', { ids: funcGroupIdList })
-                        .getMany()
                     const copyFuncs = await getRepository(Func)
                         .createQueryBuilder('func')
                         .where('func.funcGroupId IN (:...funcGroupIds)', { funcGroupIds: funcGroupIdList })
                         .getMany()
 
                     // 新建函数组主体数据
-                    const saveCopyFuncGroups = getRepository(FuncGroup).create(copyFuncGroups.map(item => {
+                    const saveCopyFuncGroups = getRepository(FuncGroup).create(projectFuncGroupCopyValues.map(item => {
                         const { id, createTime, updateTime, ...others } = item
+                        others.projectId = projectId
                         return others
                     }))
                     const newFuncGroupList = await transactionalEntityManager.save(saveCopyFuncGroups)
@@ -229,6 +233,7 @@ export default {
                     const saveCopyFuncs = getRepository(Func).create(copyFuncs.map(item => {
                         const { id, createTime, updateTime, ...others } = item
                         others.funcGroupId = funcGroupIdMap[others.funcGroupId]
+                        others.projectId = projectId
                         return others
                     }))
 
@@ -237,15 +242,17 @@ export default {
                         funcIdMap[item.id] = newFuncList[index].id
                     })
 
-                    // 新建函数组与项目关联关系数据
-                    const projectFuncGroupValues = getRepository(ProjectFuncGroup).create(projectFuncGroupCopyValues.map((item, index) => {
+                    // 新建函数和函数关联关系
+                    const copyFuncFuncs = await getRepository(FuncFunc)
+                        .createQueryBuilder('funcFunc')
+                        .where('funcFunc.projectId = :projectId', { projectId: projectData.copyFrom })
+                        .getMany()
+                    const newFuncFuncs = getRepository(FuncFunc).create(copyFuncFuncs.map(item => {
                         const { id, createTime, updateTime, ...others } = item
                         others.projectId = projectId
-                        // 分组id为新建得到的分组id
-                        others.funcGroupId = newFuncGroupList[index].id
                         return others
                     }))
-                    await transactionalEntityManager.save(projectFuncGroupValues)
+                    await transactionalEntityManager.save(newFuncFuncs)
                 }
 
                 const layoutIdMap = {}
@@ -397,17 +404,61 @@ export default {
                     }))
                     await transactionalEntityManager.save(saveVariableVariableList)
                 }
+
+                if (projectDataTables.length) {
+                    // 开启数据源
+                    await enablePerviewDb(projectId, projectId + projectCode)
+                    // 新建数据源表结构
+                    const copyDataTables = getRepository(DataTable).create(projectDataTables.map(item => {
+                        const { id, createTime, updateTime, ...others } = item
+                        others.projectId = projectId
+                        return others
+                    }))
+                    const newDataTables = await transactionalEntityManager.save(copyDataTables)
+                    const dataTableIdMap = {}
+                    newDataTables.forEach((newDataTable, index) => {
+                        dataTableIdMap[projectDataTables[index].id] = newDataTable.id
+                    })
+
+                    // 新建数据源表变更记录
+                    const copyDataTableModifyRecords = await getRepository(DataTableModifyRecord)
+                        .createQueryBuilder('dataTableModifyRecord')
+                        .where('dataTableModifyRecord.projectId = :projectId', { projectId: projectData.copyFrom })
+                        .getMany()
+                    const newDataTableModifyRecords = getRepository(DataTableModifyRecord).create(copyDataTableModifyRecords.map(item => {
+                        const { id, createTime, updateTime, ...others } = item
+                        others.projectId = projectId
+                        others.tableId = dataTableIdMap[id]
+                        return others
+                    }))
+                    await transactionalEntityManager.save(newDataTableModifyRecords)
+
+                    // 执行表变更sql
+                    const previewDbConfig = await getPreviewDbConfig(projectId)
+                    const dbEngine = new DBEngineService(previewDbConfig)
+                    let sql = ''
+                    newDataTableModifyRecords.forEach((newDataTableModifyRecord) => {
+                        sql += newDataTableModifyRecord.sql
+                    })
+                    await dbEngine.execMultSql(sql)
+                }
             } else {
                 // 创建默认函数分组和函数
-                const funcGroup = getRepository(FuncGroup).create(defaultGroup)
+                const funcGroup = getRepository(FuncGroup).create({
+                    groupName: '默认分类',
+                    projectId
+                })
                 const { id: funcGroupId } = await transactionalEntityManager.save(funcGroup)
                 const curCtx = RequestContext.getCurrentCtx()
-                const defaultFunc = getDefaultFunc(curCtx.origin)
-                defaultFunc.forEach((func) => (func.funcGroupId = funcGroupId))
+                const defaultFunc = getDefaultFunc(
+                    {
+                        projectId,
+                        funcGroupId
+                    },
+                    curCtx.origin
+                )
                 const funcs = getRepository(Func).create(defaultFunc)
                 await transactionalEntityManager.save(funcs)
-                const projectFuncGroup = getRepository(ProjectFuncGroup).create({ projectId, funcGroupId })
-                await transactionalEntityManager.save(projectFuncGroup)
 
                 // 创建默认模板分类
                 const templateCategory = getRepository(TemplateCategory).create({

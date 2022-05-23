@@ -31,6 +31,7 @@ export default () => {
     // 支持复制操作的组件
     if ([
         'render-column',
+        'render-block',
         'free-layout'
     ].includes(activeNode.type)) {
         list.push({
@@ -65,6 +66,7 @@ export default () => {
     // 支持清空操作的组件
     if ([
         'render-column',
+        'render-block',
         'free-layout'
     ].includes(activeNode.type)) {
         list.push({
@@ -77,6 +79,27 @@ export default () => {
     let removeDisabled = false
     if (activeNode.type === 'render-column') {
         removeDisabled = activeNode.parentNode.children.length <= 1
+    }
+
+    if (activeNode.parentNode.type === 'free-layout') {
+        list.push({
+            name: '上移一层',
+            action: () => {
+                const zIndex = ~~activeNode.style['z-index']
+                activeNode.setStyle({
+                    zIndex: zIndex + 1
+                })
+            }
+        })
+        list.push({
+            name: '下移一层',
+            action: () => {
+                const zIndex = ~~activeNode.style['z-index']
+                activeNode.setStyle({
+                    zIndex: zIndex - 1
+                })
+            }
+        })
     }
     
     list.push({

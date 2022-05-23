@@ -119,7 +119,7 @@
                 return this.$route.params.projectId
             },
             dialogTitle () {
-                return this.actionType === 'apply' ? `添加模板【${this.fromTemplate.templateName}】到本项目，请重命名模板` : '编辑模板'
+                return this.actionType === 'apply' ? `添加模板【${this.fromTemplate.templateName}】到本应用，请重命名模板` : '编辑模板'
             },
             actionName () {
                 return this.actionType === 'apply' ? '添加模板' : '编辑模板'
@@ -173,7 +173,7 @@
                         id: this.templateId,
                         fromProjectId: this.fromTemplate.belongProjectId,
                         params,
-                        templateInfo: [{ templateName: this.dialog.formData.templateName, belongProjectId: this.projectId, categoryId: this.dialog.formData.categoryId }]
+                        templateInfo: [{ templateName: this.dialog.formData.templateName, belongProjectId: this.projectId, versionId: this.versionId, categoryId: this.dialog.formData.categoryId }]
                     }
                     if (this.actionType === 'apply') {
                         const { varList, funcList } = await this.getVarAndFuncList(this.fromTemplate)

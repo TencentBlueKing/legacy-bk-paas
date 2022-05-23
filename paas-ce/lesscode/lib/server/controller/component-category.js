@@ -47,7 +47,7 @@ export const create = async (ctx) => {
             throw new Error('分类名不能为空')
         }
         if (!belongProjectId) {
-            throw new Error('项目id不能为空')
+            throw new Error('应用id不能为空')
         }
         await getConnection().transaction(async transactionalEntityManager => {
             const categoryList = name.split('/')
@@ -91,7 +91,7 @@ export const create = async (ctx) => {
     } catch (error) {
         const { name, belongProjectId } = ctx.request.body
         operationLogger.error(error, {
-            operateTarget: !name ? `项目ID：${belongProjectId}` : `分类名称：${name}`
+            operateTarget: !name ? `应用ID：${belongProjectId}` : `分类名称：${name}`
         })
         ctx.send({
             code: -1,
@@ -154,7 +154,7 @@ export const sort = async (ctx) => {
     try {
         const { belongProjectId, list } = ctx.request.body
         if (!belongProjectId) {
-            throw new Error('项目id不能为空')
+            throw new Error('应用id不能为空')
         }
         if (!list || !_.isArray(list) || list.length < 1) {
             throw new Error('非法数据')

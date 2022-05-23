@@ -7,7 +7,7 @@
                     新建变量
                 </bk-button>
             </h3>
-            <span>项目级变量的修改，请跳转至
+            <span>应用级变量的修改，请跳转至
                 <a :href="`/project/${projectId}/variable-manage`" target="_blank" class="variable-header-link">
                     变量管理
                     <i class="bk-drag-icon bk-drag-jump-link"></i>

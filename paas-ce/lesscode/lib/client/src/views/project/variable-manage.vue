@@ -10,7 +10,7 @@
                 <br>1. 可以在组件属性和指令的配置面板中使用该变量
                 <br>2. 在函数插槽中可以使用【lesscode.变量标识】唤醒编辑器自动补全功能选择对应变量，来获取或者修改该变量的值
                 <br>3. 在远程函数中，参数 Api Url 和 Api Data 的值可用 <span v-pre>{{变量标识}}</span> 来获取变量值
-                <br>4. 这里为项目级公共变量，各页面私有变量请前往页面编辑-》页面变量查看
+                <br>4. 这里为应用级公共变量，各页面私有变量请前往页面编辑-》页面变量查看
             </span>
         </variable-table>
         <variable-form />
@@ -44,12 +44,10 @@
 
         created () {
             this.getList()
-            this.getAllGroupFuncs({ projectId: this.projectId, versionId: this.versionId }).catch((err) => this.$bkMessage({ theme: 'error', message: err.message || err }))
         },
 
         methods: {
             ...mapActions('variable', ['getAllVariable', 'setVariableFormData']),
-            ...mapActions('functions', ['getAllGroupFuncs']),
 
             getList () {
                 const params = {

@@ -8,7 +8,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-import { getTokenByUserName } from '../model/token'
+import { LCDataService, TABLE_FILE_NAME } from '../service/data-service'
 
 function strToJson (str) {
     // eslint-disable-next-line no-new-func
@@ -42,10 +42,14 @@ const Data = {
             const options = {}
             if (withToken) {
                 const bkTikcet = ctx.cookies.get('bk_ticket')
-                const tokenList = await getTokenByUserName(projectId) || []
-                const firstToken = tokenList[0] || {}
+                const projectInfo = await LCDataService.findOne(TABLE_FILE_NAME.PROJECT, { id: projectId })
+                const firstToken = await LCDataService.findOne(TABLE_FILE_NAME.TOKEN, {
+                    deleteFlag: 0,
+                    updateUser: ctx.session?.userInfo?.username,
+                    appCode: projectInfo?.appCode
+                })
                 const token = {
-                    access_token: firstToken.token || '',
+                    access_token: firstToken?.token || '',
                     bk_ticket: bkTikcet
                 }
                 options.headers = {
@@ -57,7 +61,7 @@ const Data = {
             ctx.send(re.data)
         } catch (err) {
             let message = err.message
-            if (message.match(/Parameters error \[reason=\"参数 app_code 为空，请进行检查\"\]/)) message = 'Parameters error [reason="参数 app_code 为空，请进行检查"]，请在该项目下凭证管理页面绑定蓝鲸应用信息并获取用户认证凭证'
+            if (message.match(/Parameters error \[reason=\"参数 app_code 为空，请进行检查\"\]/)) message = 'Parameters error [reason="参数 app_code 为空，请进行检查"]，请在该应用下凭证管理页面绑定蓝鲸应用信息并获取用户认证凭证'
             ctx.throwError({
                 message
             })
@@ -73,7 +77,7 @@ const Data = {
                 id: i,
                 projectId: `id-${i}`,
                 projectCode: `code-${i}`,
-                projectName: `项目-${i}`,
+                projectName: `应用-${i}`,
                 name: `名称-${i}`
             })
         }

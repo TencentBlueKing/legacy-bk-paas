@@ -69,8 +69,7 @@ export default {
         },
 
         addVariable ({ commit }, data) {
-            return http.put(`${variablePerfix}/addVariable`, data).then(response => {
-                if (response.code === 499) throw new Error(response.message)
+            return http.put(`${variablePerfix}/addVariable`, data, { globalError: false }).then(response => {
                 const data = response.data || []
                 data.defaultValue = JSON.parse(data.defaultValue || '{}')
                 commit('addVariable', data)
@@ -79,8 +78,7 @@ export default {
         },
 
         editVariable ({ commit }, data) {
-            return http.post(`${variablePerfix}/editVariable`, data).then(response => {
-                if (response.code === 499) throw new Error(response.message)
+            return http.post(`${variablePerfix}/editVariable`, data, { globalError: false }).then(response => {
                 const data = response.data || []
                 data.defaultValue = JSON.parse(data.defaultValue || '{}')
                 commit('editVariable', data)

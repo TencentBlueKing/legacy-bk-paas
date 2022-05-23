@@ -61,6 +61,7 @@
     import ModifierPanel from './components/modifier-panel'
     import OperationArea from './components/operation-area'
     import ActionTool from './components/action-tool'
+    import { syncVariableValue } from './components/utils'
 
     console.dir(LC)
 
@@ -105,46 +106,48 @@
         watch: {
             curTemplateData: {
                 handler () {
-                    this.handleUpdatePreview({
-                        isGenerateNav: true,
-                        id: this.pageRoute.layoutPath,
-                        curTemplateData: this.curTemplateData,
-                        types: ['reload']
-                    })
+                    this.handleUpdateNavPerview()
                 }
             },
             layoutPageList: {
                 handler () {
-                    this.handleUpdatePreview({
-                        isGenerateNav: true,
-                        id: this.pageRoute.layoutPath,
-                        curTemplateData: this.curTemplateData,
-                        types: ['reload']
-                    })
+                    this.handleUpdateNavPerview()
                 }
             },
             variableList () {
                 // 变量发生变化的时候  reload
-                this.handleUpdatePreview()
+                this.handleUpdatePreviewContent()
             },
             funcGroups () {
                 // 函数发生变化的时候  reload
-                this.handleUpdatePreview()
+                this.handleUpdatePreviewContent()
             },
             'pageDetail.lifeCycle' () {
                 // 生命周期发生变化的时候  reload
-                this.handleUpdatePreview()
+                this.handleUpdatePreviewContent()
             },
             'pageDetail.styleSetting' () {
                 // 页面样式发生变化的时候  reload
-                this.handleUpdatePreview()
+                this.handleUpdatePreviewContent()
             }
         },
         async created () {
             this.projectId = parseInt(this.$route.params.projectId)
             this.pageId = parseInt(this.$route.params.pageId)
 
-            LC.addEventListener('update', this.handleUpdatePreview)
+            LC.addEventListener('update', this.handleUpdatePreviewContent)
+            // 更新预览区域数据
+            LC.addEventListener('ready', this.initPerviewData)
+            // 卸载的时候，清除 storage 数据
+            LC.addEventListener('unload', this.clearPerviewData)
+
+            this.$once('hook:beforeDestroy', () => {
+                LC.removeEventListener('update', this.handleUpdatePreviewContent)
+                // 更新预览区域数据
+                LC.removeEventListener('ready', this.initPerviewData)
+                // 卸载的时候，清除 storage 数据
+                LC.removeEventListener('unload', this.clearPerviewData)
+            })
 
             this.registerCustomComponent()
 
@@ -208,11 +211,7 @@
             ]
         },
         beforeDestroy () {
-            LC.removeEventListener('update', this.handleUpdatePreview)
-            LC.triggerEventListener('unload')
-            
             window.removeEventListener('beforeunload', this.beforeunloadConfirm)
-            localStorage.removeItem('ONLINE_PREVIEW')
         },
         beforeRouteLeave (to, from, next) {
             this.$bkInfo({
@@ -257,13 +256,17 @@
             async fetchData () {
                 try {
                     this.isContentLoading = true
-                    const [pageDetail, pageList, projectDetail] = await Promise.all([
+                    const [pageDetail, pageList, projectDetail, functionData] = await Promise.all([
                         this.$store.dispatch('page/detail', { pageId: this.pageId }),
                         this.$store.dispatch('page/getList', {
                             projectId: this.projectId,
                             versionId: this.versionId
                         }),
                         this.$store.dispatch('project/detail', { projectId: this.projectId }),
+                        this.$store.dispatch('functions/getAllGroupAndFunction', {
+                            projectId: this.projectId,
+                            versionId: this.versionId
+                        }),
                         this.$store.dispatch('page/pageLockStatus', { pageId: this.pageId }),
                         this.$store.dispatch('route/getProjectPageRoute', {
                             projectId: this.projectId,
@@ -271,10 +274,6 @@
                         }),
                         this.$store.dispatch('layout/getPageLayout', { pageId: this.pageId }),
                         this.$store.dispatch('components/componentNameMap'),
-                        this.$store.dispatch('functions/getAllGroupFuncs', {
-                            projectId: this.projectId,
-                            versionId: this.versionId
-                        }),
                         this.$store.dispatch('dataSource/list', { projectId: this.projectId })
                     ])
 
@@ -284,7 +283,7 @@
                         versionId: this.versionId
                     })
 
-                    await this.$store.dispatch('variable/getAllVariable', {
+                    const variableList = await this.$store.dispatch('variable/getAllVariable', {
                         projectId: this.projectId,
                         pageCode: pageDetail.pageCode,
                         versionId: this.versionId,
@@ -294,13 +293,15 @@
                     this.$store.commit('page/setPageDetail', pageDetail || {})
                     this.$store.commit('page/setPageList', pageList || [])
                     this.$store.commit('project/setCurrentProject', projectDetail || {})
+                    this.$store.commit('functions/setFunctionData', functionData)
+
+                    syncVariableValue(pageDetail.content, variableList)
 
                     // 设置初始targetData
                     LC.parseData(pageDetail.content)
                     LC.pageStyle = pageDetail.styleSetting
 
                     LC.platform = this.platform
-                    this.handleUpdatePreview()
                 } catch (e) {
                     console.error(e)
                 } finally {
@@ -322,14 +323,35 @@
                 (event || window.event).returnValue = confirmationMessage
                 return confirmationMessage
             },
-            handleUpdatePreview (setting = {}) {
+            initPerviewData () {
+                // 更新导航
+                this.handleUpdateNavPerview()
+                // 更新内容区域
+                this.handleUpdatePreviewContent()
+            },
+            clearPerviewData () {
+                localStorage.removeItem('ONLINE_PREVIEW_CONTENT')
+                localStorage.removeItem('ONLINE_PREVIEW_NAV')
+            },
+            handleUpdatePreviewContent (setting = {}) {
                 const defaultSetting = {
                     isGenerateNav: false,
-                    id: this.pageDetail.pageCode,
+                    id: this.projectId + this.pageDetail.pageCode,
                     curTemplateData: {},
+                    storageKey: 'ONLINE_PREVIEW_CONTENT',
                     types: ['reload', 'update_style']
                 }
                 this.debounceUpdatePreview(Object.assign(defaultSetting, setting))
+            },
+            handleUpdateNavPerview (setting = {}) {
+                const defaultSetting = {
+                    isGenerateNav: true,
+                    id: this.projectId + this.pageRoute.layoutPath,
+                    curTemplateData: this.curTemplateData,
+                    storageKey: 'ONLINE_PREVIEW_NAV',
+                    types: ['reload']
+                }
+                this.updatePreview(Object.assign(defaultSetting, setting))
             }
         }
     }
@@ -339,7 +361,7 @@
     $pageHeaderHeight: 52px;
 
     .lessocde-editor-page {
-        min-width: 1280px;
+        min-width: 1366px;
         height: calc(100vh - $headerHeight);
         margin-top: $headerHeight;
     }

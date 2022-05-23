@@ -1,25 +1,29 @@
 <template>
     <div :class="$style['mobile-canvas-wrapper']">
         <edit-area></edit-area>
-        <simulator v-show="preview" style="transform: translateX(-40px)"></simulator>
-        <preview-switch :value.sync="preview"></preview-switch>
+        <simulator v-show="showPreview" style="transform: translateX(-40px)"></simulator>
     </div>
 </template>
 
 <script>
     import editArea from './edit-area.vue'
     import simulator from './simulator-area.vue'
-    import previewSwitch from './preview-switch'
+    import LC from '@/element-materials/core'
+    
     export default {
         components: {
             editArea,
-            simulator,
-            previewSwitch
+            simulator
         },
         data () {
             return {
-                preview: true
+                showPreview: true
             }
+        },
+        created () {
+            LC.addEventListener('mobilePreviewSwitch', val => {
+                this.showPreview = val
+            })
         }
     }
 </script>
@@ -29,7 +33,7 @@
     justify-content: space-around;
     min-width: 1000px;
     padding: 40px 0 80px;
-    overflow: auto;
+    background: #fff;
     ::v-deep .lesscode-layout-empty {
         min-height: 0;
         min-width: 0;

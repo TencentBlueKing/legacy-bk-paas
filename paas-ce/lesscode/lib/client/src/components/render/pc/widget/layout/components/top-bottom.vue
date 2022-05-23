@@ -11,8 +11,8 @@
                 slot="side-header"
                 class="component-wrapper"
                 style="display: flex"
-                @mouseenter.stop="componentWrapperMouseenterHandler"
-                @mouseleave.stop="componentWrapperMouseleaveHandler"
+                @mouseenter="componentWrapperMouseenterHandler"
+                @mouseleave="componentWrapperMouseleaveHandler"
                 @click.stop="handleNavigationWraperClick('info', $event)">
                 <span class="title-icon">
                     <img style="width: 28px; height: 28px" :src="curTemplateData.logo" />
@@ -38,7 +38,8 @@
                             <div
                                 class="navigation-header-item"
                                 :class="{
-                                    'theme-item': !isDefaultTheme
+                                    'theme-item': !isDefaultTheme,
+                                    'item-active': topMemu.pageCode === navActive
                                 }">
                                 {{topMemu.name}}
                             </div>
@@ -62,7 +63,7 @@
                     placement="bottom-start"
                     offset="-20, 10"
                     :tippy-options="{ 'hideOnClick': false }">
-                    <div :class="{ 'header-user': true, 'theme-header': !isDefaultTheme }">
+                    <div :class="{ 'header-user': true, 'theme-header': !isDefaultTheme }" @click.stop>
                         <span class="user-name">{{ user.username }}</span>
                         <i class="bk-icon icon-down-shape"></i>
                     </div>
@@ -104,7 +105,11 @@
             ...mapGetters('drag', [
                 'curTemplateData'
             ]),
+            ...mapGetters('page', ['pageDetail']),
             ...mapGetters('layout', ['pageLayout']),
+            navActive () {
+                return this.pageDetail.pageCode
+            },
             isDefaultTheme () {
                 return !this.curTemplateData?.theme || this.curTemplateData?.theme === '#182132'
             },
@@ -124,6 +129,13 @@
             this.$once('hook:beforeDestroy', () => {
                 LC.removeEventListener('active', activeCallback)
                 bus.$off('on-template-change', this.handleTemplateChange)
+            })
+        },
+        mounted () {
+            const element = document.querySelector('.bk-navigation-header')
+            element && element.addEventListener('click', this.handleClickEvent)
+            this.$once('hook:beforeDestroy', () => {
+                element.removeEventListener('click', this.handleClickEvent)
             })
         },
         methods: {
@@ -172,6 +184,13 @@
             },
             handleLogout () {
                 this.messageWarn('请部署后使用本功能')
+            },
+            handleClickEvent () {
+                unselectComponent()
+                this.setCurTemplateData({
+                    ...this.curTemplateData,
+                    panelActive: 'base'
+                })
             }
         }
     }
@@ -238,6 +257,10 @@
                     opacity: 1;
                 }
             }
+            &.item-active {
+                color: #fff;
+                opacity: 1;
+            }
         }
         .message-box{
             flex: 0 0 70px;
@@ -247,11 +270,17 @@
         .theme-desc {
             color: #313238;
         }
-        .navigation-header-item.theme-item {
-            color: #63656e;
-            opacity: 1;
-            &:hover {
-                color: #000000;
+        .navigation-header-item {
+            &.theme-item {
+                color: #63656e;
+                opacity: 1;
+                &:hover {
+                    color: #000000;
+                }
+            }
+            &.item-active {
+                color: #000;
+                opacity: 1;
             }
         }
         .header-user.theme-header {

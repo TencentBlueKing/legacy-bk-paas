@@ -12,7 +12,10 @@
 <template>
     <div
         :ref="componentData.componentId"
-        :class="$style['free-layout']"
+        :class="{
+            [$style['free-layout']]: true,
+            [$style['empty']]: componentData.children.length < 1
+        }"
         :style="componentData.style">
         <Draggable
             :component-data="componentData"
@@ -26,7 +29,7 @@
                     'component'
                 ]
             }"
-            :ghost-class="$style['drag-component-ghost']"
+            :ghost-class="$style['drag-ghost']"
             :force-fallback="false"
             @add="handleAdd">
             <resolve-component
@@ -34,7 +37,6 @@
                 :ref="slotData.componentId"
                 :key="slotData.renderKey"
                 :component-data="slotData"
-                style="position: absolute;"
                 attach-to-freelayout
                 @component-mounted="handleComponentMounted(slotData)"
                 @component-mousedown="event => handleComponentMousedown(slotData, event)"
@@ -43,6 +45,7 @@
     </div>
 </template>
 <script>
+    import LC from '@/element-materials/core'
     import DragLine from '../../common/drag-line'
     import Drag from '../../common/drag'
     import Draggable from '../components/draggable'
@@ -78,8 +81,7 @@
             doDrag (childNode) {
                 if (!this.dragLine) {
                     this.dragLine = new DragLine({
-                        container: this.$el,
-                        offset: this.layoutOffset
+                        container: this.$el
                     })
                 }
                 const dragEle = this.$refs[childNode.componentId][0].$el
@@ -90,7 +92,14 @@
 
                 this.dragLine.setContainer(dragEle.parentNode)
 
+                let isMoveing = false
+
                 this.drag.on('move', () => {
+                    if (!isMoveing) {
+                        LC.triggerEventListener('componentMouserleave')
+                        childNode.activeClear()
+                    }
+                    isMoveing = true
                     this.dragLine.check(this.drag.$elem, '[role="component-root"]')
                 }).on('end', () => {
                     this.dragLine.uncheck()
@@ -101,6 +110,8 @@
                         left: left + 'px',
                         top: top + 'px'
                     })
+                    childNode.active()
+                    isMoveing = false
                 })
             },
             /**
@@ -178,6 +189,7 @@
                     }
 
                     childNode.setStyle({
+                        position: 'absolute',
                         top: `${top}px`,
                         left: `${left}px`
                     })
@@ -192,7 +204,9 @@
             handleComponentMousedown (childNode, event) {
                 event.stopPropagation()
                 event.preventDefault()
-                this.doDrag(childNode)
+                setTimeout(() => {
+                    this.doDrag(childNode)
+                })
             },
             /**
              * @desc 当 freelayout 内部组件变化时，需要计算所有组件高度，保证 freelayout 在编辑状态尺寸自适应
@@ -210,8 +224,25 @@
         border: 1px dashed #ccc;
         /* 如果基础的 slot 可以拖拽需要设置这个屏蔽掉基础组件上面的 pointer-events: none 效果 */
         pointer-events: all;
+        &.empty{
+            background: #FAFBFD;
+            &::before{
+                content: "请拖入组件";
+                position: absolute;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 14px;
+                color: #C4C6CC;
+                pointer-events: all;
+            }
+        }
     }
-    .drag-component-ghost {
+    .drag-ghost {
         position: absolute;
         top: 0;
         right: 0;

@@ -24,7 +24,7 @@
         data () {
             return {
                 panels: [
-                    { name: 'project', label: '按项目' },
+                    { name: 'project', label: '按应用' },
                     { name: 'time', label: '按时间' }
                 ],
                 active: ''

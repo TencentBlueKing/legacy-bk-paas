@@ -2,7 +2,7 @@
     <div :class="$style['component-manage-useing-page']">
         <div :class="$style['search']">
             <div :class="$style['version-selector']">
-                项目版本：<project-version-selector :bordered="false" :popover-width="200" v-model="projectVersionId" />
+                应用版本：<project-version-selector :bordered="false" :popover-width="200" v-model="projectVersionId" />
             </div>
             <div :class="$style['comp-type-select']">
                 <type-select @select-change="handleSelectChange"></type-select>
@@ -32,9 +32,9 @@
                         <span :class="$style['component-name']">{{ row.displayName }}({{ row.name }})</span>
                     </template>
                 </bk-table-column>
-                <bk-table-column label="来源项目" prop="compSource" min-width="120" show-overflow-tooltip>
+                <bk-table-column label="来源应用" prop="compSource" min-width="120" show-overflow-tooltip>
                     <template slot-scope="{ row }">
-                        <span>{{row.belongProjectId !== row.sourceProject.id ? row.sourceProject.projectName : '本项目'}}</span>
+                        <span>{{row.belongProjectId !== row.sourceProject.id ? row.sourceProject.projectName : '本应用'}}</span>
                     </template>
                 </bk-table-column>
                 <bk-table-column label="所属分类" prop="category" min-width="120" sortable show-overflow-tooltip />
@@ -89,7 +89,7 @@
             :mask-close="false"
             :auto-close="false">
             <p class="tips-content">
-                将会把该项目“{{selectedProjectVersionName}}”版本里所有页面中使用到的【{{updateDialog.data.displayName}}】组件统一升级到【{{updateDialog.data.version}}】版本，请谨慎操作
+                将会把该应用“{{selectedProjectVersionName}}”版本里所有页面中使用到的【{{updateDialog.data.displayName}}】组件统一升级到【{{updateDialog.data.version}}】版本，请谨慎操作
             </p>
             <div class="dialog-footer" slot="footer">
                 <bk-button
