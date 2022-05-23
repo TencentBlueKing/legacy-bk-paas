@@ -18,6 +18,9 @@ import preload from '@/common/preload'
 
 Vue.use(VueRouter)
 
+// 首页
+const Home = () => import(/* webpackChunkName: 'home' */'@/views/home')
+
 const SystemEntry = () => import(/* webpackChunkName: 'index' */'@/views/system')
 const Projects = () => import(/* webpackChunkName: 'projects' */'@/views/system/projects')
 const Account = () => import(/* webpackChunkName: 'account' */'@/views/system/account')
@@ -81,12 +84,16 @@ const OperationStatsProject = () => import(/* webpackChunkName: 'operation-stats
 const OperationStatsFunc = () => import(/* webpackChunkName: 'operation-stats-func' */'@/views/system/operation/stats/func/index.vue')
 const OperationStatsComp = () => import(/* webpackChunkName: 'operation-stats-comp' */'@/views/system/operation/stats/comp/index.vue')
 
+// 流程管理
+const FlowManage = () => import(/* webpackChunkName: 'FlowManage' */'@/views/project/flow-manage/index.vue')
+
 // 平台管理
 const PlatformManageEntry = () => import(/* webpackChunkName: 'operation-stats-entry' */'@/views/system/platform-manage/index.vue')
 const ProjectMember = () => import(/* webpackChunkName: 'operation-stats-entry' */'@/views/system/platform-manage/project-member/index.vue')
 const routes = [
     {
         path: '/help',
+        name: 'help',
         component: MainHelpEntry,
         children: [
             { path: 'custom', name: 'custom', component: Custom },
@@ -112,6 +119,11 @@ const routes = [
         component: HealthPage
     },
     {
+        path: '/home',
+        name: 'home',
+        component: Home
+    },
+    {
         path: '/',
         components: {
             default: SystemEntry,
@@ -124,7 +136,7 @@ const routes = [
                 name: 'projects',
                 component: Projects,
                 meta: {
-                    title: '应用管理'
+                    title: '我的应用'
                 }
             },
             {
@@ -302,6 +314,14 @@ const routes = [
                 component: Layout,
                 meta: {
                     title: '布局模板实例'
+                }
+            },
+            {
+                path: 'flow-manage',
+                name: 'flowManage',
+                component: FlowManage,
+                meta: {
+                    title: '流程管理'
                 }
             },
             {

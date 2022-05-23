@@ -9,7 +9,7 @@
             @end="end">
             <field-element
                 v-for="(item, index) in fields"
-                :key="`${item.type}_${index}`"
+                :key="`${item.key}_${index}_${item.timeStamp}`"
                 :class="{ actived: selectedIndex === index }"
                 :field="item"
                 @action="handleFormAction($event, index)">
@@ -24,7 +24,7 @@
     import draggable from 'vuedraggable'
     import cloneDeep from 'lodash.clonedeep'
     import { FIELDS_TYPES } from '../../constant/forms'
-    import FieldElement from '../from-edit/fieldElement.vue'
+    import FieldElement from '../form-edit/fieldElement.vue'
     import pinyin from 'pinyin'
 
     export default {
@@ -90,7 +90,19 @@
                     read_only_conditions: {}, // 只读条件
                     mandatory_conditions: {}, // 必填条件
                     is_readonly: false, // 只读
-                    show_type: 0// 显隐
+                    show_type: 0, // 显隐
+                    fileTemplate: [], // 存储文件类型组件模板的值
+                    imageRange: { // 上传图片的范围
+                        isMin: false,
+                        minNum: 1,
+                        isMax: false,
+                        maxNum: 1
+                    },
+                    deviderAttr: { // 下划线属性
+                        align: 'center',
+                        color: '#787A7F'
+                    }
+
                 }
                 const index = this.fields.length === 0 ? 0 : e.newIndex
                 this.$emit('add', config, index)
@@ -112,34 +124,42 @@
                     this.$emit('copy', field, index)
                     this.selectedIndex = index + 1
                 } else if (type === 'delete') {
-                    this.$emit('delete', index)
-                    if (this.selectedIndex === index) {
-                        this.selectedIndex = -1
-                    }
+                    this.$bkInfo({
+                        title: '确认删除？',
+                        type: 'warning',
+                        subTitle: '删除字段将会同时删除已存在该字段下的数据，你还要继续吗？',
+                        theme: 'primary',
+                        confirmFn: async () => {
+                            this.$emit('delete', index)
+                            if (this.selectedIndex === index) {
+                                this.selectedIndex = -1
+                            }
+                        }
+                    })
                 }
             },
             getDefaultChoice (type) {
                 if (['SELECT', 'INPUTSELECT', 'MULTISELECT', 'CHECKBOX', 'RADIO'].includes(type)) {
                     return [
-                        { key: 'XUANXIANG1', name: '选项1' },
-                        { key: 'XUANXIANG2', name: '选项2' }
+                        { key: 'XUANXIANG1', name: '选项1', color: '#FF8C00', isDefaultVal: true },
+                        { key: 'XUANXIANG2', name: '选项2', color: '#3A84FF', isDefaultVal: false }
                     ]
                 }
                 if (['TABLE'].includes(type)) {
                     return [
-                        { key: '', name: '' },
-                        { key: '', name: '' }
+                        { key: 'LIE1', name: '列1', choice: [], display: '', required: false },
+                        { key: 'LIE2', name: '列2', choice: [], display: '', required: false }
                     ]
                 }
                 return []
             }
-
         }
     }
 </script>
 
 <style lang="postcss" scoped>
 @import "@/css/mixins/scroller";
+
 .form-panel {
   margin: 24px;
   height: calc(100% - 48px);
@@ -153,6 +173,7 @@
   padding: 35px 0;
   height: 100%;
   overflow: auto;
+
   &.hover {
     outline: 2px dashed #1768ef;
     border-radius: 4px;

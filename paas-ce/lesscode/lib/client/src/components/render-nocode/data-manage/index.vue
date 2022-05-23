@@ -6,9 +6,9 @@
                 <page-edit v-else></page-edit>
             </div>
         </layout>
-        <div v-if="type === 'edit'" class="data-manage-setting-wrapper" slot="right">
-            数据管理页配置组件
-        </div>
+        <!--        <div v-if="type === 'edit'" class="data-manage-setting-wrapper" slot="right">-->
+        <!--            数据管理页配置组件-->
+        <!--        </div>-->
     </draw-layout>
 </template>
 <script>

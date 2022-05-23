@@ -38,7 +38,14 @@
         methods: {
             async handleSubmit () {
                 if (this.nocodeType === 'FORM') {
-                    const content = this.$store.state.formSetting.fieldsList
+                    const content = this.$store.state.nocode.formSetting.fieldsList || []
+                    if (content.length < 1) {
+                        this.$bkMessage({
+                            theme: 'error',
+                            message: '表单项不能为空'
+                        })
+                        return
+                    }
                     const formData = {
                         content,
                         tableName: this.pageDetail.pageCode,
@@ -52,12 +59,14 @@
                         Object.assign(formData, { id: this.pageDetail.formId })
                     }
                     const res = await this.$store.dispatch(`form/${action}`, formData)
-                    if (res) {
+                    if (res && res.id) {
                         this.$bkMessage({
                             theme: 'success',
                             message: '保存成功'
                         })
+                        action === 'createForm' && this.$store.commit('page/setPageDetail', Object.assign({}, this.pageDetail, { formId: res.id }))
                     }
+                    console.log(res, this.pageDetail)
                 }
             }
         }

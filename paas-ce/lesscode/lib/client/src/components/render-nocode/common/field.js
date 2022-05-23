@@ -1,0 +1,20 @@
+export const RICHTEXT_FIELD = {
+    api_instance_id: null,
+    choice: [],
+    default: '',
+    desc: '',
+    is_readonly: false,
+    key: 'FU_WEN_BEN',
+    kv_relation: Object,
+    layout: 'COL_12',
+    mandatory_conditions: Object,
+    meta: {},
+    name: '富文本',
+    regex: 'EMPTY',
+    show_conditions: {},
+    show_type: 0,
+    source_type: 'CUSTOM',
+    type: 'RICHTEXT',
+    unique: false,
+    validate_type: 'OPTION'
+}

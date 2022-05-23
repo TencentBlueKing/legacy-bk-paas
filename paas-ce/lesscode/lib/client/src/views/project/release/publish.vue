@@ -144,32 +144,39 @@
                             <bk-radio value="prod" style="margin-left: 70px">生产环境</bk-radio>
                         </bk-radio-group>
                     </div>
-                    <div :class="$style['type']">
+                    <div :class="[$style['type'], $style['is-source']]">
                         <span :class="$style['version-label']">源码包</span>
-                        <bk-radio-group v-model="versionForm.releaseType" :class="$style['version-type']" @change="getReleaseSql">
-                            <bk-radio value="NEW_VERSION">应用默认版本
-                                <i :class="['bk-icon', 'icon-info', $style['icon']]"
-                                    v-bk-tooltips="{
-                                        content: '部署时基于“默认”版本生成新的版本号，后续可在“版本管理”页面已归档版本中查看',
-                                        width: 220
-                                    }"
-                                ></i>
-                            </bk-radio>
-                            <bk-radio value="PROJECT_VERSION" style="margin-left: 70px">应用已有版本
-                                <i :class="['bk-icon', 'icon-info', $style['icon']]"
-                                    v-bk-tooltips="{
-                                        content: '“版本管理”页面中未归档的版本'
-                                    }"
-                                ></i>
-                            </bk-radio>
-                            <bk-radio value="HISTORY_VERSION" style="margin-left: 70px">历史部署包
-                                <i :class="['bk-icon', 'icon-info', $style['icon']]"
-                                    v-bk-tooltips="{
-                                        content: '已部署成功过的的源码包'
-                                    }"
-                                ></i>
-                            </bk-radio>
-                        </bk-radio-group>
+                        <div>
+                            <bk-radio-group v-model="versionForm.releaseType" :class="$style['version-type']" @change="getReleaseSql">
+                                <bk-radio value="PROJECT_VERSION">应用版本
+                                    <i :class="['bk-icon', 'icon-info', $style['icon']]"
+                                        v-bk-tooltips="{
+                                            content: '基于应用“默认”或未归档的版本',
+                                            width: 220
+                                        }"
+                                    ></i>
+                                </bk-radio>
+                                <bk-radio value="HISTORY_VERSION" style="margin-left: 70px">历史部署包
+                                    <i :class="['bk-icon', 'icon-info', $style['icon']]"
+                                        v-bk-tooltips="{
+                                            content: '已部署成功过的的源码包'
+                                        }"
+                                    ></i>
+                                </bk-radio>
+                            </bk-radio-group>
+                            <div :class="$style['source-from']" v-if="isProjVersion">
+                                <bk-select placeholder="请选择要部署的应用版本" style="width: 400px"
+                                    :clearable="false"
+                                    v-model="versionForm.projVersionSelect" :loading="projVersionLoading" @toggle="toggleProjVersionList"
+                                    @change="changeProjVersionList">
+                                    <bk-option v-for="option in projVersionList"
+                                        :key="option.id"
+                                        :id="option.id"
+                                        :name="option.version">
+                                    </bk-option>
+                                </bk-select>
+                            </div>
+                        </div>
                     </div>
                     <div :class="[$style['last-version-tips'], $style['version-table']]" v-if="releaseSqls.length" v-bkloading="{ isLoading: isLoadingReleaseSql }">
                         <i :class="$style['table-icon']" class="bk-drag-icon bk-drag-info-tips"></i>
@@ -177,25 +184,18 @@
                         <span :class="$style['table-link']" @click="showSql">变更详情</span>
                     </div>
                     <div :class="[$style['form-item']]">
-                        <span :class="$style['version-label']">版本号</span>
-                        <div v-if="isNewVersion">
+                        <span :class="$style['version-label']">部署版本号</span>
+                        <div v-if="isProjVersion">
                             <bk-input
-                                placeholder="请输入版本号，仅支持英文、数字、下划线、中划线和英文句号"
+                                placeholder="请输入部署版本号，仅支持英文、数字、下划线、中划线和英文句号"
                                 maxlength="30"
                                 style="width: 400px"
-                                v-model="versionForm.versionInput">
+                                v-model="versionForm.releaseVersion">
                             </bk-input>
                             <p :class="$style['version-err-tips']" v-show="versionErrTips">{{versionErrTips}}</p>
                         </div>
-                        <bk-select v-else-if="isProjVersion" placeholder="请选择要部署的应用版本" style="width: 400px"
-                            v-model="versionForm.projVersionSelect" :loading="projVersionLoading" @toggle="toggleProjVersionList">
-                            <bk-option v-for="option in projVersionList"
-                                :key="option.version"
-                                :id="option.version"
-                                :name="option.version">
-                            </bk-option>
-                        </bk-select>
                         <bk-select v-else-if="isSucVersion" placeholder="请选择要部署的历史版本" style="width: 400px"
+                            :clearable="false"
                             v-model="versionForm.sucVersionSelect" :loading="sucVersionLoading" @toggle="toggleSucVersionList">
                             <bk-option v-for="option in sucVersionList"
                                 :key="option.version"
@@ -204,17 +204,22 @@
                             </bk-option>
                         </bk-select>
                     </div>
-                    <div :class="[$style['form-item'], 'version-publish-log', { 'is-proj-history': isProjVersion }]"
-                        v-show="isNewVersion || (isProjVersion && versionForm.projVersionSelect)">
-                        <span :class="[$style['version-label'], { [$style['is-proj-history']]: isProjVersion }]">版本日志</span>
-                        <mavon-editor v-if="isNewVersion"
+                    <div :class="$style['form-item']" v-if="isProjVersion">
+                        <span :class="$style['version-label']">创建应用版本</span>
+                        <bk-radio-group v-model="versionForm.isCreateProjVersion" :class="$style['version-type']">
+                            <bk-radio :value="0">否</bk-radio>
+                            <bk-radio :value="1" style="margin-left: 70px">是，部署成功后创建应用版本并归档</bk-radio>
+                        </bk-radio-group>
+                    </div>
+                    <div :class="[$style['form-item'], 'version-publish-log']"
+                        v-show="isProjVersion && versionForm.projVersionSelect && versionForm.isCreateProjVersion">
+                        <span :class="[$style['version-label']]">版本日志</span>
+                        <mavon-editor
                             :external-link="false"
                             v-model="versionForm.versionLog"
                             default-open="edit"
                             :placeholder="versionLogPlaceholder" />
-                        <mavon-editor v-else-if="versionForm.projVersionSelect" :value="curVersionLog"
-                            :external-link="false" :editable="false" :subfield="false" preview-background="#fff" :toolbars-flag="false" default-open="preview" />
-                        <p :class="$style['version-err-tips']" v-show="isNewVersion && versionLogErrTips">{{versionLogErrTips}}</p>
+                        <p :class="$style['version-err-tips']" v-show="versionLogErrTips">{{versionLogErrTips}}</p>
                     </div>
                     <div :class="[$style['operate-btn'], $style['m-left']]">
                         <bk-button theme="primary" :disabled="releaseBtnDisabled" @click="release">{{((latestInfo.status === 'running' && !latestInfo.isOffline) || disabledRelease) ? `部署中...` : '部署'}}</bk-button>
@@ -278,11 +283,12 @@
 
     const defaultVersionFormData = () => ({
         env: 'stag',
-        releaseType: 'NEW_VERSION',
-        versionInput: '',
-        projVersionSelect: '',
+        releaseType: 'PROJECT_VERSION',
+        releaseVersion: '',
+        projVersionSelect: -1,
         sucVersionSelect: '',
-        versionLog: undefined
+        versionLog: undefined,
+        isCreateProjVersion: 0
     })
 
     export default {
@@ -343,27 +349,31 @@
             projectId () {
                 return this.$route.params.projectId
             },
-            isNewVersion () {
-                return this.versionForm.releaseType === 'NEW_VERSION'
-            },
             isSucVersion () {
                 return this.versionForm.releaseType === 'HISTORY_VERSION'
             },
             isProjVersion () {
                 return this.versionForm.releaseType === 'PROJECT_VERSION'
             },
-            curVersionLog () {
-                return this.projVersionList.find(item => item.version === this.versionForm.projVersionSelect)?.versionLog
+            curProjVersionLog () {
+                return this.projVersionList.find(item => item.id === this.versionForm.projVersionSelect)?.versionLog
             },
-            curVersionId () {
-                return this.projVersionList.find(item => item.version === this.versionForm.projVersionSelect)?.id
+            curProjVersionId () {
+                return this.projVersionList.find(item => item.id === this.versionForm.projVersionSelect)?.id
             },
-            curReleaseVersionId () {
+            curProjVersion () {
+                return this.projVersionList.find(item => item.id === this.versionForm.projVersionSelect)?.version
+            },
+            curSucReleaseVersionId () {
                 return this.sucVersionList.find(item => item.version === this.versionForm.sucVersionSelect)?.id
             },
-            curVersion () {
-                if (this.isNewVersion) return this.versionForm.versionInput
-                if (this.isProjVersion) return this.versionForm.projVersionSelect
+            sourceVersion () {
+                if (this.isProjVersion) return this.curProjVersion
+                if (this.isSucVersion) return this.versionForm.sucVersionSelect
+                return ''
+            },
+            curReleaseVersion () {
+                if (this.isProjVersion) return this.versionForm.releaseVersion
                 if (this.isSucVersion) return this.versionForm.sucVersionSelect
                 return ''
             },
@@ -374,9 +384,9 @@
             },
             releaseBtnDisabled () {
                 return this.disabledRelease
-                    || (this.isNewVersion && !!this.versionErrTips)
-                    || (this.isNewVersion && !this.versionForm.versionLog)
-                    || (!this.isNewVersion && !this.curVersion)
+                    || (this.isProjVersion && !!this.versionErrTips)
+                    || (this.isProjVersion && this.versionForm.isCreateProjVersion && !this.versionForm.versionLog)
+                    || !this.sourceVersion
                     || this.latestInfo.status === 'running'
             },
             showMobileTips () {
@@ -384,9 +394,9 @@
             },
             versionErrTips () {
                 let tips = ''
-                const version = this.versionForm.versionInput
+                const version = this.versionForm.releaseVersion
                 if (!version) {
-                    tips = '版本号必填'
+                    tips = '部署版本号必填'
                 } else if (!/^[A-za-z0-9\-\.\_]{1,40}$/.test(version)) {
                     tips = '仅支持英文、数字、下划线、中划线和英文句号'
                 }
@@ -471,9 +481,15 @@
             },
             async getProjVersionOptionList () {
                 this.projVersionLoading = true
-                this.projVersionList = await this.$store.dispatch('release/getProjectVersionOptionList', {
+                const projVersionList = await this.$store.dispatch('release/getProjectVersionOptionList', {
                     projectId: this.projectId
                 })
+                const defaultVersion = {
+                    id: -1,
+                    version: '默认',
+                    versionLog: ''
+                }
+                this.projVersionList = [defaultVersion].concat(projVersionList)
                 this.projVersionLoading = false
             },
             async getSucVersionList () {
@@ -548,12 +564,14 @@
                             env: versionForm.env,
                             status: 'running',
                             releaseType: versionForm.releaseType,
-                            version: this.curVersion,
-                            versionId: this.curVersionId, // 新版本为undefined已有版本为一个版本id值
+                            releaseVersionId: this.curSucReleaseVersionId, // 历史发布id
+                            version: this.curReleaseVersion, // 基于应用版本为填写的部新版本号，基于历史包为历史部署版本号
+                            versionId: this.curProjVersionId === -1 ? undefined : this.curProjVersionId, // 选择应用版本则为版本id值或者无
+                            fromProjectVersion: this.curProjVersionId === -1 ? '' : this.curProjVersion, // 基于应用版本的版本号
                             versionLog: versionForm.versionLog,
-                            releaseVersionId: this.curReleaseVersionId,
                             bindInfo: this.showAppAndModule,
-                            releaseSqlIds: this.releaseSqls.map(releaseSql => releaseSql.id).join(',')
+                            releaseSqlIds: this.releaseSqls.map(releaseSql => releaseSql.id).join(','),
+                            isCreateProjVersion: versionForm.isCreateProjVersion
                         }
                     }
                     const res = await this.$store.dispatch('release/releaseProject', data)
@@ -712,6 +730,9 @@
                 if (isOpen) {
                     this.getProjVersionOptionList()
                 }
+            },
+            changeProjVersionList () {
+                this.versionForm.versionLog = this.curProjVersionLog
             },
             getReleaseSql () {
                 this.isLoadingReleaseSql = true
@@ -872,7 +893,7 @@
             }
             .release-form {
                 .m-left {
-                    margin-left: 100px;
+                    margin-left: 110px;
                 }
                 & > div {
                     margin-bottom: 28px;
@@ -882,7 +903,8 @@
                     display: flex;
                     align-items: center;
                     .version-label {
-                        width: 112px;
+                        flex: none;
+                        width: 110px;
                     }
                     .version-type {
                         display: inline;
@@ -890,19 +912,24 @@
                             font-size: 16px;
                         }
                     }
+                    .source-from {
+                        margin-top: 16px;
+                    }
+
+                    &.is-source {
+                        align-items: flex-start;
+                    }
                 }
                 .form-item {
                     position: relative;
                     .version-label {
-                        width: 100px;
-
                         &.is-proj-history {
                             font-weight: 700;
                         }
                     }
                     .version-err-tips {
                         position: absolute;
-                        left: 100px;
+                        left: 110px;
                         top: 100%;
                         font-size: 12px;
                         color: red;
@@ -912,7 +939,7 @@
                 .version-table {
                     border-color: #ffdfac;
                     background-color: #fff4e2;
-                    margin-left: 100px;
+                    margin-left: 110px;
                     width: 700px;
                     .table-icon {
                         color: #ff9c01;
@@ -982,7 +1009,7 @@
                 padding: 12px;
                 background: #fff;
                 flex-direction: column;
-                margin-left: 100px;
+                margin-left: 110px;
 
                 .markdown-body {
                     min-height: auto !important;

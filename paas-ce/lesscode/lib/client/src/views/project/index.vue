@@ -152,6 +152,14 @@
                         ]
                     },
                     {
+                        title: '流程管理',
+                        icon: 'data-source-manage',
+                        url: 'flowManage',
+                        toPath: {
+                            name: 'flowManage'
+                        }
+                    },
+                    {
                         title: '发布管理',
                         icon: '1_deploy-fill',
                         url: 'release',

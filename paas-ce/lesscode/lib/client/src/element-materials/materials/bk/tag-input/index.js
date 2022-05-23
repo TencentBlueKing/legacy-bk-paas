@@ -49,6 +49,11 @@ export default {
         'pointer',
         'opacity'
     ],
+    renderStyles: {
+        display: 'inline-block',
+        width: '300px',
+        verticalAlign: 'middle'
+    },
     directives: [
         {
             type: 'v-model',
@@ -57,9 +62,8 @@ export default {
         // {
         //     type: 'v-bind',
         //     prop: 'list',
-        //     propTypes: ['array'],
-        //     val: '',
-        //     valType: 'variable'
+        //     format: 'variable',
+        //     valueTypeInclude: ['array']
         // }
     ],
     props: {

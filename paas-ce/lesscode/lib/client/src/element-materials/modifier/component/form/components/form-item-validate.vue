@@ -40,11 +40,13 @@
                             error-display-type="normal"
                             :required="true"
                             :desc="getItemConfig(item.type, 'desc')">
-                            <select-func
+                            <choose-function
+                                class="choose-function"
                                 v-if="item.type === 'validator'"
-                                :value="item[item.type]"
+                                :choosen-function="{ methodCode: item[item.type] }"
+                                :show-add-params="false"
                                 @change="val => handleChange(val, item.type, index)"
-                                :show-add-params="false" />
+                            />
                             <bk-input
                                 v-else
                                 :value="item[item.type]"
@@ -66,7 +68,7 @@
     </div>
 </template>
 <script>
-    import selectFunc from '@/components/methods/select-func'
+    import ChooseFunction from '@/components/methods/choose-function/index.vue'
 
     const itemList = [
         {
@@ -104,7 +106,7 @@
     export default {
         name: '',
         components: {
-            selectFunc
+            ChooseFunction
         },
         props: {
             name: {
@@ -237,6 +239,12 @@
             }
             i {
                 padding-right: 2px;
+            }
+        }
+        .choose-function {
+            padding: 0;
+            &:hover {
+                box-shadow: none;
             }
         }
     }

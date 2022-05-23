@@ -203,7 +203,7 @@
              */
             getVariableTypeText ({ valueType }) {
                 const variableType = Object.keys(VARIABLE_TYPE).find((variableTypeKey) => VARIABLE_TYPE[variableTypeKey].VAL === valueType)
-                return variableType.NAME
+                return VARIABLE_TYPE[variableType].NAME
             },
             /**
              * @desc 变量列表行样式
@@ -377,4 +377,10 @@
             -webkit-box-orient: vertical;
         }
    }
+   .remote-example {
+        color: #3a84ff;
+        cursor: pointer;
+        font-size: 12px;
+        margin-top: 5px;
+    }
 </style>

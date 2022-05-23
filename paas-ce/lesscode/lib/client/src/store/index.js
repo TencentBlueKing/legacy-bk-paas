@@ -27,7 +27,6 @@ import layout from './modules/layout'
 import member from './modules/member'
 import form from './modules/nocode/form'
 import flow from './modules/nocode/flow'
-import formSetting from './modules/nocode/form-setting'
 import logs from './modules/logs'
 import functionMarket from './modules/function-market'
 import perm from './modules/perm'
@@ -35,6 +34,7 @@ import projectVersion from './modules/project-version'
 import dataSource from './modules/data-source'
 import api from './modules/api'
 
+import nocode from './modules/nocode'
 import http from '@/api'
 import router from '../router'
 import { unifyObjectStyle, json2Query, circleJSON } from '@/common/util'
@@ -67,8 +67,8 @@ const store = new Vuex.Store({
         perm,
         projectVersion,
         dataSource,
-        formSetting,
-        api
+        api,
+        nocode
     },
     // 公共 store
     state: {
@@ -78,7 +78,12 @@ const store = new Vuex.Store({
         // 系统当前登录用户
         user: {},
         // 是否平台管理员
-        isPlatformAdmin: false
+        isPlatformAdmin: false,
+        loadingConf: {
+            speed: 2,
+            primaryColor: '#f5f6fa',
+            secondaryColor: '#FAFAFC'
+        }
     },
     // 公共 getters
     getters: {

@@ -186,7 +186,8 @@ export const apply = async (ctx) => {
                         const { id, createTime, createUser, updateTime, updateUser, ...other } = func
                         const newFunc = Object.assign(other, {
                             versionId,
-                            funcGroupId: defaultFuncGroupId
+                            funcGroupId: defaultFuncGroupId,
+                            projectId: belongProjectId
                         })
                         const createFunc = getRepository(Func).create(newFunc)
                         saveQueue.push(transactionalEntityManager.save(createFunc))
@@ -262,10 +263,11 @@ export const importTemplate = async (ctx) => {
             }
             if (funcList.length) {
                 await Promise.all(funcList.map(async func => {
-                    const { id, createTime, createUser, updateTime, updateUser, pages, ...other } = func
+                    const { id, createTime, createUser, updateTime, updateUser, funcGroupName, pages, ...other } = func
                     const newFunc = Object.assign(other, {
                         versionId,
                         funcGroupId: defaultFuncGroupId,
+                        projectId: belongProjectId,
                         remoteParams: (other.remoteParams || []).join(', '),
                         funcParams: (other.funcParams || []).join(', ')
                     })
@@ -288,12 +290,13 @@ export const importTemplate = async (ctx) => {
     }
 }
 
-const getRealVarAndFunc = async ({ projectId, fromProjectId, valList, funcList }) => {
+const getRealVarAndFunc = async ({ projectId, fromProjectId, versionId, valList, funcList }) => {
     let varIds = []
     const funcIds = []
     const funcCodes = []
-    const projectValList = await VariableModel.getAll({ projectId, effectiveRange: 0 })
-    const projectFuncGroupList = await getAllGroupAndFunction(projectId)
+    const projectValList = await VariableModel.getAll({ projectId, effectiveRange: 0, versionId })
+    // 应用到默认版本
+    const projectFuncGroupList = await getAllGroupAndFunction(projectId, versionId)
     const projectFuncList = []
     projectFuncGroupList.map(item => {
         projectFuncList.splice(0, 0, ...item.children)
@@ -309,6 +312,7 @@ const getRealVarAndFunc = async ({ projectId, fromProjectId, valList, funcList }
     const funcVarList = await getRepository(FuncVariable).find({
         where: {
             projectId: fromProjectId,
+            versionId,
             deleteFlag: 0,
             funcCode: In(funcCodes)
         }
@@ -324,6 +328,7 @@ const getRealVarAndFunc = async ({ projectId, fromProjectId, valList, funcList }
         }
     })
     // 变量id去重
+    varIds = varIds.map(item => typeof item === 'string' ? parseInt(item) : item)
     varIds = Array.from(new Set(varIds))
     return { varIds, funcIds, defaultFuncGroupId }
 }
@@ -338,7 +343,6 @@ const filterFuncAndVars = async ({ projectId, versionId, valList, funcList }) =>
     const defaultFuncGroupId = projectFuncGroupList[0] && projectFuncGroupList[0].id
     funcList = funcList.filter(item => !projectFuncList.find(func => func.funcCode === item.funcCode))
     valList = valList.filter(item => !projectValList.find(val => val.variableCode === item.variableCode))
-    
     return { valList, funcList, defaultFuncGroupId }
 }
 

@@ -4,13 +4,16 @@
             <div class="history-content">
                 <bk-table :data="list" type="small" ext-cls="history-table" empty-text="暂无部署记录">
                     <bk-table-column label="关联的应用模块" prop="bindInfo" width="200" show-overflow-tooltip></bk-table-column>
-                    <bk-table-column label="源码包类型" prop="releaseType" width="150">
+                    <bk-table-column label="源码包类型" prop="releaseType" width="150" show-overflow-tooltip>
                         <template slot-scope="{ row }">
                             {{releaseTypeMap[row.releaseType]}}
+                            <span v-if="row.releaseType === 'PROJECT_VERSION'">
+                                {{`${row.fromProjectVersion === '' ? `(默认)` : (row.fromProjectVersion ? `(${row.fromProjectVersion})` : '') }` }}
+                            </span>
                         </template>
                     </bk-table-column>
                     <bk-table-column label="部署环境" prop="env" :formatter="envFormatter" width="150"></bk-table-column>
-                    <bk-table-column label="源码包版本" prop="version" width="120" show-overflow-tooltip>
+                    <bk-table-column label="部署包版本" prop="version" width="120" show-overflow-tooltip>
                         <template slot-scope="{ row }">
                             <div v-if="row.codeUrl" class="status-result">
                                 <a class="status-log-link" :href="row.codeUrl">{{row.version}}</a>
@@ -89,7 +92,7 @@
                 },
                 releaseTypeMap: {
                     NEW_VERSION: '应用默认版本',
-                    PROJECT_VERSION: '应用已有版本',
+                    PROJECT_VERSION: '应用版本',
                     HISTORY_VERSION: '历史部署包',
                     FROM_V3: 'PaaS平台部署包'
                 },
