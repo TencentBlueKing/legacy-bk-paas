@@ -445,5 +445,7 @@ export const TABLE_FILE_NAME = {
     VARIABLE: 'variable',
     VERSION: 'version',
     FORM: 'form',
-    FLOW: 'flow'
+    FLOW: 'flow',
+    API: 'api',
+    API_CATEGORY: 'api-category'
 }

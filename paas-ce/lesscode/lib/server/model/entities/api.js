@@ -12,88 +12,53 @@
 import { Entity, Column } from 'typeorm'
 import Base from './base'
 
-@Entity({ name: 'func', comment: '函数表' })
+@Entity({ name: 'api', comment: 'Api 管理' })
 export default class extends Base {
-    // 函数名字
+    // 分类 id
+    @Column({ type: 'int' })
+    categoryId
+
+    // 名字
     @Column({ type: 'varchar', length: 255 })
-    funcName
+    name
 
-    // 函数标识
+    // 标识
     @Column({ type: 'varchar', length: 255 })
-    funcCode
+    code
 
-    // 函数参数
-    @Column({ type: 'tinytext' })
-    funcParams
+    // 系统内置 Api id
+    @Column({ type: 'int' })
+    systemApiId
 
-    // 回调函数参数
-    @Column({ type: 'tinytext' })
-    remoteParams
+    // api 方法
+    @Column({ type: 'varchar', length: 50 })
+    method
 
-    // 函数内容
-    @Column({ type: 'mediumtext' })
-    funcBody
+    // url
+    @Column({ type: 'varchar', length: 255 })
+    url
 
-    // 项目id
+    // 项目 id
     @Column({ type: 'int' })
     projectId
 
-    // 函数分类ID
-    @Column({ type: 'int' })
-    funcGroupId
-
-    // 函数分类名字
-    @Column({ type: 'varchar', length: 255 })
-    funcGroupName
-
-    // 函数简介
-    @Column({ type: 'tinytext' })
-    funcSummary
-
-    // 函数模板类型
-    @Column({ type: 'varchar', length: 255 })
-    funcType
-
-    // 远程函数方法
-    @Column({ type: 'varchar', length: 255 })
-    funcMethod
-
-    // 远程函数是否携带 Token
-    @Column({ type: 'int' })
-    withToken
-
-    // 远程函数数据体
-    @Column({ type: 'text' })
-    funcApiData
-
-    // 是否公开
-    @Column({ type: 'int' })
-    publicFlag
-
-    // 远程函数url
-    @Column({ type: 'varchar', length: 255 })
-    funcApiUrl
-
-    // 排序
-    @Column({ type: 'int' })
-    order
-
+    // 版本 id
     @Column({ type: 'int' })
     versionId
 
-    // Api Id
-    @Column({ type: 'int' })
-    apiId
+    // 备注
+    @Column({ type: 'varchar', length: 255 })
+    summary
 
-    // Api header 的值
+    // header 配置
     @Column({ type: 'json' })
-    apiHeader
+    header
 
-    // Api query 的值
+    // query 配置
     @Column({ type: 'json' })
-    apiQuery
+    query
 
-    // Api body 的值
+    // body 配置
     @Column({ type: 'json' })
-    apiBody
+    body
 }
