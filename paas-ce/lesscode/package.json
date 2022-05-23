@@ -13,8 +13,7 @@
     "dev": "better-npm-run dev",
     "stop": "cross-env FOREVER_ROOT=./ forever stop lesscode",
     "list": "cross-env FOREVER_ROOT=./ forever list",
-    "logs": "cross-env FOREVER_ROOT=./ forever logs",
-    "dbm:create": "npx db-migrate --config lib/server/conf/db-migrate.json -m lib/server/model/migrations -e dev create update-sql --sql-file"
+    "logs": "cross-env FOREVER_ROOT=./ forever logs"
   },
   "betterScripts": {
     "dll": {
