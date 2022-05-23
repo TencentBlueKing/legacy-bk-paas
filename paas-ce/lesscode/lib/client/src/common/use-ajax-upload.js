@@ -65,6 +65,10 @@ export default (option) => {
         option.onSuccess(getRes(xhr))
     })
 
+    xhr.addEventListener('loadend', () => {
+        option?.onComplete?.()
+    })
+
     xhr.open(option.method, action, true)
 
     if (option.withCredentials && 'withCredentials' in xhr) {

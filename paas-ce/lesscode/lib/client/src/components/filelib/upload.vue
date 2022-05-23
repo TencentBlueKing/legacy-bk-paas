@@ -94,12 +94,12 @@
                     }
 
                     if (props.autoUpload) {
-                        sendFile(rawFile)
+                        sendFile(rawFile, uploadFiles)
                     }
                 }
             }
 
-            const sendFile = (rawFile: UploadRawFile) => {
+            const sendFile = (rawFile: UploadRawFile, uploadFiles: File[]) => {
                 const { uid } = rawFile
                 const uploadOption = {
                     file: rawFile,
@@ -120,6 +120,11 @@
                     onError: (err: Error) => {
                         props.onError(err, rawFile)
                         delete requests.value[uid]
+                    },
+                    onComplete: () => {
+                        if (uploadFiles.indexOf(rawFile) === uploadFiles.length - 1) {
+                            emit('done')
+                        }
                     }
                 }
                 const request = useAjaxUpload(uploadOption)

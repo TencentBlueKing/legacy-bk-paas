@@ -56,11 +56,11 @@
             :header-border="false"
             :header-cell-style="{ background: '#f0f1f5' }"
             :data="files">
-            <bk-table-column label="文件名称" prop="name" min-width="120" show-overflow-tooltip>
+            <bk-table-column label="文件名称" prop="name" min-width="210" sortable show-overflow-tooltip>
                 <template v-slot="{ row }">
                     <div :class="['filename-content', row.status]">
                         <i class="bk-drag-icon bk-drag-image"></i>
-                        <bk-link theme="primary"
+                        <bk-link theme="primary" class="filename"
                             target="_blank"
                             :href="getFileUrl(row, true)"
                             :disabled="row.status === UPLOAD_STATUS.FAIL">
@@ -69,12 +69,12 @@
                     </div>
                 </template>
             </bk-table-column>
-            <bk-table-column label="大小" prop="size" min-width="120" show-overflow-tooltip>
+            <bk-table-column label="大小" prop="size" min-width="90" sortable show-overflow-tooltip>
                 <template v-slot="{ row }">
                     <span>{{formatSize(row.size)}}</span>
                 </template>
             </bk-table-column>
-            <bk-table-column label="状态" prop="status" min-width="120" show-overflow-tooltip>
+            <bk-table-column label="状态" prop="status" min-width="150" show-overflow-tooltip>
                 <template v-slot="{ row }">
                     <div :class="['upload-status', row.status]">
                         <bk-progress v-if="row.status === UPLOAD_STATUS.UPLOADING" :percent="row.percentage / 100" size="small"></bk-progress>
@@ -83,13 +83,13 @@
                     </div>
                 </template>
             </bk-table-column>
-            <bk-table-column label="创建人" prop="createUser" min-width="120" show-overflow-tooltip></bk-table-column>
-            <bk-table-column label="创建时间" prop="createTime" min-width="120" show-overflow-tooltip>
+            <bk-table-column label="创建人" prop="createUser" min-width="90" sortable show-overflow-tooltip></bk-table-column>
+            <bk-table-column label="创建时间" prop="createTime" min-width="200" sortable show-overflow-tooltip>
                 <template v-slot="{ row }">
                     <span>{{row.createTime | time}}</span>
                 </template>
             </bk-table-column>
-            <bk-table-column label="操作" width="260">
+            <bk-table-column label="操作" min-width="150">
                 <template v-slot="{ row }">
                     <span v-bk-tooltips="{ content: '文件上传中，暂无链接', placements: ['top'], disabled: row.status !== UPLOAD_STATUS.UPLOADING }">
                         <bk-button
@@ -174,8 +174,17 @@
             }
 
             ::v-deep .bk-link {
+                &.filename {
+                    width: calc(100% - 28px);
+                    justify-content: flex-start;
+                    white-space: nowrap;
+                }
+
                 .bk-link-text {
                     font-size: 12px;
+                    width: 100%;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
                 }
             }
 

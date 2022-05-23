@@ -30,7 +30,9 @@
         },
         setup (props, { emit }) {
             const state = reactive({
-                isFileModalShow: false
+                isFileModalShow: false,
+                isShowPreviewViewer: false,
+                previewFileList: []
             })
 
             const url = computed({
@@ -58,12 +60,23 @@
                 state.isFileModalShow = true
             }
 
+            function handleViewFile (file) {
+                state.isShowPreviewViewer = true
+                state.previewFileList = [file.url]
+            }
+
+            function handleClosePreviewViewer () {
+                state.isShowPreviewViewer = false
+            }
+
             return {
                 ...toRefs(state),
                 url,
                 inputPrpos,
                 handleOpenFileModal,
-                handleSelectFile
+                handleSelectFile,
+                handleViewFile,
+                handleClosePreviewViewer
             }
         }
     })
@@ -80,7 +93,13 @@
                 </div>
             </template>
         </bk-input>
-        <file-modal :is-show.sync="isFileModalShow" @select="handleSelectFile" />
+        <file-modal :is-show.sync="isFileModalShow" @select="handleSelectFile" @view="handleViewFile" />
+        <bk-image-viewer
+            v-if="isShowPreviewViewer"
+            :z-index="99999"
+            :on-close="handleClosePreviewViewer"
+            :url-list="previewFileList"
+        ></bk-image-viewer>
     </div>
 </template>
 

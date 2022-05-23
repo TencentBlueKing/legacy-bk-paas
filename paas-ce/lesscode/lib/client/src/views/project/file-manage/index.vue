@@ -94,6 +94,7 @@
 
             const {
                 uploadFiles,
+                isUploading,
                 handleStart,
                 handleError,
                 handleSuccess,
@@ -133,10 +134,25 @@
                 displayList,
                 DISPLAY_TYPES,
                 listComponent,
+                isUploading,
                 handleSearch,
                 handleToggleDisplayType,
                 handleRemove
             }
+        },
+        beforeRouteLeave (to, from, next) {
+            if (!this.isUploading) {
+                next()
+                return
+            }
+
+            this.$bkInfo({
+                title: '确认离开?',
+                subTitle: '文件正在上传中，离开可能导致文件上传失败',
+                confirmFn: async () => {
+                    next()
+                }
+            })
         }
     })
 </script>
@@ -166,7 +182,7 @@
                 </div>
             </div>
         </div>
-        <div class="page-body file-manage-body" v-bkloading="{ isLoading: listLoading }">
+        <div :class="['page-body', 'file-manage-body', { 'is-empty': !uploadFiles.length }]" v-bkloading="{ isLoading: listLoading }">
             <component
                 v-show="!listLoading"
                 :is="listComponent"
@@ -225,5 +241,21 @@
 
     .file-manage-body {
         height: calc(100% - 52px);
+        ::v-deep .list-card {
+            display: grid;
+            grid-gap: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(256px, 1fr));
+
+            .card-item {
+                margin: 0;
+                width: auto;
+            }
+        }
+
+        &.is-empty {
+            ::v-deep .list-card {
+                display: flex;
+            }
+        }
     }
 </style>

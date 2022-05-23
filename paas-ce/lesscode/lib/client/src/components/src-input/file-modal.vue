@@ -102,8 +102,7 @@
                 emit('select', file)
             }
             const handleView = (file) => {
-                emit('')
-                console.log(file)
+                emit('view', file)
             }
 
             const handleCancel = () => {
@@ -143,6 +142,7 @@
         :class="'filelib-dialog'"
         :render-directive="'if'"
         :width="980"
+        :esc-close="false"
         :mask-close="false"
         header-position="left"
         title="文件库">

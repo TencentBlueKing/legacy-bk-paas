@@ -28,6 +28,8 @@ export default (props, uploadRef) => {
 
     const uploadFiles = ref([])
 
+    const isUploading = ref(false)
+
     const getFile = (rawFile) => uploadFiles.value.find((file) => file.uid === rawFile.uid)
 
     function abort (file) {
@@ -146,6 +148,10 @@ export default (props, uploadRef) => {
         { immediate: true, deep: true }
     )
 
+    watch(uploadFiles, (files) => {
+        isUploading.value = files.some(file => file?.status === 'uploading')
+    }, { deep: true })
+
     return {
         abort,
         handleError,
@@ -154,6 +160,7 @@ export default (props, uploadRef) => {
         handleSuccess,
         handleRemove,
         submit,
-        uploadFiles
+        uploadFiles,
+        isUploading
     }
 }
