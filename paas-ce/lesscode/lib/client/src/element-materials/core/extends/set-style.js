@@ -9,12 +9,15 @@
  * - params1 是 String 时表示属性名，params2 为对应的属性值
  */
 export default function (node, params1, params2 = '') {
-    if (Object.prototype.toString.call(params1) === '[object Object]') {
-        Object.keys(params1).forEach(styleName => {
-            node.renderStyles[styleName] = params1[styleName]
-        })
-    } else if (Object.prototype.toString.call(params1) === '[object String]') {
-        node.renderStyles[params1] = params2
+    let styleData = {}
+    if (Object.prototype.toString.call(params1) === '[object String]') {
+        styleData[params1] = params2
+    } else {
+        styleData = params1
     }
+    
+    Object.keys(styleData).forEach(styleName => {
+        node.renderStyles[styleName] = styleData[styleName]
+    })
     return true
 }

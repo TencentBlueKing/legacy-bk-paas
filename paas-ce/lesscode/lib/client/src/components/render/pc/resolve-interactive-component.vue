@@ -55,7 +55,7 @@
 <style lang="postcss" module>
     .interactive {
         position: fixed;
-        z-index: 1000000000000;
+        z-index: 99999999;
         background: rgba(0,0,0,0.5);
         top: 0;
         right: 0;

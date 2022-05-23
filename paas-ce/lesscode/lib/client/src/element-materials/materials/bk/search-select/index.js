@@ -92,9 +92,8 @@ export default {
         // {
         //     type: 'v-bind',
         //     prop: 'data',
-        //     propTypes: ['array'],
-        //     val: '',
-        //     valType: 'variable'
+        //     format: 'variable',
+        //     valueTypeInclude: ['array']
         // }
     ],
     props: {

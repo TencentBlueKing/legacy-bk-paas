@@ -37,9 +37,8 @@ export default {
         // {
         //     type: 'v-bind',
         //     prop: 'list',
-        //     propTypes: ['array'],
-        //     val: '',
-        //     valType: 'variable'
+        //     format: 'variable',
+        //     valueTypeInclude: ['array']
         // }
     ],
     props: {

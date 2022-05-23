@@ -9,7 +9,8 @@
 <script>
     import {
         ref,
-        onBeforeUnmount
+        onBeforeUnmount,
+        getCurrentInstance
     } from '@vue/composition-api'
     import MenuItem from './menu-item'
     import useSave from './common/use-save'
@@ -22,6 +23,7 @@
         },
         
         setup () {
+            const currentInstance = getCurrentInstance()
             const [isLoading, handleSave] = useSave()
             const [, handleUpdatePreiviewImg] = usePreviewImg()
             const {
@@ -33,10 +35,13 @@
 
             const isLocked = ref(true)
 
+            let lockInfo = {}
+
             // 检测页面的可编辑状态
             canvasLockCheck()
                 .then(data => {
                     if (data.isLock) {
+                        lockInfo = data
                         isLocked.value = true
                         canvasLockNotify({
                             type: 'lock',
@@ -54,6 +59,10 @@
              */
             const handleSubmit = async () => {
                 if (isLocked.value) {
+                    currentInstance.proxy.$bkMessage({
+                        message: `画布正在被 ${lockInfo.activeUser} 编辑无法保存`,
+                        theme: 'warning'
+                    })
                     return
                 }
                 await handleSave()

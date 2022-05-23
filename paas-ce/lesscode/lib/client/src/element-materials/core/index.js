@@ -1,12 +1,13 @@
 import parseData from './static/parse-data'
 import parseTemplate from './static/parse-template'
 import getRoot from './static/get-root'
+import getMaterial, { registerMaterial, unregisterMaterial } from './static/get-material'
 import getActiveNode from './static/get-active-node'
 import getNodeById from './static/get-node-by-id'
 import getNodesByType from './static/get-nodes-by-type'
 import createNode from './static/create-node'
 import reset from './static/reset'
-import { registerMaterial, unregisterMaterial } from './static/get-material'
+
 import isNode from './static/is-node'
 import isInteractiveType from './static/is-interactive-type'
 import isLayoutType from './static/is-layout-type'
@@ -57,6 +58,7 @@ core.parseTemplate = parseTemplate
 core.registerMaterial = registerMaterial
 // NodeTree 操作 api
 core.getRoot = getRoot
+core.getMaterial = getMaterial
 core.getActiveNode = getActiveNode
 core.getNodeById = getNodeById
 core.getNodesByType = getNodesByType

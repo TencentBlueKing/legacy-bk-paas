@@ -76,7 +76,9 @@
                 <edit-func-form
                     ref="functionForm"
                     :func-data="chosenFunction"
-                    @success-save="handleSuccessSave"
+                    :show-save-use="showSaveUse"
+                    @save-use="handleSaveUse"
+                    @success-save="refreshStatus"
                     @close="handleCloseDialog"
                 />
             </layout>
@@ -112,6 +114,9 @@
             insertFunction: {
                 type: Object,
                 default: undefined
+            },
+            showSaveUse: {
+                type: Boolean
             }
         },
 
@@ -138,7 +143,7 @@
         watch: {
             show (val) {
                 if (val) {
-                    this.refreshStatus().then(() => {
+                    this.resetList().then(() => {
                         // 打开面板并初始化数据以后，需要判断是新增函数还是选择已有函数
                         if (this.insertFunction) {
                             this.handleInsertFunction(this.renderGroupList[0], this.insertFunction)
@@ -158,7 +163,7 @@
                 'editFunctionGroups'
             ]),
 
-            refreshStatus () {
+            resetList () {
                 this.isLoading = true
                 return Promise.all([
                     this.getGroupList({
@@ -265,8 +270,12 @@
                 }
             },
 
-            handleSuccessSave () {
-                this.refreshStatus().then(this.handleChooseDefaultFunction)
+            handleSaveUse (funcCode) {
+                this.$emit('save-use', funcCode)
+            },
+
+            refreshStatus () {
+                this.resetList().then(this.handleChooseDefaultFunction)
             },
 
             handleGroupSort () {
@@ -294,7 +303,7 @@
                         this.newGroupName = ''
                         this.clickEmptyArea()
                         this.messageSuccess('添加成功')
-                        this.refreshStatus()
+                        this.resetList()
                     }).finally(() => {
                         this.isCreatingGroup = false
                     })

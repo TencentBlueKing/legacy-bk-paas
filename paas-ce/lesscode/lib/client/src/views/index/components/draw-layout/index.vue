@@ -111,7 +111,6 @@
             top: 0;
             bottom: 0;
             left: 0;
-            z-index: 1;
             width: $layoutLeftWidth;
             background: #fff;
             box-shadow: 2px 4px 4px 0 rgb(0 0 0 / 10%);
@@ -128,8 +127,6 @@
         .layout-center{
             position: relative;
             height: 100%;
-            padding: 20px 0;
-            overflow: hidden;
         }
         .collapsed-left-btn,
         .collapsed-right-btn{

@@ -18,6 +18,9 @@ import preload from '@/common/preload'
 
 Vue.use(VueRouter)
 
+// 首页
+const Home = () => import(/* webpackChunkName: 'home' */'@/views/home')
+
 const SystemEntry = () => import(/* webpackChunkName: 'index' */'@/views/system')
 const Projects = () => import(/* webpackChunkName: 'projects' */'@/views/system/projects')
 const Account = () => import(/* webpackChunkName: 'account' */'@/views/system/account')
@@ -92,6 +95,7 @@ const ProjectMember = () => import(/* webpackChunkName: 'operation-stats-entry' 
 const routes = [
     {
         path: '/help',
+        name: 'help',
         component: MainHelpEntry,
         children: [
             { path: 'custom', name: 'custom', component: Custom },
@@ -117,6 +121,11 @@ const routes = [
         component: HealthPage
     },
     {
+        path: '/home',
+        name: 'home',
+        component: Home
+    },
+    {
         path: '/',
         components: {
             default: SystemEntry,
@@ -129,7 +138,7 @@ const routes = [
                 name: 'projects',
                 component: Projects,
                 meta: {
-                    title: '应用管理'
+                    title: '我的应用'
                 }
             },
             {

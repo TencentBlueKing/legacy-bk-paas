@@ -1,17 +1,18 @@
 <template>
     <div class="project-template-modifier">
-        <template v-if="templateData.panelActive !== 'complexSide'">
-            <div class="header">{{ templateData.showName }}</div>
+        <div class="header" v-if="!isComplexSide">{{ templateData.showName }}</div>
+        <div class="main" :class="{ 'is-complex-side': isComplexSide }">
             <editor-prop
+                v-if="!isComplexSide"
                 v-bind="templateData"
                 @on-change="handleChange" />
-        </template>
-        <div ref="container" class="container">
-            <component
-                :is="panelCom"
-                :style="containerStyle"
-                v-bind="templateData"
-                @on-change="handleChange" />
+            <div ref="container" class="container">
+                <component
+                    :is="panelCom"
+                    :style="containerStyle"
+                    v-bind="templateData"
+                    @on-change="handleChange" />
+            </div>
         </div>
     </div>
 </template>
@@ -69,6 +70,9 @@
         computed: {
             panelCom () {
                 return panelComMap[this.templateData.panelActive] || ''
+            },
+            isComplexSide () {
+                return this.templateData.panelActive === 'complexSide'
             }
         },
         mounted () {
@@ -88,6 +92,8 @@
     }
 </script>
 <style lang='postcss'>
+    @import "@/css/mixins/scroller";
+
     .project-template-modifier{
         position: absolute;
         top: 0;
@@ -98,11 +104,19 @@
         background: #fff;
         .header{
             height: 46px;
-            margin-bottom: 20px;
             font-size: 14px;
             line-height: 46px;
             text-align: center;
             border-bottom: 1px solid #dcdee5;
+        }
+        .main {
+            padding-top: 20px;
+            height: calc(100% - 46px);
+            overflow: auto;
+            @mixin scroller;
+            &.is-complex-side {
+                height: 100%
+            }
         }
         .container{
             padding: 0 10px;

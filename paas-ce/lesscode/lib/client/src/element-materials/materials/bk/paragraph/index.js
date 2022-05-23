@@ -28,13 +28,12 @@ export default {
         verticalAlign: 'middle'
     },
     directives: [
-        // {
-        //     type: 'v-html',
-        //     prop: 'slots',
-        //     propTypes: ['string'],
-        //     val: '',
-        //     valType: 'variable'
-        // }
+        {
+            type: 'v-html',
+            prop: 'slots',
+            format: 'variable',
+            valueTypeInclude: ['string']
+        }
     ],
     props: {
         title: {
