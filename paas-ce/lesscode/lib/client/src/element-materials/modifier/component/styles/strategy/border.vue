@@ -134,7 +134,7 @@
         </style-item>
         <template v-if="borderImage.show">
             <style-item name="url">
-                <bk-input
+                <src-input
                     :value="borderImage.borderImageSource"
                     @change="handleBorderSourceChange"
                     style="width: 100%" />
@@ -173,6 +173,7 @@
     import AppendNumberInput from '@/components/modifier/append-number-input'
     import BorderDetail from '@/components/modifier/border-detail'
     import SizeInput from '@/components/modifier/size-input'
+    import SrcInput from '@/components/src-input/index.vue'
     import { splitValueAndUnit, computeIsDifferent } from '@/common/util'
 
     export default {
@@ -181,7 +182,8 @@
             StyleItem,
             AppendNumberInput,
             BorderDetail,
-            SizeInput
+            SizeInput,
+            SrcInput
         },
         props: {
             value: {

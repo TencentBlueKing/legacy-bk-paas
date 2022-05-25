@@ -12,7 +12,7 @@
 <template>
     <div class="modifier-prop">
         <variable-select
-            :show="variableSelectEnable"
+            :show="!isReadOnly && variableSelectEnable"
             :options="variableSelectOptions"
             :value="formData"
             @change="handleVariableFormatChange">
@@ -39,7 +39,8 @@
             </bk-radio-group>
             <div class="prop-action">
                 <template v-for="(renderCom, index) in renderComponentList">
-                    <template v-if="selectValueType === renderCom.type">
+                    <!-- 控件类型或者值的类型匹配都将展示，如：控制类型为 src 值的类型为 string(支持src输入加选择模式之前) 都需展示 -->
+                    <template v-if="selectValueType === renderCom.type || selectValueType === renderCom.valueType">
                         <component
                             :is="renderCom.component"
                             :name="name"
@@ -49,6 +50,7 @@
                             :payload="propTypeValueMemo[selectValueType].payload"
                             :remote-validate="describe.remoteValidate"
                             :key="`${renderCom.type}_${index}`"
+                            :readonly="isReadOnly"
                             :change="handleCodeChange" />
                     </template>
                 </template>
@@ -90,6 +92,7 @@
     import TypleElProps from './strategy/el-props'
     import TypeDataSource from './strategy/data-source.vue'
     import TypeTableDataSource from './strategy/table-data-source.vue'
+    import TypeSrc from './strategy/src.vue'
 
     const getRealValue = (type, target) => {
         if (type === 'object') {
@@ -114,12 +117,14 @@
                     'array': '数组',
                     'remote': '远程函数',
                     'data-source': '数据源',
-                    'table-data-source': '数据源'
+                    'table-data-source': '数据源',
+                    'srcset': '图片列表'
                 }
                 return textMap[valueType] || toPascal(valueType)
             }
         },
         props: {
+            componentType: String,
             // prop 的 name
             name: {
                 type: String,
@@ -172,7 +177,9 @@
                     'function': TypeFunction,
                     'el-props': TypleElProps,
                     'data-source': TypeDataSource,
-                    'table-data-source': TypeTableDataSource
+                    'table-data-source': TypeTableDataSource,
+                    'src': TypeSrc,
+                    'srcset': TypeSlotWrapper
                 }
 
                 const typeMap = {
@@ -211,8 +218,12 @@
                     'el-checkbox': 'el-checkbox',
                     'el-props': 'el-props',
                     'data-source': 'data-source',
-                    'table-data-source': 'table-data-source'
+                    'table-data-source': 'table-data-source',
+                    'src': 'src',
+                    'srcset': 'srcset'
                 }
+
+                // 属性“值”的类型映射
                 const valueMap = {
                     'text': 'string',
                     'paragraph': 'string',
@@ -220,7 +231,10 @@
                     'json': 'object',
                     'icon': 'string',
                     'van-icon': 'string',
-                    'float': 'number'
+                    'float': 'number',
+                    'src': 'string',
+                    'srcset': 'array',
+                    'object': 'hidden'
                 }
 
                 let realType = config.type
@@ -250,7 +264,7 @@
                     return this.name
                 }
                 const [editCom] = this.renderComponentList
-                return `${this.name}(${toPascal(editCom.type)})`
+                return `${this.name}(${toPascal(editCom.valueType)})`
             },
             /**
              * @desc 不支持的变量切换类型(variable、expression)
@@ -280,12 +294,48 @@
                 return !this.renderComponentList.some(com => com.type === 'remote')
             }
         },
+        watch: {
+            lastValue: {
+                handler (lastValue) {
+                    if (this.isInnerChange) {
+                        this.isInnerChange = false
+                        return
+                    }
+                    setTimeout(() => {
+                        if (lastValue && lastValue.valueType) {
+                            // fix: 旧数据存在 valueType 是数组的情况
+                            const lastValueType = Array.isArray(lastValue.valueType)
+                                ? lastValue.valueType[0]
+                                : lastValue.valueType
+                            // fix: 错误数据转换，表达式类型的 format 包存成了 value
+                            const isFixedComputeFormat = lastValue.format === 'value'
+                                && /=/.test(lastValue.code)
+                                && !/</.test(lastValue.code)
+                            this.formData = Object.freeze({
+                                ...this.formData,
+                                format: isFixedComputeFormat ? 'expression' : lastValue.format,
+                                code: lastValue.code,
+                                valueType: lastValueType
+                            })
+
+                            this.propTypeValueMemo[this.formData.valueType] = {
+                                val: lastValue.code,
+                                payload: lastValue.payload || {}
+                            }
+                        }
+                        this.selectValueType = this.formData.valueType
+                    })
+                },
+                immediate: true
+            }
+        },
         created () {
+            this.isReadOnly = this.componentType === 'widget-form' && this.name === 'model'
             const {
                 type,
                 val
             } = this.describe
-            
+
             const defaultValue = val !== undefined ? val : getDefaultValueByType(type)
             const valueTypeInclude = Array.isArray(type) ? type : [type]
 
@@ -307,7 +357,7 @@
                 renderValue: defaultValue,
                 payload: this.lastValue.payload || {}
             })
-            
+
             // 编辑状态缓存
             this.propTypeValueMemo = {
                 [this.formData.valueType]: {
@@ -315,43 +365,16 @@
                     payload: this.formData.payload
                 }
             }
-
-            if (this.lastValue && this.lastValue.valueType) {
-                // fix: 旧数据存在 valueType 是数组的情况
-                const lastValueType = Array.isArray(this.lastValue.valueType)
-                    ? this.lastValue.valueType[0]
-                    : this.lastValue.valueType
-                // fix: 错误数据转换，表达式类型的 format 包存成了 value
-                const isFixedComputeFormat = this.lastValue.format === 'value' && /=/.test(this.lastValue.code)
-                this.formData = Object.freeze({
-                    ...this.formData,
-                    format: isFixedComputeFormat ? 'expression' : this.lastValue.format,
-                    code: this.lastValue.code,
-                    valueType: lastValueType
-                })
-                // TODO. format 为变量的时候时是否需要去获取变量的默认值
-                if (this.formData.format === 'value') {
-                    this.propTypeValueMemo[this.formData.valueType] = {
-                        val: this.lastValue.code,
-                        payload: this.lastValue.payload || {}
-                    }
-                } else {
-                    this.propTypeValueMemo[this.formData.valueType] = {
-                        val: defaultValue,
-                        payload: this.lastValue.payload || {}
-                    }
-                }
-            }
-            this.selectValueType = this.formData.valueType
         },
         methods: {
             /**
              * @desc 同步更新用户操作
              */
             triggerChange () {
+                this.isInnerChange = true
                 // 缓存用户本地编辑值
                 this.propTypeValueMemo[this.formData.valueType] = {
-                    val: this.formData.code,
+                    val: this.formData.code || this.formData.renderValue,
                     payload: this.formData.payload
                 }
 
@@ -365,11 +388,16 @@
              * @param { Object } variableSelectData
              */
             handleVariableFormatChange (variableSelectData) {
+                const {
+                    format,
+                    code,
+                    renderValue
+                } = variableSelectData
                 this.formData = Object.freeze({
                     ...this.formData,
-                    format: variableSelectData.format,
-                    code: variableSelectData.code,
-                    renderValue: variableSelectData.renderValue
+                    format,
+                    code,
+                    renderValue
                 })
                 this.triggerChange()
             },
@@ -396,7 +424,7 @@
                     // 切换值类型时，通过类型获取默认值
                     code = getDefaultValueByType(valueType)
                 }
-                
+
                 this.formData = Object.freeze({
                     ...this.formData,
                     code,
@@ -404,7 +432,7 @@
                     valueType,
                     renderValue: code
                 })
-                
+
                 this.triggerChange()
             },
             /**
@@ -432,7 +460,7 @@
                         code = val
                         renderValue = val
                     }
-                    
+
                     this.formData = Object.freeze({
                         ...this.formData,
                         code,

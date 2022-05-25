@@ -111,7 +111,7 @@
 
     .horizontal-wrapper{
         position: relative;
-        padding: 0px 20px;
+        padding: 20px;
         height: 100%;
         overflow: auto;
     }

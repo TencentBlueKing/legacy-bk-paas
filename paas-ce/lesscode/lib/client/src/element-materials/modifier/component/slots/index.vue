@@ -15,7 +15,7 @@
 <script>
     import _ from 'lodash'
     import LC from '@/element-materials/core'
-    import renderSlot from './slot.vue'
+    import renderSlot from './render-slot.vue'
 
     export default {
         components: {
@@ -29,13 +29,8 @@
             }
         },
 
-        watch: {
-            lastSlots () {
-                this.renderSlots = this.lastSlots
-            }
-        },
-
         created () {
+            this.isInnerChange = false
             this.componentNode = LC.getActiveNode()
             // 布局类型的组件不支持 slot 配置
             if (this.componentNode.layoutType) {
@@ -61,6 +56,20 @@
                 return result
             }, {})
             this.lastSlots = Object.freeze(_.cloneDeep(renderSlots))
+
+            const updateCallback = _.debounce(() => {
+                if (this.isInnerChange) {
+                    this.isInnerChange = false
+                    return
+                }
+
+                this.lastSlots = Object.freeze(_.cloneDeep(this.componentNode.renderSlots))
+            }, 100)
+
+            LC.addEventListener('setRenderSlots', updateCallback)
+            this.$once('hook:beforeDestroy', () => {
+                LC.removeEventListener('setRenderSlots', updateCallback)
+            })
         },
 
         methods: {
@@ -69,6 +78,7 @@
                     ...this.lastSlots,
                     [slotName]: slotData
                 })
+                this.isInnerChange = true
                 this.componentNode.setRenderSlots(slotData, slotName)
             }, 60)
         }

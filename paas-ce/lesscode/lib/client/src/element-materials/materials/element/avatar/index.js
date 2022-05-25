@@ -45,7 +45,7 @@ export default {
             tips: '设置头像的形状'
         },
         src: {
-            type: 'string',
+            type: 'src',
             val: 'https://magicbox.bk.tencent.com/static_api/v3/components_vue/2.0/example/example/static/images/firstswiper.jpg',
             tips: '图片头像的资源地址'
         },

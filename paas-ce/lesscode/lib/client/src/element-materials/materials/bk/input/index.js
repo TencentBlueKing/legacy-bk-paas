@@ -78,6 +78,8 @@ export default {
         'opacity'
     ],
     renderStyles: {
+        display: 'inline-block',
+        verticalAlign: 'middle',
         width: '300px'
     },
     directives: [

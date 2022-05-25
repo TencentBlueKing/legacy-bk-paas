@@ -46,9 +46,8 @@ export default {
         // {
         //     type: 'v-bind',
         //     prop: 'pics',
-        //     propTypes: ['array'],
-        //     val: '',
-        //     valType: 'variable'
+        //     format: 'variable',
+        //     valueTypeInclude: ['array']
         // }
     ],
     props: {
@@ -63,7 +62,7 @@ export default {
             tips: '轮播间隔'
         },
         pics: {
-            type: ['array', 'remote'],
+            type: ['srcset', 'remote'],
             remoteValidate (data) {
                 if (!Array.isArray(data)) return '返回值需要是数组'
                 const errData = data.find((item) => !item.hasOwnProperty('url'))

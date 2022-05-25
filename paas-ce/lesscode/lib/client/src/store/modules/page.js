@@ -26,13 +26,13 @@ export default {
             state.mobilePreview = preview
         },
         setPageDetail (state, page) {
-            state.pageDetail = page
+            state.pageDetail = Object.freeze(page)
         },
         setPageList (state, pageList) {
             state.pageList = pageList
         },
         updatePageDetail (state, page) {
-            state.pageDetail = { ...state.pageDetail, ...page }
+            state.pageDetail = Object.freeze({ ...state.pageDetail, ...page })
         },
         updatePageList (state, page) {
             const index = state.pageList.findIndex(item => item.id === page.id)

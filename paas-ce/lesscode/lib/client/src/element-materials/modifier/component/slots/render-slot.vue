@@ -74,6 +74,7 @@
     import slotText from './components/text'
     import slotTextArea from './components/textarea'
     import slotDataSource from './components/data-source.vue'
+    import slotSelectDataSource from './components/select-data-source.vue'
 
     const comMap = {
         list: slotList,
@@ -82,7 +83,8 @@
         text: slotText,
         textarea: slotTextArea,
         'table-list': slotTable,
-        'data-source': slotDataSource
+        'data-source': slotDataSource,
+        'select-data-source': slotSelectDataSource
     }
 
     const typeTextMap = {
@@ -93,7 +95,8 @@
         'remote': '远程函数',
         'data-source': '数据源',
         'list': '数据列表',
-        'table-list': '数据列表'
+        'table-list': '数据列表',
+        'select-data-source': '数据源'
     }
 
     export default {
@@ -170,6 +173,39 @@
                 }
             }
         },
+        watch: {
+            lastValue: {
+                handler (lastValue) {
+                    if (this.isInnerChange) {
+                        this.isInnerChange = false
+                        return
+                    }
+                    if (lastValue && lastValue.valueType) {
+                        // setTimeout 让 watch 第一次执行时在 created 之后
+                        setTimeout(() => {
+                            // fix: 错误数据转换，表达式类型的 format 包存成了 value
+                            const isFixedComputeFormat = lastValue.format === 'value'
+                                && /=/.test(lastValue.code)
+                                && !/</.test(lastValue.code)
+                            this.formData = Object.freeze({
+                                ...this.formData,
+                                format: isFixedComputeFormat ? 'expression' : lastValue.format,
+                                component: lastValue.component,
+                                code: lastValue.code,
+                                payload: lastValue.payload || {},
+                                valueType: lastValue.valueType
+                            })
+                            this.slotTypeValueMemo[this.formData.valueType] = {
+                                val: this.formData.code,
+                                payload: this.formData.payload,
+                                component: this.formData.component
+                            }
+                        })
+                    }
+                },
+                immediate: true
+            }
+        },
         created () {
             const {
                 val,
@@ -207,24 +243,6 @@
                     component: this.formData.component
                 }
             }
-
-            if (this.lastValue && this.lastValue.valueType) {
-                // fix: 错误数据转换，表达式类型的 format 包存成了 value
-                const isFixedComputeFormat = this.lastValue.format === 'value' && /=/.test(this.lastValue.code)
-                this.formData = Object.freeze({
-                    ...this.formData,
-                    format: isFixedComputeFormat ? 'expression' : this.lastValue.format,
-                    component: this.lastValue.component,
-                    code: this.lastValue.code,
-                    payload: this.lastValue.payload || {},
-                    valueType: this.lastValue.valueType
-                })
-                this.slotTypeValueMemo[this.formData.valueType] = {
-                    val: this.formData.code,
-                    payload: this.formData.payload,
-                    component: this.formData.component
-                }
-            }
         },
         methods: {
             /**
@@ -233,11 +251,11 @@
             triggerChange () {
                 // 缓存用户本地编辑值
                 this.slotTypeValueMemo[this.formData.valueType] = {
-                    val: this.formData.code,
+                    val: this.formData.code || this.formData.renderValue,
                     payload: this.formData.payload,
                     component: this.formData.component
                 }
-
+                this.isInnerChange = true
                 this.$emit('on-change', this.name, {
                     ...this.formData
                 })
@@ -275,7 +293,7 @@
                 if (this.slotTypeValueMemo.hasOwnProperty(valueType)) {
                     code = this.slotTypeValueMemo[valueType].val
                     payload = this.slotTypeValueMemo[valueType].payload
-                } else if (valueType === 'remote') {
+                } else if (['remote', 'data-source', 'select-data-source'].includes(valueType)) {
                     // fix: 配置远程函数类型，
                     // 接口数据没返回时使用配置文件设置的默认值
                     code = this.describe.val

@@ -33,16 +33,7 @@ export default {
         'pointer',
         'opacity'
     ],
-    directives: [
-        // {
-        //     type: 'v-bind',
-        //     prop: 'rate',
-        //     propTypes: ['number'],
-        //     val: '',
-        //     valType: 'variable',
-        //     modifiers: ['sync']
-        // }
-    ],
+    directives: [],
     props: {
         rate: {
             type: 'number',

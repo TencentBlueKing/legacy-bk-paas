@@ -22,9 +22,7 @@ const createNodeFromData = (data) => {
                 newNode.componentId = data.componentId
             }
         }
-
         data.renderStyles && newNode.setRenderStyles(data.renderStyles)
-        // data.renderProps && newNode.setRenderProps(data.renderProps)
         data.renderDirectives && newNode.setRenderDirectives(data.renderDirectives)
         data.renderEvents && newNode.setRenderEvents(data.renderEvents)
         if (data.renderProps) {

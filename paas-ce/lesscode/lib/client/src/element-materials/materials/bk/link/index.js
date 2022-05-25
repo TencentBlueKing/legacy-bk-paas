@@ -39,7 +39,8 @@ export default {
     ],
     renderStyles: {
         display: 'inline-block',
-        textAlign: 'center'
+        textAlign: 'center',
+        verticalAlign: 'middle'
     },
     props: {
         theme: {
@@ -49,7 +50,7 @@ export default {
             tips: '链接类型、主题'
         },
         href: {
-            type: 'string',
+            type: 'src',
             val: '',
             tips: '链接跳转地址'
         },

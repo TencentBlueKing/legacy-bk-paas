@@ -49,7 +49,7 @@
     import RenderExpression from './components/expression'
 
     const genFormData = ({
-        format = 'value',
+        format,
         code = '',
         valueType = [],
         renderValue
@@ -124,7 +124,7 @@
 
         data () {
             return {
-                formData: genFormData(this.value)
+                formData: {}
             }
         },
 
@@ -143,8 +143,21 @@
                 }, {})
             }
         },
+        watch: {
+            value: {
+                handler (value) {
+                    if (this.innerChange) {
+                        this.innerChange = false
+                        return
+                    }
+                    this.formData = genFormData(value)
+                },
+                immediate: true
+            }
+        },
         methods: {
             triggerChange () {
+                this.innerChange = true
                 this.$emit('change', {
                     ...this.formData
                 })
@@ -156,6 +169,9 @@
              * format 改变时需要重置 code 的值
              */
             handleFormatChange (format) {
+                if (format === this.formData.format) {
+                    return
+                }
                 this.formData.format = format
                 this.formData.code = ''
                 this.triggerChange()

@@ -13,7 +13,29 @@ const headers = {
     'Authorization': 'Basic ' + Buffer.from(config.BKREPO_USERNAME + ':' + config.BKREPO_PASSWORD).toString('base64')
 }
 
-const urlPrefix = `${config.BKREPO_ENDPOINT_URL}/generic/${config.BKREPO_PROJECT}/${config.BKREPO_BUCKET}`
+const urlPrefix = `${config.BKREPO_ENDPOINT_URL}/generic/${config.BKREPO_PROJECT}`
+
+/**
+ * 获取最终的接口调用地址
+ * @param {string} path 接口路径
+ * @param {boolean} isPublic 是否为公开
+ * @returns {string} 最终的接口调用地址
+ */
+const getUrl = (path, isPublic) => {
+    let prefix = urlPrefix
+    if (isPublic === undefined) {
+        prefix = `${prefix}/${config.BKREPO_BUCKET}`
+    } else {
+        prefix = `${prefix}/${isPublic ? config.BKREPO_PUBLIC_BUCKET : config.BKREPO_PRIVATE_BUCKET}`
+    }
+
+    let newPath = path
+    if (!newPath.startsWith('/')) {
+        newPath = '/' + newPath
+    }
+
+    return `${prefix}${newPath}`
+}
 
 const checkSetting = () => {
     if (!config.BKREPO_USERNAME || !config.BKREPO_PROJECT || !config.BKREPO_ENDPOINT_URL) {
@@ -52,11 +74,9 @@ const downloadFile = (targetFile, dest) => {
         const destParent = path.dirname(dest)
         fse.ensureDirSync(destParent)
     }
-    if (!targetFile.startsWith('/')) {
-        targetFile = '/' + targetFile
-    }
+
     const options = {
-        url: urlPrefix + targetFile,
+        url: getUrl(targetFile),
         headers: headers
     }
 
@@ -100,33 +120,48 @@ const getSignUrl = async (fullPathSet = [], expireSeconds = 0) => {
     })
 }
 
-const uploadFile = async (filePath, uploadKey) => {
+const uploadFile = async (filePath, uploadKey, settings = {}) => {
     checkSetting()
     const key = path.basename(filePath)
     const fileStream = fs.createReadStream(filePath)
     fileStream.on('error', err => {
         return Promise.reject(err)
     })
-    const res = await uploadRepoFile(`${uploadKey}${key}`, fileStream)
+    const res = await uploadRepoFile(`${uploadKey}${key}`, fileStream, settings)
     return res
 }
 
-const uploadImage = async (filePath, uploadKey) => {
+const uploadImage = async (filePath, uploadKey, settings = {}) => {
     checkSetting()
     const key = path.basename(filePath)
+
+    let uploadPath = `${uploadKey}${key}`
+    if (settings.ensurePath) {
+        uploadPath = uploadKey
+    }
+
     const fileStream = fs.createReadStream(filePath)
     fileStream.on('error', err => {
         return Promise.reject(err)
     })
-    const res = await uploadRepoFile(`${uploadKey}${key}`, fileStream)
+    const res = await uploadRepoFile(uploadPath, fileStream, settings)
     return res
 }
 
-// uploadPath: 文件存储路径     filePath：文件内容
-const uploadRepoFile = async (uploadPath, fileStream) => {
+/**
+ * 上传文件至bkrepo
+ * @param {string} uploadPath 文件存储路径
+ * @param {ReadStream} fileStream 文件内容
+ * @param {object} settings 配置选项
+ * @param {boolean} settings.isPublic 是否公开
+ * @param {boolean} settings.fullUrl 是否返回完整url
+ * @returns {Promise} 文件存储路径
+ */
+const uploadRepoFile = async (uploadPath, fileStream, settings = {}) => {
+    const url = getUrl(uploadPath, settings.isPublic)
     const options = {
+        url,
         method: 'PUT',
-        url: urlPrefix + uploadPath,
         headers: Object.assign({}, headers, { 'X-BKREPO-OVERWRITE': true }),
         body: fileStream
     }
@@ -140,7 +175,7 @@ const uploadRepoFile = async (uploadPath, fileStream) => {
             } else if (typeof body === 'object' && body.code > 0) {
                 reject(new Error(`上传至repo失败： ${body.message}`))
             } else if (body.code === 0) {
-                resolve(uploadPath)
+                resolve(settings.fullUrl ? url : uploadPath)
             } else {
                 reject(new Error('上传至repo失败'))
             }

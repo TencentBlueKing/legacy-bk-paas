@@ -1,17 +1,17 @@
 import LC from '@/element-materials/core'
 
-export default function (event) {
-    return () => {
+export default function () {
+    return (event) => {
         event.stopPropagation()
         event.preventDefault()
         const activeNode = LC.getActiveNode()
         const newTemplateNode = activeNode.cloneNode()
         let templateJSON = {}
         if (newTemplateNode.type === 'render-column') {
-        // render-column 不能单独存在必须和 render-grid 配套存在
-            templateJSON = LC.createNode('render-grid').toJSON()
+        // render-column 存为模板时用 render-block承载
+            templateJSON = LC.createNode('render-block').toJSON()
             newTemplateNode.setStyle('width', '100%')
-            templateJSON.renderSlots.default = [newTemplateNode.toJSON()]
+            templateJSON.renderSlots.default = newTemplateNode.toJSON().renderSlots.default
         } else {
             templateJSON = newTemplateNode.toJSON()
         }

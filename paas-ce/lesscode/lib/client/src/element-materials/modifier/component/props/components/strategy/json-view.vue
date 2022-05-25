@@ -18,7 +18,12 @@
                 type="textarea"
                 :rows="5"
                 :value="initJsonStr" />
-            <div class="option-add" @click="showEdit">编辑数据</div>
+            <div
+                v-if="!readonly"
+                class="option-add"
+                @click="showEdit">
+                编辑数据
+            </div>
         </section>
 
         <bk-dialog
@@ -81,6 +86,10 @@
             type: {
                 type: String,
                 required: true
+            },
+            readonly: {
+                type: Boolean,
+                default: false
             }
         },
 
@@ -106,11 +115,24 @@
                 return `${AJAX_URL_PREFIX}/page/importJson`
             }
         },
-        created () {
-            this.localValue = this.defaultValue
-            this.initJsonStr = circleJSON(this.defaultValue, null, 4)
+        watch: {
+            defaultValue: {
+                handler (defaultValue) {
+                    if (this.isInnerChange) {
+                        this.isInnerChange = false
+                        return
+                    }
+                    this.localValue = defaultValue
+                    this.initJsonStr = circleJSON(defaultValue, null, 4)
+                },
+                immediate: true
+            }
         },
         methods: {
+            triggerChange (name, value, type) {
+                this.isInnerChange = true
+                this.change(name, value, type)
+            },
             showEdit () {
                 this.isShow = true
             },
@@ -130,12 +152,12 @@
                                 title: '',
                                 subTitle: 'Json会覆盖现有画布内容区域数据，请谨慎操作',
                                 confirmFn: () => {
-                                    this.change(this.name, JSON.parse(this.initJsonStr), this.type)
+                                    this.triggerChange(this.name, JSON.parse(this.initJsonStr), this.type)
                                     this.isShow = false
                                 }
                             })
                         } else {
-                            this.change(this.name, JSON.parse(this.initJsonStr), this.type)
+                            this.triggerChange(this.name, JSON.parse(this.initJsonStr), this.type)
                             this.isShow = false
                         }
                     }

@@ -35,7 +35,7 @@ export default function () {
             }
         }).then(() => {
             updateTimer = setTimeout(() => {
-                // update()
+                update()
             }, 20000)
         })
     }
@@ -147,6 +147,7 @@ export default function () {
 
     // 间隔更新抢占状态有个定时器，组件卸载时需要去掉
     onBeforeUnmount(() => {
+        lockNotify && lockNotify.close()
         lockNotify = null
         clearTimeout(updateTimer)
     })

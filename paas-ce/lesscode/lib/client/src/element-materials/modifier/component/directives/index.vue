@@ -107,8 +107,8 @@
                 const {
                     type,
                     prop,
-                    valType,
-                    val,
+                    format,
+                    code,
                     tips
                 } = directiveConfig
                 if (propConfig[prop]) {
@@ -120,9 +120,9 @@
                         result.push({
                             type: 'v-bind',
                             prop,
-                            format: valType,
+                            format: format,
                             formatInclude: ['variable'], // v-bind 支持配置（变量）
-                            code: val,
+                            code: code,
                             valueTypeInclude,
                             renderValue,
                             tips: tips
@@ -140,8 +140,19 @@
                         })
                     }
                 }
+                if (type === 'v-html' && prop === 'slots') {
+                    result.push({
+                        type: 'v-html',
+                        prop,
+                        format: 'value',
+                        formatInclude: ['value', 'variable', 'expression'], // v-bind 支持配置（变量）
+                        code: '',
+                        tips: tips
+                    })
+                }
                 return result
             }, [])
+
             // 公共 v-for
             directiveList.unshift(
                 {
@@ -150,7 +161,7 @@
                     format: 'variable',
                     formatInclude: ['value', 'variable'], // v-bind 支持配置（值、变量）
                     code: '',
-                    valueTypeInclude: ['boolean'],
+                    valueTypeInclude: ['array'],
                     renderValue: 1,
                     tips: (dir) => {
                         return dir.val
@@ -193,7 +204,9 @@
                 const directiveKey = this.genDirectiveKey(directive)
                 if (lastDirectiveMap[directiveKey]) {
                     // fix: 错误数据转换，表达式类型的 format 包存成了 value
-                    const isFixedComputeFormat = directive.format === 'value' && /=/.test(directive.code)
+                    const isFixedComputeFormat = directive.format === 'value'
+                        && /=/.test(directive.code)
+                        && !/</.test(directive.code)
                     Object.assign(lastDirectiveMap[directiveKey], {
                         format: isFixedComputeFormat ? 'expression' : directive.format,
                         code: directive.code
