@@ -3,7 +3,7 @@
         <nav class="mg-home-nav">
             <div class="logo-fixed">
                 <div class="brand">
-                    <img class="app-logo" src="../images/logo.png" @click="$router.push('projects')" alt="">
+                    <img class="app-logo" src="../images/logo.png" @click="$router.push('/projects')" alt="">
                     <h2 class="app-name">蓝鲸可视化开发平台</h2>
                 </div>
             </div>
