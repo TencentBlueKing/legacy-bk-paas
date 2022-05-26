@@ -165,6 +165,7 @@ input[type="number"]::-webkit-outer-spin-button {
   position: relative;
   margin: 0 auto;
   background-color: rgb(235,242,250);
+  background: url(../img/logo_ce/bg.png) no-repeat center;
 }
 
 #particles-js{
@@ -218,10 +219,10 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 .page-content .login-from .logo-title {
   opacity: 1;
-  padding: 39px 0 40px 56px;
+  padding: 39px 0 40px 0;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
 }
 .page-content .login-from .logo-title .logo-img {
   height: 34px;
