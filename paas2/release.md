@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.10
+    - fix(static/logo): update login v6 logo
+
 # 2.14.9
     - bugfix: console html title wrong
 
