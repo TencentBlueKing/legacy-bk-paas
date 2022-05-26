@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.11
+    - bugfix: login bg.png resolution
+
 # 2.14.10
     - fix(static/logo): update login v6 logo
 
