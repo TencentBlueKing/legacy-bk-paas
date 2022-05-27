@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.12
+    - update: esb update monitor_v3 confapis
+
 # 2.14.11
     - bugfix: login bg.png resolution
 
