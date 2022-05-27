@@ -492,7 +492,6 @@ input[type="number"]::-webkit-outer-spin-button {
   color: #bfcbd7;
   font-size: 12px;
   text-align: center;
-  background: url(../img/logo_ce/footer.png) no-repeat center;
   background-size: 100% 100%;
 }
 .footer a {

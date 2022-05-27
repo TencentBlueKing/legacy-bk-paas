@@ -1,6 +1,7 @@
 Release Log
 ===============================
 # 2.14.12
+    - bugfix: remove login footer background
     - update: esb update monitor_v3 confapis
 
 # 2.14.11
@@ -1248,7 +1249,6 @@ Release Log
 
 # 2.5.31:
     - update: esb udpate data.yaml
->>>>>>> enterprise
 
 # 2.5.30:
     - update: esb update error msg when interface is not json format
