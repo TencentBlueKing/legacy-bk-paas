@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.12
+    - bugfix: remove login footer background
+
 # 2.14.11
     - bugfix: login bg.png resolution
 
