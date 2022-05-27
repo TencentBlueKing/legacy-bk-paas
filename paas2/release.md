@@ -1,7 +1,9 @@
 Release Log
 ===============================
-# 2.14.12
+# 2.14.13
     - bugfix: remove login footer background
+
+# 2.14.12
     - update: esb update monitor_v3 confapis
 
 # 2.14.11
