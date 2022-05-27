@@ -28,7 +28,7 @@
 | end_time   | string | 否   | 结束时间(每天)                                     |
 | type       | int    | 是   | 屏蔽周期类型（单次：1，每天：2，每周：3，每月：4） |
 | day_list   | list   | 否   | 周期为月时，需要屏蔽的天                           |
-| week_list  | list   | 否   | 周期为星期是，需要屏蔽的天                         |
+| week_list  | list   | 否   | 周期为星期时，需要屏蔽的天                         |
 
 #### 通知配置(notice_config)
 
