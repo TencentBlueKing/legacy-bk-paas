@@ -32,6 +32,17 @@
               }
           </style>
         {% endif %}
+        <style>
+            #password-eye {
+                  right: 14px !important;
+                  float: right !important;
+                  left: auto !important;
+                  cursor: pointer;
+              }
+            #password {
+                padding-right: 40px;
+            }
+        </style>
     </head>
     <body>
         <div class="page-content">
@@ -54,6 +65,7 @@
                             <div class="pwd group-control">
                                 <i class="bk-icon icon-password"></i>
                                 <input class="password" id="password" type="password" name="password" value="" placeholder="请输入用户密码">
+                                <i class="bk-icon icon-eye-slash" id="password-eye"></i>
                             </div>
                             <div>
                                 <input type="hidden" name="next" value="{{ next }}" />
@@ -113,12 +125,32 @@
             var encrypted = encrypt.encrypt(password);
             $('#password').val(encrypted);
         }
+        // 显示密码
+        function showPassword() {
+            $('#password').prop('type', 'text');
+            $('#password-eye').attr('class', 'bk-icon icon-eye');
+        }
+        // 隐藏密码
+        function hidePassword() {
+            $('#password').prop('type', 'password');
+            $('#password-eye').attr('class', 'bk-icon icon-eye-slash');
+        }
         $(document).ready(function(){
              if (ENABLE_PASSWORD_RSA_ENCRYPTED) {
                  $('#login-form').submit(() => {
                      rsa_encrypt_password();
                 });
             }
+            // 点击小眼睛显示或者隐藏密码
+            $('#password-eye').click(
+                () => {
+                    if ($('#password').prop('type') === 'password') {
+                        showPassword();
+                    } else {
+                        hidePassword();
+                    }
+                }
+            )
         })
     </script>
 </html>
