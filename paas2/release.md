@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.50
+    - add: login page show password in input box
+
 # 2.12.49
     - add: login support encrypt password
 
