@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.14
+    - update: download url
+
 # 2.14.13
     - bugfix: remove login footer background
 
