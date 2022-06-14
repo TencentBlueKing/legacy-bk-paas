@@ -4,6 +4,7 @@ Release Log
     - update: esb cc set default bk_supplier_account for component dest_path
     - update: esb gse compatible with gse 2.0 interface protocol
     - update: esb update cc/gsekit/itsm confapis
+    - fix: esb cmsi send_mail_with_smtp attachment type
 
 # 2.14.14
     - update: download url
