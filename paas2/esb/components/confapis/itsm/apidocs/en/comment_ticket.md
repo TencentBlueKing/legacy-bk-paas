@@ -1,6 +1,6 @@
 ### Functional description
 
-token verification
+ticket comment interface
 
 ### Request Parameters
 
@@ -10,32 +10,34 @@ token verification
 
 | Field        | Type     | Required  | Description  |
 | --------- | ------ | --- | -------------------------- |
-| token      | string    | YES    | itsm generate encrypted token |
+| sn      | string    | YES   | ticket sn |
+| stars   | string    | YES   | The score is 0-5  |
+| comments | string    | YES   | Evaluation content |
+| source    | string    | YES   | API |
+| operator    | string    | YES   | operator |
 
 
 ### Request Parameters Example
 
 ```json
-{  
-    "bk_app_secret": "xxxx", 
-    "bk_app_code": "xxxx", 
-    "bk_token": "xxxx", 
-    "token": "PF14MnqZcrqqN7tc4mKDt4YVgzf3sagw3vdyvxSgcohF/qZDan0AC3TzKnlcMx53EFWIku2AY5WOIlU4P97bDw=="
-}  
+{
+    "sn": "NO2019100818365320",
+    "stars": 4,
+    "comments": "123",
+    "source": "API",
+    "operator": "admin"
+} 
 ```
 
 ### Return Result Example
 
 ```json
 {
-	"message": "success",
-	"code": 0,
-	"data": {
-		"is_passed": true
-	},
-    "result": true
+    "result": true,
+    "code": 0,
+    "message": "success",
+    "data": []
 }
-
 ```
 
 ### Return Result Description
@@ -46,9 +48,3 @@ token verification
 | code    | int       | return code. 0 indicates success, other values indicate failure       |
 | message | string    | error message returned when result is false                    |
 | data    | object | return data |
-
-### data
-
-| Field     | Type     | Description       |
-| -------------| ------ | -------- |
-| is_passed  | bool | is validate     |

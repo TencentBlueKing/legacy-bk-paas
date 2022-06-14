@@ -32,15 +32,14 @@
 
 ### 请求参数示例
 
+```
+GET {{API_URL}}/?view_type=my_todo&user=admin&create_at__gte=2021-10-24+17:00:00&create_at__lte=2021-10-26+17:00:00
+```
 ```json
 {
     "app_secret": "xxxx",
     "app_code": "xxxx",
-    "bk_token": "xxxx",
-    "view_type": "my_todo",
-    "user": "admin",
-    "create_at__gte": "2021-10-24 17:00:00",
-    "create_at__lte": "2021-10-26 17:00:00"
+    "bk_token": "xxxx"
 }
 ```
 

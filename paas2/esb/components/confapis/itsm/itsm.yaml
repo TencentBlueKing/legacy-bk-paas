@@ -148,5 +148,15 @@
   suggest_method: GET
   api_type: query
   comp_codename: generic.v2.itsm.itsm_component
-  dest_path: /openapi/workflow/get_workflow_detail/
+  dest_path: /o/bk_itsm/openapi/workflow/get_workflow_detail/
   dest_http_method: GET
+
+- path: /v2/itsm/comment_ticket/
+  name: comment_ticket
+  label: 评论单据
+  label_en: Comment Ticket
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.itsm.itsm_component
+  dest_path: /o/bk_itsm/openapi/ticket/comment/
+  dest_http_method: POST
