@@ -1,23 +1,51 @@
 ### Functional description
 
-batch update process info
-
-#### General Parameters
-
-{{ common_args_desc }}
+Batch update process information
 
 ### Request Parameters
 
-| Field                |  Type       | Required	   | Description                            |
-|----------------------|------------|--------|-----------------------|
-| bk_supplier_account  | string     |Yes     | Supplier Account ID       |
-| processes            | array  | Yes   | process info |
+{{ common_args_desc }}
 
+#### Interface Parameters
+
+| Field                 | Type      | Required	   | Description                 |
+|----------------------|------------|--------|-----------------------|
+| processes            | array  | Yes   | process info, the max length is 100 |
+| bk_biz_id            |  int  |yes   | Business ID |
+
+#### Processes Field Description
+| Field| Type| Description|
+|---|---|---|
+|process_template_id| int| Process template id|
+|auto_start| bool| Whether to pull up automatically|
+|auto_time_gap| int| Pull up interval|
+|bk_biz_id| int| Business ID |
+|bk_func_id| string| Function ID|
+|bk_func_name| string| Process name|
+|bk_process_id| int| Process id|
+|bk_process_name| string| Process alias|
+|bk_supplier_account| string| Developer account number|
+|face_stop_cmd| string| Forced stop command|
+|pid_file| string| PID file path|
+|priority| int| Startup priority|
+|proc_num| int| Number of starts|
+|reload_cmd| string| Process reload command|
+|restart_cmd| string| Restart command|
+|start_cmd| string| Start command|
+|stop_cmd| string| Stop order|
+|timeout| int| Operation time-out duration|
+|user| string| Start user|
+|work_path| string| Working path|
+|process_info| object| Process information|
 
 ### Request Parameters Example
 
-```json
+```python
 {
+  "bk_app_code": "esb_test",
+  "bk_app_secret": "xxx",
+  "bk_username": "xxx",
+  "bk_token": "xxx",
   "bk_biz_id": 1,
   "processes": [
     {
@@ -49,7 +77,7 @@ batch update process info
             "protocol": "1", 
             "template_row_id": 1  
         }
-      ],
+      ]
     }
   ]
 }
@@ -62,6 +90,8 @@ batch update process info
   "result": true,
   "code": 0,
   "message": "success",
+  "permission": null,
+  "request_id": "e43da4ef221746868dc4c837d36f3807",
   "data": [43]
 }
 ```
@@ -70,10 +100,12 @@ batch update process info
 
 #### response
 
-| Field       | Type     | Description         |
+| Name| Type| Description|
 |---|---|---|
-| result | bool | request success or failed. true:success；false: failed |
-| code | int | error code. 0: success, >0: something error |
-| message | string | error info description |
-| data | object | response data |
+| result | bool |Whether the request succeeded or not. True: request succeeded;false request failed|
+| code | int |Wrong code. 0 indicates success,>0 indicates failure error|
+| message | string |Error message returned by request failure|
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data | object |Data returned by request|
 

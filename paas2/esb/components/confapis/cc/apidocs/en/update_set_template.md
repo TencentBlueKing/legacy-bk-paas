@@ -1,27 +1,29 @@
 ### Functional description
 
-update set template
-
-#### General Parameters
-
-{{ common_args_desc }}
+According to the service id and the set template id, edit the set template under the specified service
 
 ### Request Parameters
 
-| Field                | Type   | Required   | Description              |
-| -------------------- | ------ | ---------- | ------------------------ |
-| bk_supplier_account  | string | Yes        | Supplier Account Code    |
-| bk_biz_id            | int    | Yes        | Business ID              |
-| set_template_id      | int    | Yes        | Set Template ID          |
-| name                 | string | Choose One | Set Template Name        |
-| service_template_ids | array  | Choose One | Service Template ID List |
+{{ common_args_desc }}
+
+#### Interface Parameters
+
+| Field                  | Type   | Required   | Description           |
+| -------------------- | ------ | ----- | -------------- |
+| bk_biz_id            |  int    | yes | Business ID |
+| set_template_id      |  int    | yes | Set template ID |
+| name                 |  string |Either service_template_ids or service_template_ids is required, or both| Set template name |
+| service_template_ids | array  |And name are required, or both| Service template ID list|
 
 
 ### Request Parameters Example
 
 ```json
 {
-    "bk_supplier_account": "0",
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
     "name": "test",
     "bk_biz_id": 20,
     "set_template_id": 6,
@@ -37,6 +39,7 @@ update set template
     "code": 0,
     "message": "success",
     "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": {
         "id": 6,
         "name": "test",
@@ -55,23 +58,25 @@ update set template
 
 #### response
 
-| Field   | Type   | Description                                            |
-| ------- | ------ | ------------------------------------------------------ |
-| result  | bool   | request success or failed. true:success；false: failed |
-| code    | int    | error code. 0: success, >0: something error            |
-| message | string | error info description                                 |
-| data    | object | response data                                          |
+| Name    | Type   | Description                                    |
+| ------- | ------ | ------------------------------------- |
+| result  | bool   | Whether the request was successful or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error   |
+| message | string |Error message returned by request failure                   |
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data    |  object |Data returned by request                          |
 
-#### data description
+#### Data field Description
 
-| Field               | Type    | Description           |
-| ------------------- | ------- | --------------------- |
-| id                  | integer | set template ID       |
-| name                | array   | set template name     |
-| bk_biz_id           | int     | business ID           |
-| version             | int     | set template version  |
-| creator             | string  | creator               |
-| modifier            | string  | last modifier         |
-| create_time         | string  | creation time         |
-| last_time           | string  | last modify time      |
-| bk_supplier_account | string  | supplier account code |
+| Field                | Type   | Description         |
+| ------------------- | ------ | ------------ |
+| id                  |  int    | Set template ID |
+| name                |  string  |Set template name|
+| bk_biz_id           |  int    | Business ID |
+| version             |  int    | Set template version |
+| creator             |  string |Creator       |
+| modifier            |  string |Last modified by|
+| create_time         |  string |Settling time     |
+| last_time           |  string |Update time     |
+| bk_supplier_account | string |Developer account number   |

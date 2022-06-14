@@ -1,26 +1,29 @@
 ### Functional description
 
-sync set template to set
-
-#### General Parameters
-
-{{ common_args_desc }}
+Synchronize that set template unde the specified service to the set according to the service id, the clust template id and the set id list to be synchronized
 
 ### Request Parameters
 
-| Field               | Type   | Required | Description              |
-| ------------------- | ------ | -------- | ------------------------ |
-| bk_supplier_account | string | Yes      | Supplier Account Code    |
-| bk_biz_id           | int    | Yes      | Business ID              |
-| set_template_id     | int    | Yes      | Set Template ID          |
-| bk_set_ids          | array  | Yes      | IDs Of Set To Sync       |
+{{ common_args_desc }}
+
+#### Interface Parameters
+
+| Field                  | Type   | Required| Description           |
+| -------------------- | ------ | ---- | ------------- |
+| bk_biz_id            |  int    | yes      | Business ID |
+| set_template_id      |  int    | yes | Set template ID   |
+| bk_set_ids           |  array  |yes   | List of set IDs to be synchronized |
 
 
 ### Request Parameters Example
 
 ```json
 {
-    "bk_supplier_account": "0",
+
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
     "bk_biz_id": 20,
     "set_template_id": 6,
     "bk_set_ids": [46]
@@ -35,6 +38,7 @@ sync set template to set
     "code": 0,
     "message": "success",
     "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": null
 }
 ```
@@ -43,9 +47,11 @@ sync set template to set
 
 #### response
 
-| Field   | Type   | Description                                            |
-| ------- | ------ | ------------------------------------------------------ |
-| result  | bool   | request success or failed. true:success；false: failed |
-| code    | int    | error code. 0: success, >0: something error            |
-| message | string | error info description                                 |
-| data    | object | response data                                          |
+| Name    | Type   | Description                                    |
+| ------- | ------ | ------------------------------------- |
+| result  | bool   | Whether the request was successful or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error   |
+| message | string |Error message returned by request failure                   |
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data    |  object |Data returned by request                          |

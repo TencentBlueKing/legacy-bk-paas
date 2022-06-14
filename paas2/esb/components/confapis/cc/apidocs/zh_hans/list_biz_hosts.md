@@ -70,7 +70,6 @@
     "bk_app_secret": "xxx",
     "bk_username": "xxx",
     "bk_token": "xxx",
-    "bk_supplier_account": "0",
     "page": {
         "start": 0,
         "limit": 10,

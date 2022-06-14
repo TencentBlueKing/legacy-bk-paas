@@ -1,19 +1,18 @@
 ### Functional description
 
-
-search business set topology(v3.10.12+)
+Query business set topology (v3.10.12+)
 
 ### Request Parameters
 
 {{ common_args_desc }}
 
-#### General Parameters
+#### Interface Parameters
 
-| Field      |  Type      | Required   |  Description   |
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| bk_biz_set_id    | int    | Yes | business set ID |
-| bk_parent_obj_id | string | Yes | the parent object ID of the model that needs to be queried|
-| bk_parent_id     | int    | Yes | the parent ID of the model that needs to be queried |
+| bk_biz_set_id    |  int    | yes | Business set ID|
+| bk_parent_obj_id | string |yes| The parent object ID of the query model is required|
+| bk_parent_id     |  int    | yes | The parent ID of the query model is required|
 
 ### Request Parameters Example
 
@@ -58,22 +57,22 @@ search business set topology(v3.10.12+)
 ### Return Result Parameters Description
 #### response
 
-| Field    | Type   | Description                          |
+| Name    | Type   | Description                                    |
 | ------- | ------ | ------------------------------------- |
-| result  | bool   | request success or failed. true:success；false: failed  |
-| code    | int    | error code. 0: success, >0: something error  |
-| message | string | error info description                     |
-| permission    | object | permission info     |
-| data    | array | response data                             |
-| request_id    | string | request chain id     |
+| result  | bool   | Whether the request was successful or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error    |
+| message | string |Error message returned by request failure                    |
+| permission    |  object |Permission information    |
+| data    |  array |Data returned by request                           |
+| request_id    |  string |Request chain id    |
 
 #### data
 
-| Field    | Type   | Description        |
+| Name    | Type   | Description              |
 | ------- | ------ | --------------- |
-| bk_obj_id  | string   | model object ID  |
-| bk_inst_id    | int    | model instance ID   |
-| bk_inst_name | string | model instance name   |
-| default    | int | model instance classification |
+| bk_obj_id  | string   | Model object ID|
+| bk_inst_id    |  int    | Model instance ID   |
+| bk_inst_name | string |Model instance name   |
+| default    |  int |Model instance classification    |
 
 

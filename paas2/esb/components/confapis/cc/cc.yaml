@@ -1264,3 +1264,13 @@
   comp_codename: generic.v2.cc.cc_component
   dest_path: /api/v3/hosts/add/resource
   dest_http_method: POST
+
+- path: /v2/cc/list_host_total_mainline_topo/
+  name: list_host_total_mainline_topo
+  label: 查询主机及其对应topo
+  label_en: query host and its corresponding Topo.
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/findmany/hosts/total_mainline_topo/biz/{bk_biz_id}
+  dest_http_method: POST

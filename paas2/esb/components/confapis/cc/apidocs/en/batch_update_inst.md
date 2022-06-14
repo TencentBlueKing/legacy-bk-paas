@@ -1,36 +1,40 @@
 ### Functional description
 
-update object instances in batches
+Bulk update object instances
 
 ### Request Parameters
 
 {{ common_args_desc }}
 
-#### General Parameters
+#### Interface Parameters
 
-| Field                |  Type       | Required	   |  Description                            |
+| Field                | Type       | Required   | Description                            |
 |---------------------|-------------|--------|----------------------------------|
-| bk_supplier_account | string      | Yes     | Supplier account                       |
-| bk_obj_id           | string      | Yes     | Object ID                           |
-| update              | object array| Yes     | The updated fields and values for the instance             |
+| bk_obj_id           |  string      | yes  | Model ID                           |
+| update              |  array| yes     | Instance updated fields and values             |
 
 #### update
-| Field         | Type   | Required	  | Description                           |
+| Field         | Type   | Required| Description                           |
 |--------------|--------|-------|--------------------------------|
-| bk_inst_name | string | No    | Instance name, or custom field |
-| datas        | object | Yes    | The updated fields for the instance           |
-| inst_id      | int    | Yes    | Point out datas, for instance update    |
+| datas        |  object |yes    | The value of the field for which the instance is updated           |
+| inst_id      |  int    | yes | Indicates the specific instance that datas uses for the update   |
 
 #### datas
+| Field         | Type   | Required| Description                           |
+|--------------|--------|-------|--------------------------------|
+| bk_inst_name | string |no    | Instance name, or any other custom field|
 
-**datas is an object of map type，key is a field defined by an instance of the model, value is a field **
+**Datas is an object of map type, key is a field defined by the model corresponding to the instance, and value is the value of the field**
 
 
 ### Request Parameters Example
 
 ```python
 {
-    "bk_supplier_account":"0",
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
     "bk_obj_id":"test",
     "update":[
         {
@@ -52,6 +56,19 @@ update object instances in batches
     "result": true,
     "code": 0,
     "message": "",
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": "success"
 }
 ```
+
+#### response
+
+| Name    | Type   | Description                                    |
+| ------- | ------ | ------------------------------------- |
+| result  | bool   | Whether the request succeeded or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error    |
+| message | string |Error message returned by request failure                    |
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data    |  object |Data returned by request                           |

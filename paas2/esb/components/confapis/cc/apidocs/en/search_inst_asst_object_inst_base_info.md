@@ -1,39 +1,38 @@
 
+
 ### Functional description
 
-search instance association topology
+Query instance Association model instance basic information
 
 ### Request Parameters
 
 {{ common_args_desc }}
 
-#### General Parameters
 
-| Field                |  Type      | Required	   |  Description                       |
-|---------------------|------------|--------|-----------------------------|
-| fields         |  array   | No     | Specifies the field of the query. The parameter is any attribute of the service. If the field information is not filled in, the system returns all fields of the service.|
-| condition      |  dict    | No     | query condition|
-| page           |  dict    | No     | page condition |
+#### Interface Parameters
+
+| Field      | Type      | Required   | Description      |
+|-----------|------------|--------|------------|
+| fields         |   array   | no     | Specify the fields to query. The parameter is any attribute of the business. If you do not fill in the field information, the system will return all the fields of the business|
+| condition      |   object    | no     | Query criteria|
+| page           |   object    | no     | Paging condition|
 
 #### condition
 
-| Field                |  Type      | Required	   |  Description                       |
-|---------------------|------------|--------|-----------------------------|
-| bk_obj_id |  string    | Yes     | instance object ID |
-| bk_inst_id|  int    |  Yes    | instacne id |
-|association_obj_id|string|  Yes  | The model ID of the associated object, returning the instance basic data (bk_inst_id, bk_inst_name) associated with the bk_inst_id instance in the association_obj_id model|
-|is_target_object| bool |  No |whether bk_obj_id is the target model, default false, the source model in the association, and No is the target model|
+| Field      | Type      | Required   | Description      |
+|-----------|------------|--------|------------|
+| bk_obj_id |  string    | yes  | Instance model ID|
+| bk_inst_id|   int    | yes | Instance ID|
+|association_obj_id| string| yes | The model ID of the associated object, which returns the instance basic data (bk_inst_id,bk_inst_name) associated with the bk_inst_id instance of the Association_obj_id model|
+|is_target_object|  bool |no| Whether bk_obj_id is the target model, the default is false, the source model in the Association relationship, otherwise, it is the target model|
 
 #### page
 
-| Field                |  Type      | Required	   |  Description                       |
-|---------------------|------------|--------|-----------------------------|
-#### page params
+| Field      | Type      | Required   | Description      |
+|-----------|------------|--------|------------|
+| start    |   int    | no      | Record start position, default 0|
+| limit    |   int    | no     | Limit bars per page, default 20, maximum 200|
 
-| Field                 |  Type      | Required	   |  Description       | 
-|--------|------------|--------|------------|
-|start|int|No|get the data offset location|
-|limit|int|No|The number of data points in the past is limited, default value 20, max:200|
 
 ### Request Parameters Example
 
@@ -41,17 +40,17 @@ search instance association topology
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
+    "bk_username": "xxx",
     "bk_token": "xxx",
-    "bk_supplier_account": "123456789",
     "condition": {
         "bk_obj_id":"bk_switch", 
 		"bk_inst_id":12, 
 		"association_obj_id":"host", 
-		"is_target_object":true, 
+		"is_target_object":true 
     },
     "page": {
         "start": 0,
-        "limit": 10,
+        "limit": 10
     }
 }
 ```
@@ -65,6 +64,7 @@ search instance association topology
     "code": 0,
     "message": "success",
     "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": {
         "count": 4,
         "info": [
@@ -72,50 +72,47 @@ search instance association topology
                 "bk_inst_id": 1,
                 "bk_inst_name": "127.0.0.3"
             }
-        ],
-        "page": {
-            "start": 0,
-            "limit": 1
-        }
+        ]
     }
 }
 ```
 
 ### Return Result Parameters Description
+#### response
+
+| Name    | Type   | Description                                       |
+| ------- | ------ | ------------------------------------------ |
+| result  | bool   | Whether the request was successful or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error    |
+| message | string |Error message returned by request failure                     |
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data    |  object |Data returned by request                             |
 
 #### data
 
-| Field      | Type      | Description         |
-|-----------|-----------|--------------|
-| count| int| the num of record |
-| info| object array |  the associated object, instance basic data of the instance association model（bk_inst_id,bk_inst_name） |
-| page| object| page info|
+| Name| Type| Description|
+|---|---|---|
+| count|  int| Number of records|
+| info|  object array |Model ID of associated object, instance basic data of instance associated model (bk_inst_id,bk_inst_name)|
+| page|  object| Paging information|
 
-#### data.info ：
-| Field      | Type      | Description         |
-|-----------|-----------|--------------|
-| bk_inst_id | int | instance id |
-| bk_inst_name | string  | instance nae  | 
+#### Data.info Field Description:
+| Name| Type| Description|
+|---|---|---|
+| bk_inst_id | int |Instance ID|
+| bk_inst_name | string  |Instance name|
 
-##### data.info.bk_inst_id,data.info.bk_inst_name :
+##### Data.info.BK_inst_id, data.info.BK_inst_name field descriptions
 
-The values corresponding to different models bk_inst_id,bk_inst_name
+Values corresponding to bk_inst_id, bk_inst_name for different models
 
-| model| module   | bk_inst_id   | bk_inst_name |
-|---|---|---|---|
-|business | bk_biz_id | bk_biz_name|
-|set | bk_set_id | bk_set_name|
-|module | bk_module_id | bk_module_name|
-|process | bk_process_id | bk_process_name|
-|host | bk_host_id | bk_host_inner_ip|
-|object | bk_inst_id | bk_inst_name|
-
-
-
-#### data.page 
-
-| Field       | Type     | Description         |
-|------------|----------|--------------|
-|start|int|server obtains the data offset position this time|
-|limit|int|server client return data limit|
+| Model   |  bk_inst_id   |  bk_inst_name |
+|---|---|---|
+|Business|  bk_biz_id | bk_biz_name|
+|Set|  bk_set_id | bk_set_name|
+|Module|  bk_module_id | bk_module_name|
+|Process|  bk_process_id | bk_process_name|
+|Host|  bk_host_id | bk_host_inner_ip|
+|Universal model|  bk_inst_id | bk_inst_name|
 

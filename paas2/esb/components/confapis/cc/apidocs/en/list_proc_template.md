@@ -1,23 +1,27 @@
 ### Functional description
 
-list process templates
-
-#### General Parameters
-
-{{ common_args_desc }}
+Query process template information according to service template ID
 
 ### Request Parameters
 
-| Field                |  Type       | Required	   | Description                            |
+{{ common_args_desc }}
+
+#### Interface Parameters
+
+| Field                 | Type      | Required	   | Description                 |
 |----------------------|------------|--------|-----------------------|
-| bk_biz_id | int        | Yes     | business id |
-| service_template_id | int  | No   | service template id, must have at least one of service_template_id or process_template_ids |
-| process_template_ids | int array  | No   | the array of process template id , must have at least one of service_template_id or process_template_ids|
+| bk_biz_id | int        | yes  | Business ID |
+| service_template_id | int  |no   | At least one of service template ID, service_template_id and process_template_ids|
+| process_template_ids | array  |no   | Array of process template IDs, up to 200; at least one of service_template_id and process_template_ids is passed|
 
 ### Request Parameters Example
 
 ```json
 {
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
     "bk_biz_id": 1,
     "service_template_id": 51,
     "process_template_ids": [
@@ -33,6 +37,8 @@ list process templates
     "result": true,
     "code": 0,
     "message": "success",
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": {
         "count": 1,
         "info": [
@@ -154,36 +160,72 @@ list process templates
 
 #### response
 
-| Field       | Type     | Description         |
+| Name| Type| Description|
 |---|---|---|
-| result | bool | request success or failed. true:success；false: failed |
-| code | int | error code. 0: success, >0: something error |
-| message | string | error info description |
-| data | object | response data |
+| result | bool |Whether the request succeeded or not. True: request succeeded;false request failed|
+| code | int |Wrong code. 0 indicates success,>0 indicates failure error|
+| message | string |Error message returned by request failure|
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data | object |Data returned by request|
 
-#### Data field description
+#### Data field Description
 
-| Field       | Type     | Description         |
+| Field| Type| Description|
 |---|---|---|
-|count|integer|total count|
-|info|array|response data|
+|count| int| Total|
+|info| array| Return result|
 
-#### Info field description
-
-| Field       | Type     | Description         |
+#### Info Field Description
+| Field| Type| Description|
 |---|---|---|
-|id|integer| process template ID|
-|bk_process_name|string|process template name|
-|property|object|process template properties |
+|id| int| Process template ID|
+|bk_process_name| string| Process template name|
+|property| object| Process template properties|
+|bk_biz_id| int| Business ID |
+|service_template_id| int| Service template ID|
+| creator              |  string             | Creator of this data                                                                                 |
+| modifier             |  string             | The last person to modify this piece of data            |
+| create_time         |  string |Settling time     |
+| last_time           |  string |Update time     |
+| bk_supplier_account | string       | Developer account number|
 
+#### data.info[x].property
 
+Is the value of the as_default_value process based on the template
 
-#### data.info[x].property.bind_info.value[n] description
-| Field|Type|Description|
+| Field| Type| Description|
 |---|---|---|
-|enable|object|Whether the port is enabled|
-|ip|object|bind ip|
-|port|object|bind port|
-|protocol|object|protocol used|
-|row_id|int|template row index, unique in process|
+|auto_start| bool| Whether to pull up automatically|
+|auto_time_gap| int| Pull up interval|
+|bk_biz_id| int| Business ID |
+|bk_func_id| string| Function ID|
+|bk_func_name| string| Process name|
+|bk_process_id| int| Process id|
+|bk_process_name| string| Process alias|
+|bk_start_param_regex| string| Process start parameters|
+|bk_supplier_account| string| Developer account number|
+|create_time| string| Settling time|
+|description| string| Description|
+|face_stop_cmd| string| Forced stop command|
+|last_time| string| Update time|
+|pid_file| string| PID file path|
+|priority| int| Startup priority|
+|proc_num| int| Number of starts|
+|reload_cmd| string| Process reload command|
+|restart_cmd| string| Restart command|
+|start_cmd| string| Start command|
+|stop_cmd| string| Stop order|
+|timeout| int| Operation time-out duration|
+|user| string| Start user|
+|work_path| string| Working path|
+|bind_info| object| Binding information|
 
+#### data.info [x] .Property.bind .Property.bind info.value [n] Field Description
+| Field| Type| Description|
+|---|---|---|
+|enable| object| Is the port enabled|
+|ip| object| Bound ip|
+|port| object| Bound port|
+|protocol| object| Protocol used|
+|row_id| int| Template row index, in-process unique|

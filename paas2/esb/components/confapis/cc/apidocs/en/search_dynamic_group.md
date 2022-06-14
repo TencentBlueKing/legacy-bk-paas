@@ -1,6 +1,6 @@
 ### Functional description
 
-search dynamic groups (V3.9.6)
+Query dynamic group list (V3.9.6)
 
 ### Request Parameters
 
@@ -8,20 +8,20 @@ search dynamic groups (V3.9.6)
 
 #### Interface Parameters
 
-| Field               | Type    | Required  | Description          |
-|---------------------|---------|-----------|----------------------|
-| bk_biz_id           | int     | Yes       | Business ID          |
-| condition           | dict    | No        | search condition     |
-| disable_counter     | bool    | No        | disable counter flag |
-| page                | object  | Yes       | query page settings  |
+| Field      | Type      | Required   | Description      |
+|-----------|------------|--------|------------|
+| bk_biz_id |  int     | yes  | Business ID |
+| condition |  object    | no     | Query condition: the condition field is the attribute field of the user-defined query, which can be create_user, modify_user, name|
+| disable_counter |  bool |no     | Return total number of records; default|
+| page     |   object   | yes  | Paging settings|
 
 #### page
 
-| Field  | Type   | Required  | Description            |
-|--------|--------|-----------|------------------------|
-| start  | int    | Yes       | start record           |
-| limit  | int    | Yes       | page limit, max is 200 |
-| sort   | string | No        | query order by         |
+| Field      | Type      | Required   | Description      |
+|-----------|------------|--------|------------|
+| start     |   int     | yes  | Record start position|
+| limit     |   int     | yes  | Limit bars per page, Max. 200|
+| sort      |   string  |no     | Retrieve sort, by default by creation time|
 
 ### Request Parameters Example
 
@@ -29,6 +29,7 @@ search dynamic groups (V3.9.6)
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
+    "bk_username": "xxx",
     "bk_token": "xxx",
     "bk_biz_id": 1,
     "disable_counter": true,
@@ -49,6 +50,8 @@ search dynamic groups (V3.9.6)
     "result": true,
     "code": 0,
     "message": "",
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": {
         "count": 0,
         "info": [
@@ -91,6 +94,9 @@ search dynamic groups (V3.9.6)
                 			}
                     ]
                 },
+                "name": "test",
+                "bk_obj_id": "host",
+                "id": "1111",
                 "create_user": "admin",
                 "create_time": "2018-03-27T16:22:43.271+08:00",
                 "modify_user": "admin",
@@ -101,40 +107,50 @@ search dynamic groups (V3.9.6)
 }
 ```
 
-### Return Result Parameters Description
+### Return result parameter
+#### response
+
+| Name    | Type   | Description                                       |
+| ------- | ------ | ------------------------------------------ |
+| result  | bool   | Whether the request succeeded or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error    |
+| message | string |Error message returned by request failure                     |
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data    |  object |Data returned by request                             |
 
 #### data
 
-| Field | Type  | Description       |
-|-------|-------|-------------------|
-| count | int   | the num of record |
-| info  | array | detail of record  |
+| Field      | Type      | Description      |
+|-----------|-----------|-----------|
+| count     |  int |The total number of records that can be matched by the current rule (used for pre-paging by the caller, the actual number of returns from a single request and whether all data are pulled are subject to the number of JSON Array parsing)|
+| info      |  array        | Custom query data|
 
 #### data.info
 
-| Field        | Type    | Description                     |
-|--------------|---------|---------------------------------|
-| bk_biz_id    | int     | Business ID                     |
-| id           | string  | Primary key ID of dynamic group |
-| name         | string  | the name of dynamic group       |
-| bk_obj_id    | string  | object name, it can be set,host |
-| info         | object  | common search query parameters  |
-| last_time    | string  | last update timestamp           |
-| modify_user  | string  | last modify user                |
-| create_time  | string  | create timestamp                |
-| create_user  | string  | creator                         |
+| Field      | Type       | Description      |
+|-----------|------------|-----------|
+| bk_biz_id    |  int     | Business ID |
+| id           |  string  |Dynamic grouping pk ID|
+| name         |  string  |Dynamic group naming|
+| bk_obj_id    |  string  |The target resource object type of dynamic grouping can be host,set at present|
+| info         |  object  |Dynamic grouping information|
+| last_time    |  string  |Update time|
+| modify_user  | string  |Modifier|
+| create_time  | string  |Settling time|
+| create_user  | string  |Creator|
 
 #### data.info.info.condition
 
-| Field     | Type    | Description                                                                                                                |
-|-----------|---------|----------------------------------------------------------------------------------------------------------------------------|
-| bk_obj_id | string  | object name, it can be set,module,host object type for host type dynamic group, only set object type for set dynamic group |
-| condition | array   | search condition                                                                                                           |
+| Field      | Type     | Description      |
+|-----------|-----------|------------|
+| bk_obj_id |  string   | Object name, which can be set,module,host|
+| condition |  array    | Query criteria|
 
 #### data.info.info.condition.condition
 
-| Field     | Type   | Description                                                                            |
-|-----------|--------|----------------------------------------------------------------------------------------|
-| field     | string | field of object                                                                        |
-| operator  | string | condition operator, $eq is equal, $ne is not equal, $in is belongs, $nin is not belong |
-| value     | object | the value of field                                                                     |
+| Field      | Type     | Description      |
+|-----------|------------|---------------|
+| field     |   string    | Fields of the object|
+| operator  |  string    | Operator, op values are eq(equal)/ne(unequal)/in(of)/nin(not of)/like(fuzzy match)|
+| value     |   object    | The value for the field|

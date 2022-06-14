@@ -1,47 +1,48 @@
 ### Functional description
 
-list hosts without business id
+Host query without business information
 
 ### Request Parameters
 
-
-#### General Parameters
-
-| Field | Type | Required |  Description |
-|-----------|------------|--------|------------|
-| bk_app_code  |  string    | Yes | APP ID     |
-| bk_app_secret|  string    | Yes | APP Secret(APP TOKEN), which can be got via BlueKing Developer Center -&gt; Click APP ID -&gt; Basic Info  |
-| bk_token     |  string    | No | Current user login token, bk_token or bk_username must be valid, bk_token can be got by Cookie |
-| bk_username  |  string    | No | Current user username, APP in the white list, can use this field to specify the current user |
-| fields  |  array   | Yes     | host property list, the specified host property feilds will be returned <br>it can speed up the request and reduce the network payload  |
+{{ common_args_desc }}
 
 #### Interface Parameters
 
-| Field      |  Type      | Required   |  Description      |
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| bk_supplier_account | string     | No     | supplier account code |
-| bk_biz_id | int        | No    | Business ID |
-| page       |  dict    | No     | search condition |
-| host_property_filter    |  dict  | No     | host property filter |
+| bk_biz_id | int        | no     | Business ID |
+| page       |   object    | yes  | Query criteria|
+| host_property_filter|  object| no | Host attribute combination query criteria|
+| fields  |  array   | yes  | Host attribute list, which controls which fields are in the host that returns the result, can speed up interface requests and reduce network traffic   |
 
 #### host_property_filter
-host property filter is a combined of atom filter rule, combine operator could be `AND` or `OR`, nested up to 2 levels。
-atom rule has three fields: `field`, `operator`, `value`
+This parameter is a combination of filtering rules for the host attribute field and is used to search for hosts based on the host attribute field. The combination supports AND and OR, and can be nested, with a maximum of 2 layers.
+The filtering rule is a quadruple`field`,`operator`,`value`
 
-| Field      |  Type      | Required   |  Description      |
-| ---  | ---  | --- |---  |
-| field|string|Yes|field |
-| operator|string|No|operator |available values: equal,not_equal,in,not_in,less,less_or_equal,greater,greater_or_equal,between,not_between |
-| value| - | No| value|values's format depend on operator|
+| Field      | Type      | Required   | Description      |
+|-----------|------------|--------|------------|
+| condition       |   string    | no     | Combined query criteria|
+| rules      |   array    | no     | Rule|
 
-reference: <https://github.com/Tencent/bk-cmdb/blob/master/src/common/querybuilder/README.md>
+
+#### rules
+| Name| Type| Required| Default value|  Description|
+| ---  | ---  | --- |---  | ---|
+| field| string| yes | None| Field name| Field name|
+| operator| string| yes | None| Operator| Optional values equal,not_equal,in,not_in,less,less_or_equal,greater,greater_or_equal,between,not_between|
+| value| - |no| None| Operand| Different values correspond to different value formats|
+
+Assembly rules can be found at: https://github.com/Tencent/bk-cmdb/blob/master/src/common/querybuilder/README.md
+
+
 
 #### page
 
-| Field      |  Type      | Required   |  Description      |
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| start    |  int    | Yes     | start record |
-| limit    |  int    | Yes     | page limit, max is 500 |
+| start    |   int    | yes  | Record start position|
+| limit    |   int    | yes  | Limit bars per page, Max. 500|
+
 
 
 ### Request Parameters Example
@@ -50,6 +51,7 @@ reference: <https://github.com/Tencent/bk-cmdb/blob/master/src/common/querybuild
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
+    "bk_username": "xxx",
     "bk_token": "xxx",
     "bk_supplier_account": "0",
     "page": {
@@ -100,6 +102,8 @@ reference: <https://github.com/Tencent/bk-cmdb/blob/master/src/common/querybuild
   "result": true,
   "code": 0,
   "message": "success",
+  "permission": null,
+  "request_id": "e43da4ef221746868dc4c837d36f3807",
   "data": {
     "count": 30,
     "info": [
@@ -130,40 +134,29 @@ reference: <https://github.com/Tencent/bk-cmdb/blob/master/src/common/querybuild
 ```
 
 ### Return Result Parameters Description
+#### response
+
+| Name| Type| Description|
+|---|---|---|
+| result | bool |Whether the request was successful or not. True: request succeeded;false request failed|
+| code | int |Wrong code. 0 indicates success,>0 indicates failure error|
+| message | string |Error message returned by request failure|
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data | object |Data returned by request|
 
 #### data
 
 | Field      | Type      | Description      |
 |-----------|-----------|-----------|
-| count     | int       | the num of record |
-| info      | array     | host data |
+| count     |  int       | Number of records|
+| info      |  array     | Host actual data|
 
 #### data.info
-| Field      | Type      | Description      |
-|---|---|---|
-| bk_isp_name| string | telecom operators | 0: Others; 1: China Telecom; 2: China Unicom; 3: China Mobile |
-| bk_sn | string | device SN |
-| operator | string | maintainer |
-| bk_outer_mac | string | outer MAC |
-| bk_state_name | string | country | CN: China, please refer to CMDB web page for detailed value |
-| bk_province_name | string | province |  |
-| import_from | string | import from | 1:excel;2:agent;3:api |
-| bk_sla | string | SLA level | 1:L1;2:L2;3:L3 |
-| bk_service_term | int | warranty | 1-10 |
-| bk_os_type | string | os type | 1:Linux;2:Windows;3:AIX |
-| bk_os_version | string | os version |
-| bk_os_bit | int | os bits |
-| bk_mem | string | memory capacity |
-| bk_mac | string | mac address |
-| bk_host_outerip | string | outer ip |
-| bk_host_name | string | hostname | 
-| bk_host_innerip | string | inner ip |
-| bk_host_id | int | host id |
-| bk_disk | int | disk capacity |
-| bk_cpu_module | string | CPU module |
-| bk_cpu_mhz | int | CPU hz |
-| bk_cpu | int | CPU count | 1-1000000
-| bk_comment | string | comment |
-| bk_cloud_id | int | cloud area id |
-| bk_bak_operator | string | backup maintainer |
-| bk_asset_id | string | device id |
+| Name| Type| Description|
+| ---------------- | ------ | -------------------------------  |
+| bk_os_type       |  string |Operating system type| 1:Linux;2:Windows; 3:AIX         |
+| bk_mac           |  string |Intranet MAC address   |                                 |
+| bk_host_innerip  | string |Intranet IP        |                                 |
+| bk_host_id       |  int    | Host ID        |                                 |
+| bk_cloud_id      |  int    | Cloud area    |                                 |

@@ -1,63 +1,63 @@
 ### Functional description
 
-update business set info(v3.10.12+)
+Update business set information (v3.10.12+)
 
 ### Request Parameters
 
 {{ common_args_desc }}
 
-#### General Parameters
+#### Interface Parameters
 
-| Field      |  Type      | Required   |  Description      |
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| bk_biz_set_ids | array  | Yes  | business set id list |
-| data           | object | Yes | business set data|
+| bk_biz_set_ids | array  |yes| Business set ID list|
+| data           |  object |Yes.| Business set data|
 
 #### data
 
-| Field      |  Type      | Required   |  Description      |
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| bk_biz_set_attr |  object  | No     | Business Set Model Fields |
-| bk_scope  |  object  | No     | Selected business area |
+| bk_biz_set_attr |  object  |no     | Business set model attribute |
+| bk_scope  |  object  |no     | Selected business scope|
 
 #### bk_biz_set_attr
 
-| Field      |  Type      | Required   |  Description      |
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| bk_biz_set_name   |  string  | Yes     | business set name|
-| bk_biz_maintainer |  string  | No     | the maintainers |
-| bk_biz_set_desc   |  string  | No     | business set description |
+| bk_biz_set_name   |   string  |yes     | Business set name|
+| bk_biz_maintainer |  string  |no     | Operation and maintenance personnel|
+| bk_biz_set_desc   |   string  |no     | Business set description|
 
 #### bk_scope
 
-| Field      |  Type      | Required   |  Description      |
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| match_all |  bool  | Yes     | Selected business line tags|
-| filter    |  object| No     | Scope conditions for the selected business |
+| match_all |  bool  |yes     | Selected business scope tag|
+| filter    |   object| no     | Scope criteria for the selected business|
 
 #### filter
 
-This parameter is a combination of service attribute field filtering rules, which is used to search for services based on service attribute fields. Combinations only support AND operations and can be nested up to 2 levels.
+This parameter is a combination of filtering rules for business attribute fields, and is used to search for hosts according to host attribute fields. The combination only supports AND operation and can be nested, with a maximum of 2 layers.
 
-| Field      |  Type      | Required   |  Description      |
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| condition |  string  | Yes    |rule operator|
-| rules |  array  | Yes     |Scope condition rules for the selected business |
+| condition |  string  |yes    | Rule operator|
+| rules |  array  |yes     | Scope condition rule for selected business|
 
 
 #### rules
 
-| Field     | Type   | Required |  Description                                                  |
-| -------- | ------ | ---- | ------------------------------------------------------------ |
-| field    | string | Yes   |  field name |
-| operator | string | Yes   | available values: equal,in |
-| value    | -      | No   |   values's format depend on operator                     |
+| Name     | Type   | Required| Default value  |  Description                                                  |
+| -------- | ------ | ---- | ------  | ------------------------------------------------------------ |
+| field    |  string |yes   | None     | Field name|                                                              |
+| operator | string |yes   | None     | Operator| Optional value equal,in|
+| value    | -      |no   | None     | Operand| Different values correspond to different value formats                            |
 
 
 **Note:**
-- The input parameters here only describe the required and built-in parameters of the system, and the other parameters that need to be filled depend on the attribute fields defined by the user.
-- Changes to `bk_biz_set_name` and `bk_scope` fields are not allowed under batch scenarios (the number of IDs in bk_biz_set_ids is greater than 1).
-- The maximum number for each batch update is 200.
+- The input parameters here only describe the required and built-in parameters, and the rest of the parameters to be filled in depend on the attribute fields defined by the user
+- The and fields are not allowed to change for batch scenarios (number of IDs in bk_biz_set_ids is greater than 1`bk_biz_set_name``bk_scope`
+- The maximum number of batch updates is 200.
 
 ### Request Parameters Example
 
@@ -72,6 +72,7 @@ This parameter is a combination of service attribute field filtering rules, whic
     ],
     "data":{
         "bk_biz_set_attr":{
+            "bk_biz_set_name": "test",
             "bk_biz_set_desc":"xxx",
             "biz_set_maintainer":"xxx"
         },
@@ -109,11 +110,11 @@ This parameter is a combination of service attribute field filtering rules, whic
 ### Return Result Parameters Description
 #### response
 
-| Field    | Type   | Description                         |
+| Name    | Type   | Description                                    |
 | ------- | ------ | ------------------------------------- |
-| result  | bool   | request success or failed. true:success；false: failed |
-| code    | int    | error code. 0: success, >0: something error  |
-| message | string | error info description      |
-| permission    | object | permission info       |
-| data | object | response data |
-| request_id    | string |  request chain id    |
+| result  | bool   | Whether the request was successful or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error    |
+| message | string |Error message returned by request failure                    |
+| permission    |  object |Permission information    |
+| data    |  object |Data returned by request                           |
+| request_id    |  string |Request chain id    |

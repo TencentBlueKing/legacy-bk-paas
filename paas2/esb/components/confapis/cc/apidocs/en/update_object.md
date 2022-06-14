@@ -1,22 +1,21 @@
 ### Functional description
 
-update object
+Update model definition
 
 ### Request Parameters
 
 {{ common_args_desc }}
 
-#### General Parameters
+#### Interface Parameters
 
-| Field                |  Type              | Required	   |  Description                                   |
+| Field                | Type              | Required   | Description                                   |
 |---------------------|--------------------|--------|-----------------------------------------|
-| id                  | int                | No     | ID of target object data record, as a condition for update     |
-| modifier            | string             | No     | Last editor of data    |
-| bk_classification_id| string             | Yes     | Classification ID, can be named in English alphabet sequence only|
-| bk_obj_name         | string             | No     | Object name                           |
-| bk_supplier_account | string             | Yes     | Supplier account                              |
-| bk_obj_icon         | string             | No     | Object icon information, display in front, that can refer to [(modleIcon.json)](/static/esb/api_docs/res/cc/modleIcon.json)|
-| position            | json object string | No     |  Position of front display                     |
+| id                  |  int                | no     | The ID of the object model as a condition for the update operation    |
+| modifier            |  string             | no     | The last person to modify this piece of data    |
+| bk_classification_id|  string             | yes  | The classification ID of the object model, which can only be named by English letter sequence|
+| bk_obj_name         |  string             | no     | The name of the object model                          |
+| bk_obj_icon         |  string             | no     | ICON information of object model, used for front-end display, value can be referred to [(modleIcon.json)](/static/esb/api_docs/res/cc/modleIcon.json)|
+| position            |  json object string |no     | Coordinates for front-end presentation                      |
 
 
 
@@ -24,11 +23,14 @@ update object
 
 ```python
 {
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
     "id": 1,
     "modifier": "admin",
     "bk_classification_id": "cc_test",
     "bk_obj_name": "cc2_test_inst",
-    "bk_supplier_account": "0",
     "bk_obj_icon": "icon-cc-business",
     "position":"{\"ff\":{\"x\":-863,\"y\":1}}"
 }
@@ -42,6 +44,21 @@ update object
     "result": true,
     "code": 0,
     "message": "",
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": "success"
 }
 ```
+
+### Return Result Parameters Description
+
+#### response
+
+| Name| Type| Description|
+|---|---|---|
+| result | bool |Whether the request was successful or not. True: request succeeded;false request failed|
+| code | int |Wrong code. 0 indicates success,>0 indicates failure error|
+| message | string |Error message returned by request failure|
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data | object |No data return|

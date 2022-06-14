@@ -1,51 +1,52 @@
 ### Functional description
 
-search business in business set(v3.10.12+)
+Query business in business set (v3.10.12+)
 
 ### Request Parameters
 
 {{ common_args_desc }}
 
-#### General Parameters
+#### Interface Parameters
 
-| Field      |  Type      | Required   |  Description  |
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| bk_biz_set_id | int    | Yes     | business set id |
-| filter      |  object  | No     | business attribute combination query condition|
-| fields      |  array   | No     | fields of object,the parameter is any attribute of the business. if the field information is not filled in, return all the fields of the business|
-| page        |  object  | Yes     |  page information  |
+| bk_biz_set_id | int    | yes  | Business set ID|
+| filter      |   object  |no     | Business attribute combination query criteria|
+| fields      |   array   | no     | Specify the fields to query. The parameter is any attribute of the business. If you do not fill in the field information, the system will return all the fields of the business|
+| page        |   object  |yes     | Paging condition|
 
 #### filter
-- query conditions. Combination supports both AND and OR. Can be nested up to 2 levels.
 
-| Field      |  Type      | Required   |  Description |
+Query criteria. The combination supports AND and OR. Can be nested, up to 2 layers.
+
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| condition |  string  | Yes    | rule operator|
-| rules |  array  | Yes     | filter business scope rules|
+| condition |  string  |yes    | Rule operator|
+| rules |  array  |yes     | Scope rule for filtering business|
 
 
 #### rules
-- the filter rule is the triple `field`, `operator`, `value`
+The filtering rule is triplet`field`,`operator`,`value`
 
-| Field     | Type   | Required |  Description                            |
-| -------- | ------ | ---- |----------------------------------------------------------- |
-| field    | string | Yes   |                                   |
-| operator | string | Yes   | available values: equal,not_equal,in,not_in,less,less_or_equal,greater,greater_or_equal,between,not_between |
-| value    | -      | No   |  values's format depend on operator                        |
+| Name     | Type   | Required| Default value|  Description                                                  |
+| -------- | ------ | ---- | ------ | ------------------------------------------------------------ |
+| field    |  string |yes   | None     | Field name|                                                              |
+| operator | string |yes   | None     | Operator| Optional value equal,not_equal,in,not_in,less,less_or_equal,greater,greater_or_equal,between,not_between|
+| value    | -      |no   | None     | Operand| Different values correspond to different value formats                            |
 
-condition rules detail: <https://github.com/Tencent/bk-cmdb/blob/master/src/common/querybuilder/README.md>
+Assembly rules can be found at: https://github.com/Tencent/bk-cmdb/blob/master/src/common/querybuilder/README.md
 
 #### page
 
-| Field      |  Type      | Required   |  Description  |
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| start    |  int    | Yes     | start record |
-| limit    |  int    | Yes     | page size,  maximum is 500. |
-| enable_count |  bool  | Yes  | whether to get the flag of the number of query objects|
-| sort     |  string | No     |sort field, by adding - in front of the field, such as sort:&#34;-field&#34; can indicate descending order by field field |
+| start    |   int    | yes  | Record start position|
+| limit    |   int    | yes  | Limit bars per page, Max. 500|
+| enable_count |  bool  |yes| Whether to get the flag of the number of query objects|
+| sort     |   string |no     | Sort the field. By adding sort in front of the field, for example, sort&#34;: sort field&#34; can indicate descending order by field field|
 
 **Note:**
-- `enable_count` If this flag is then the request is to get the count. At this time, the rest of the fields must be true, start is 0, limit: 0, and sort is "".
+- `enable_count`If this flag is true, then the request is to get the quantity. The remaining fields must be initialized,start is 0, and limit is: 0, sort is "."
 
 ### Request Parameters Example
 
@@ -86,7 +87,7 @@ condition rules detail: <https://github.com/Tencent/bk-cmdb/blob/master/src/comm
 }
 ```
 
-###  Return Result Example
+### Details return result example
 
 ```python
 
@@ -108,7 +109,7 @@ condition rules detail: <https://github.com/Tencent/bk-cmdb/blob/master/src/comm
 }
 ```
 
-### Return Search Business Number Result Example
+### Example of return result of query business quantity
 
 ```python
 {
@@ -129,21 +130,30 @@ condition rules detail: <https://github.com/Tencent/bk-cmdb/blob/master/src/comm
 ### Return Result Parameters Description
 #### response
 
-| Field    | Type   | Description                         |
+| Name    | Type   | Description                                    |
 | ------- | ------ | ------------------------------------- |
-| result  | bool   | request success or failed. true:success；false: failed |
-| code    | int    | error code. 0: success, >0: something error   |
-| message | string | error info description                |
-| permission    | object |  permission info      |
-| data    | object | response data                 |
-| request_id    | string | request chain id     |
+| result  | bool   | Whether the request was successful or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error    |
+| message | string |Error message returned by request failure                    |
+| permission    |  object |Permission information    |
+| data    |  object |Data returned by request                           |
+| request_id    |  string |Request chain id    |
 
 #### data
 
-| Field      | Type      | Description   |
+| Field      | Type      | Description      |
 |-----------|-----------|-----------|
-| count     | int       |  the num of record |
-| info      | array     |  business info     |
+| count     |  int       | Number of records|
+| info      |  array     | Actual business data|
+
+
+#### info
+
+| Field      | Type      | Description      |
+|-----------|-----------|-----------|
+| bk_biz_id     |  int       | Business ID |
+| bk_biz_name      |  string     | Business name|
+
 
 **Note:**
-- if the request is to query detailed information, then count is 0. If the query is for quantity, then info is empty.
+- If this request is to query details, count is 0. If the query is quantity, info is empty.

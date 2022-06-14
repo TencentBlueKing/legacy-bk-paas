@@ -1,22 +1,26 @@
 ### Functional description
 
-list service templates of a set template
-
-#### General Parameters
-
-{{ common_args_desc }}
+According to the service id and the set template id, obtaining a service template list of a set template under the specified service
 
 ### Request Parameters
 
-| Field           | Type   | Required | Description           |
-| ----------------| ------ | -------- | --------------------- |
-| set_template_id | int    | Yes      | set template ID |
-| bk_biz_id       | int    | Yes      | Business ID           |
+{{ common_args_desc }}
+
+#### Interface Parameters
+
+| Field                 | Type      | Required   | Description                       |
+|---------------------|------------|--------|-----------------------------|
+| set_template_id     |  int  |yes   | Set template ID |
+| bk_biz_id           |  int        | yes  | Business ID |
 
 ### Request Parameters Example
 
 ```json
 {
+  "bk_app_code": "esb_test",
+  "bk_app_secret": "xxx",
+  "bk_username": "xxx",
+  "bk_token": "xxx",
   "set_template_id": 1,
   "bk_biz_id": 3
 }
@@ -29,6 +33,8 @@ list service templates of a set template
     "result": true,
     "code": 0,
     "message": "success",
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": [
         {
             "bk_biz_id": 3,
@@ -58,26 +64,25 @@ list service templates of a set template
 
 ### Return Result Parameters Description
 
-#### response
+| Name| Type| Description|
+|---|---|---|
+| result | bool |Whether the request was successful or not. True: request succeeded;false request failed|
+| code | int |Wrong code. 0 indicates success,>0 indicates failure error|
+| message | string |Error message returned by request failure|
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data | array| Data returned by request|
 
-| Field   | Type   | Description                                            |
-| ------- | ------ | ------------------------------------------------------ |
-| result  | bool   | request success or failed. true:success；false: failed |
-| code    | int    | error code. 0: success, >0: something error            |
-| message | string | error info description                                 |
-| data    | object | response data                                          |
+Data field Description:
 
-#### Data field description
-
-| Field | Type  | Description   |
-| ----- | ----- | ------------- |
-| bk_biz_id           | int    | business ID       |
-| id                  | int    | service template ID   |
-| name                | array  | service template name |
-| service_category_id | int    | service category id   |
-| creator             | string | creator       |
-| modifier            | string | last modifier |
-| create_time         | string  | creation time         |
-| last_time           | string  | last modify time      |
-| bk_supplier_account | string  | supplier account code |
-
+| Name| Type| Description|
+|---|---|---|
+| bk_biz_id           |  int    | Business ID |
+| id                  |  int    | Service template ID   |
+| name                |  string  |Service template name|
+| service_category_id | int    | Service class ID   |
+| creator             |  string |Creator       |
+| modifier            |  string |Last modified by|
+| create_time         |  string |Settling time     |
+| last_time           |  string |Update time     |
+| bk_supplier_account | string |Developer account number   |

@@ -12,7 +12,7 @@
 |----------------------|------------|--------|-----------------------|
 | bk_biz_id  | int     |是     | 业务ID       |
 | service_template_id            | int  | 否   | 服务模板ID |
-| processes         | array  | 是   | 进程模板信息 |
+| processes         | array  | 是   | 进程模板信息,最大值为100 |
 
 
 #### processes 

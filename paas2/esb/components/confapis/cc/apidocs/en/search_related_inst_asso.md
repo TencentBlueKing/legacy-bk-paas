@@ -1,25 +1,37 @@
 ### Functional description
 
- Query all the association relationships of an instance by relation name (including the situation that it is used as the original model of association relationship and the target model of association relationship)
-
-#### General Parameters
-
-{{ common_args_desc }}
+ Query all Association relationships of an instance (including the case that it is the original model of Association relationship and the target model of Association relationship)
 
 ### Request Parameters
 
-| Field      | Type   | Required | Description                 |
-| ---------- | ------ | -------- | --------------------------- |
-| bk_inst_id | int    | Yes      | Instance ID                 |
-| bk_obj_id  | string | Yes      | Object ID                   |
-| fields     | array  | Yes      | Fields to be returned       |
-| start      | int    | No       | Record start position       |
-| limit      | int    | No       | Page size,  maximum is 500. |
+{{ common_args_desc }}
+
+#### Interface Parameters
+
+| Field       | Type   | Required| Description                  |
+| ---------- | ------ | ---- | --------------------- |
+| bk_inst_id | int    | yes | Instance id                |
+| bk_obj_id  | string |yes   | Model id                |
+| fields     |  array  |yes   | Fields to be returned        |
+| start      |  int    | no   | Record start position          |
+| limit      |  int    | no   | Page size, maximum 500. |
+
+#### page
+
+| Field      | Type      | Required   | Description      |
+|-----------|------------|--------|------------|
+| start     |   int     | yes  | Record start position|
+| limit     |   int     | yes  | Limit bars per page, Max. 200|
+
 
 ### Request Parameters Example
 
 ```json
 {
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
     "condition": {
         "bk_inst_id": 16,
         "bk_obj_id": "bk_router"
@@ -45,9 +57,10 @@
 ```json
 {
     "result": true,
-    "bk_error_code": 0,
-    "bk_error_msg": "success",
+    "code": 0,
+    "message": "success",
     "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": [
         {
             "id": 4,
@@ -72,16 +85,25 @@
 ```
 
 ### Return Result Parameters Description
+#### response
+
+| Name    | Type   | Description                                       |
+| ------- | ------ | ------------------------------------------ |
+| result  | bool   | Whether the request was successful or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error    |
+| message | string |Error message returned by request failure                     |
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data    |  object |Data returned by request                             |
 
 #### data
 
-| Field           | Type   | Description                                   |
-| --------------- | ------ | --------------------------------------------- |
-| id              | int64  | Association ID                                |
-| bk_inst_id      | int64  | Source instance ID                            |
-| bk_obj_id       | string | Source object ID                              |
-| bk_asst_inst_id | int64  | Target instance ID                            |
-| bk_asst_obj_id  | string | Target object ID                              |
-| bk_obj_asst_id  | string | Automatically generated object association ID |
-| bk_asst_id      | string | Relationship name                             |
-
+| Name            | Type   | Description                     |
+| :-------------- | :----- | :----------------------- |
+| id              |  int64  |Association id                   |
+| bk_inst_id      |  int64  |Source model instance id             |
+| bk_obj_id       |  string |Association relationship source model id         |
+| bk_asst_inst_id | int64  |Association relation target model id       |
+| bk_asst_obj_id  | string |Target model instance id           |
+| bk_obj_asst_id  | string |Auto-generated model association id|
+| bk_asst_id      |  string |Relationship name                 |

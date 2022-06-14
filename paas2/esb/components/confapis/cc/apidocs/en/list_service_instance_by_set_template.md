@@ -1,21 +1,34 @@
 ### Functional description
 
-query service instances by set_template_id
-
-### General Parameters
-
-{{ common_args_desc }}
+Obtaining the service instance list according to the set template id
 
 ### Request Parameters
 
-| Field                |  Type       | Required	   | Description                            |
+{{ common_args_desc }}
+
+#### Interface Parameters
+
+| Field                 | Type      | Required	   | Description                 |
 |----------------------|------------|--------|-----------------------|
-| set_template_id  | int     |Yes     | Set Template ID       |
+| bk_biz_id            |  int  |yes   | Business ID |
+| set_template_id            |  int  |yes   | Set template ID |
+| page       |   object    | no     | Query criteria|
+
+#### page
+
+| Field      | Type      | Required   | Description      |
+|-----------|------------|--------|------------|
+| start    |   int    | yes  | Record start position|
+| limit    |   int    | yes  | Limit bars per page, Max. 500, suggest 200.|
 
 ### Request Parameters Example
 
 ```python
 {
+  "bk_app_code": "esb_test",
+  "bk_app_secret": "xxx",
+  "bk_username": "xxx",
+  "bk_token": "xxx",  
   "bk_biz_id": 1,
   "set_template_id":1,
   "page": {
@@ -30,16 +43,17 @@ query service instances by set_template_id
 ```python
 {
     "result": true,
-    "bk_error_code": 0,
-    "bk_error_msg": "success",
+    "code": 0,
+    "message": "success",
     "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": {
         "count": 2,
         "info": [
             {
                 "bk_biz_id": 3,
                 "id": 1,
-                "name": "197.193.0.2_lgh-process-1",
+                "name": "10.0.0.1_lgh-process-1",
                 "labels": null,
                 "service_template_id": 50,
                 "bk_host_id": 1,
@@ -73,23 +87,35 @@ query service instances by set_template_id
 
 #### response
 
-| Field       | Type     | Description         |
+| Name| Type| Description|
 |---|---|---|
-| result | bool | request success or failed. true:success；false: failed |
-| code | int | error code. 0: success, >0: something error |
-| message | string | error info description |
-| data | object | response data |
+| result | bool |Whether the request was successful or not. True: request succeeded;false request failed|
+| code | int |Wrong code. 0 indicates success,>0 indicates failure error|
+| message | string |Error message returned by request failure|
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data | object |Data returned by request|
 
-#### Data field description
+#### Data field Description
 
-| Field       | Type     | Description         |
-|---|---|---|---|
-|count|integer|total count||
-|info|array|response data||
+| Field| Type| Description|
+|---|---|---|
+|count| int| Total|
+|info| array| Return result|
 
-#### Info field description
+#### Info Field Description
 
-| Field       | Type     | Description         |
-|---|---|---|---|
-|id|integer|Service Instance ID||
-|name|array|Service Instance Name||
+| Field| Type| Description|
+|---|---|---|
+|id| int| Service instance ID|
+|name| string| Service instance name|
+|bk_biz_id| int| Business ID |
+|bk_module_id| int| Model id|
+|service_template_id| int| Service template ID|
+| labels           |  map  |Tag information|
+|bk_host_id| int| Host id|
+| creator              |  string             | Creator of this data                                                                                 |
+| modifier             |  string             | The last person to modify this piece of data            |
+| create_time         |  string |Settling time     |
+| last_time           |  string |Update time     |
+| bk_supplier_account | string       | Developer account number|

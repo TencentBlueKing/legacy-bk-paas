@@ -1,52 +1,56 @@
 ### Functional description
 
- Obtain operation audit logs based on conditions
-
-#### General Parameters
-
-{{ common_args_desc }}
+ Get action Audit log based on condition
 
 ### Request Parameters
 
-| Field | Type | Required | Description |
+{{ common_args_desc }}
+
+#### Interface Parameters
+
+| Field                | Type      | Required   | Description                       |
 |---------------------|------------|--------|-----------------------------|
-| page | object | Yes | paging parameters |
-| condition | object | No | Operation audit log query condition |
+| page                |  object     | yes  | Paging parameter                    |
+| condition           |  object     | no     | Operation audit log query criteria                   |
 
 #### page
 
-| Field | Type | Required | Description |
+| Field      | Type      | Required   | Description                |
 |-----------|------------|--------|----------------------|
-| start | int | No | record start position |
-| limit | int | Yes | limit the number of entries per page, maximum 200 |
-| sort | string | No | Sort field |
+| start     |   int       | no     | Record start position         |
+| limit     |   int       | yes  | Limit bars per page, Max. 200|
+| sort      |   string    | no     | Sort field             |
 
 #### condition
 
-| Field | Type | Required | Description |
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| bk_biz_id | int | No | business id |
-| resource_type |string | No | The specific resource type of the operation |
-| action | array | No | Action type |
-| operation_time | object | Yes | Operation time |
-| user | string | No | Operator |
-| resource_name | string | No | Resource name |
-| category | string | No | type of query |
-| fuzzy_query    | bool         | No       | use fuzzy query or not when searching with resource name, **fuzzy query has low efficiency and poor performance** |
-| condition | array | No | condition query's condition, with user and resource_name cannot be provided at the same time |
+| bk_biz_id     | int      | no      | Business ID                                    |
+| resource_type  |string      | no      | Specific resource type of operation|
+| action     |    array  |no    | Operation type|
+|   operation_time   |    object  |yes    | Operating time|
+|   user   |    string  |no    | Operator|
+|    resource_name  |    string  |  no   | Resource name |
+|    category  |    string  |  no  | Type of query |
+| fuzzy_query    |  bool         | no   | Whether to use fuzzy query to query the resource name is **inefficient and poor in performance**. This field only affects resource_name. This field will be ignored when using condition to perform fuzzy query. Please choose one of the two. |
+| condition | array |no| Specify query criteria, which can not be provided at the same time as user and resource_name|
 
 ##### condition.condition
 
-| Field    | Type         | Required | Description                                                  |
-| -------- | ------------ | -------- | ------------------------------------------------------------ |
-| field    | string       | Yes      | fields of query, only can be "user" and "resource_name"      |
-| operator | string       | Yes      | operator，$in means "belong to"，$nin means "does not belong  to"，$regex means "contain"，$regex only can be used by resource_name |
-| value    | string/array | Yes      | value of query，$in and $nin need array type，$regex need string type |
+| Field     | Type         | Required| Description                                                         |
+| -------- | ------------ | ---- | ------------------------------------------------------------ |
+| field    |  string       | yes | Object,"user" only,"resource_name"                      |
+| operator | string       | yes | Operator: in is belongs to, not_in is does not belong to, contains is contains, and field is resource_name. Contains can be used for fuzzy query|
+| value    |  string/array |yes   | The value corresponding to the field, in and not_in require array type, and contexts require String type|
 
 ### Request Parameters Example
 
 ```json
 {
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
     "condition":{
         "bk_biz_id":2,
         "resource_type":"host",
@@ -87,13 +91,13 @@
       	"condition":[
           {
             "field":"user",
-            "operatior":"in",
-            "value":"admin"
+            "operator":"in",
+            "value":["admin"]
           },
           {
             "field":"resource_name",
-            "operatior":"in",
-            "value":"1.1.1.1"
+            "operator":"in",
+            "value":["1.1.1.1"]
           }
         ],
         "category":"host"
@@ -111,9 +115,10 @@
 ```json
 {
     "result":true,
-    "bk_error_code":0,
-    "bk_error_msg":"success",
-    "permission":null,
+    "code":0,
+    "message":"success",
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data":{
         "count":2,
         "info":[
@@ -151,10 +156,36 @@
 ```
 
 ### Return Result Parameters Description
+#### response
+
+| Name| Type| Description|
+|---|---|---|
+| result | bool |Whether the request was successful or not. True: request succeeded;false request failed|
+| code | int |Wrong code. 0 indicates success,>0 indicates failure error|
+| message | string |Error message returned by request failure|
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data | object |Data returned by request|
 
 #### data
 
-| Field | Type | Description |
+| Field      | Type      | Description         |
 |-----------|-----------|--------------|
-| count | int | Number of records |
-| info | array | Operation audit record information |
+| count     |  int       | Number of records     |
+| info      |  array     | Record information of operation audit|
+
+#### info
+| Field      | Type      | Description         |
+|-----------|-----------|--------------|
+|    id |      int  | Audit ID  |
+|   audit_type  |     string   |   Operational audit type   |
+|   bk_supplier_account  |    string    | Developer account number     |
+|   user  |      string  |    Operator|
+|   resource_type  |    string    |   Resource type   |
+|  action   |    string    |    Operation type|
+|    operate_from |    string    | Source platform          |
+|  operation_detail   |     object     | Operational details    |
+| operation_time    |     string   |    Operating time|
+|  bk_biz_id   |       int | Business ID |
+| resource_id    |     int   |    Resource id|
+|   resource_name  |     string   | Resource Name    |
