@@ -1,5 +1,11 @@
 Release Log
 ===============================
+# 2.12.51
+    - update: esb cc set default bk_supplier_account for component dest_path
+    - update: esb gse compatible with gse 2.0 interface protocol
+    - update: esb update cc/gsekit/itsm/monitor_v3 confapis
+    - fix: esb cmsi send_mail_with_smtp attachment type
+
 # 2.12.50
     - add: login page show password in input box
 

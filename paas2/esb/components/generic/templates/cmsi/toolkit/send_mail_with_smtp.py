@@ -90,26 +90,26 @@ class SMTPClient(object):
             # rfc2047: encoded-word = "=?" charset "?" encoding "?" encoded-text "?="
             # encoding b for base64
             filename = smart_str(f_info.get("filename", ""))
-            _filename = "=?utf-8?b?" + base64.b64encode(filename) + "?="
+            encoded_filename = "=?utf-8?b?" + base64.b64encode(filename) + "?="
             _content = f_info.get("content", "")
-            _type = f_info.get("type") or _filename.split(".")[-1] or "attachment"
+            _type = f_info.get("type") or filename.split(".")[-1] or "attachment"
             _disposition = f_info.get("disposition", "")
             # 添加二进制附件
             if _type in ["image", "jpg", "png", "jpeg"]:
-                content_id = f_info.get("content_id") or "<%s>" % _filename
+                content_id = f_info.get("content_id") or "<%s>" % encoded_filename
                 _disposition = _disposition or "inline"
-                msgImage = MIMEImage(_content, name=_filename)
+                msgImage = MIMEImage(_content, name=encoded_filename)
                 msgImage.add_header("Content-ID", content_id)
-                msgImage.add_header("Content-Disposition", _disposition, filename=_filename)
+                msgImage.add_header("Content-Disposition", _disposition, filename=encoded_filename)
                 mail_msg.attach(msgImage)
             else:
                 _disposition = _disposition or "attachment"
-                ctype, encoding = mimetypes.guess_type(_filename)
+                ctype, encoding = mimetypes.guess_type(encoded_filename)
                 if ctype is None or encoding is not None:
                     ctype = "application/octet-stream"
                 maintype, subtype = ctype.split("/", 1)
                 att = MIMEImage(_content, _subtype=subtype)
-                att.add_header("Content-Disposition", _disposition, filename=_filename)
+                att.add_header("Content-Disposition", _disposition, filename=encoded_filename)
                 mail_msg.attach(att)
 
     def get_smtp_client(self):

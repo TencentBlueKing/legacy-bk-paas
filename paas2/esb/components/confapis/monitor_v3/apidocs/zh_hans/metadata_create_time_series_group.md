@@ -73,7 +73,7 @@
 | create_time | string | 创建时间 |
 | last_modify_user | string | 最后更新人 |
 | last_modify_time | string | 最后更新时间 |
-| metric_info_list | list | \自定义时序列表 |
+| metric_info_list | list | 自定义时序列表 |
 
 #### data.metric_info_list具体内容说明
 

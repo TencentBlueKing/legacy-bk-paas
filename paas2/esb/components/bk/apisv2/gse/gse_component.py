@@ -14,6 +14,7 @@ import json
 
 from common.errors import error_codes
 from components.component import ConfComponent
+
 from .toolkit import configs
 
 
@@ -53,13 +54,26 @@ class GseComponent(ConfComponent):
         )
 
         try:
-            response = {
-                "result": True if response["bk_error_code"] == 0 else False,
-                "code": response["bk_error_code"],
-                "message": response.get("bk_error_msg", ""),
-                "data": response.get("result"),
-            }
+            if self._is_legacy(response):
+                response = self._format_legacy_response(response)
+            else:
+                response = self._format_response(response)
         except Exception:
             raise error_codes.THIRD_PARTY_RESULT_ERROR.format_prompt(args=configs.SYSTEM_NAME)
 
         self.response.payload = response
+
+    def _is_legacy(self, response):
+        return "bk_error_code" in response
+
+    def _format_legacy_response(self, response):
+        return {
+            "result": True if response["bk_error_code"] == 0 else False,
+            "code": response["bk_error_code"],
+            "message": response.get("bk_error_msg", ""),
+            "data": response.get("result"),
+        }
+
+    def _format_response(self, response):
+        response["result"] = response["code"] == 0
+        return response

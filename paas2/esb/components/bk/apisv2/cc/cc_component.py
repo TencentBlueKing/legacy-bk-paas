@@ -24,6 +24,8 @@ class CcComponent(ConfComponent):
     host = configs.host
 
     def handle(self):
+        self.request.kwargs.setdefault("bk_supplier_account", configs.DEFAULT_BK_SUPPLIER_ACCOUNT)
+
         request_info = self.get_request_info()
 
         client = tools.CCClient(self)
