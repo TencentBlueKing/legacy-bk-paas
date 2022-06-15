@@ -10,7 +10,7 @@ token verification
 
 | Field        | Type     | Required  | Description  |
 | --------- | ------ | --- | -------------------------- |
-| token      | string    | 是   | itsm generate encrypted token |
+| token      | string    | YES    | itsm generate encrypted token |
 
 
 ### Request Parameters Example
@@ -49,6 +49,6 @@ token verification
 
 ### data
 
-| 字段     | 类型     | 描述       |
+| Field     | Type     | Description       |
 | -------------| ------ | -------- |
 | is_passed  | bool | is validate     |

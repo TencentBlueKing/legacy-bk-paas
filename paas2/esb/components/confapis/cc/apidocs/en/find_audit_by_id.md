@@ -1,22 +1,28 @@
 ### Functional description
 
- Get detailed information based on audit ID
-
-#### General Parameters
-
-{{ common_args_desc }}
+ Get details based on audit ID
 
 ### Request Parameters
 
-| Field | Type | Required | Description |
+{{ common_args_desc }}
+
+#### Interface Parameters
+
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| id |int array |Yes | Audit id array
+| id     |   array    | yes   | Audit id array, limited to 200 at a time                                             |
 
 ### Request Parameters Example
+
 ```python
 {
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
     "id":[95,118]
 }
+
 ```
 
 ### Return Result Example
@@ -24,9 +30,10 @@
 ```json
 {
     "result": true,
-    "bk_error_code": 0,
-    "bk_error_msg": "success",
+    "code": 0,
+    "message": "success",
     "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": [
         {
             "id": 95,
@@ -156,25 +163,44 @@
 
 ### Return Result Parameters Description
 
+#### response
+
+| Name    | Type   | Description                                    |
+| ------- | ------ | ------------------------------------- |
+| result  | bool   | Whether the request succeeded or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error   |
+| message | string |Error message returned by request failure                   |
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data    |  object |Data returned by request                          |
+
 #### data
 
-| Field | Type | Description |
+| Field      | Type      | Description         |
 |-----------|-----------|--------------|
-|  | array | Operation audit record information |
+|    id |      int  | Audit ID  |
+|   audit_type  |     string   |   Operational audit type   |
+|   bk_supplier_account  |    string    | Developer account number     |
+|   user  |      string  |    Operator|
+|   resource_type  |    string    |   Resource type   |
+|  action   |    string    |    Operation type|
+|    operate_from |    string    |   Source platform   |
+|  operation_detail   |     object     | Operational details    |
+| operation_time    |     string   |    Operating time|
+|  bk_biz_id   |       int | Business ID |
+| resource_id    |     int   |    Resource id|
+|   resource_name  |     string   | Resource Name    |
+|   rid  |     string   | Request chain id    |
 
-# single audit details
-
-| Field | Type | Description |
+#### operation_detail
+| Field      | Type      | Description         |
 |-----------|-----------|--------------|
-| id | int | Audit ID |
-| audit_type | string | Operation audit type |
-| bk_supplier_account | string | Developer account |
-| user | string | Operator |
-| resource_type | string | Resource type |
-| action | string | Action type |
-| operate_from | string | Source platform |
-| operation_detail | object | Operation details |
-| operation_time | string | Operation time |
-| bk_biz_id | int | business id |
-| resource_id | int | resource id |
-| resource_name | string | Resource name |
+|    details |      object  | Detail data   |
+|    bk_obj_id |      string  | Model type   |
+
+#### details
+| Field      | Type      | Description         |
+|-----------|-----------|--------------|
+|    pre_data |      object  | Prior data   |
+|   cur_data  |     object   |   Current data   |
+|   update_fields  |     object   |   Updated field   |

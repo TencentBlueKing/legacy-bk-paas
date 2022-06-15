@@ -1,38 +1,41 @@
 ### Functional description
 
-update host properties in batches(can't update host's cloud area property)
+Bulk update host attributes based on host id and attributes (can not be used to update cloud area field in host attributes)
 
 ### Request Parameters
 
 {{ common_args_desc }}
 
-#### General Parameters
+#### Interface Parameters
 
-| Field               |  Type        | Required |  Description                                                   |
-|---------------------|--------------|----------|----------------------------------------------------------------|
-| bk_supplier_account | string       | No       | Supplier account                                               |
-| update              | object array | Yes      | The updated properties and values for the host, limited to 500 |
+| Field                | Type         | Required   | Description                           |
+|---------------------|--------------|--------|---------------------------------|
+| update              |  array |yes     | Host updated attributes and values, up to 500   |
 
 #### update
-| Field      | Type   | Required | Description                                                                  |
-|------------|--------|----------|------------------------------------------------------------------------------|
-| properties | object | Yes      | The updated properties for the host, can't update host's cloud area property |
-| bk_host_id | int    | Yes      | The host ID, for host update                                                 |
+| Field        | Type    | Required   | Description                                                |
+|-------------|--------|--------|----------------------------------------------------|
+| properties  | object |yes     | The updated properties and values of the host can not be used to update the cloud area field in the host properties |
+| bk_host_id  | int    | yes     | Host ID for update                                     |
 
 #### properties
-| Field        | Type   | Required | Description                                                                     |
-|--------------|--------|----------|---------------------------------------------------------------------------------|
-| bk_host_name | string | No       | Host name, or other properties, can't update host's cloud area property         |
-| operator     | string | No       | Maintainer, or other properties, can't update host's cloud area property        |
-| bk_comment   | string | No       | Comment, or other properties, can't update host's cloud area property           |
-| bk_isp_name  | string | No       | Telecom operators, or other properties, can't update host's cloud area property |
+| Field         | Type   | Required   | Description                                                      |
+|--------------|--------|-------|-----------------------------------------------------------|
+| bk_host_name | string |no    | The host name, which can also be another attribute, can not be used to update the cloud area field in the host properties |
+| operator     |  string |no    | The primary maintainer, which can also be another attribute, can not be used to update the cloud area field in the host properties|
+| bk_comment   |  string |no    | Note, which can be other properties, can not be used to update the cloud area field in host properties  |
+| bk_isp_name  | string |no    | The operator, or other attributes, can not be used to update the cloud area field in the host attribute|
+
 
 
 ### Request Parameters Example
 
 ```json
 {
-    "bk_supplier_account":"0",
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
     "update":[
       {
         "properties":{
@@ -55,6 +58,19 @@ update host properties in batches(can't update host's cloud area property)
     "result": true,
     "code": 0,
     "message": "success",
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": null
 }
 ```
+
+#### response
+
+| Name    | Type   | Description                                    |
+| ------- | ------ | ------------------------------------- |
+| result  | bool   | Whether the request was successful or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error    |
+| message | string |Error message returned by request failure                    |
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data    |  object |Data returned by request                           |

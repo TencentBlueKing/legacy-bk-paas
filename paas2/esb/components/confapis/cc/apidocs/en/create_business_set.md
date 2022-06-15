@@ -1,60 +1,57 @@
 ### Functional description
 
-create business set(v3.10.12+)
-
+New business set (v3.10.12+)
 
 ### Request Parameters
 
 {{ common_args_desc }}
 
 
-#### General Parameters
+#### Interface Parameters
 
-| Field      |  Type      | Required   |  Description      |
-|-----------|------------|--------|---------------------------|
-| bk_biz_set_attr    |  object  | Yes     |  business set model field|
-| bk_scope |  object  | Yes     | selected business scope|
+| Field      | Type      | Required   | Description      |
+|-----------|------------|--------|------------|
+| bk_biz_set_attr    |   object  |yes     | Business set model attribute |
+| bk_scope |  object  |yes     | Selected business scope|
 
 #### bk_biz_set_attr
 
-| Field      |  Type      | Required   |  Description      |
-|-----------|------------|--------|------------------|
-| bk_biz_set_name   |  string  | Yes   | business set name|
-| bk_biz_maintainer |  string  | No   | the maintainers |
-| bk_biz_set_desc   |  string  | No   | business description |
+| Field      | Type      | Required   | Description      |
+|-----------|------------|--------|------------|
+| bk_biz_set_name   |   string  |yes   | Business set name|
+| bk_biz_maintainer |  string  |no   | Operation and maintenance personnel|
+| bk_biz_set_desc   |   string  |no   | Business set description|
 
 #### bk_scope
 
-| Field      |  Type      | Required   |  Description      |
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| match_all |  bool  | Yes    | selected business line tags|
-| filter |  object  | No     | scope conditions for the selected business|
+| match_all |  bool  |yes    | Selected business scope tag|
+| filter |  object  |no     | Scope criteria for the selected business|
 
 #### filter
 
-- This parameter is a combination of business attribute field filtering rules, which is used to search for business based on business attribute fields. Combinations only support AND operations and can be nested up to 2 levels.
+This parameter is a combination of filtering rules for the service attribute field, and is used to search for services according to the service attribute field. The combination only supports AND operation and can be nested, with a maximum of 2 layers.
 
-| Field      |  Type      | Required   |  Description      |
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| condition |  string  | Yes    | rule operator|
-| rules |  array  | Yes     | scope condition rules for the selected business|
+| condition |  string  |yes    | Rule operator|
+| rules |  array  |yes     | Scope condition rule for selected business|
 
 
 #### rules
 
-| Field     | Type   | Required   | Description                 |
-| -------- | ------ | ---- | ---------------------------------- |
-| field    | string |  No  |    field name                      |
-| operator | string |  No  | available values: equal,in |
-| value    | -      |  No  |  values's format depend on operator   |
+| Name     | Type   | Required| Default value| Description   |  Description                                                  |
+| -------- | ------ | ---- | ------ | ------ | ------------------------------------------------------------ |
+| field    |  string |yes   | None     | Field name|                                                              |
+| operator | string |yes   | None     | Operator| Optional value equal,in|
+| value    | -      |no   | None     | Operand| Different values correspond to different value formats                            |
 
-**Note：**
-
-- The input here only describes the required and built-in parameters for the `bk_biz_set_attr` parameter, and the other parameters that need to be filled depend on the attribute fields defined by the user.
-- when the `match_all` field in `bk_scope` is true, it means that the selected business scope of the business set is all, and the parameter `filter` is empty. If the `match_all` field is false, 
-  `filter` needs to be non-null and the user needs to explicitly specify choice of business
-- The selected business type must be enum or organization.
-
+**Note:**
+- The input here`bk_biz_set_attr` only describes the required and built-in parameters for parameters, and the rest of the parameters to be filled in depend on the attribute fields defined by the user
+- `bk_scope`If the field in`match_all` is true, it means that the selected business range of the business set is all. In this case, the parameter`filter` is blank. If the`match_all` field is false`filter`, it needs to be non-empty, and the user needs to explicitly point to
+Scope of business selection
+- The circled type of the selected business attribute in the business set is organization and enumeration
 ### Request Parameters Example
 
 ```python
@@ -76,7 +73,7 @@ create business set(v3.10.12+)
                 {
                     "field":"bk_sla",
                     "operator":"equal",
-                    "value":"2"
+                    "value":"3"
                 },
                 {
                     "field":"life_cycle",
@@ -103,14 +100,13 @@ create business set(v3.10.12+)
 }
 ```
 ### Return Result Parameters Description
-
 #### response
 
-| Field    | Type   | Description                                    |
+| Name    | Type   | Description                                    |
 | ------- | ------ | ------------------------------------- |
-| result  | bool   | request success or failed. true:success；false: failed |
-| code    | int    | error code. 0: success, >0: something error |
-| message | string | error info description       |
-| permission    | object | permission info    |
-| data    | int | business set id                           |
-| request_id    | string |  request chain id    |
+| result  | bool   | Whether the request succeeded or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error    |
+| message | string |Error message returned by request failure                    |
+| permission    |  object |Permission information    |
+| data    |  int |Business set id created                           |
+| request_id    |  string |Request chain id    |

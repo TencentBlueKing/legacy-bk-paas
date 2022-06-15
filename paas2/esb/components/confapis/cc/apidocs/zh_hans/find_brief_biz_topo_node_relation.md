@@ -25,8 +25,7 @@
 |-----------|------------|--------|------------|
 | src_biz_obj  | string  | 是     | 业务层级中，源层级的模型ID，可以分别为"biz"、自定义层级模型ID(bk_obj_id)、"set"、"module"。 |
 | src_ids  | array  | 是     |  src_biz_obj 所代表的实例ID列表，列表长度范围为[1,200]|
-| dest_biz_obj  | string  | 是     | 与src_biz_obj**直接(紧临)**相关联的业务层级模型。其中业务("biz")
-为例外，任意的src_biz_obj的dest_biz_obj都可以是"biz"。但二者不允许相同。|
+| dest_biz_obj  | string  | 是     | 与src_biz_obj**直接(紧临)**相关联的业务层级模型。其中业务("biz")为例外，任意的src_biz_obj的dest_biz_obj都可以是"biz"。但二者不允许相同。|
 | page  | object  | 是     |  查询到的数据返回的分页配置信息|
 
 #### page 字段说明

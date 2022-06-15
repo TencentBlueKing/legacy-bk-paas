@@ -1,6 +1,6 @@
 ### Functional description
 
-query dynamic group (V3.9.6)
+Get dynamic grouping details (V3.9.6)
 
 ### Request Parameters
 
@@ -8,10 +8,10 @@ query dynamic group (V3.9.6)
 
 #### Interface Parameters
 
-| Field               | Type    | Required | Description                            |
-|---------------------|---------|----------|----------------------------------------|
-| bk_biz_id           | int     | Yes      | Business ID                            |
-| id                  | string  | Yes      | Primary key ID of target dynamic group |
+| Field      | Type      | Required   | Description      |
+|-----------|------------|--------|------------|
+| bk_biz_id |  int     | yes  | Business ID |
+| id        |   string  |yes     | Target dynamic grouping pk ID|
 
 ### Request Parameters Example
 
@@ -19,6 +19,7 @@ query dynamic group (V3.9.6)
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
+    "bk_username": "xxx",
     "bk_token": "xxx",
     "bk_biz_id": 1,
     "id": "XXXXXXXX"
@@ -32,6 +33,8 @@ query dynamic group (V3.9.6)
     "result": true,
     "code": 0,
     "message": "",
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": {
     	"bk_biz_id": 1,
     	"name": "my-dynamic-group",
@@ -75,37 +78,49 @@ query dynamic group (V3.9.6)
        "create_time": "2018-03-27T16:22:43.271+08:00",
        "modify_user": "admin",
        "last_time": "2018-03-27T16:29:26.428+08:00"
-    }
+    },
+    "permission": null,
+    "request_id": "dsda1122adasadadada2222",
 }
 ```
 
-### Return Result Parameters Description
+### Return result parameter
+#### response
+
+| Name    | Type   | Description                                    |
+| ------- | ------ | ------------------------------------- |
+| result  | bool   | Whether the request was successful or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error    |
+| message | string |Error message returned by request failure                    |
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data    |  object |Data returned by request                           |
 
 #### data
 
-| Field        | Type    | Description                     |
-|--------------|---------|---------------------------------|
-| bk_biz_id    | int     | Business ID                     |
-| id           | string  | Primary key ID of dynamic group |
-| bk_obj_id    | string  | object name, it can be set,host |
-| name         | string  | the name of dynamic group       |
-| info         | object  | common search query parameters  |
-| last_time    | string  | last update timestamp           |
-| modify_user  | string  | last modify user                |
-| create_time  | string  | create timestamp                |
-| create_user  | string  | creator                         |
+| Field      | Type      | Description      |
+|-----------|-----------|-----------|
+| bk_biz_id    |  int     | Business ID |
+| id           |  string  |Dynamic grouping pk ID|
+| bk_obj_id    |  string  |Target resource object type of dynamic grouping, which can be host,set at present|
+| name         |  string  |Dynamic group naming|
+| info         |  object  |Dynamic grouping rule information|
+| last_time    |  string  |Update time|
+| modify_user  | string  |Modifier|
+| create_time  | string  |Settling time|
+| create_user  | string  |Creator|
 
 #### data.info.condition
 
-| Field     | Type    | Description                                                                                                                |
-|-----------|---------|----------------------------------------------------------------------------------------------------------------------------|
-| bk_obj_id |  string | object name, it can be set,module,host object type for host type dynamic group, only set object type for set dynamic group |
-| condition |  array  | search condition                                                                                                           |
+| Field      | Type     | Description      |
+|-----------|-----------|------------|
+| bk_obj_id |  string   | Conditional object resource type, info.conditon supported for dynamic grouping of host type: set,module,host; Info.conditions supported for dynamic grouping of type set: set|
+| condition |  array    | Query criteria|
 
 #### data.info.condition.condition
 
-| Field     | Type    | Description                                                                            |
-|-----------|---------|----------------------------------------------------------------------------------------|
-| field     | string  | field of object                                                                        |
-| operator  | string  | condition operator, $eq is equal, $ne is not equal, $in is belongs, $nin is not belong |
-| value     | object  | the value of field                                                                     |
+| Field      | Type     | Description       |
+|-----------|------------|------------|
+| field     |   string    | Fields of the object|
+| operator  |  string    | Operator with op values eq(equal)/ne(unequal)/in(of)/nin(not of)|
+| value     |   object    | The value corresponding to the field|

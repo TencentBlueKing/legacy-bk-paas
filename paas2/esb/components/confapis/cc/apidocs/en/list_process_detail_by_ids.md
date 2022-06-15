@@ -1,24 +1,29 @@
 ### Functional description
 
-list process detail by their ids in one biz (v3.9.8)
-
-#### General Parameters
-
-{{ common_args_desc }}
+Query the process details corresponding to the process ID under a business (v3.9.8)
 
 ### Request Parameters
 
-| Field      | Type      | Required | Description                                                  |
-| ---------- | --------- | -------- | ------------------------------------------------------------ |
-| bk_biz_id  | int64       | Yes      | Business ID                                                  |
-|bk_process_ids|int64 array|Yes|process id array,its max length is 500|
-| fields     | array     | No      | process property list, the specified process property feilds will be returned <br>it can speed up the request and reduce the network payload |
+{{ common_args_desc }}
+
+#### Interface Parameters
+
+|Field| Type| Required| Description|
+|---|---|---|---|
+|bk_biz_id| int| yes | The business ID of the process|
+|bk_process_ids| array| yes | Process ID list, up to 500|
+|fields| array| No| Process attribute list, which controls which fields are in the process instance information that returns the result, can speed up interface requests and reduce network traffic transmission<br> If blank, all fields of the process are returned, and bk_process_id is a required field|
 
 
 ### Request Parameters Example
 
-```json
+``` json
 {
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
+    "bk_biz_id":1,
     "bk_process_ids": [
         43,
         44
@@ -33,12 +38,13 @@ list process detail by their ids in one biz (v3.9.8)
 ```
 
 ### Return Result Example
-
-```json
+``` json
 {
     "result": true,
     "code": 0,
     "message": "success",
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": [
         {
             "bk_func_id": "",
@@ -58,11 +64,19 @@ list process detail by their ids in one biz (v3.9.8)
 
 ### Return Result Parameters Description
 
-#### response
+| Name| Type| Description|
+|---|---|--- |
+| result | bool |Whether the request was successful or not. True: request succeeded;false request failed|
+| code | int |Wrong code. 0 indicates success,>0 indicates failure error|
+| message | string |Error message returned by request failure|
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data | array |Data returned by request|
 
-| Field       | Type     | Description         |
-|---|---|---|
-| result | bool | request success or failed. true:success；false: failed |
-| code | int | error code. 0: success, >0: something error |
-| message | string | error info description |
-| data | object | response data |
+#### data
+| Name| Type| Description|
+|---|---|--- |
+|bk_func_id| string| Function ID|
+|bk_func_name| string| Process name|
+|bk_process_id| int| Process id|
+|bk_process_name| string| Process alias|

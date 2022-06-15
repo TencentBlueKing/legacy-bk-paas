@@ -1,16 +1,16 @@
 ### Functional description
 
-delete business set(v3.10.12+)
+Delete business set (v3.10.12+)
 
 ### Request Parameters
 
 {{ common_args_desc }}
 
-#### General Parameters
+#### Interface Parameters
 
-| Field      |  Type      | Required   |  Description      |
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| bk_biz_set_ids      | array     | Yes     |business set id list |
+| bk_biz_set_ids      |  array     | yes     | Business set ID list|
 
 ### Request Parameters Example
 
@@ -42,11 +42,11 @@ delete business set(v3.10.12+)
 ### Return Result Parameters Description
 #### response
 
-| Field    | Type   | Description                         |
+| Name    | Type   | Description                                    |
 | ------- | ------ | ------------------------------------- |
-| result  | bool   | request success or failed. true:success；false: failed |
-| code    | int    | error code. 0: success, >0: something error  |
-| message | string | error info description      |
-| permission    | object | permission info       |
-| data | object | response data |
-| request_id    | string |  request chain id    |
+| result  | bool   | Whether the request succeeded or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error    |
+| message | string |Error message returned by request failure                    |
+| permission    |  object |Permission information    |
+| data | object |Data returned by request|
+| request_id    |  string |Request chain id    |

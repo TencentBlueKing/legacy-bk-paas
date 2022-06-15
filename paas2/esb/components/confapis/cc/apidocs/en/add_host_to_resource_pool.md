@@ -1,41 +1,48 @@
 ### Functional description
 
-add host to resource pool
+Adds a host to the resource pool with the specified id based on the host list information
 
 ### Request Parameters
 
 {{ common_args_desc }}
 
-#### General Parameters
+#### Interface Parameters
 
-| Field               |  Type        | Required |  Description                                           |
-|---------------------|--------------|----------|--------------------------------------------------------|
-| bk_supplier_account | string       | Yes      | Supplier account                                       |
-| host_info           | object array | Yes      | The info of the hosts to be added to the resource pool |
-| directory           | int          | No       | The directory ID the hosts to be added to              |
+| Field                  | Type        | Required	 |Description                |
+|----------------------|--------------|--------|---------------------|
+| host_info            |  object array |yes     | Host information              |
+| directory            |  int          | no    | Resource directory ID |
 
 #### host_info
-| Field           | Type   | Required | Description                     |
-|-----------------|--------|----------|---------------------------------|
-| bk_host_innerip | string | Yes      | Host inner IP                   |
-| bk_host_name    | string | No       | Host name, or other properties  |
-| operator        | string | No       | Maintainer, or other properties |
-| bk_comment      | string | No       | Comment, or other properties    |
-
+| Field             | Type| Required| Description                    |
+|-----------------|--------|-----|-------------------------|
+| bk_host_innerip | string |yes| Host intranet ip                |
+| bk_cloud_id | int |yes| Cloud area id     |
+| bk_host_name    |  string |no| Host name, or any other property    |
+| operator        |  string | no       | Main maintainer, or other attributes|
+| bk_comment      |  string |no| Comments, or other attributes      |
 
 ### Request Parameters Example
 
 ```json
 {
-    "bk_supplier_account": "0",
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
     "host_info": [
         {
             "bk_host_innerip": "127.0.0.1",
             "bk_host_name": "host1",
-            "operator": "admin"
+            "bk_cloud_id": 0,
+            "operator": "admin",
+            "bk_comment": "comment"
         },
         {
-            "bk_host_innerip": "",
+            "bk_host_innerip": "127.0.0.2",
+            "bk_host_name": "host2",
+            "bk_cloud_id": 0,
+            "operator": "admin",
             "bk_comment": "comment"
         }
     ],
@@ -43,58 +50,61 @@ add host to resource pool
 }
 ```
 
-
 ### Return Result Example
 
 ```json
 {
-  "result": false,
-  "code": 1110004,
-  "message": "Failed to create host",
-  "permission": null,
+  "result": true,
+  "code": 0,
+  "message": "success",
   "data": {
-    "success": [
-      {
-        "index": 0,
-        "bk_host_id": 11,
-      }
-    ],
-    "error": [
-      {
-        "index": 1,
-        "error_message": "'bk_host_innerip' unassigned",
-      }
-    ]
-  }
+      "success": [
+          {
+              "index": 0,
+              "bk_host_id": 6
+          },
+          {
+              "index": 1,
+              "bk_host_id": 7
+          }
+      ]
+  },
+  "permission": null,
+  "request_id": "e43da4ef221746868dc4c837d36f3807"
 }
+
 ```
+
+### Return Result Parameters Description
 
 #### response
 
-| Field   | Type   | Description                                            |
-| ------- | ------ | ------------------------------------------------------ |
-| result  | bool   | request success or failed. true:success；false: failed |
-| code    | int    | error code. 0: success, >0: something error            |
-| message | string | error info description                                 |
-| data    | object | response data                                          |
+| Name    | Type   | Description                                    |
+| ------- | ------ | ------------------------------------- |
+| result  | bool   | Whether the request was successful or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error    |
+| message | string |Error message returned by request failure                    |
+| data    |  object |Data returned by request                           |
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
 
-#### data description
+#### Data field Description
 
-| Field   | Type  | Description                            |
-| ------- | ----- | -------------------------------------- |
-| success | array | successfully added hosts' info         |
-| error   | array | unsuccessfully added hosts' error info |
+| Field     | Type| Description                |
+| ------- | ----- | ------------------ |
+| success | array |Host information array added successfully|
+| error   |  array |Add failed host info array|
 
-#### success description
+#### Success Field Description
 
-| Field      | Type | Description                              |
-| ---------- | ---- | ---------------------------------------- |
-| index      | int  | successfully added hosts' index in array |
-| bk_host_id | int  | host ID of the host                      |
+| Field        | Type| Description             |
+| ---------- | ---- | --------------- |
+| index      |  int  |Add successful host subscripts|
+| bk_host_id | int  |Successfully added host ID   |
 
-#### error description
+#### Error Field Description
 
-| Field         | Type   | Description                                |
-| ------------- | ------ | ------------------------------------------ |
-| index         | int    | unsuccessfully added hosts' index in array |
-| error_message | string | error message of the failure               |
+| Field           | Type   | Description             |
+| ------------- | ------ | --------------- |
+| index         |  int    | Add failed host subscript|
+| error_message | string |Failure reason         |

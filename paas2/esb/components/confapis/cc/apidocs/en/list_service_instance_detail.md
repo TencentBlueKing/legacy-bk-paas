@@ -1,41 +1,57 @@
 ### Functional description
 
-list service instances with processes info
-
-#### General Parameters
-
-{{ common_args_desc }}
+Query the service instance list (with process information) according to the service id, and query conditions such as module id can be added
 
 ### Request Parameters
 
-| Field                |  Type       | Required	   | Description                            |
-|----------------------|------------|--------|-----------------------|
-| bk_supplier_account  | string     |Yes     | Supplier Account ID       |
-| bk_biz_id            | int  | Yes  | Business ID |
-| bk_module_id         | int  | No   | Module ID |
-| bk_host_id           | int  | No   | Host ID, deprecated: please do not use any more |
-| bk_host_list         | array| No   | Host ID list |
-| service_instance_ids | int  | No   | Service Instance IDs |
-| selectors            | int  | No   | label filters，available operator values are: `=`,`!=`,`exists`,`!`,`in`,`notin`|
-| page                 | object| Yes | page paremeters |
+{{ common_args_desc }}
 
-Only one parameter between `bk_host_list` and `bk_host_id` can take effect. `bk_host_id` does not recommend using it again.
+#### Interface Parameters
+
+| Field                 | Type      | Required	   | Description                 |
+|----------------------|------------|--------|-----------------------|
+| bk_biz_id            |  int  |yes   | Business ID |
+| bk_module_id         |  int  |no   | Module ID|
+| bk_host_id           |  int  |no   | Host ID, Note: This field is no longer maintained, please use bk_host_list field|
+| bk_host_list         |  array| no   | Host ID list|
+| service_instance_ids | int  |no   | Service instance ID list|
+| selectors            |  int  |no   | Label filtering function, operator optional value: `=`,`!=`,` exists`,`!`,` in`,`notin`|
+| page                 |  object  |yes   | Paging parameter|
+
+Note: only one of the parameters`bk_host_list` and`bk_host_id` can be effective`bk_host_id`. It is not recommended to use it again.
 #### page params
 
 | Field                 |  Type      | Required	   |  Description       | 
 |--------|------------|--------|------------|
 |start|int|No|get the data offset location|
-|limit|int|Yes|The number of data points in the past is limited, suggest 1000|
+|limit|int|Yes|page limit, maximum value is 1000|
+#### selectors
+| Field                 | Type      | Required	   | Description                 |
+| -------- | ------ | ---- | ------ |
+| key    |  string |no   | Field name|
+| operator | string |no   | Operator optional value: `=`,`!=`,` exists`,`!`,` in`,`notin` |
+| values    | -      |no| Different values correspond to different value formats                            |
+
+#### Page field Description
+
+| Field| Type   | Required| Description                  |
+| ----- | ------ | ---- | --------------------- |
+| start | int    | yes | Record start position          |
+| limit | int    | yes | Limit bars per page, Max. 1000|
 
 ### Request Parameters Example
 
 ```python
 
 {
+  "bk_app_code": "esb_test",
+  "bk_app_secret": "xxx",
+  "bk_username": "xxx",
+  "bk_token": "xxx",
   "bk_biz_id": 1,
   "page": {
     "start": 0,
-    "limit": 1
+    "limit": 10,
   },
   "bk_module_id": 8,
   "bk_host_list": [11,12],
@@ -58,6 +74,7 @@ Only one parameter between `bk_host_list` and `bk_host_id` can take effect. `bk_
   "code": 0,
   "message": "success",
   "permission": null,
+  "request_id": "e43da4ef221746868dc4c837d36f3807",
   "data": {
     "count": 1,
     "info": [
@@ -129,36 +146,88 @@ Only one parameter between `bk_host_list` and `bk_host_id` can take effect. `bk_
 
 #### response
 
-| Field       | Type     | Description         |
+| Name| Type| Description|
 |---|---|---|
-| result | bool | request success or failed. true:success；false: failed |
-| code | int | error code. 0: success, >0: something error |
-| message | string | error info description |
-| data | object | response data |
+| result | bool |Whether the request was successful or not. True: request succeeded;false request failed|
+| code | int |Wrong code. 0 indicates success,>0 indicates failure error|
+| message | string |Error message returned by request failure|
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data | object |Data returned by request|
 
-#### Data field description
+#### Data field Description
 
-| Field       | Type     | Description         |
-|---|---|---|---|
-|count|integer|total count||
-|info|array|response data||
+| Field| Type| Description|
+|---|---|---|
+|count| int| Total|
+|info| array| Return result|
 
-#### Info field description
+#### Data.info Field Description
 
-| Field       | Type     | Description         |
-|---|---|---|---|
-|id|integer|Service Instance ID||
-|name|array|Service Instance Name||
-|service_template_id|integer|Service Template ID||
-|bk_host_id|integer|Host ID||
-|bk_host_innerip|string|Host IP||
-|bk_module_id|integer|Module ID||
-|creator|string|Creator||
-|modifier|string|Modifier||
-|create_time|string|Create Time||
-|last_time|string|Update Time||
-|bk_supplier_account|string|Supplier Account ID||
-|process_instances|Array|Process Instance Data|||
-|process_instances.process|object|Process Instance Detail|Process Instance Property||
-|process_instances.relation|object|Process Instance Relations|f.e. host id, process template id||
+| Field| Type| Description|
+|---|---|---|
+|id| integer| Service instance ID||
+|name| array| Service instance name||
+|service_template_id| int| Service template ID||
+|bk_host_id| int| Host ID||
+|bk_host_innerip| string| Host IP||
+|bk_module_id| integer| Module ID||
+|creator| string| Founder||
+|modifier| string| Modified by||
+|create_time| string| Settling time||
+|last_time| string| Repair time||
+|bk_supplier_account| string| Vendor ID||
+|service_category_id| integer| Service class ID||
+|process_instances| Array| Process instance information| Including|
+|bk_biz_id| int| Service ID| Business ID |
+|process_instances.process| object| Process instance details| Process properties field|
+|process_instances.relation| object| Process instance association information| Such as host ID, proces template ID|
+
+#### Data.info.process_instances [x] .process .process description
+| Field| Type| Description|
+|---|---|---|
+|auto_start| bool| Whether to pull up automatically|
+|auto_time_gap| int| Pull up interval|
+|bk_biz_id| int| Business ID |
+|bk_func_id| string| Function ID|
+|bk_func_name| string| Process name|
+|bk_process_id| int| Process id|
+|bk_process_name| string| Process alias|
+|bk_start_param_regex| string| Process start parameters|
+|bk_supplier_account| string| Developer account number|
+|create_time| string| Settling time|
+|description| string| Description|
+|face_stop_cmd| string| Forced stop command|
+|last_time| string| Update time|
+|pid_file| string| PID file path|
+|priority| int| Startup priority|
+|proc_num| int| Number of starts|
+|reload_cmd| string| Process reload command|
+|restart_cmd| string| Restart command|
+|start_cmd| string| Start command|
+|stop_cmd| string| Stop order|
+|timeout| int| Operation time-out duration|
+|user| string| Start user|
+|work_path| string| Working path|
+|bind_info| object| Binding information|
+
+#### Data.info.process_instances [x] .process.bind .process.bind info [n] Field Description
+| Field| Type| Description|
+|---|---|---|
+|enable| bool| Is the port enabled|
+|ip| string| Bound ip|
+|port| string| Bound port|
+|protocol| string| Protocol used|
+|template_row_id| int| Template row index used for instantiation, unique in process|
+
+#### Data.info.process_instances [x]. Relationfield description
+| Field| Type| Description|
+|---|---|---|
+|bk_biz_id| int| Business ID |
+|bk_process_id| int| Process id|
+|service_instance_id| int| Service instance id|
+|process_template_id| int| Process template id|
+|bk_host_id| int| Host id|
+|bk_supplier_account| string| Developer account number|
+
 

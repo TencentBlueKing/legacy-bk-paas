@@ -1,30 +1,40 @@
 ### Functional description
 
-this api is used to find the brief relations in a business topology from the source mainline object to the destination
-mainline object with positive direction (as is from biz to set) or negative direction (as is from set to biz). (v3.
-10.1+)
+This interface is used to query the concise relationship information of the upper and lower levels (models) directly associated with an instance of a certain level (model) in the business topology. (v3.10.1+)
 
-#### General Parameters
 
-{{ common_args_desc }}
+If the business topology level is business, Department (user-defined business level), set and module from top to bottom. Then:
+
+
+1. You can query the relationship information of the direct superior Department to which a set belongs upward;
+
+
+2. The module relationship information directly associated with the set can be queried downward.
+
+
+Conversely, you can not directly query the module relationship contained in a Department of a custom level instance through Department, because Department and module are not directly associated.
+
 
 ### Request Parameters
 
-| Field      | Type      | Required | Description                                                  |
-| ---------- | --------- | -------- | ------------------------------------------------------------ |
-| bk_biz_id  | int64       | Yes      | Business ID                                                  |
-| src_biz_obj  | string  | Yes     | the source mainline object，can be one of the "biz"、custom level(bk_obj_id)、"set"、"module". |
-| src_ids  | array int  | Yes     |  the instance id list of the source object(src_biz_obj), the length range is [1,200]|
-| dest_biz_obj  | string  | Yes     | the destination mainline object, which should be the neighbour of the source object, except biz model. and it should not be same with the source object.|
-| page  | object  | Yes     |  page information of the search result|
+{{ common_args_desc }}
 
-#### page description
+#### Interface Parameters
 
-| Field | Type   | Required | Description                                       |
-| ----- | ------ | -------- | ------------------------------------------------- |
-| start | int    | Yes       | start record, from 0.                                     |
-| limit | int    | Yes       | page limit, maximum value is 500                 |
-| sort | string    | do not set   | it has a default value of the destination object's instance id. |
+| Field      | Type      | Required   | Description      |
+|-----------|------------|--------|------------|
+| src_biz_obj  | string  |yes     | In business hierarchy, the model ID of source hierarchy can be "biz," user-defined hierarchy model ID(bk_obj_id),"set," and "module." |
+| src_ids  | array  |yes     | List of instance IDs represented by src_biz_obj, with a list length in the range of [1200]|
+| dest_biz_obj  | string  |yes     | The business hierarchy model directly (immediately) associated with src_biz_obj.  Where the business ("biz") As an exception, dest_biz_obj can be "biz" for any src_biz_obj. But the two are not allowed to be the same. |
+| page  | object  |yes     | Paging configuration information returned by queried data|
+
+#### Page field Description
+
+| Field| Type   | Required| Description                  |
+| ----- | ------ | ---- | --------------------- |
+| start | int    | yes | Record start position, starting from 0         |
+| limit | int    | yes | Limit bars per page, Max. 500|
+| sort | string    | Unavailable   | This field is sorted by the identity ID of the associated (dest_biz_obj) by default in the interface. Please do not set this field|
 
 
 
@@ -34,14 +44,15 @@ mainline object with positive direction (as is from biz to set) or negative dire
 {
     "bk_app_code": "xxx",
     "bk_app_secret": "xxx",
+    "bk_username": "xxx",
     "bk_token": "xxx",
-	"src_biz_obj": "biz",
-	"src_ids":[3,302],
-	"dest_biz_obj":"nation",
-	"page":{
-		"start": 0,
-		"limit": 2
-	}
+    "src_biz_obj": "biz",
+    "src_ids":[3,302],
+    "dest_biz_obj":"nation",
+    "page":{
+        "start": 0,
+        "limit": 2
+    }
 }
 ```
 
@@ -53,6 +64,7 @@ mainline object with positive direction (as is from biz to set) or negative dire
     "code": 0,
     "message": "success",
     "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data":
     [
         {
@@ -71,18 +83,27 @@ mainline object with positive direction (as is from biz to set) or negative dire
 
 ### Return Result Parameters Description
 
-#### data description
-| Field       | Type     | Description         |
-|------------|----------|--------------|
-| bk_biz_id | int   | business's instance id     |
-| src_id | int   | the source object's instance id, which is one of the src_ids. |
-| dest_id | int| the destination object's instance id, which is related with the src id. |
+#### response
 
-Note：
+| Name    | Type   | Description                                    |
+| ------- | ------ | ------------------------------------- |
+| result  | bool   | Whether the request succeeded or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error    |
+| message | string |Error message returned by request failure                    |
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data    |  object |Data returned by request                           |
 
-1. if you search from the top to bottom way in the business mainline topology, the way you check if you have already 
-   found all the relations is that you get 0 data array in the response.
+#### Data description
+| Field      | Type      | Description      |
+|-----------|------------|------------|
+| bk_biz_id | int   | The business ID to which this instance belongs     |
+| src_id | int   | It is consistent with the ID list entered by the src_ids in the parameter. Represents the instance ID of the input query model|
+| dest_id | int| The instance ID directly associated with the model corresponding to dest_biz_obj in the parameter and the instance corresponding to src_ids|
+
+Note:
+
+1. If it is a downward query (query from the level to the lower level), it is judged that the method of paging and pulling data is that the returned data array list is empty.
 
 
-2. if you search from the bottom to top way in the business mainline topology, the response will return all the 
-   relations if page.limit is >= the length of src_ids.
+2. In the case of an upward query (from a low level to a high level), the interface can return all query results at once, provided that the value of page.limit is>= the length of src_ids.

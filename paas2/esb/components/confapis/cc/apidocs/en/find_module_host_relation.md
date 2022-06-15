@@ -1,32 +1,39 @@
 ### Functional description
 
-find module host relation by module ids(v3.8.7)
+Query host-module relationship by module ID (v3.8.7)
 
 ### Request Parameters
 
 {{ common_args_desc }}
 
-#### General Parameters
+#### Interface Parameters
 
-| Field         | Type      | Required | Description                                                  |
-| ------------- | --------- | -------- | ------------------------------------------------------------ |
-| bk_biz_id     | int       | Yes      | bussiness ID                                                 |
-| bk_module_ids | int array | Yes      | module id array, length must be less than 200                |
-| module_fields | array     | Yes      | module property list, the specified module property feilds will be returned |
-| host_fields   | array     | Yes      | host property list, the specified host property feilds will be returned |
-| page          | object    | Yes      | page condition                                               |
+| Field          | Type         | Required| Description                                         |
+| ------------- | ------------ | ---- | -------------------------------------------- |
+| bk_biz_id     |  int          | yes | Business ID                            |
+| bk_module_ids |  array    | yes | Module ID array, up to 200                        |
+| module_fields |  array |yes   | Module attribute list, which controls which fields are in the module that returns the result|
+| host_fields   |   array |yes   | Host attribute list, which controls which fields are in the host that returns the result|
+| page          |  object       | yes | Paging parameter                                     |
 
 #### page
 
-| Field | Type | Required | Description                      |
-| ----- | ---- | -------- | -------------------------------- |
-| start | int  | Yes      | start record, default is 0       |
-| limit | int  | Yes      | page limit, maximum value is 500 |
+| Field| Type| Required| Description                  |
+| ----- | ---- | ---- | --------------------- |
+| start | int  |no   | Record start position, default 0|
+| limit | int  |yes   | Limit number of bars per page, maximum 1000|
+
+**Note: the host relationship under a module may be split and returned multiple times. The paging method is to sort by host ID.**
 
 ### Request Parameters Example
 
 ```json
 {
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
+    "bk_biz_id": 1,
     "bk_module_ids": [
         1,
         2,
@@ -54,6 +61,8 @@ find module host relation by module ids(v3.8.7)
   "result": true,
   "code": 0,
   "message": "success",
+  "permission": null,
+  "request_id": "e43da4ef221746868dc4c837d36f3807",
   "data": {
     "count": 2,
     "relation": [
@@ -90,26 +99,28 @@ find module host relation by module ids(v3.8.7)
 }
 ```
 
-
 ### Return Result Parameters Description
 
-| Field   | Type   | Description                                            |
-| ------- | ------ | ------------------------------------------------------ |
-| result  | bool   | request success or failed. true:success；false: failed |
-| code    | int    | error code. 0: success, >0: something error            |
-| message | string | error info description                                 |
-| data    | object | response data                                          |
+| Name    | Type   | Description                                       |
+| ------- | ------ | ------------------------------------------ |
+| result  | bool   | Whether the request was successful or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error    |
+| message | string |Error message returned by request failure                     |
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data    |  object |Data returned by request                             |
 
-#### data
+Data field Description:
 
-| Field    | Type  | Description          |
-| -------- | ----- | -------------------- |
-| count    | int   | the count of result  |
-| relation | array | host and module info |
+| Name     | Type         | Description               |
+| -------- | ------------ | ------------------ |
+| count    |  int          | Number of records           |
+| relation |  array |Host and module actual data|
 
-#### relation
 
-| Field   | Type         | Description             |
-| ------- | ------------ | ----------------------- |
-| host    | object       | host information        |
-| modules | object array | host module information |
+Description of the recall field:
+
+| Name    | Type         | Description               |
+| ------- | ------------ | ------------------ |
+| host    |  object       | Host data           |
+| modules |  array |Module information to which the host belongs|

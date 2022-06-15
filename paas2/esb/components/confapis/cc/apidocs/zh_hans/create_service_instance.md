@@ -11,7 +11,7 @@
 | 字段                 |  类型      | 必选	   |  描述                 |
 |----------------------|------------|--------|-----------------------|
 | bk_module_id         | int  | 是   | 模块ID |
-| instances            | array  | 是   | 需要创建的服务实例信息|
+| instances            | array  | 是   | 需要创建的服务实例信息,最大值为100|
 | bk_biz_id            | int  | 是   | 业务ID|
 
 #### instances 字段说明
@@ -19,6 +19,7 @@
 | 字段|类型|必选	   |说明|Description|
 |---|---|---|---|---|
 |instances.bk_host_id|int|是|主机ID|服务实例绑定的主机ID|
+|instances.service_instance_name|string|否|服务实例名称|服务实例名称|
 |instances.processes|array|是|进程信息|服务实例下新建的进程信息|
 |instances.processes.process_template_id|int|是|进程模板ID|如果模块没有绑定服务模板则填0|
 |instances.processes.process_info|object|是|进程实例信息|如果进程绑定有模板，则仅模板中没有锁定的字段有效|
@@ -76,6 +77,7 @@
   "instances": [
     {
       "bk_host_id": 2,
+      "service_instance_name": "test",
       "processes": [
         {
           "process_template_id": 1,

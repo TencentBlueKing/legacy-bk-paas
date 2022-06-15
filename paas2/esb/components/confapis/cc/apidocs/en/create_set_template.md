@@ -1,25 +1,28 @@
 ### Functional description
 
-create set template
-
-#### General Parameters
-
-{{ common_args_desc }}
+Create a set template with the specified name under the specified service id, and the set template created to contain the service template by the specified service template id
 
 ### Request Parameters
 
-| Field                | Type   | Required | Description              |
-| -------------------- | ------ | -------- | ------------------------ |
-| bk_supplier_account  | string | Yes      | Supplier Account Code    |
-| bk_biz_id            | int    | Yes      | Business ID              |
-| name                 | string | Yes      | Set Template Name        |
-| service_template_ids | array  | Yes      | Service Template ID List |
+{{ common_args_desc }}
+
+#### Interface Parameters
+
+| Field                 | Type   | Required| Description           |
+| -------------------- | ------ | ---- | -------------- |
+| bk_biz_id            |  int    | yes   | Business ID |
+| name                 |  string |yes   | Set template name |
+| service_template_ids | array  |yes   | Service template ID list|
 
 
 ### Request Parameters Example
 
 ```json
 {
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
     "bk_supplier_account": "0",
     "name": "test",
     "bk_biz_id": 20,
@@ -35,11 +38,11 @@ create set template
     "code": 0,
     "message": "success",
     "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": {
         "id": 6,
         "name": "test",
         "bk_biz_id": 20,
-        "version": 0,
         "creator": "admin",
         "modifier": "admin",
         "create_time": "2019-11-27T17:24:10.671658+08:00",
@@ -53,23 +56,24 @@ create set template
 
 #### response
 
-| Field   | Type   | Description                                            |
-| ------- | ------ | ------------------------------------------------------ |
-| result  | bool   | request success or failed. true:success；false: failed |
-| code    | int    | error code. 0: success, >0: something error            |
-| message | string | error info description                                 |
-| data    | object | response data                                          |
+| Name    | Type   | Description                                    |
+| ------- | ------ | ------------------------------------- |
+| result  | bool   | Whether the request succeeded or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error   |
+| message | string |Error message returned by request failure                   |
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data    |  object |Data returned by request                          |
 
-#### data description
+#### Data field Description
 
-| Field               | Type    | Description           |
-| ------------------- | ------- | --------------------- |
-| id                  | integer | set template ID       |
-| name                | array   | set template name     |
-| bk_biz_id           | int     | business ID           |
-| version             | int     | set template version  |
-| creator             | string  | creator               |
-| modifier            | string  | last modifier         |
-| create_time         | string  | creation time         |
-| last_time           | string  | last modify time      |
-| bk_supplier_account | string  | supplier account code |
+| Field                | Type   | Description         |
+| ------------------- | ------ | ------------ |
+| id                  |  int    | Set template ID |
+| name                |  array  |Set template name|
+| bk_biz_id           |  int    | Business ID |
+| creator             |  string |Creator       |
+| modifier            |  string |Last modified by|
+| create_time         |  string |Settling time     |
+| last_time           |  string |Update time     |
+| bk_supplier_account | string |Developer account number   |

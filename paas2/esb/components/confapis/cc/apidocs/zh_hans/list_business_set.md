@@ -81,7 +81,7 @@
                 "value":10
             },
             {
-                "field":"bk_biz_set_maintainer",
+                "field":"bk_biz_maintainer",
                 "operator":"equal",
                 "value":"admin"
             }
@@ -126,7 +126,7 @@
                 "bk_biz_set_id":10,
                 "bk_biz_set_name":"biz_set",
                 "bk_biz_set_desc":"dba",
-                "biz_set_maintainer":"tom",
+                "bk_biz_maintainer":"tom",
                 "create_time":"2021-09-06T08:10:50.168Z",
                 "last_time":"2021-10-15T02:30:01.867Z",
                 "bk_scope":{
@@ -137,7 +137,7 @@
                 "bk_biz_set_id":11,
                 "bk_biz_set_name":"biz_set1",
                 "bk_biz_set_desc":"dba",
-                "biz_set_maintainer":"tom",
+                "bk_biz_maintainer":"tom",
                 "create_time":"2021-09-06T08:10:50.168Z",
                 "last_time":"2021-10-15T02:30:01.867Z",
                 "bk_scope":{

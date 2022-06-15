@@ -1,69 +1,68 @@
 ### Functional description
 
-search business set(v3.10.12+)
+Query business set (v3.10.12+)
 
 ### Request Parameters
 
 {{ common_args_desc }}
 
-#### General Parameters
+#### Interface Parameters
 
-| Field      |  Type      | Required   |  Description      |
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| bk_biz_set_filter | object  | No   | business set condition scope|
-| time_condition    | object  | No   | query condition, the parameter is any attribute of the business, if not written, it means to search all data|
-| fields            | array   | No   | fields of object,the parameter is any attribute of the business. if the field information is not filled in, return all the fields of the business |
-| page              | object  | Yes   |  page condition |
+| bk_biz_set_filter | object  |no   | Business set condition range|
+| time_condition    |  object  |no   | Business set time range|
+| fields            |  array   | no   | Query criteria. The parameter is any attribute of the business. If it is not written, it means to search all data.|
+| page              |  object  |Yes.   | Paging condition|
 
 #### bk_biz_set_filter
 
-- This parameter is a combination of service set attribute field filtering rules, which is used to search for service sets 
-based on service set attribute fields. The combination supports AND and OR, and allows nesting, up to 2 levels of nesting.
+This parameter is a combination of filtering rules for business set attribute fields, and is used to search business sets according to business set attribute fields. The combination supports AND and OR, allowing nesting, with a maximum of 2 layers.
 
-| Field      |  Type      | Required   |  Description      |
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| condition |  string  | Yes    | rule operator|
-| rules |  array  | Yes     | filter business scope rules|
+| condition |  string  | yes      | Rule operator|
+| rules |  array  |yes     | Scope rule for filtering business|
 
 
 #### rules
-- the filter rule is the triple `field`, `operator`, `value`
+The filtering rule is triplet`field`,`operator`,`value`
 
-| Field     | Type   | Required   | Description                                                  |
-| -------- | ------ | ----  | ------------------------------------------------------------ |
-| field    | string | Yes    |                                                              |
-| operator | string | Yes | available values: equal,not_equal,in,not_in,less,less_or_equal,greater,greater_or_equal,between,not_between |
-| value    | -      | No   |  values's format depend on operator                           |
+| Name     | Type   | Required| Default value|  Description                                                  |
+| -------- | ------ | ---- | ------ | ------------------------------------------------------------ |
+| field    |  string |yes   | None     | Field name|                                                              |
+| operator | string |yes   | None     | Operator| Optional values equal,not_equal,in,not_in,less,less_or_equal,greater,greater_or_equal,between,not_between|
+| value    | -      |no   | None     | Operand| Different values correspond to different value formats                            |
 
-condition rules detail: <https://github.com/Tencent/bk-cmdb/blob/master/src/common/querybuilder/README.md>
+Assembly rules can be found at: https://github.com/Tencent/bk-cmdb/blob/master/src/common/querybuilder/README.md
 
 #### time_condition
 
-| Field   | Type   | Required |  Description              |
+| Field   | Type   | Required| Description              |
 |-------|--------|-----|--------------------|
-| oper  | string | Yes  | operator，only `and` is supported |
-| rules | array  | Yes  | time query condition |
+| oper  | string |yes| Operator, currently only and is supported|
+| rules | array  | yes      | Time query criteria         |
 
 #### rules
 
-| Field   | Type   | Required | Description                |
+| Field   | Type   | Required| Description                             |
 |-------|--------|-----|----------------------------------|
-| field | string | Yes  | value of model field                   |
-| start | string | Yes  | start time in the form of yyyy-MM-dd hh:mm:ss |
-| end   | string | Yes  | end time in the form of yyyy-MM-dd hh:mm:ss | 
+| field | string |yes| The value is the field name of the model                  |
+| start | string |yes| Start time in the format yyyy MM dd hh: mm:ss|
+| end   |  string |yes| End time in the format yyyy MM dd hh: mm:ss|
 
 #### page
 
-| Field      |  Type      | Required   |  Description      |
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| start    |  int    | Yes     | start record   |
-| limit    |  int    | Yes     | page limit, max is 500 |
-| enable_count |  bool | Yes | whether to get the flag of the number of query objects |
-| sort     |  string | No     | sort field, by adding - in front of the field, such as sort:&#34;-field&#34; can indicate descending order by field field |
+| start    |   int    | yes  | Record start position|
+| limit    |   int    | yes  | Limit bars per page, Max. 500|
+| enable_count |  bool |yes| Whether this request is a token to obtain quantity or details|
+| sort     |   string |no     | Sort the field. By adding sort in front of the field, for example, sort&#34;: sort field&#34; can indicate descending order by field field|
 
 **Note:**
-- `enable_count` If this flag is then the request is to get the count. At this time, the rest of the fields must be true, start is 0, limit: 0, and sort is "".
-- `sort` If the caller does not specify it, the background defaults to the business set ID.
+- `enable_count`If this flag is true, this request is a get quantity. The remaining fields must be initialized, start is 0, and limit is: 0, sort is "."
+- `sort`If the caller does not specify it, the background specifies it as the business set ID by default.
 
 ### Request Parameters Example
 
@@ -111,6 +110,8 @@ condition rules detail: <https://github.com/Tencent/bk-cmdb/blob/master/src/comm
 ```
 
 ### Return Result Example
+
+### Details interface response
 ```python
 
 {
@@ -147,7 +148,7 @@ condition rules detail: <https://github.com/Tencent/bk-cmdb/blob/master/src/comm
                             {
                                 "field":"bk_sla",
                                 "operator":"equal",
-                                "value":"2"
+                                "value":"3"
                             },
                             {
                                 "field":"bk_biz_maintainer",
@@ -164,7 +165,7 @@ condition rules detail: <https://github.com/Tencent/bk-cmdb/blob/master/src/comm
 }
 ```
 
-### Return Search Business Number Result Example
+### Business set quantity interface response
 ```python
 {
     "result":true,
@@ -183,61 +184,59 @@ condition rules detail: <https://github.com/Tencent/bk-cmdb/blob/master/src/comm
 ### Return Result Parameters Description
 #### response
 
-| Field    | Type   | Description                          |
+| Name    | Type   | Description                                    |
 | ------- | ------ | ------------------------------------- |
-| result  | bool   | request success or failed. true:success；false: failed  |
-| code    | int    | error code. 0: success, >0: something error  |
-| message | string | error info description                     |
-| permission    | object | permission info     |
-| data    | object | response data                             |
-| request_id    | string | request chain id     |
+| result  | bool   | Whether the request succeeded or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error    |
+| message | string |Error message returned by request failure                    |
+| permission    |  object |Permission information    |
+| data    |  object |Data returned by request                           |
+| request_id    |  string |Request chain id    |
 
 #### data
 
 | Field      | Type      | Description      |
 |-----------|-----------|-----------|
-| count     | int       |  the num of record |
-| info      | array     | business set info  |
+| count     |  int       | Number of records|
+| info      |  array     | Actual business data|
 
 #### info
 
-| Field      |  Type      | Required   |  Description      |
-|-----------|------------|--------|------------------|
-| bk_biz_set_id   |  int  | Yes   | business set ID|
-| create_time   |  string  | No   | business set create time|
-| last_time   |  string  | No   | business set update time|
-| bk_biz_set_name   |  string  | Yes   | business set name|
-| bk_biz_maintainer |  string  | No   | the maintainers |
-| bk_biz_set_desc   |  string  | No   | business description |
-| bk_scope   |  object  | No   | business set selected business scope |
+| Field      | Type      | Required   | Description      |
+|-----------|------------|--------|------------|
+| bk_biz_set_id   |   int  |yes   | Business set ID|
+| create_time   |   string  |no   | Business set creation time|
+| last_time   |   string  |no   | Business set modification time|
+| bk_biz_set_name   |   string  |yes   | Business set name|
+| bk_biz_maintainer |  string  |no   | Operation and maintenance personnel|
+| bk_biz_set_desc   |   string  |no   | Business set description|
+| bk_scope   |   object  |no   | Business set selected business scope|
 
 #### bk_scope
 
-| Field      |  Type      | Required   |  Description      |
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| match_all |  bool  | Yes    | selected business line tags|
-| filter |  object  | No     | scope conditions for the selected business|
+| match_all |  bool  |yes    | Selected business scope tag|
+| filter |  object  |no     | Scope criteria for the selected business|
 
 #### filter
 
-- This parameter is a combination of business attribute field filtering rules, which is used to search for business based on business attribute fields. Combinations only support AND operations and can be nested up to 2 levels.
+This parameter is a combination of filtering rules for service attribute fields, and is used to search for services according to the service attribute fields. The combination only supports AND operation and can be nested, with a maximum of 2 layers.
 
-| Field      |  Type      | Required   |  Description      |
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| condition |  string  | Yes    | rule operator|
-| rules |  array  | Yes     | scope condition rules for the selected business|
+| condition |  string  |yes    | Rule operator|
+| rules |  array  |yes     | Scope condition rule for selected business|
 
 
 #### rules
 
-| Field     | Type   | Required   | Description                 |
-| -------- | ------ | ---- | ---------------------------------- |
-| field    | string |  No  |    field name                      |
-| operator | string |  No  | available values: equal,in |
-| value    | -      |  No  |  values's format depend on operator   |
+| Name     | Type   | Required| Default value|  Description                                                  |
+| -------- | ------ | ---- | ------ | ------------------------------------------------------------ |
+| field    |  string |yes   | None     | Field name|                                                              |
+| operator | string |yes   | None     | Operator| Optional value equal,in|
+| value    | -      |no   | None     | Operand| Different values correspond to different value formats                            |
 
-**Note：**
-
-- The input here only describes the required and built-in parameters for the `info` parameter, and the other parameters that need to be filled depend on the attribute fields defined by the user.
-- if the request is to query detailed information, then count is 0. If the query is for quantity, then info is empty.
-
+**Note:**
+- If this request is to query details, count is 0. If the query is quantity, info is empty.
+- The input here`info` only describes the required and built-in parameters for parameters, and the rest of the parameters to be filled in depend on the attribute fields defined by the user

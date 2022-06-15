@@ -64,7 +64,8 @@
                 "modifier": "admin",
                 "create_time": "2019-09-18T20:31:29.607+08:00",
                 "last_time": "2019-09-18T20:31:29.607+08:00",
-                "bk_supplier_account": "0"
+                "bk_supplier_account": "0",
+                "host_apply_enabled": false
             }
         ]
     }
@@ -93,14 +94,15 @@
 
 #### info 字段说明
 
-| 字段|类型|说明|Description|
-|---|---|---|---|
-|bk_biz_id|int|业务id||
-|id|int|服务模板ID||
-|name|array|服务模板名称||
-|service_category_id|integer|服务分类ID||
-|creator|string|创建人||
-|modifier|string|修改人||
-|create_time|string|创建时间||
-|last_time|string|修复时间||
-|bk_supplier_account|string|供应商ID||
+| 字段|类型|说明|
+|---|---|---|
+|bk_biz_id|int|业务id|
+|id|int|服务模板ID|
+|name|array|服务模板名称|
+|service_category_id|integer|服务分类ID|
+|creator|string|创建人|
+|modifier|string|修改人|
+|create_time|string|创建时间|
+|last_time|string|修复时间|
+|bk_supplier_account|string|供应商ID|
+| host_apply_enabled|bool|是否启用主机属性自动应用|

@@ -1,72 +1,74 @@
 ### Functional description
 
-create business custom object attribute
+Create business custom model properties
 
 ### Request Parameters
 
 {{ common_args_desc }}
 
-#### Request Parameters Example
+#### Interface Parameters
 
-| Field                  |  Type      | Required	   |  Description                                                    |
+| Field                  | Type      | Required   | Description                                                    |
 |-----------------------|------------|--------|----------------------------------------------------------|
-| creator               | string     | No     | The creator of data                                             |
-| description           | string     | No     | Description information of data                                           |
-| editable              | bool       | No     | Editable data                                       |
-| isonly                | bool       | No     | Uniqueness data                                             |
-| ispre                 | bool       | No     | true:preset field,false:non preset field                           |
-| isreadonly            | bool       | No     | true:read-only，false:non read-only                                   |
-| isrequired            | bool       | No     | true:required,false:optional                                    |
-| option                | string     | No     |User's custom content，the content and format of memory is determined by caller,example ({"min":"1","max":"2"})|
-| unit                  | string     | No     | Unit                                                     |
-| placeholder           | string     | No     | Placeholder                                                   |
-| bk_property_group     | string     | No     | Object property group name                                            |
-| bk_obj_id             | string     | Yes     | Object ID                                                   |
-| bk_supplier_account   | string     | Yes     | Supplier account                                               |
-| bk_property_id        | string     | Yes     | Object Property ID                                             |
-| bk_property_name      | string     | Yes     | Object property name                                      |
-| bk_property_type      | string     | Yes     | The storage data type of defined property field,rang list(singlechar,longchar,int,enum,date,time,objuser,singleasst,multiasst,timezone,bool)|
-| bk_asst_obj_id        | string     | No     | If there are other models associated with the object, then must be set this field, otherwise, it doesn't to be set                                                                        |
-| bk_biz_id             | int        | Yes    | business's ID                                              |
+| bk_biz_id             |  int        | yes     | Business ID                                      |
+| creator               |  string     | no     | Who created the data                                             |
+| description           |  string     | no     | Description information of data                                           |
+| editable              |  bool       | no     | Indicates whether the data is editable                                       |
+| isonly                |  bool       | no     | Show uniqueness                                               |
+| ispre                 |  bool       | no     | True: preset field,false: Non-built-in field                           |
+| isreadonly            |  bool       | no     | True: read-only, false: Not read-only                                  |
+| isrequired            |  bool       | no     | True: required, false: Optional                                    |
+| option                |  string     | no     | User-defined content. The stored content and format are determined by the caller. Take the number type as an example ({"min":"1","max":"2"}）|
+| unit                  |  string     | no     | Unit                                                     |
+| placeholder           |  string     | no     | Placeholder                                                   |
+| bk_property_group     |  string     | no     | Name of the field column                                           |
+| bk_obj_id             |  string     | yes     | Model ID                                                   |
+| bk_property_id        |  string     | yes     | The property ID of the model                                             |
+| bk_property_name      |  string     | yes      | Model property name, used to show                                     |
+| bk_property_type      |  string     | yes     | The defined attribute field is used to store the data type of the data, and the value range can be (singlechar,longchar,int,enum,date,time,objUser,singleasst,multiasst,timezone,bool)|
+| bk_asst_obj_id        |  string     | no     | This field must be set if there are other models associated with it, otherwise it is not required                                                                        |
 
 #### bk_property_type
 
-| IDentifier       | name     |
+| Identification       | Name     |
 |------------|----------|
-| singlechar | Single character   |
+| singlechar |Short character   |
 | longchar   | Long character   |
-| int        | Integer     |
-| enum       | Enumeration |
-| date       | Date      |
-| time       | time      |
-| objuser    | Object user      |
-| singleasst | Single association   |
-| multiasst  | Multiple association   |
-| timezone   | Timezone     |
-| bool       | Bool    |
+| int        | Reshaping     |
+| enum       | Enumeration type|
+| date       | Date     |
+| time       | Time     |
+| objuser    | User     |
+| singleasst |Simple correlation   |
+| multiasst  |Multiple correlation   |
+| timezone   | Time zone     |
+| bool       | Bull     |
 
 ### Request Parameters Example
 
 ```json
 {
-	"bk_biz_id": 2,
-	"creator": "user",
-	"description": "test",
-	"editable": true,
-	"isonly": false,
-	"ispre": false,
-	"isreadonly": false,
-	"isrequired": false,
-	"option": {"min":1,"max":2},
-	"unit": "1",
-	"placeholder": "test",
-	"bk_property_group": "default",
-	"bk_obj_id": "cc_test_inst",
-	"bk_supplier_account": "0",
-	"bk_property_id": "cc_test",
-	"bk_property_name": "cc_test",
-	"bk_property_type": "singlechar",
-	"bk_asst_obj_id": "test"
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
+    "bk_biz_id": 2,
+    "creator": "user",
+    "description": "test",
+    "editable": true,
+    "isonly": false,
+    "ispre": false,
+    "isreadonly": false,
+    "isrequired": false,
+    "option": {"min":1,"max":2},
+    "unit": "1",
+    "placeholder": "test",
+    "bk_property_group": "default",
+    "bk_obj_id": "cc_test_inst",
+    "bk_property_id": "cc_test",
+    "bk_property_name": "cc_test",
+    "bk_property_type": "singlechar",
+    "bk_asst_obj_id": "test"
 }
 ```
 
@@ -78,6 +80,8 @@ create business custom object attribute
     "result": true,
     "code": 0,
     "message": "",
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
 	"data": {
 		"bk_biz_id": 2,
 		"id": 7,
@@ -101,49 +105,62 @@ create business custom object attribute
 		"description": "test",
 		"creator": "user",
 		"create_time": "2020-03-25 17:12:08",
-		"last_time": "2020-03-25 17:12:08",
-		"bk_property_group_name": "default"
+		"last_time": "2020-03-25 17:12:08"
 	}
 }
 ```
 
 ### Return Result Parameters Description
+#### response
+
+| Name    | Type   | Description                                    |
+| ------- | ------ | ------------------------------------- |
+| result  | bool   | Whether the request was successful or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error    |
+| message | string |Error message returned by request failure                    |
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data    |  object |Data returned by request                           |
 
 #### data
 
 | Field                | Type         | Description                                                       |
 |---------------------|--------------|------------------------------------------------------------|
-| creator             | string       | The creator of data                                               |
-| description         | string       | Description information of data                                              |
-| editable            | bool         | Editable data                                         |
-| isonly              | bool         | Uniqueness data                                                 |
-| ispre               | bool         | true:preset field, false:non preset field                             |
-| isreadonly          | bool         | true:read-only, false:non read-only                                    |
-| isrequired          | bool         | true:required, false:optional                                      |
-| option              | string       | User's custom content，the content and format of memory is determined by caller               |
-| unit                | string       | Unit                                                       |
-| placeholder         | string       | Placeholder                                                     |
-| bk_property_group   | string       | Object property group name                                             |
-| bk_obj_id           | string       | Object ID                                                     |
-| bk_supplier_account | string       | Supplier account                                                 |
-| bk_property_id      | string       | Object Property ID                                               |
-| bk_property_name    | string       | Object property name                                       |
-| bk_property_type    | string       | The storage data type of defined property field,range list(singlechar,longchar,int,enum,date,time,objuser,singleasst,multiasst,timezone,bool)|
-| bk_asst_obj_id      | string       | If there are other models associated with the object, then must be set this field, otherwise, it doesn't to be set|
-| bk_biz_id           | int          | business's ID of biz custom field                          |
+| bk_biz_id           |  int          | Business id of business custom field                                       |
+| creator             |  string       | Who created the data                                               |
+| description         |  string       | Description information of data                                             |
+| editable            |  bool         | Indicates whether the data is editable                                         |
+| isonly              |  bool         | Show uniqueness                                                 |
+| ispre               |  bool         | True: preset field,false: Non-built-in field                             |
+| isreadonly          |  bool         | True: read-only, false: Not read-only                                    |
+| isrequired          |  bool         | True: required, false: Optional                                      |
+| option              |  string       | User-defined content, stored content and format determined by the caller               |
+| unit                |  string       | Unit                                                       |
+| placeholder         |  string       | Placeholder                                                     |
+| bk_property_group   |  string       | Name of the field column                                             |
+| bk_property_group_name | string    | Name of the field column|
+| bk_obj_id           |  string       | Model ID                                                     |
+| bk_supplier_account | string       | Developer account number                                                 |
+| bk_property_id      |  string       | The property ID of the model                                               |
+| bk_property_name    |  string       | Model attribute name, used to show                                       |
+| bk_property_type    |  string       | The data type of the defined attribute field used to store the data (singlechar,longchar,int,enum,date,time,objUser,singleasst,multiasst,timezone,bool)|
+| bk_asst_obj_id      |  string       | This field must be set if there are other models associated with it, otherwise it is not required|
+| create_time         |  string |Settling time     |
+| last_time           |  string |Update time     |
+| id|  int |Primary key id|
 
 #### bk_property_type
 
-| identifier       | name     |
+| Identification       | Name     |
 |------------|----------|
-| singlechar | Single character   |
+| singlechar |Short character   |
 | longchar   | Long character   |
-| int        | Integer     |
-| enum       | Enumeration |
+| int        | Reshaping     |
+| enum       | Enumeration type|
 | date       | Date     |
-| time       | Time      |
-| objuser    | Object user      |
-| singleasst | Single association   |
-| multiasst  | Multiple association   |
-| timezone   | Timezone     |
-| bool       | Bool     |
+| time       | Time     |
+| objuser    | User     |
+| singleasst |Simple correlation   |
+| multiasst  |Multiple correlation   |
+| timezone   | Time zone     |
+| bool       | Bull     |

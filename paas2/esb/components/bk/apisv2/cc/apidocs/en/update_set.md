@@ -30,6 +30,7 @@ update set
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
+    "bk_username": "xxx",
     "bk_token": "xxx",
     "bk_supplier_account": "123456789",
     "bk_biz_id": 1,
@@ -48,6 +49,21 @@ update set
     "result": true,
     "code": 0,
     "message": "",
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": {}
 }
 ```
+
+### Return Result Parameters Description
+
+#### response
+
+| Field       | Type     | Description         |
+|---|---|---|
+| result | bool | request success or failed. true:success；false: failed |
+| code | int | error code. 0: success, >0: something error |
+| message | string | error info description |
+| data | object | response data |
+| permission    | object | permission Information    |
+| request_id    | string | request chain id    |

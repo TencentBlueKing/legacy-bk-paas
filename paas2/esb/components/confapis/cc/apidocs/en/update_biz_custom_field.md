@@ -1,50 +1,55 @@
 ### Functional description
 
-update business custom object attribute
+Update business custom model properties
 
 ### Request Parameters
 
 {{ common_args_desc }}
 
-#### General Parameters
+#### Interface Parameters
 
-| Field                |  Type   | Required	   |  Description                                   |
+| Field                | Type   | Required   | Description                                   |
 |---------------------|---------|--------|-----------------------------------------|
-| id                  | int     | Yes     |   ID of target data record                        |
-| bk_biz_id           | int     | Yes    | business's ID                                              |
-| description         | string  | No     |  Description information of datas                          |
-| isonly              | bool    | No     | Uniqueness data                              |
-| isreadonly          | bool    | No     | Read-only, true or not                            |
-| isrequired          | bool    | No     | Required, true or not                            |
-| bk_property_group   | string  | No     | Property group name                          |
-| option              | string  | No     | User's custom content，the content and format of memory is determined by caller, example for digital content({"min":"1","max":"2"})|
-| bk_property_name    | string  | No     | Property name, for display                    |
-| bk_property_type    | string  | No     | The storage data type of defined property field,rang list（singlechar,longchar,int,enum,date,time,objuser,singleasst,multiasst,timezone,bool)|
-| unit                | string  | No     | Unit                                    |
-| placeholder         | string  | No     | Placeholder                                  |
-| bk_asst_obj_id      | string  | No     | If there are other models associated with the object, then must be set this field, otherwise, it doesn't to be set |
+| id                  |  int     | yes  | Record ID of the target data                        |
+| bk_biz_id           |  int     | yes  | Business ID                     |
+| description         |  string  |no     | Description information of data                          |
+| isonly              |  bool    | no     | Show uniqueness                              |
+| isreadonly          |  bool    | no     | Indicates whether it is read-only                            |
+| isrequired          |  bool    | no     | Indicates whether it is required                            |
+| bk_property_group   |  string  |no     | Name of the field column                          |
+| option              |  object  |no     | User-defined content, stored content and format determined by the caller, take digital content as an example ({"min": 1,"max":2}）|
+| bk_property_name    |  string  |no     | Model property name, used to show                    |
+| bk_property_type    |  string  |no     | The data type of the defined attribute field used to store the data (singlechar,longchar,int,enum,date,time,objUser,singleasst,multiasst,timezone,bool)|
+| unit                |  string  |no     | Unit                                    |
+| placeholder         |  string  |no     | Placeholder                                  |
+| bk_asst_obj_id      |  string  |no     | This field must be set if there are other models associated with it, otherwise it is not required|
 
 #### bk_property_type
 
-| identifier       | name     |
+| Identification       | Name     |
 |------------|----------|
-| singlechar | Single character   |
+| singlechar |Short character   |
 | longchar   | Long character   |
-| int        | Integer     |
-| enum       | Enumeration |
+| int        | Reshaping     |
+| enum       | Enumeration type|
 | date       | Date     |
 | time       | Time     |
-| objuser    | Object user     |
-| singleasst | Single association   |
-| multiasst  | Multiple association   |
-| timezone   | Timezone     |
-| bool       | Bool     |
+| objuser    | User     |
+| singleasst |Simple correlation   |
+| multiasst  |Multiple correlation   |
+| timezone   | Time zone     |
+| bool       | Bull     |
 
 
 ### Request Parameters Example
 
 ```json
 {
+
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
     "id":1,
     "bk_biz_id": 2,
     "description":"test",
@@ -68,6 +73,21 @@ update business custom object attribute
     "result": true,
     "code": 0,
     "message": "success",
+    "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": null
 }
 ```
+
+### Return Result Parameters Description
+
+#### response
+
+| Name    | Type   | Description                                    |
+| ------- | ------ | ------------------------------------- |
+| result  | bool   | Whether the request was successful or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error   |
+| message | string |Error message returned by request failure                   |
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data    |  object |Data returned by request                          |

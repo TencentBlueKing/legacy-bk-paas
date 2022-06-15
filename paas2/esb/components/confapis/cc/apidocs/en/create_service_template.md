@@ -1,24 +1,27 @@
 ### Functional description
 
-create service template
-
-#### General Parameters
-
-{{ common_args_desc }}
+Creates a service template with the specified name and service class based on the passed-in service template name and service class ID
 
 ### Request Parameters
 
-| Field                |  Type       | Required	   | Description                            |
-|----------------------|------------|--------|-----------------------|
-| bk_supplier_account  | string     |Yes     | Supplier Account ID       |
-| name            | string  | Yes   | Service Template name |
-| service_category_id         | int  | Yes   | Service Category ID |
+{{ common_args_desc }}
 
+#### Interface Parameters
+
+| Field                 | Type      | Required	   | Description                 |
+|----------------------|------------|--------|-----------------------|
+| name            |  string  |yes   | Service template name|
+| service_category_id         |  int  |yes   | Service class ID|
+| bk_biz_id            |  int  |yes   | Business ID |
 
 ### Request Parameters Example
 
 ```python
 {
+  "bk_app_code": "esb_test",
+  "bk_app_secret": "xxx",
+  "bk_username": "xxx",
+  "bk_token": "xxx",
   "bk_biz_id": 1,
   "name": "test4",
   "service_category_id": 1
@@ -33,6 +36,7 @@ create service template
   "code": 0,
   "message": "success",
   "permission": null,
+  "request_id": "e43da4ef221746868dc4c837d36f3807",
   "data": {
     "bk_biz_id": 1,
     "id": 52,
@@ -51,24 +55,25 @@ create service template
 
 #### response
 
-| Field       | Type     | Description         |
+| Name| Type| Description|
 |---|---|---|
-| result | bool | request success or failed. true:success；false: failed |
-| code | int | error code. 0: success, >0: something error |
-| message | string | error info description |
-| data | object | response data |
+| result | bool |Whether the request was successful or not. True: request succeeded;false request failed|
+| code | int |Wrong code. 0 indicates success,>0 indicates failure error|
+| message | string |Error message returned by request failure|
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data | object |Data returned by request|
 
-#### data description
+#### Data field Description
 
-| Field       | Type     | Description         |
-|---|---|---|---|
-|count|integer|total count||
-|info|array|response data||
-
-#### info description
-
-| Field       | Type     | Description         |
-|---|---|---|---|
-|id|integer|service template ID||
-|name|array|service template||
-|service_category_id|integer|service category ID||
+| Field| Type| Description|
+|---|---|---|
+|id| int| Service template ID|
+|bk_biz_id| int| Business ID |
+|name| string| Service template name|
+|service_category_id| int| Service template ID|
+| creator              |  string             | Creator of this data                                                                                 |
+| modifier             |  string             | The last person to modify this piece of data            |
+| create_time         |  string |Settling time     |
+| last_time           |  string |Update time     |
+| bk_supplier_account | string       | Developer account number|

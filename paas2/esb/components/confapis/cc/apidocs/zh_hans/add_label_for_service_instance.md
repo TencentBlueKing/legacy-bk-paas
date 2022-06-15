@@ -10,7 +10,7 @@
 
 | 字段                 |  类型      | 必选	   |  描述                 |
 |----------------------|------------|--------|-----------------------|
-|instance_ids|array|是|服务实例ID|
+|instance_ids|array|是|服务实例ID,最大值为100|
 |labels|object|是|添加的Label|
 | bk_biz_id  | int     |是     | 业务ID       |
 

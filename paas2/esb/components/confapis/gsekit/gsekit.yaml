@@ -18,6 +18,16 @@
   dest_http_method: POST
   suggest_method: POST
 
+- api_type: operate
+  comp_codename: generic.v2.gsekit.gsekit_component
+  name: sync_process_status
+  label: 同步进程状态
+  label_en: null
+  dest_path: /o/bk_gsekit/api/{bk_biz_id}/process/sync_process_status/
+  path: /v2/gsekit/api/process/sync_process_status/
+  dest_http_method: POST
+  suggest_method: POST
+
 - api_type: query
   comp_codename: generic.v2.gsekit.gsekit_component
   name: config_template_list

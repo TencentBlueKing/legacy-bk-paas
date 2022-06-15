@@ -1,39 +1,42 @@
 ### Functional description
 
-list process related info according to condition (v3.9.13)
+Click Five-digit query process instance related information (v3.9.13)
 
-- only used for GSEKit，is hidden in ESB doc
-
-#### General Parameters
-
-{{ common_args_desc }}
+- This interface is intended for use by GSEKit and is hidden in the ESB documentation
 
 ### Request Parameters
 
-| Field      | Type      | Required | Description                                                  |
-| ---------- | --------- | -------- | ------------------------------------------------------------ |
-| bk_biz_id  | int64       | Yes      | Business ID                                                  |
-|bk_set_ids|int64 array|No|set id array, empty represent anyone|
-|bk_module_ids|int64 array|No|set id array, empty represent anyone|
-|ids|int64 array|No|set id array, empty represent anyone|
-|bk_process_names|string array|No|process name array,empty represent anyone, `bk_process_name，bk_func_id can only use one`|
-|bk_func_ids|string array|No|func id array, empty represent anyone, `bk_process_name，bk_func_id can only use one`|
-|bk_process_ids|int64 array|No|process id array, empty represent anyone,|
-| fields     | array     | No      | process property list, the specified process property feilds will be returned <br>it can speed up the request and reduce the network payload |
-| page       | object    | Yes      | page info                                                    |
+{{ common_args_desc }}
 
+#### Interface Parameters
+
+|Field| Type| Required| Description|
+|---|---|---|---|
+| bk_biz_id  | int64       |  yes   | Business ID |
+|bk_set_ids| int64 array| no | The set ID list, if empty, represents any set |
+|bk_module_ids| int64 array| no | Module ID list, if empty, it represents any module|
+|ids| int64 array| no | Service instance ID list. If empty, it represents any instance|
+|bk_process_names| string array| no | List of process names. If empty, it represents any process. This field is mutually exclusive with bk_func_id. Only one of them can be selected `it can not have value at the same time`|
+|bk_func_ids| string array| no | Function ID list of process. If empty, it represents any process. bk_process_name `only one of the two can be selected, and can not have value at the same time|
+|bk_process_ids| int64 array| no | Process ID list, if empty, represents any process|
+|fields| string array| no | Process attribute list, which controls which fields are in the process instance information that returns the result, can speed up interface requests and reduce network traffic transmission<br> If it is null, all fields of the process are returned, and bk_process_id,bk_process_name and bk_func_id are required fields to be returned|
+|page| dict| yes | Paging condition|
+
+The conditional relationship for these fields is relationship and (&amp;&amp;), and only process instances that meet the criteria you fill in are queried<br>
+For example, if both bk_set_ids and bk_module_ids are filled in, and neither bk_module_ids belongs to bk_set_ids, the query result is empty
 
 #### page
 
-| Field | Type | Required | Description                      |
-| ----- | ---- | -------- | -------------------------------- |
-| start | int  | Yes      | start record                     |
-| limit | int  | Yes      | page limit, maximum value is 500 |
-| sort  | string | No       | the field for sort, '-' represent decending order, default sorted by bk_process_id |
+| Field| Type| Required| Description|
+| ---  | ---  | ---  | --- |
+| start| int| no | Record start position, default is 0|
+| limit| int| yes | Limit bars per page, Max. 500|
+| sort  | string |no   | Sort field,'backward' means reverse order, can only be the field of the process, and sort by bk_process_id by default|
+
 
 ### Request Parameters Example
 
-```json
+``` json
 {
     "set": {
         "bk_set_ids": [
@@ -80,8 +83,7 @@ list process related info according to condition (v3.9.13)
 ```
 
 ### Return Result Example
-
-```json
+``` json
 {
     "result": true,
     "code": 0,
@@ -154,14 +156,19 @@ list process related info according to condition (v3.9.13)
 
 ### Return Result Parameters Description
 
-#### data
+| Name| Type| Description|
+|---|---|--- |
+| result | bool |Whether the request was successful or not. True: request succeeded;false request failed|
+| code | int |Wrong code. 0 indicates success,>0 indicates failure error|
+| message | string |Error message returned by request failure|
 
-| Field | Type  | Description       |
-| ----- | ----- | ----------------- |
-| count | int   | the num of record |
-| info  | array | process related info         |
-|set|object|set info|
-|module|object|module info|
-|host|object|host info|
-|service_instance|object|service_instance info|
-|process|object|process info|
+- Data field Description
+
+| Name| Type| Description|
+|---|---|--- |
+|count| int| Total number of eligible process instances|
+|set| object| Set information to which the process belongs |
+|module| object| Module information to which the process belongs|
+|host| object| Host information to which the process belongs|
+|service_instance| object| Service instance information to which the process belongs|
+|process| object| Details of the process itself|

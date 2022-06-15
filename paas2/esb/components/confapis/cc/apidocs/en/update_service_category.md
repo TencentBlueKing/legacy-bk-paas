@@ -1,23 +1,27 @@
 ### Functional description
 
-update service template info
-
-#### General Parameters
-
-{{ common_args_desc }}
+Update service template information (currently only name field can be updated)
 
 ### Request Parameters
 
-| Field                |  Type       | Required	   | Description                            |
+{{ common_args_desc }}
+
+#### Interface Parameters
+
+| Field                 | Type      | Required	   | Description                 |
 |----------------------|------------|--------|-----------------------|
-| bk_supplier_account  | string     |Yes     | Supplier Account ID       |
-| id            | int  | No   | Service Template ID |
-| name         | string  | No   | Service Template Name |
+| id            |  int  |yes   | Service template ID|
+| name         |  string  |yes   | Service template name|
+| bk_biz_id     |   int     | yes  | Business ID |
 
 ### Request Parameters Example
 
 ```python
 {
+  "bk_app_code": "esb_test",
+  "bk_app_secret": "xxx",
+  "bk_username": "xxx",
+  "bk_token": "xxx",
   "bk_biz_id": 1,
   "id": 3,
   "name": "222"
@@ -31,6 +35,8 @@ update service template info
   "result": true,
   "code": 0,
   "message": "success",
+  "permission": null,
+  "request_id": "e43da4ef221746868dc4c837d36f3807",
   "data": {
     "bk_biz_id": 1,
     "id": 3,
@@ -46,9 +52,12 @@ update service template info
 
 #### response
 
-| Field       | Type     | Description         |
+| Name| Type| Description|
 |---|---|---|
-| result | bool | request success or failed. true:success；false: failed |
-| code | int | error code. 0: success, >0: something error |
-| message | string | error info description |
-| data | object | response data |
+| result | bool |Whether the request was successful or not. True: request succeeded;false request failed|
+| code | int |Wrong code. 0 indicates success,>0 indicates failure error|
+| message | string |Error message returned by request failure|
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data | object |Updated service classification information|
+

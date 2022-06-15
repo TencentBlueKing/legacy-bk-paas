@@ -1,62 +1,65 @@
 ### Functional description
 
-search instance by the associated instance
+Query model instance according to Association relation instance
 
-- the api is just suitable for instances of self-defined mainline model and common model, not suitable for instances of business, set, module, host model, etc.
+- This interface is only applicable to custom hierarchical model and general model instances, and is not applicable to model instances such as business, set, module, host, etc
 
 ### Request Parameters
 
 {{ common_args_desc }}
 
-#### General Parameters
+#### Interface Parameters
 
-| Field                |  Type      | Required	   |  Description                       |
+| Field                | Type      | Required   | Description                       |
 |---------------------|------------|--------|-----------------------------|
-| bk_obj_id           | string     | Yes     | Object ID                      |
-| bk_supplier_account | string     | Yes     | Supplier account,please fill '0' by independent deployment  |
-| page                | object     | Yes     | Page parameters                    |
-| condition           | object     | No     | the associated model instance condition                    |
-| time_condition           | object     | No     | the model instance time condition                    |
-| fields              | map | No     | the model attribution fields to return,key is Object ID，value is the fields to return |
+| bk_obj_id           |  string     | yes  | Model ID                      |
+| page                |  object     | yes  | Paging parameter                    |
+| condition           |  object     | no     | Model instance query criteria with Association relationship                    |
+| time_condition      |  object     | no     | Query criteria for querying model instances by time|
+| fields              |  object     | no     | Specifies the field returned by the query model instance, where key is the model ID and value is the model attribute field to be returned by the query model|
 
 #### page
 
-| Field      |  Type      | Required	   |  Description                |
+| Field      | Type      | Required   | Description                |
 |-----------|------------|--------|----------------------|
-| start     |  int       | Yes     | The record of start position         |
-| limit     |  int       | Yes     | Limit number of each page,maximum 200 |
-| sort      |  string    | No     | Sort fields             |
+| start     |   int       | yes  | Record start position         |
+| limit     |   int       | yes  | Limit bars per page, Max. 200|
+| sort      |   string    | no     | Sort field             |
 
 #### condition
+The user in the example is the model
 
-| Field      |  Type      | Required	   |  Description      |
+| Field      | Type      | Required   | Description      |
 |-----------|------------|--------|------------|
-| field     |string      |Yes      | Value of model field                                                |
-| operator  |string      |Yes      | value : $regex $eq $ne                                           |
-| value     |string      |Yes      | Value of model field                                   |
+| field     | string      | yes   | The value is the field name of the model                                               |
+| operator  |string      | yes   | Value is: $regex $eq $ne                                           |
+| value     | string      | yes   | The value corresponding to the model attribute name of the field configuration                   |
 
 #### time_condition
 
-| Field | Type   | Required | Description                          |
-| ----- | ------ | -------- | ------------------------------------ |
-| oper  | string | Yes      | operator, only support "and" for now |
-| rules | array  | Yes      | search time condition                |
+| Field   | Type   | Required| Description              |
+|-------|--------|-----|--------------------|
+| oper  | string |yes| Operator, currently only and is supported|
+| rules | array  |yes| Time query criteria         |
 
 #### rules
 
-| Field | Type   | Required | Description                                   |
-| ----- | ------ | -------- | --------------------------------------------- |
-| field | string | Yes      | Value of model field                          |
-| start | string | Yes      | start time in the form of yyyy-MM-dd hh:mm:ss |
-| end   | string | Yes      | end time in the form of yyyy-MM-dd hh:mm:ss   |
+| Field   | Type   | Required| Description                             |
+|-------|--------|-----|----------------------------------|
+| field | string |yes| The value is the field name of the model                  |
+| start | string |yes| Start time in the format yyyy MM dd hh: mm:ss|
+| end   |  string |yes| End time in the format yyyy MM dd hh: mm:ss|
 
 
 ### Request Parameters Example
 
 ```json
 {
+    "bk_app_code": "esb_test",
+    "bk_app_secret": "xxx",
+    "bk_username": "xxx",
+    "bk_token": "xxx",
     "bk_obj_id": "bk_switch",
-    "bk_supplier_account": "0",
     "page": {
         "start": 0,
         "limit": 10,
@@ -100,6 +103,7 @@ search instance by the associated instance
     "code": 0,
     "message": "success",
     "permission": null,
+    "request_id": "e43da4ef221746868dc4c837d36f3807",
     "data": {
         "count": 2,
         "info": [
@@ -121,10 +125,20 @@ search instance by the associated instance
 ```
 
 ### Return Result Parameters Description
+#### response
+
+| Name    | Type   | Description                                       |
+| ------- | ------ | ------------------------------------------ |
+| result  | bool   | Whether the request was successful or not. True: request succeeded;false request failed|
+| code    |  int    | Wrong code. 0 indicates success,>0 indicates failure error    |
+| message | string |Error message returned by request failure                     |
+| permission    |  object |Permission information    |
+| request_id    |  string |Request chain id    |
+| data    |  object |Data returned by request                             |
 
 #### data
 
 | Field      | Type      | Description         |
 |-----------|-----------|--------------|
-| count     | int       | Count number     |
-| info      | array     | The real model instance data |
+| count     |  int       | Number of records     |
+| info      |  array     | Model instance actual data|
