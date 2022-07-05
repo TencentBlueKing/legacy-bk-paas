@@ -10,7 +10,7 @@
 
 | 字段   | 类型   | 必选 | 描述                                                         |
 | ------ | ------ | ---- | ------------------------------------------------------------ |
-| bk_biz_id | int    | 是   | 业务id |
+| biz_id | int    | 是   | 业务id |
 | protocol | str | 否 | 协议类型(TCP、UDP、HTTP)|
 | task_ids | str | 否 | 任务ID，多个任务以逗号分隔 |
 | node_conf_needed | int | 否 | 是否导出任务相关的节点配置信息，0或1,默认为1 |
@@ -22,7 +22,7 @@
     "bk_app_code": "xxx",
     "bk_app_secret": "xxxxx",
     "bk_token": "xxxx",
-    "bk_biz_id": 2,
+    "biz_id": 2,
     "task_ids": "60",
     "protocol": "TCP"
 }
