@@ -1383,3 +1383,21 @@
   method: POST
   name: v3_aiops_get_AIOps_Experiment_Node_execute_groups
   path: /data/v3/aiops/models/{model_id}/experiments/{model_experiment_id}/node/execute/groups/
+
+- path: /data/v3/aiops/envs/
+  name: v3_aiops_envs
+  label: 获取依赖的aiops部分环境变量
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/envs/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/serving/processing/{result_table_name}/execute/
+  name: v3_aiops_api_serving_execute
+  label: 执行api_serving
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/serving/processing/{result_table_name}/execute/
+  dest_http_method: POST
+  is_hidden: true

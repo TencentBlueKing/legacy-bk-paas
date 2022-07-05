@@ -397,6 +397,7 @@
   dest_http_method: GET
   is_hidden: true
 
+
 - path: /data/v3/meta/result_tables/{result_table_id}/geog_area/
   name: v3_meta_result_tables__result_table_id__geog_area_get
   label: 获取结果表所属地域
@@ -404,4 +405,34 @@
   comp_codename: generic.data.datav3_component
   dest_path: /v3/meta/result_tables/{result_table_id}/geog_area/
   dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/meta/tag/recommends/
+  name: v3_meta_tag_recommends_get
+  label: 标签推荐列表接口
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/tag/recommends/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/meta/tag/tags/
+  name: v3_meta_tag_tags_code_list
+  label: 标签列表接口
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/tag/tags/
+  dest_http_method: GET
+  is_hidden: true
+
+
+- path: /data/v3/meta/result_tables/{result_table_id}/tags/
+  name: v3_meta_result_tables_post_tags
+  label: 目标rt打标签接口
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/meta/result_tables/{result_table_id}/tags/
+  dest_http_method: POST
   is_hidden: true
