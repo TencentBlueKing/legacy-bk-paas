@@ -330,3 +330,12 @@
   dest_path: /v3/access/rawdata/query_by_name/
   dest_http_method: GET
   is_hidden: true
+
+- path: /data/v3/access/rawdata/{data_id}/tags/
+  name: v3_access_rawdata_raw_data_id_tags_post
+  label: 目标rawdata打标签接口
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/rawdata/{data_id}/tags/
+  dest_http_method: POST
+  is_hidden: true

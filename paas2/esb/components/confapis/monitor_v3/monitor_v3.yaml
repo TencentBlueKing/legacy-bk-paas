@@ -1757,6 +1757,7 @@
   label_en: delete apm app config
   name: delete_apm_app_config
   path: /v2/monitor_v3/delete_apm_delete_app_config/
+  method: POST
 
 - api_type: operate
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
@@ -1768,3 +1769,14 @@
   name: get_action_params_by_config
   path: /v2/monitor_v3/get_action_params_by_config/
   method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v4/bcs/get_bcs_gray_cluster_list/
+  is_hidden: true
+  label: 获取BCS集群灰度ID名单
+  label_en: null
+  name: get_bcs_gray_cluster_list
+  path: /v2/monitor_v3/get_bcs_gray_cluster_list/
+  method: GET
