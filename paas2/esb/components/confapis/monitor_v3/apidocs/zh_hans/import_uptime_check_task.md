@@ -114,7 +114,7 @@
 
 ###### 拨测任务详细配置(HTTP)--conf_list.collector_conf.config
 
-| 字段                 | 类型 | 必选 |
+| 字段                 | 类型 | 描述 |
 | -------------------- | ---- | ---- |
 | urls                 | str  | 是   |
 | method               | str  | 是   |
@@ -125,6 +125,7 @@
 | timeout              | int  | 否   |
 | response             | str  | 否   |
 | response_code        | str  | 否   |
+| request              | str  | 否   |
 
 ##### 监控策略配置--conf_list.monitor_conf
 

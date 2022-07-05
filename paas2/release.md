@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.52
+    - update: esb update data/monitor_v3 confapis
+
 # 2.12.51
     - update: esb cc set default bk_supplier_account for component dest_path
     - update: esb gse compatible with gse 2.0 interface protocol

@@ -15,6 +15,7 @@
 | -------------- | ------ | ---- | ----------- |
 | bk_data_id  | int | 否   | 数据源ID |
 | data_name | string | 否 | 数据源名称 |
+| with_rt_info | bool | 否 | 是否需要ResultTable信息（默认是） |
 
 > 注意：
 > 1. 上述两个必须提供一个，不可以两者同时为空;
@@ -27,7 +28,8 @@
     "bk_app_code": "xxx",
   	"bk_app_secret": "xxxxx",
   	"bk_token": "xxxx",
-	"bk_data_id": 1001
+	"bk_data_id": 1001,
+    "with_rt_info": false
 }
 ```
 
