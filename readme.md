@@ -61,7 +61,7 @@
 - [FAQ](https://github.com/Tencent/bk-PaaS/wiki/FAQ)
 - [白皮书](http://docs.bk.tencent.com/product_white_paper/paas/)
 - [蓝鲸论坛](https://bk.tencent.com/s-mart/community)
-- [蓝鲸 DevOps 在线视频教程](https://cloud.tencent.com/developer/edu/major-100008)
+- [蓝鲸 DevOps 在线视频教程](https://bk.tencent.com/s-mart/video/)
 - 联系我们，技术交流QQ群：
 
 
