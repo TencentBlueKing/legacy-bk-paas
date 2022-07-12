@@ -13,6 +13,7 @@ specific language governing permissions and limitations under the License.
 import base64
 import mimetypes
 import smtplib
+from django.utils.encoding import force_text
 from email.header import Header
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
@@ -92,7 +93,7 @@ class SMTPClient(object):
             filename = smart_str(f_info.get("filename", ""))
             encoded_filename = "=?utf-8?b?" + base64.b64encode(filename) + "?="
             _content = f_info.get("content", "")
-            _type = f_info.get("type") or filename.split(".")[-1] or "attachment"
+            _type = f_info.get("type") or force_text(filename).split(".")[-1] or "attachment"
             _disposition = f_info.get("disposition", "")
             # 添加二进制附件
             if _type in ["image", "jpg", "png", "jpeg"]:
