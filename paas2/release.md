@@ -1,5 +1,9 @@
 Release Log
 ===============================
+# 2.14.18
+    - update: esb update cc/monitor_v3 confapis
+    - fix: esb cmsi send_mail_with_smtp
+
 # 2.14.17
     - add: define bk_monitorv3 apm api
 
