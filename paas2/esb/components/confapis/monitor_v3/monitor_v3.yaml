@@ -1518,6 +1518,17 @@
 - api_type: operate
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST
+  dest_path: /apm_api/v1/application/create_application_simple/
+  is_hidden: false
+  label: 快速创建APM应用
+  label_en: null
+  name: apm_create_application
+  path: /v2/monitor_v3/apm/create_application/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
   dest_path: /apm_api/v1/application/apply_datasource/
   is_hidden: true
   label: 申请APM数据源
