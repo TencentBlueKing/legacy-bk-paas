@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.18
+    - add: define bk_monitorv3 create apm application api
+
 # 2.14.17
     - add: define bk_monitorv3 apm api
 
