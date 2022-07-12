@@ -1274,3 +1274,25 @@
   comp_codename: generic.v2.cc.cc_component
   dest_path: /api/v3/findmany/hosts/total_mainline_topo/biz/{bk_biz_id}
   dest_http_method: POST
+
+- path: /v2/cc/count_biz_host_cpu/
+  name: count_biz_host_cpu
+  label: 统计每个业务下主机CPU数量（成本管理专用接口）
+  label_en: count host cpu num in biz (special interface for cost managing)
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/host/count/cpu
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /v2/cc/push_host_identifier/
+  name: push_host_identifier
+  label: 推送主机身份
+  label_en: push host identifier.
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.cc.cc_component
+  dest_path: /api/v3/event/push/host_identifier
+  dest_http_method: POST
+  is_hidden: true
