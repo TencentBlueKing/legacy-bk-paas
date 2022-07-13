@@ -55,15 +55,15 @@ def check_custom_codename(request):
             prefix, sys_name, component_name = component_codename.split(".")
         except Exception:
             return HttpResponse(
-                'codename "%s" does not math the rule generic.xxx.xxx, please check' % component_codename
+                'codename does not math the rule generic.xxx.xxx, please check'
             )
         if component_codename in component_manager.get_registed_components():
             return HttpResponse(
-                'component "%s" exists, if the visit prompts the error '
-                'message "Not found, component class not found", please restart the esb service' % component_codename
+                'component exists, if the visit prompts the error '
+                'message "Not found, component class not found", please restart the esb service'
             )
         else:
-            error_msg.append('component "%s" does not exist, please check the following steps:' % component_codename)
+            error_msg.append('component does not exist, please check the following steps:')
             error_msg.append(
                 '1. component path is "%s", please check whether the component file exists' % comp_config["path"]
             )
