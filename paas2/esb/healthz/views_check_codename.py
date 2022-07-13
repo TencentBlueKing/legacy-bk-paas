@@ -17,7 +17,7 @@ from importlib import import_module
 
 from django.http import HttpResponse
 
-from common.base_utils import smart_upper, html_escape
+from common.base_utils import smart_upper_v2, html_escape
 from components.esb_conf import _rel_path, CUSTOM_APIS_REL_PATH
 from esb.utils import fpath_to_module
 from esb.component.base import ComponentsManager
@@ -66,7 +66,7 @@ def check_custom_codename(request):
             error_msg.append(
                 '1. component path is "%s", please check whether the component file exists' % comp_config["path"]
             )
-            error_msg.append('2. component class name should be "%s", please check' % smart_upper(component_name))
+            error_msg.append('2. component class name should be "%s", please check' % smart_upper_v2(component_name))
             error_msg.append(
                 '3. uppercase of compoennt attribute sys_name should be "%s", please check' % sys_name.upper()
             )

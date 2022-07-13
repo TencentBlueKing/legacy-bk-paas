@@ -111,6 +111,15 @@ def smart_upper(value):
     return "".join(string.capitalize(word) if i != 0 else word for i, word in enumerate(value_list))
 
 
+def smart_upper_v2(value):
+    """
+        >>> smart_upper('request_friend_handler')
+        'RequestFriendHandler'
+    """
+    value_list = value.split("_")
+    return "".join(string.capitalize(word) for _, word in enumerate(value_list))
+
+
 def smart_str(s, encoding="utf-8"):
     """
     转换一个字符串或者unicode为指定的编码
