@@ -226,6 +226,7 @@ def test_datetime_format(value, expected):
 )
 def test_get_md5(value, expected):
     result = base_utils.get_md5(value)
+    assert result == expected
 
 
 @pytest.mark.parametrize(
@@ -265,4 +266,22 @@ def test_get_md5(value, expected):
 )
 def test_get_first_not_empty_value(data, keys, default, expected):
     result = base_utils.get_first_not_empty_value(data, keys, default)
+    assert result == expected
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        (
+            "request_friend_handler",
+            "RequestFriendHandler",
+        ),
+        (
+            "request",
+            "Request",
+        ),
+    ]
+)
+def test_smart_upper_v2(value, expected):
+    result = base_utils.smart_upper_v2(value)
     assert result == expected
