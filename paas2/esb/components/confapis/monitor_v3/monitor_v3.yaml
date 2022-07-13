@@ -1824,3 +1824,25 @@
   name: get_bcs_gray_cluster_list
   path: /v2/monitor_v3/get_bcs_gray_cluster_list/
   method: GET
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v4/grafana/graph_promql_query/
+  is_hidden: true
+  label: prom语法数据查询
+  label_en: null
+  name: graph_promql_query
+  path: /v2/monitor_v3/graph_promql_query/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v4/bcs/register_cluster/
+  is_hidden: true
+  label: BCS集群接入监控
+  label_en: null
+  name: register_bcs_cluster
+  path: /v2/monitor_v3/register_cluster/
+  method: POST
