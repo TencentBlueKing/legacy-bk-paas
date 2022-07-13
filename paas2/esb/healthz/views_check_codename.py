@@ -12,14 +12,13 @@ specific language governing permissions and limitations under the License.
 
 from builtins import str
 import os
-import html
 
 # import traceback
 from importlib import import_module
 
 from django.http import HttpResponse
 
-from common.base_utils import smart_upper
+from common.base_utils import smart_upper, html_escape
 from components.esb_conf import _rel_path, CUSTOM_APIS_REL_PATH
 from esb.utils import fpath_to_module
 from esb.component.base import ComponentsManager
@@ -27,7 +26,7 @@ from esb.component.base import ComponentsManager
 
 def check_custom_codename(request):
     """check custom component codename"""
-    component_codename = html.escape(request.GET.get("codename") or "")
+    component_codename = html_escape(request.GET.get("codename") or "")
     component_manager = ComponentsManager()
 
     file_import_error = {}
