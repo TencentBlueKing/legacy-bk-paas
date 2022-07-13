@@ -17,7 +17,7 @@ from importlib import import_module
 
 from django.http import HttpResponse
 
-from common.base_utils import smart_upper
+from common.base_utils import smart_upper_v2, html_escape
 from components.esb_conf import _rel_path, CUSTOM_APIS_REL_PATH
 from esb.utils import fpath_to_module
 from esb.component.base import ComponentsManager
@@ -25,7 +25,7 @@ from esb.component.base import ComponentsManager
 
 def check_custom_codename(request):
     """check custom component codename"""
-    component_codename = request.GET.get("codename")
+    component_codename = html_escape(request.GET.get("codename") or "")
     component_manager = ComponentsManager()
 
     file_import_error = {}
@@ -54,19 +54,19 @@ def check_custom_codename(request):
             prefix, sys_name, component_name = component_codename.split(".")
         except Exception:
             return HttpResponse(
-                'codename "%s" does not math the rule generic.xxx.xxx, please check' % component_codename
+                'codename does not math the rule generic.xxx.xxx, please check'
             )
         if component_codename in component_manager.get_registed_components():
             return HttpResponse(
-                'component "%s" exists, if the visit prompts the error '
-                'message "Not found, component class not found", please restart the esb service' % component_codename
+                'component exists, if the visit prompts the error '
+                'message "Not found, component class not found", please restart the esb service'
             )
         else:
-            error_msg.append('component "%s" does not exist, please check the following steps:' % component_codename)
+            error_msg.append('component does not exist, please check the following steps:')
             error_msg.append(
                 '1. component path is "%s", please check whether the component file exists' % comp_config["path"]
             )
-            error_msg.append('2. component class name should be "%s", please check' % smart_upper(component_name))
+            error_msg.append('2. component class name should be "%s", please check' % smart_upper_v2(component_name))
             error_msg.append(
                 '3. uppercase of compoennt attribute sys_name should be "%s", please check' % sys_name.upper()
             )

@@ -11,7 +11,7 @@ specific language governing permissions and limitations under the License.
 """
 import pytest
 
-from common.base_utils import get_first_not_empty_value
+from common.base_utils import get_first_not_empty_value, smart_upper_v2
 
 
 @pytest.mark.parametrize(
@@ -51,4 +51,22 @@ from common.base_utils import get_first_not_empty_value
 )
 def test_get_first_not_empty_value(data, keys, default, expected):
     result = get_first_not_empty_value(data, keys, default)
+    assert result == expected
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        (
+            "request_friend_handler",
+            "RequestFriendHandler",
+        ),
+        (
+            "request",
+            "Request",
+        ),
+    ]
+)
+def test_smart_upper_v2(value, expected):
+    result = smart_upper_v2(value)
     assert result == expected
