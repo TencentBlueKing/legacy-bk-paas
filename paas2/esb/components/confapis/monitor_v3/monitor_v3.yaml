@@ -1762,6 +1762,50 @@
 - api_type: operate
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST
+  dest_path: /apm_api/v1/application/query_trace_by_ids/
+  is_hidden: true
+  label: 根据traceId列表获取trace信息
+  label_en: query trace by ids
+  name: query_trace_by_ids
+  path: /v2/monitor_v3/query_trace_by_ids/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /apm_api/v1/application/query_app_by_trace/
+  is_hidden: true
+  label: 根据traceId列表获取App关联
+  label_en: query app by trace
+  name: query_app_by_trace
+  path: /v2/monitor_v3/query_app_by_trace/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /apm_api/v1/application/query_app_by_host_instance/
+  is_hidden: true
+  label: 根据ip列表获取App关联
+  label_en: query app by host instance
+  name: query_app_by_host_instance
+  path: /v2/monitor_v3/query_app_by_host_instance/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /apm_api/v1/application/query_trace_by_host_instance/
+  is_hidden: true
+  label: 根据ip获取trace信息
+  label_en: query trace by host instance
+  name: query_trace_by_host_instance
+  path: /v2/monitor_v3/query_trace_by_host_instance/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
   dest_path: /api/v4/action_instance/get_action_params_by_config/
   is_hidden: true
   label: 根据套餐ID获取当前告警处理参数
@@ -1784,21 +1828,21 @@
 - api_type: operate
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST
-  dest_path: /apm_api/v1/application/query_trace_by_ids/
+  dest_path: /api/v4/grafana/graph_promql_query/
   is_hidden: true
-  label: 根据traceId列表获取trace信息
-  label_en: query trace by ids
-  name: query_trace_by_ids
-  path: /v2/monitor_v3/query_trace_by_ids/
+  label: prom语法数据查询
+  label_en: null
+  name: graph_promql_query
+  path: /v2/monitor_v3/graph_promql_query/
   method: POST
 
 - api_type: operate
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST
-  dest_path: /apm_api/v1/application/query_app_by_trace/
+  dest_path: /api/v4/bcs/register_cluster/
   is_hidden: true
-  label: 根据traceId列表获取App关联
-  label_en: query app by trace
-  name: query_app_by_trace
-  path: /v2/monitor_v3/query_app_by_trace/
+  label: BCS集群接入监控
+  label_en: null
+  name: register_bcs_cluster
+  path: /v2/monitor_v3/register_cluster/
   method: POST
