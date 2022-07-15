@@ -20,7 +20,7 @@
     - esb: 蓝鲸API网关
     - appengine: 蓝鲸应用引擎
 - PaaSAgent（paas-ce/paasagent）: 蓝鲸应用引擎Agent（golang [[labstack/echo](https://github.com/labstack/echo)]）
-- LessCode（paas-ce/lesscode）: 蓝鲸可视化开发平台，提供了前端页面在线可视化拖拽组装、配置编辑、源码生成、二次开发等能力，[详细介绍](https://github.com/Tencent/bk-PaaS/blob/lesscode-master/paas-ce/lesscode/README.md)
+- LessCode: 蓝鲸可视化开发平台，提供了前端页面在线可视化拖拽组装、配置编辑、源码生成、二次开发等能力，[详细介绍](https://github.com/TencentBlueKing/bk-lesscode/blob/develop/readme.md)
 
 ## Overview
 
@@ -37,7 +37,7 @@
 - API网关：支持两种接入模式（在线自助接入和组件编码接入）的企业级服务总线，方便开发者对接企业内已有系统的API服务
 - 多环境部署：支持多环境部署SaaS应用, 方便开发者进行测试验证及生产环境发布
 - 可插拔式应用：支持蓝鲸S-mart应用上传部署, 方便蓝鲸S-mart应用部署移植 [更多应用](http://bk.tencent.com/s-mart)
-- 可视化开发平台：支持前端页面在线可视化拖拽组装、配置编辑、源码生成、二次开发等能力（[详细介绍](https://github.com/Tencent/bk-PaaS/blob/lesscode-master/paas-ce/lesscode/README.md)）
+- 可视化开发平台：支持前端页面在线可视化拖拽组装、配置编辑、源码生成、二次开发等能力（[详细介绍](https://github.com/TencentBlueKing/bk-lesscode/blob/develop/readme.md)）
 
 ## Experience
 
