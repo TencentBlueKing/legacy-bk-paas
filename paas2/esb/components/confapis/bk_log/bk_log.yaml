@@ -396,3 +396,48 @@
   dest_path: /api/v1/grafana/target_tree/
   dest_http_method: GET
   is_hidden: True
+  
+- path: /v2/bk_log/list_bcs_collector/
+  name: list_bcs_collector
+  label: 日志平台-查询bcs采集项
+  label_en: bk_log list bcs collector
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/list_bcs_collector/
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/create_bcs_collector/
+  name: create_bcs_collector
+  label: 日志平台-创建bcs采集项
+  label_en: bk_log create bcs collector
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/create_bcs_collector/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/update_bcs_collector/{rule_id}/
+  name: update_bcs_collector
+  label: 日志平台-更新bcs采集项
+  label_en: bk_log update bcs collector
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/{rule_id}/update_bcs_collector/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/delete_bcs_collector/{rule_id}/
+  name: delete_bcs_collector
+  label: 日志平台-删除bcs采集项
+  label_en: bk_log delete bcs collector
+  method: DELETE
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/{rule_id}/delete_bcs_collector/
+  dest_http_method: DELETE
+  is_hidden: True
+
