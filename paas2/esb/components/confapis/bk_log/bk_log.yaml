@@ -188,6 +188,39 @@
   dest_http_method: GET
   is_hidden: True
 
+- path: /v2/bk_log/databus_collectors/{collector_config_id}/task_status/
+  name: databus_collector_task_status
+  label: 日志平台-任务执行情况
+  label_en: bk_log get collector task status
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/{collector_config_id}/task_status/
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/databus_collectors/{collector_config_id}/task_detail/
+  name: databus_collector_task_detail
+  label: 日志平台-任务详情
+  label_en: bk_log get collector task detail
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/{collector_config_id}/task_detail/
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/databus_collectors/{collector_config_id}/retry/
+  name: databus_collector_retry_task
+  label: 日志平台-重试任务
+  label_en: bk_log get collector retry task
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/{collector_config_id}/retry/
+  dest_http_method: POST
+  is_hidden: True
+
 - path: /v2/bk_log/databus_collectors/
   name: create_databus_collectors
   label: 日志平台-创建采集项
@@ -208,6 +241,17 @@
   comp_codename: generic.v2.bk_log.bk_log_component
   dest_path: /api/v1/databus/collectors/
   dest_http_method: PUT
+  is_hidden: True
+
+- path: /v2/bk_log/databus_collectors/{collector_config_id}/
+  name: delete_databus_collectors
+  label: 日志平台-删除采集项
+  label_en: bk_log delete collector
+  method: DELETE
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/{collector_config_id}/
+  dest_http_method: DELETE
   is_hidden: True
 
 - path: /v2/bk_log/databus_collectors/
@@ -232,6 +276,28 @@
   dest_http_method: GET
   is_hidden: True
 
+- path: /v2/bk_log/databus_collectors/{collector_config_id}/etl_preview/
+  name: databus_collector_etl_preview
+  label: 日志平台-预览清洗结果
+  label_en: bk_log collector etl preview
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/{collector_config_id}/etl_preview/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/databus_collectors/{collector_config_id}/subscription_status/
+  name: databus_collector_subscription_status
+  label: 日志平台-获取采集项订阅任务
+  label_en: bk_log get collector subscription status
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/{collector_config_id}/subscription_status/
+  dest_http_method: GET
+  is_hidden: True
+
 - path: /v2/bk_log/databus_collectors/{collector_config_id}/update_or_create_clean_config/
   name: databus_collectors_replace_clean_config
   label: 日志平台-清洗入库
@@ -252,6 +318,73 @@
   comp_codename: generic.v2.bk_log.bk_log_component
   dest_path: /api/v1/databus/collectors/list_collectors_by_host/
   dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/databus_collectors/batch_subscription_status/
+  name: batch_subscription_status
+  label: 日志平台-获取采集订阅状态
+  label_en: bk_log list subscription status
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/batch_subscription_status/
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/databus_collector_plugins/
+  name: create_collector_plugin
+  label: 日志平台-创建采集插件
+  label_en: bk_log create collector plugin
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collector_plugins/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/databus_collector_plugins/{collector_plugin_id}/
+  name: update_collector_plugin
+  label: 日志平台-更新采集插件
+  label_en: bk_log update collector plugin
+  method: PUT
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collector_plugins/{collector_plugin_id}/
+  dest_http_method: PUT
+  is_hidden: True
+
+- path: /v2/bk_log/databus_collector_plugins/{collector_plugin_id}/instances/
+  name: create_collector_plugin_instance
+  label: 日志平台-实例化采集插件
+  label_en: bk_log create collector plugin instance
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collector_plugins/{collector_plugin_id}/instances/
+  dest_http_method: POST
+  is_hidden: True
+
+
+- path: /v2/bk_log/databus_collector_plugins/update_instance/
+  name: update_collector_plugin_instance
+  label: 日志平台-更新采集插件实例
+  label_en: bk_log update collector plugin instance
+  method: PUT
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collector_plugins/update_instance/
+  dest_http_method: PUT
+  is_hidden: True
+
+- path: /v2/bk_log/databus_collector_plugins/instance_etl/
+  name: create_collector_plugin_instance_clean_config
+  label: 日志平台-创建采集插件实例清洗规则
+  label_en: bk_log create collector plugin instance clean config
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collector_plugins/instance_etl/
+  dest_http_method: POST
   is_hidden: True
 
 - path: /v2/bk_log/databus_storage/
@@ -287,15 +420,26 @@
   dest_http_method: POST
   is_hidden: True
 
-- path: /v2/bk_log/databus_storage/
+- path: /v2/bk_log/databus_storage/{cluster_id}/
   name: update_databus_storage
   label: 日志平台-更新存储
   label_en: bk_log update databus storage
   method: PUT
   api_type: query
   comp_codename: generic.v2.bk_log.bk_log_component
-  dest_path: /api/v1/databus/storage/
+  dest_path: /api/v1/databus/storage/{cluster_id}/
   dest_http_method: PUT
+  is_hidden: True
+
+- path: /v2/bk_log/databus_storage/{cluster_id}/
+  name: delete_databus_storage
+  label: 日志平台-删除存储
+  label_en: bk_log delete databus storage
+  method: DELETE
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/storage/{cluster_id}/
+  dest_http_method: DELETE
   is_hidden: True
 
 - path: /v2/bk_log/databus_storage/connectivity_detect/
@@ -306,6 +450,28 @@
   api_type: query
   comp_codename: generic.v2.bk_log.bk_log_component
   dest_path: /api/v1/databus/storage/connectivity_detect/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/databus_storage/node_attrs/
+  name: databus_storage_node_attrs
+  label: 日志平台-获取集群中各节点属性
+  label_en: bk_log es node attrs
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/storage/node_attrs/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/databus_storage/batch_connectivity_detect/
+  name: databus_storage_batch_connectivity_detect
+  label: 日志平台-批量连通性测试
+  label_en: bk_log es batch connectivity detect
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/storage/batch_connectivity_detect/
   dest_http_method: POST
   is_hidden: True
 
@@ -396,7 +562,95 @@
   dest_path: /api/v1/grafana/target_tree/
   dest_http_method: GET
   is_hidden: True
-  
+
+- path: /v2/bk_log/meta/globals/
+  name: globals
+  label: 日志平台-全局配置
+  label_en: bk_log globals
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/meta/globals/
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/bizs/
+  name: bizs
+  label: 日志平台-业务列表
+  label_en: bk_log bizs
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/bizs/
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/bizs/{bk_biz_id}/topo/
+  name: bizs_topo
+  label: 日志平台-业务拓扑列表
+  label_en: bk_log bizs topo
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/bizs/{bk_biz_id}/topo/
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/bizs/{bk_biz_id}/host_instance_by_node/
+  name: bizs_host_instance_by_node
+  label: 日志平台-根据节点获取拓扑情况（动态拓扑）
+  label_en: bizs host instance by node
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/bizs/{bk_biz_id}/host_instance_by_node/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/bizs/{bk_biz_id}/host_instance_by_ip/
+  name: bizs_host_instance_by_ip
+  label: 日志平台-根据ip列表获取主机实例（静态拓扑）
+  label_en: bizs host instance by ip
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/bizs/{bk_biz_id}/host_instance_by_ip/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/bizs/{bk_biz_id}/list_agent_status/
+  name: bizs_list_agent_status
+  label: 日志平台-获取节点对应agent数量及异常状态agent数量
+  label_en: bizs list agent status
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/bizs/{bk_biz_id}/list_agent_status/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/bizs/{bk_biz_id}/template_topo/
+  name: bizs_template_topo
+  label: 日志平台-获取服务模板topo
+  label_en: bizs template topo
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/bizs/{bk_biz_id}/template_topo/
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/bizs/{bk_biz_id}/get_nodes_by_template/
+  name: bizs_get_nodes_by_template
+  label: 日志平台-获取模版topo情况
+  label_en: bizs get nodes by template
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/bizs/{bk_biz_id}/get_nodes_by_template/
+  dest_http_method: GET
+  is_hidden: True
+
 - path: /v2/bk_log/list_bcs_collector/
   name: list_bcs_collector
   label: 日志平台-查询bcs采集项
@@ -440,4 +694,3 @@
   dest_path: /api/v1/databus/collectors/{rule_id}/delete_bcs_collector/
   dest_http_method: DELETE
   is_hidden: True
-
