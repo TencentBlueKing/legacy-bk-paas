@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.54
+    - update: esb update monitor_v3, bk_log confapis
+
 # 2.12.53
     - fix: esb cmsi send_mail_with_smtp attachment type
     - update: esb update monitor_v3 confapis
