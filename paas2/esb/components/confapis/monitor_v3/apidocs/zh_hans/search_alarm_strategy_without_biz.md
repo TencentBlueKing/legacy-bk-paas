@@ -311,7 +311,8 @@
 | 字段                                | 类型     | 必选  | 描述           |
 |-----------------------------------|--------|-----|--------------|
 | options                            | dict   | 是   | 通知套餐配置         |
-| options.converge_config             | string | 是   |     收敛配置     |
+| options.converge_config             | dict | 是   |     收敛配置     |
+| options.noise_reduce_config         | dict | 否  |     降噪配置，不带默认不开启     |
 | options.start_time             | string | 是   |    生效开始时间（格式：00:00:00）     |
 | options.end_time             | string | 是   |    生效结束时间（格式：23:59:59)     |
 | config             | string | 是   |         |
@@ -325,6 +326,14 @@
 | 字段                                | 类型     | 必选  | 描述           |
 |-----------------------------------|--------|-----|--------------|
 | need_biz_converge                 | boolean | 否   | 是否需要业务汇总    |
+
+#### NoiseReduceConfig
+
+| 字段                                | 类型     | 必选  | 描述           |
+|-----------------------------------|--------|-----|--------------|
+| is_enabled                 | boolean | 否   | 是否开启降噪   |
+| count                          | int | 否   | 降噪百分比, 开启之后必填   |
+| dimensions                     | list | 否  | 降噪维度，开启之后必填  |
 
 
 #### 相关选项

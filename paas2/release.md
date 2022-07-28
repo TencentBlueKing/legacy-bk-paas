@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.19
+    - update: esb update monitor_v3, bk_log, iam confapis
+
 # 2.14.18
     - update: esb update cc/monitor_v3 confapis
     - fix: esb cmsi send_mail_with_smtp

@@ -11,6 +11,28 @@
   dest_http_method: POST
   is_hidden: true
 
+- path: /v2/iam/management/grade_managers/
+  name: mgmt_api_list_grade_manager
+  label: 查询分级管理员列表
+  label_en: mgmt api list grade manager
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.iam.iam_component
+  dest_path: /o/bk_iam/api/v1/open/management/grade_managers/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /v2/iam/management/grade_managers/{grade_manager_id}/
+  name: mgmt_api_update_grade_manager
+  label: 更新分级管理员
+  label_en: mgmt api update grade manager
+  method: PUT
+  api_type: operate
+  comp_codename: generic.v2.iam.iam_component
+  dest_path: /o/bk_iam/api/v1/open/management/grade_managers/{grade_manager_id}/
+  dest_http_method: PUT
+  is_hidden: true
+
 - path: /v2/iam/management/grade_managers/{grade_manager_id}/members/
   name: mgmt_api_list_grade_manager_member
   label: 查询分级管理员成员列表
@@ -130,6 +152,28 @@
   comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/management/groups/{group_id}/policies/
   dest_http_method: POST
+  is_hidden: true
+
+- path: /v2/iam/management/groups/{group_id}/policies/
+  name: mgmt_api_revoke_group_policy
+  label: 用户组回收权限
+  label_en: mgmt api revoke group policy
+  method: DELETE
+  api_type: operate
+  comp_codename: generic.v2.iam.iam_delete_component
+  dest_path: /o/bk_iam/api/v1/open/management/groups/{group_id}/policies/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /v2/iam/management/groups/{group_id}/actions/policies/
+  name: mgmt_api_revoke_group_action_policy
+  label: 用户组Action级别的回收权限
+  label_en: mgmt api revoke group action policy
+  method: DELETE
+  api_type: operate
+  comp_codename: generic.v2.iam.iam_delete_component
+  dest_path: /o/bk_iam/api/v1/open/management/groups/{group_id}/actions/policies/
+  dest_http_method: DELETE
   is_hidden: true
 
 - path: /v2/iam/management/users/grade_managers/
