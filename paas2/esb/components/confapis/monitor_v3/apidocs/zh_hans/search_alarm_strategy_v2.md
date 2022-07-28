@@ -199,6 +199,14 @@
 | id            | int    | 策略标签ID |
 | count         | string | 按策略标签统计的策略数量 |
 
+#### data.strategy_status_list
+
+| 字段                    | 类型   | 描述         |
+| ---------------------- | ------ | ------------ |
+| id                      | int    | 策略状态ID       |
+| name                 | string   | 策略状态名称     |
+| count                  | int | 策略数     |
+
 #### 示例数据
 
 ```json
@@ -340,7 +348,29 @@
                 "count": 1
             }
         ],
-        "strategy_label_list": []
+        "strategy_label_list": [],
+        "strategy_status_list": [
+            {
+                "id": "ALERT",
+                "name": "告警中",
+                "count": 0
+            },
+            {
+                "id": "INVALID",
+                "name": "已失效",
+                "count": 0
+            },
+            {
+                "id": "OFF",
+                "name": "已停用",
+                "count": 22
+            },
+            {
+                "id": "ON",
+                "name": "已启用",
+                "count": 65
+            }
+        ]
     }
 }
 ```

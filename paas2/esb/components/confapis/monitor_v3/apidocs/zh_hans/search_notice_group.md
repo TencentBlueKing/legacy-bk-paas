@@ -42,9 +42,10 @@
 | name            | string | 名称               |
 | message         | string | 说明               |
 | notice_way      | dict   | 各个级别的通知方式   |
-| id              | int    | 告警ID             |
-| notice_receiver | list   | 通知人列表         |
+| id              | int    | 告警组ID             |
+| notice_receiver | list   | 通知人列表   |
 | webhook_url | string | 回调地址 |
+| webhook_action_id   | int   | 回调套餐ID |
 | update_time | string | 更新时间 |
 | update_user | string | 更新人 |
 | create_time | string | 创建人 |
@@ -70,25 +71,26 @@
   "code": 200,
   "data": [
     {
-      "bk_biz_id": 2,
-      "update_time": "2019-11-18 17:51:54+0800",
-      "notice_receiver": [
+       "bk_biz_id": 2,
+       "update_time": "2019-11-18 17:51:54+0800",
+       "notice_receiver": [
         {
           "type": "user",
           "id": "admin"
         }
       ],
-      "update_user": "admin",
-      "name": "layman",
-      "notice_way": {
+       "update_user": "admin",
+       "name": "layman",
+       "notice_way": {
         "1": ["weixin"],
         "2": ["weixin"],
         "3": ["weixin"]
-      },
-      "create_time": "2019-11-18 17:51:54+0800",
-      "message": "",
-      "webhook_url": "",
-      "id": 5
+       },
+       "create_time": "2019-11-18 17:51:54+0800",
+       "message": "",
+       "webhook_url": "", 
+       "webhook_action_id":1001,
+       "id": 5
     }
   ],
   "result": true

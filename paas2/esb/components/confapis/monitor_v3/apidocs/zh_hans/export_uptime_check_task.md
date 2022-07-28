@@ -66,7 +66,8 @@
 | ip_list | list | 目标IP地址 |
 | port | int | 端口地址 |
 | period | int | 采集周期，单位min |
-| response_format | str | 响应信息匹配方式(包含：in，不包含：nin，正则：reg) | timeout | int | 期望响应时间 |
+| response_format | str | 响应信息匹配方式(包含：in，不包含：nin，正则：reg) |
+| timeout | int | 期望响应时间 |
 | response | str | 期望响应内容 |
 | response_code | str | 期望响应码 |
 
@@ -97,9 +98,22 @@
 | headers | list | 请求头 |
 | insecure_skip_verify | bool | 是否开启ssh验证 |
 | period | int | 采集周期，单位min |
-| response_format | str | 响应信息匹配方式(包含：in，不包含：nin，正则：reg) | timeout | int | 期望响应时间 |
+| response_format | str | 响应信息匹配方式(包含：in，不包含：nin，正则：reg) |
+| timeout | int | 期望响应时间 |
 | response | str | 期望响应内容 |
 | response_code | str | 期望响应码 |
+
+##### 拨测任务基础配置详细配置(ICMP)--data.conf_list.collector_conf.config(ICMP)
+
+| 字段        | 类型   | 描述         |
+| ----------- | ------ | ------------ |
+| max_rtt | int | 超时时间 |
+| total_num | int | 周期内连续探测次数 |
+| size | int | 探测包大小 |
+| period | int | 采集周期，单位min |
+| response_format | str | 响应信息匹配方式(包含：in，不包含：nin，正则：reg) |
+| response | str | 期望响应内容 |
+| timeout | int | 期望响应时间 |
 
 ##### 拨测目标所在地址--data.conf_list.collector_conf.location
 
