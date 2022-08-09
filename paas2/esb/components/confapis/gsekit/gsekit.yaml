@@ -57,3 +57,13 @@
   path: /v2/gsekit/api/job/job_status/
   dest_http_method: POST
   suggest_method: POST
+
+- api_type: query
+  comp_codename: generic.v2.gsekit.gsekit_component
+  name: access_overview
+  label: 业务接入情况概览
+  label_en: null
+  dest_path: /o/bk_gsekit/api/{bk_biz_id}/meta/access_overview/
+  path: /v2/gsekit/api/meta/access_overview/
+  dest_http_method: GET
+  suggest_method: GET

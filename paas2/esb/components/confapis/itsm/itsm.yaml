@@ -160,3 +160,34 @@
   comp_codename: generic.v2.itsm.itsm_component
   dest_path: /o/bk_itsm/openapi/ticket/comment/
   dest_http_method: POST
+
+- path: /v2/itsm/create_service_catalog/
+  name: create_service_catalog
+  label: 创建服务目录
+  label_en: Create Service Catalog
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.itsm.itsm_component
+  dest_path: /o/bk_itsm/openapi/service_catalog/
+  dest_http_method: POST
+
+
+- path: /v2/itsm/import_service/
+  name: import_service
+  label: 导入服务
+  label_en: Import Service
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.itsm.itsm_component
+  dest_path: /o/bk_itsm/openapi/service/import_service/
+  dest_http_method: POST
+  
+- path: /v2/itsm/update_service/
+  name: update_service
+  label: 更新服务
+  label_en: Update Service
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.itsm.itsm_component
+  dest_path: /o/bk_itsm/openapi/service/update_service/
+  dest_http_method: POST

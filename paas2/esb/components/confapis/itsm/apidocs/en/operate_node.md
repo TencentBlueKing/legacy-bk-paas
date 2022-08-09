@@ -28,6 +28,7 @@ operate ticket's state
 
 ### demo1：submit
 
+The three keys correspond to the keys of the three fields of the approval node. The mandatory remarks are the remarks required when the approval is rejected
 ```json
 {  
     "bk_app_secret": "xxxx", 
@@ -40,15 +41,20 @@ operate ticket's state
     "state_id": 4,
     "fields": [
       {
-        "key": "SHENPIJIEGUO",
-        "value": "TONGYI"
+        "key": "11e8ac30a2247ddfaeef0cefd67c3d74",
+        "value": "true"
       },
       {
-        "key": "SHENPIBEIZHU",
-        "value": "hello"
+        "key": "dda3d1ad8325d2c9b1f1bc913fa5ec15",
+        "value": "approve"
+      },
+        {
+        "key": "322b6095ff3638e413ac772295b6d8e2",
+        "value": "reject"
       }
     ]
 }  
+```
 ```
 
 ### demo2：deliver
