@@ -27,6 +27,7 @@
 | value | string |是   | 字段值 |
 
 ### 请求参数示例一：审批
+其中三个key对应的是审批节点三个字段的key, 其中必填的备注为拒绝审批时需要填的备注
 
 ```json
 {  
@@ -40,12 +41,16 @@
     "state_id": 4,
     "fields": [
       {
-        "key": "SHENPIJIEGUO",
-        "value": "TONGYI"
+        "key": "11e8ac30a2247ddfaeef0cefd67c3d74",
+        "value": "true"
       },
       {
-        "key": "SHENPIBEIZHU",
-        "value": "hello"
+        "key": "dda3d1ad8325d2c9b1f1bc913fa5ec15",
+        "value": "通过备注"
+      },
+        {
+        "key": "322b6095ff3638e413ac772295b6d8e2",
+        "value": "拒绝备注"
       }
     ]
 }  

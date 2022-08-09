@@ -1718,6 +1718,17 @@
 - api_type: query
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST
+  dest_path: /apm_api/v1/application/query_es_mapping/
+  is_hidden: true
+  label: 查询apm应用es映射
+  label_en: query apm es mapping
+  name: query_apm_es_mapping
+  path: /v2/monitor_v3/query_apm_es_mapping/
+  method: POST
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
   dest_path: /apm_api/v1/application/query_trace_list/
   is_hidden: true
   label: 查询trace列表

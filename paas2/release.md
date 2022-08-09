@@ -1,5 +1,9 @@
 Release Log
 ===============================
+# 2.14.20
+    - update: esb update monitor_v3, bk_log, itsm, gsekit confapis
+    - update: esb remove get_batch_users_platform_role.py, get_batch_user_platform_role.py
+
 # 2.14.19
     - update: esb update monitor_v3, bk_log, iam confapis
 
