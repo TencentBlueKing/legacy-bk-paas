@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.12.55
+    - update: esb update monitor_v3, bk_log, itsm, gsekit confapis
+
 # 2.12.54
     - update: esb update monitor_v3, bk_log, iam confapis
 
