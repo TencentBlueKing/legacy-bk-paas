@@ -228,9 +228,6 @@ config = {
                             "is_deprecated": True,
                         },
                     ),
-                    # ('/v2/bk_login/get_batch_users_platform_role/', {
-                    #     'comp_codename': 'generic.v2.bk_login.get_batch_users_platform_role',
-                    # }),
                     ("/v2/bk_login/get_user/", {"comp_codename": "generic.v2.bk_login.get_user"}),
                     (
                         "/v2/bk_login/is_login/",
@@ -282,11 +279,6 @@ config = {
                             "is_deprecated": True,
                         },
                     ),
-                    # ('/bk_login/get_batch_user_platform_role/', {
-                    #     'comp_codename': 'generic.bk_login.get_batch_user_platform_role',
-                    #     'request_validators': [AppAuthValidator()],
-                    #     'is_deprecated': True,
-                    # }),
                     (
                         "/bk_login/is_login/",
                         {
