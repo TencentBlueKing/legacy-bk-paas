@@ -42,7 +42,6 @@ def load_data(apps, schema_editor):
                 is_platform=True,
                 is_default=True,
                 external_url="http://%s" % settings.HOST_CC,
-                open_mode="new_tab",
             ),
             App(
                 name="作业平台",
@@ -59,7 +58,6 @@ def load_data(apps, schema_editor):
                 is_platform=True,
                 is_default=True,
                 external_url="http://%s" % settings.HOST_JOB,
-                open_mode="new_tab",
             ),
         ]
     )
