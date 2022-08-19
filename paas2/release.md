@@ -1,5 +1,9 @@
 Release Log
 ===============================
+# 2.14.22
+    - update: bk_cmdb/bk_job默认new tab打开
+    - update: 桌面用户默认壁纸设置为拉伸
+
 # 2.14.21
     - add: console desktop django command
 
