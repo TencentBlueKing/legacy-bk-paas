@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.24
+    - update: esb update monitor_v3, data confapis
+
 # 2.14.23
     - bugfix: bk_cmdb/bk_job默认new tab打开导致migration失败
 
