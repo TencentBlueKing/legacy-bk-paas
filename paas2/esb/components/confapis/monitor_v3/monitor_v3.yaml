@@ -1581,6 +1581,16 @@
   method: POST
 - api_type: query
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /apm_api/v1/topo/query_remote_service_relation/
+  is_hidden: true
+  label: 查询远程服务接口调用关系
+  label_en: query apm remote service relation
+  name: query_apm_remote_service_relation
+  path: /v2/monitor_v3/query_remote_service_relation/
+  method: POST
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: GET
   dest_path: /apm_api/v1/topo/query_topo_node/
   is_hidden: true
@@ -1718,6 +1728,17 @@
 - api_type: query
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST
+  dest_path: /apm_api/v1/application/query_host_instance/
+  is_hidden: true
+  label: 查询apm主机实例
+  label_en: query apm host instance
+  name: query_apm_host_instance
+  path: /v2/monitor_v3/query_host_instance/
+  method: POST
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
   dest_path: /apm_api/v1/application/query_es_mapping/
   is_hidden: true
   label: 查询apm应用es映射
@@ -1812,6 +1833,17 @@
   label_en: query app by host instance
   name: query_app_by_host_instance
   path: /v2/monitor_v3/query_app_by_host_instance/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /apm_api/v1/application/query_log_relation_by_index_set_id/
+  is_hidden: true
+  label: 根据索引集id获取服务关联
+  label_en: query log relation by index set id
+  name: query_log_relation_by_index_set_id
+  path: /v2/monitor_v3/query_log_relation/
   method: POST
 
 - api_type: operate
