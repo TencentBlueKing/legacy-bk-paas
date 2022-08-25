@@ -644,6 +644,20 @@ config = {
                             },
                         },
                     ),
+                    (
+                        "/data/v3/aiops/serving/processing/{result_table_name}/execute/",
+                        {
+                            "comp_codename": "generic.data.datav3_component",
+                            "method": "POST",
+                            "request_validators": [AppAuthValidator()],
+                            "is_hidden": True,
+                            "comp_conf": {
+                                "name": "v3_aiops_api_serving_execute",
+                                "dest_path": "/v3/aiops/serving/processing/{result_table_name}/execute/",
+                                "dest_http_method": "POST",
+                            },
+                        },
+                    ),
 
                 ],
             },

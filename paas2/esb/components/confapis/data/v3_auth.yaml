@@ -16,6 +16,24 @@
   dest_http_method: GET
   is_hidden: true
 
+- path: /data/v3/auth/projects/{project_id}/data/check/
+  name: v3_auth_projects__project_id__data_check_post
+  label: 检查项目是否有结果表权限
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/projects/{project_id}/data/check/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/auth/projects/{project_id}/data/add/
+  name: v3_auth_add_project_data
+  label: 添加项目数据
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/projects/{project_id}/data/add/
+  dest_http_method: POST
+  is_hidden: true
+
 - path: /data/v3/auth/projects/{project_id}/role_users/
   name: v3_auth_projects__project_id__role_users_get
   label: 列举项目相关用户
@@ -85,6 +103,15 @@
   method: POST
   comp_codename: generic.data.datav3_component
   dest_path: /v3/auth/tickets/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/auth/tickets_v2/
+  name: v3_auth_tickets_v2_post
+  label: 新版创建单据
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/tickets_v2/
   dest_http_method: POST
   is_hidden: true
 
@@ -331,7 +358,6 @@
   dest_http_method: GET
   is_hidden: true
 
-
 - path: /data/v3/auth/tdw/user/get_clusters_by_user/
   name: v3_auth_tdw_user_get_clusters_by_user_get
   label: 用户有权限的集群
@@ -340,7 +366,6 @@
   dest_path: /v3/auth/tdw/user/get_clusters_by_user/
   dest_http_method: GET
   is_hidden: true
-
 
 - path: /data/v3/auth/tdw/user/get_db_with_create_priv/
   name: v3_auth_tdw_user_get_db_with_create_priv_get
@@ -351,7 +376,6 @@
   dest_http_method: GET
   is_hidden: true
 
-
 - path: /data/v3/auth/users/operation_configs/
   name: v3_auth_users_operation_configs_get
   label: 返回用户有权限的功能开关
@@ -360,7 +384,6 @@
   dest_path: /v3/auth/users/operation_configs/
   dest_http_method: GET
   is_hidden: true
-
 
 - path: /data/v3/auth/roles/{role_id}/users/
   name: v3_auth_roles__role_id__users_get
@@ -371,7 +394,6 @@
   dest_http_method: GET
   is_hidden: true
 
-
 - path: /data/v3/auth/users/batch_check/
   name: v3_auth_users_batch_check_post
   label: 批量校验用户与对象权限
@@ -380,7 +402,6 @@
   dest_path: /v3/auth/users/batch_check/
   dest_http_method: POST
   is_hidden: true
-
 
 - path: /data/v3/auth/tdw/user/check_table_perm/
   name: v3_auth_tdw_user_check_table_perm_post
@@ -391,7 +412,6 @@
   dest_http_method: POST
   is_hidden: true
 
-
 - path: /data/v3/auth/tokens/{id}/renewal/
   name: v3_auth_tokens__id__renewal_post
   label: Token 续期
@@ -400,7 +420,6 @@
   dest_path: /v3/auth/tokens/{id}/renewal/
   dest_http_method: POST
   is_hidden: true
-
 
 - path: /data/v3/auth/users/handover/
   name: v3_auth_users_handover_post
@@ -411,7 +430,6 @@
   dest_http_method: POST
   is_hidden: true
 
-
 - path: /data/v3/auth/sensitivity/
   name: v3_auth_sensitivity_get
   label: 敏感度配置
@@ -420,7 +438,6 @@
   dest_path: /v3/auth/sensitivity/
   dest_http_method: GET
   is_hidden: true
-  
 
 - path: /data/v3/auth/sensitivity/update_dataset/
   name: v3_auth_sensitivity_update_dataset_post
@@ -430,7 +447,6 @@
   dest_path: /v3/auth/sensitivity/update_dataset/
   dest_http_method: POST
   is_hidden: true
-
 
 - path: /data/v3/auth/sensitivity/retrieve_dataset/
   name: v3_auth_sensitivity_retrieve_dataset_get
