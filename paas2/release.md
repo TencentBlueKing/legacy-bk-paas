@@ -1,5 +1,9 @@
 Release Log
 ===============================
+# 2.14.25
+    - 支持smart应用 app.yml设置desktop.open_mode=new_tab
+    - 登录开启表单密码加密
+
 # 2.14.24
     - update: esb update monitor_v3, data confapis
 
