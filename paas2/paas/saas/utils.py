@@ -34,6 +34,7 @@ from common.constants import (
     DESKTOP_DEFAULT_APP_HEIGHT,
     DESKTOP_DEFAULT_APP_IS_MAX,
     DESKTOP_DEFAULT_APP_IS_DISPLAY,
+    DESKTOP_DEFAULT_APP_OPEN_MODE,
 )
 from common.exceptions import PaaSErrorCodes
 from engine.api import register_app
@@ -661,6 +662,7 @@ def _save_app_info(code, name, is_create=True, **app_info):  # noqa
         app.height = desktop.get("height", DESKTOP_DEFAULT_APP_HEIGHT)
         app.is_max = desktop.get("is_max", DESKTOP_DEFAULT_APP_IS_MAX)
         app.is_display = desktop.get("is_display", DESKTOP_DEFAULT_APP_IS_DISPLAY)
+        app.open_mode = desktop.get("open_mode", DESKTOP_DEFAULT_APP_OPEN_MODE)
 
         if app_info.get("name_en"):
             app.name_en = app_info.get("name_en")
