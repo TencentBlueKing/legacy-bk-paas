@@ -16,6 +16,8 @@ from __future__ import print_function
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import sys
+import base64
+
 from django.utils.functional import SimpleLazyObject
 
 try:
@@ -341,3 +343,19 @@ LOGGING = {
         },
     },
 }
+
+ENABLE_PASSWORD_RSA_ENCRYPTED = os.getenv("BK_ENABLE_PASSWORD_RSA_ENCRYPTED", "False").lower() == 'true'
+
+PASSWORD_RSA_PUBLIC_KEY = os.getenv("BK_PASSWORD_RSA_PUBLIC_KEY", "")
+PASSWORD_RSA_PRIVATE_KEY = os.getenv("BK_PASSWORD_RSA_PRIVATE_KEY", "")
+
+if ENABLE_PASSWORD_RSA_ENCRYPTED:
+    print("password rsa encrypted is enabled, will do something")
+    try:
+        PASSWORD_RSA_PUBLIC_KEY = base64.b64decode(PASSWORD_RSA_PUBLIC_KEY).decode()
+        PASSWORD_RSA_PRIVATE_KEY = base64.b64decode(PASSWORD_RSA_PRIVATE_KEY).decode()
+    except Exception as e:
+        message = "password rsa encrypted is enabled, but b64decode fail, PASSWORD_RSA_PUBLIC_KEY=%s, " \
+                  "PASSWORD_RSA_PRIVATE_KEY=%s".format(PASSWORD_RSA_PUBLIC_KEY, PASSWORD_RSA_PRIVATE_KEY)
+        print(message)
+        raise (e)
