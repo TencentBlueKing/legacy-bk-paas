@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.26
+    - update: esb update cc/bk_log confapi
+
 # 2.14.25
     - 支持smart应用 app.yml设置desktop.open_mode=new_tab
     - 登录开启表单密码加密
