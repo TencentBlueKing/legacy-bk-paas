@@ -40,6 +40,7 @@ class BkLogComponent(ConfComponent):
             path=request_info["path"],
             params=request_info["params"],
             data=request_info["data"],
+            response_encoding="utf-8",
             with_jwt_header=True,
             headers=headers,
             allow_non_200=True,
