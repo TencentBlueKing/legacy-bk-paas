@@ -72,7 +72,7 @@
     "bk_app_secret":"xxx",
     "bk_username":"xxx",
     "bk_token":"xxx",
-    "biz_set_filter":{
+    "bk_biz_set_filter":{
         "condition":"AND",
         "rules":[
             {
