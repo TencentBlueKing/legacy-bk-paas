@@ -59,6 +59,9 @@
                         <div class="is-danger-tip">
                             {% if error_message %}
                             <i class="bk-icon icon-exclamation-circle-shape"></i><span>{{ error_message }}</span>
+                                {% if token_set_password_url %}
+                                ,<a href="{{ token_set_password_url }}" target="_blank">{% trans '请修改密码' %}</a>
+                                {% endif %}
                             {% endif %}
                         </div>
                         <div class="form-login">
