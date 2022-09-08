@@ -52,6 +52,24 @@
   dest_http_method: PUT
   is_hidden: true
 
+- path: /data/v3/auth/projects/{project_id}/model_tickets/
+  name: v3_auth_projects__project_id__model_tickets
+  label: 获取项目已申请的模型单据信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/projects/{project_id}/model_tickets/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/auth/projects/{project_id}/model/check/
+  name: v3_auth_projects__project_id__model_check
+  label: 检查项目是否有模型权限
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/projects/{project_id}/model/check/
+  dest_http_method: POST
+  is_hidden: true
+
 - path: /data/v3/auth/raw_data/{raw_data_id}/cluster_group/
   name: v3_auth_raw_data__raw_data_id__cluster_group_get
   label: 列举 raw_data 有权限的集群组
