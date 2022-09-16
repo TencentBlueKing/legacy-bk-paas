@@ -1,6 +1,6 @@
 django==1.8.11
 dj-static==0.0.6
-mako==1.0.4
+mako==1.2.2
 pycrypto==2.6.1
 requests==2.21.0
 gunicorn==19.9.0
