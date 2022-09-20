@@ -1400,7 +1400,6 @@
   comp_codename: generic.data.datav3_component
   dest_path: /v3/aiops/serving/processing/{result_table_name}/execute/
   dest_http_method: POST
-  is_hidden: true
 
 - path: /data/v3/aiops/scene_service/lease/take/
   name: v3_aiops_scene_service_lease_take
