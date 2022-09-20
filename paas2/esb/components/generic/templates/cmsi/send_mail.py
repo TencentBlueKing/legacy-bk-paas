@@ -131,7 +131,13 @@ class SendMail(Component, SetupConfMixin):
         if self.dest_url:
             # 如果配置了第三方接口地址，则请求第三方接口实现邮件发送
             # 注意：如果通过第三方接口，则第三方接口协议需兼容组件参数
-            result = self.outgoing.http_client.request_by_url("POST", self.dest_url, data=json.dumps(data))
+            result = self.outgoing.http_client.request_by_url(
+                "POST",
+                self.dest_url,
+                data=json.dumps(data),
+                verify=False,
+                headers={"Content-Type": "application/json"},
+            )
 
             if result["result"] and data.get("_extra_user_error_msg"):
                 result = {

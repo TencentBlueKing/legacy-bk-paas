@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.28
+    - update: esb update cc, bk_data confapis
+
 # 2.14.27
     - update: esb update bk_data confapis
 

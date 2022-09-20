@@ -23,7 +23,7 @@ class Sleep(Component):
     api_type = API_TYPE_Q
 
     def handle(self):
-        sleep = self.request.kwargs.get("sleep", 1000)
+        sleep = self.request.kwargs.get("sleep", 2000)
         result = self.outgoing.http_client.request(
             self.request.wsgi_request.method,
             host=os.environ.get("ESB_ECHO_HOST"),

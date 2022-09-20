@@ -12,7 +12,6 @@ specific language governing permissions and limitations under the License.
 
 
 from .default import *  # noqa: F403,F401
-from .default import env
 
 # Generic Django project settings
 DEBUG = env.bool("DEBUG", False)
@@ -21,11 +20,11 @@ DEBUG = env.bool("DEBUG", False)
 DATABASES = {
     "default": {
         "ENGINE": env.str("BK_PAAS_ESB_DATABASE_ENGINE", "django.db.backends.mysql"),
-        "NAME": env.str("BK_PAAS_ESB_DATABASE_NAME"),
-        "USER": env.str("BK_PAAS_ESB_DATABASE_USER"),
-        "PASSWORD": env.str("BK_PAAS_ESB_DATABASE_PASSWORD"),
-        "HOST": env.str("BK_PAAS_ESB_DATABASE_HOST"),
-        "PORT": env.int("BK_PAAS_ESB_DATABASE_PORT"),
+        "NAME": "tc_open_paas",
+        "USER": "apigw-dev",
+        "PASSWORD": "Dev#igskynX64tre",
+        "HOST": "127.0.0.1",
+        "PORT": 3306,
         "TEST_CHARSET": env.str("DATABASE_TEST_CHARSET", "utf8"),
         "TEST_COLLATION": env.str(
             "DATABASE_TEST_COLLATION",
@@ -34,20 +33,15 @@ DATABASES = {
     }
 }
 
-SECRET_KEY = env.str("BK_PAAS_ESB_SECRET_KEY")
+SECRET_KEY = "@3dqbfh23ihs)*ffdck21g(f)+)95qnj4i3n2m-yhafl#&@#hx"
 
-# esb app_token
-ESB_TOKEN = env.str("BK_PAAS_ESB_TOKEN")
-
-# esb ssl root dir
-SSL_ROOT_DIR = env.str("BK_PAAS_ESB_CERT_PATH")
-
-# paas host
-PAAS_HOST = env.str("BK_PAAS_URL", "")
+ESB_TOKEN = ""
+PAAS_HOST = ""
+SSL_ROOT_DIR = ""
 
 # Third party system host
 # host for bk login
-HOST_BK_LOGIN = env.str("BK_PAAS_LOGIN_URL", "")
+HOST_BK_LOGIN = "http://127.0.0.1:17329"
 
 # host for cc
 HOST_CC = env.str("BK_CMDB_URL", "")
@@ -98,7 +92,6 @@ DATAV3_MODELAPI_HOST = env.str("BK_DATA_V3_MODELAPI_URL", "")
 DATAV3_DATACUBEAPI_HOST = env.str("BK_DATA_V3_DATACUBEAPI_URL", "")
 DATAV3_ALGORITHMAPI_HOST = env.str("BK_DATA_V3_ALGORITHMAPI_URL", "")
 DATAV3_RESOURCECENTERAPI_HOST = env.str("BK_DATA_V3_RESOURCECENTERAPI_URL", "")
-DATAV3_AIOPSAPI_HOST = env.str("BK_DATA_V3_AIOPSAPI_URL", "")
 
 # host for fta,  default 80 for http/8443 for https
 HOST_FTA = env.str("BK_FTA_URL", "")
@@ -106,7 +99,7 @@ HOST_FTA = env.str("BK_FTA_URL", "")
 # Redis config
 USE_SENTINEL = env.bool("BK_PAAS_ESB_REDIS_SENTINEL_MODE", False)
 REDIS_HOST = env.str("BK_PAAS_ESB_REDIS_HOST", "")
-REDIS_PORT = env.int("BK_PAAS_ESB_REDIS_PORT")
+REDIS_PORT = env.int("BK_PAAS_ESB_REDIS_PORT", 6379)
 REDIS_PASSWORD = env.str("BK_PAAS_ESB_REDIS_PASSWORD", "")
 REDIS_MASTER_NAME = env.str("BK_PAAS_ESB_REDIS_MASTER_NAME", "")
 REDIS_DB = env.int("BK_PAAS_ESB_REDIS_DATABASE", 0)
