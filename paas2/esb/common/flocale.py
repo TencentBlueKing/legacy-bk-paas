@@ -114,8 +114,8 @@ _BK_SYSTEMS = {
     },
     "DATA": {
         "name": "DATA",
-        "label": _(u"数据平台"),
-        "remark": _(u"数据平台"),
+        "label": _(u"基础计算平台"),
+        "remark": _(u"基础计算平台"),
     },
     "BSCP": {
         "name": "BSCP",
