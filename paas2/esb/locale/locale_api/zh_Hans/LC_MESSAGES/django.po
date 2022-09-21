@@ -99,8 +99,8 @@ msgid "文档中心"
 msgstr "文档中心"
 
 #: common/flocale.py:101 common/flocale.py:102
-msgid "数据平台"
-msgstr "数据平台"
+msgid "基础计算平台"
+msgstr "基础计算平台"
 
 #: common/flocale.py:106 common/flocale.py:107
 msgid "蓝鲸基础服务配置平台"

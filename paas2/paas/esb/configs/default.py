@@ -153,8 +153,8 @@ BK_SYSTEMS = {
     },
     "DATA": {
         "name": "DATA",
-        "label": ugettext("数据平台"),
-        "remark": ugettext("数据平台"),
+        "label": ugettext("基础计算平台"),
+        "remark": ugettext("基础计算平台"),
     },
     "BSCP": {
         "name": "BSCP",
