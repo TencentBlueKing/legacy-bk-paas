@@ -136,6 +136,12 @@ def _save_app(request):  # noqa
         logger.error(error_msg)
         return HttpResponseRedirect(error_url.format(error=error_msg))
 
+    try:
+        from components.bkauth import create_app
+        create_app(code, token, name)
+    except Exception:
+        logger.exception("create app sync info to bkauth failed")
+
     # 保存应用信息到数据库
     try:
         with transaction.atomic():
