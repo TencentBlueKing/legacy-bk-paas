@@ -18,10 +18,10 @@ from .http import http_post
 
 HOST_BKAUTH = ""
 try:
-    HOST_BKAUTH =  settings.HOST_BKAUTH
-    if not HOST_BKAUTH.startswith("http"):
-        HOST_BKAUTH = "http://" + HOST_BKAUTH
+    HOST_BKAUTH = settings.HOST_BKAUTH
     print("got bkauth host: {}".format(HOST_BKAUTH))
+    if HOST_BKAUTH == "__BK_AUTH_PRIVATE_ADDR__":
+        HOST_BKAUTH = ""
 except:
     pass
 
@@ -34,7 +34,7 @@ def _call_bkauth_api(http_func, url_path, data, timeout=30):
         "X-Bk-App-Secret": settings.ESB_TOKEN,
     }
 
-    url = "{}{}".format(HOST_BKAUTH, url_path)
+    url = "http://{}{}".format(HOST_BKAUTH, url_path)
 
     ok, resp_data = http_func(url, data, headers=headers)
     if not ok:
@@ -73,7 +73,7 @@ def _call_bkauth_api(http_func, url_path, data, timeout=30):
 
 def create_app(app_code, app_secret, app_name):
     if not HOST_BKAUTH:
-        logger.info("bkauth host not set, skip create app sync data to bkauth")
+        logger.info("bkauth host not set, skip create app sync data to bkauth, app_code=%s", app_code)
         return
 
     path = "/api/v1/apps"
