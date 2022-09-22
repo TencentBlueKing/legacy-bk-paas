@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.30
+    - add: sync app accesskeys to bkauth
+
 # 2.14.29
     - update: esb show data docs
 
