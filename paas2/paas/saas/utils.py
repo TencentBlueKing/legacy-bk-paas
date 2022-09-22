@@ -625,6 +625,13 @@ def _save_app_info(code, name, is_create=True, **app_info):  # noqa
             )
             return False, error_msg, None
 
+        # 同步信息到 bkauth
+        try:
+            from components.bkauth import create_app
+            create_app(code, token, name)
+        except Exception:
+            logger.exception("create app sync info to bkauth failed")
+
     with transaction.atomic():
         # 创建应用
         if is_create:
