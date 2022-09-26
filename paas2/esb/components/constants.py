@@ -163,12 +163,12 @@ BK_SYSTEMS = {
         "remark": _(u"文档中心"),
         "doc_category": SystemDocCategoryEnum.DEFAULT.value,
     },
-    # "DATA": {
-    #     "name": "DATA",
-    #     "label": _(u"数据平台"),
-    #     "remark": _(u"数据平台"),
-    #     "doc_category": SystemDocCategoryEnum.MANAGEMENT_TOOLS.value,
-    # },
+    "DATA": {
+        "name": "DATA",
+        "label": _(u"基础计算平台"),
+        "remark": _(u"基础计算平台"),
+        "doc_category": SystemDocCategoryEnum.MANAGEMENT_TOOLS.value,
+    },
     "BSCP": {
         "name": "BSCP",
         "label": _(u"蓝鲸基础服务配置平台"),

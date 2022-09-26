@@ -1,5 +1,17 @@
 Release Log
 ===============================
+# 2.14.30
+    - add: sync app accesskeys to bkauth
+
+# 2.14.29
+    - update: esb show data docs
+
+# 2.14.28
+    - update: esb update cc, bk_data confapis
+
+# 2.14.27
+    - update: esb update bk_data confapis
+
 # 2.14.26
     - update: esb update cc/bk_log confapi
 
