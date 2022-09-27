@@ -1431,7 +1431,7 @@
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST
   dest_path: /api/v4/action_config/save/
-  is_hidden: flase
+  is_hidden: false
   label: 保存处理套餐
   label_en: save_action_config
   name: save_action_config
@@ -1442,7 +1442,7 @@
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: GET
   dest_path: /api/v4/action_config/detail/
-  is_hidden: flase
+  is_hidden: false
   label: 获取单个处理套餐
   label_en: get_action_config
   name: get_action_config
@@ -1453,7 +1453,7 @@
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: GET
   dest_path: /api/v4/action_config/search/
-  is_hidden: flase
+  is_hidden: false
   label: 批量获取处理套餐
   label_en: search_action_config
   name: search_action_config
@@ -1464,7 +1464,7 @@
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST
   dest_path: /api/v4/action_config/edit/
-  is_hidden: flase
+  is_hidden: false
   label: 编辑处理套餐
   label_en: edit_action_config
   name: edit_action_config
@@ -1475,7 +1475,7 @@
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST
   dest_path: /api/v4/action_config/delete/
-  is_hidden: flase
+  is_hidden: false
   label: 删除处理套餐
   label_en: delete_action_config
   name: delete_action_config
@@ -1486,7 +1486,7 @@
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST
   dest_path: /api/v4/search_action/search_action/
-  is_hidden: flase
+  is_hidden: false
   label: 查询处理记录
   label_en: search_action
   name: search_action
@@ -1497,7 +1497,7 @@
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST
   dest_path: /api/v4/search_alert/search_alert/
-  is_hidden: flase
+  is_hidden: false
   label: 查询告警记录
   label_en: search_alert
   name: search_alert
@@ -1589,6 +1589,16 @@
   name: query_apm_remote_service_relation
   path: /v2/monitor_v3/query_remote_service_relation/
   method: POST
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /apm_api/v1/application/query_metric_dimensions/
+  is_hidden: true
+  label: 查询指标维度
+  label_en: query metric dimensions
+  name: query_metric_dimensions
+  path: /v2/monitor_v3/query_metric_dimensions/
+  method: GET
 - api_type: query
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: GET

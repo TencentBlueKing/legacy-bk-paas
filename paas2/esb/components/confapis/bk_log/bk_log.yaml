@@ -151,7 +151,7 @@
   method: POST
   api_type: query
   comp_codename: generic.v2.bk_log.bk_log_component
-  dest_path: /api/v1/search/index_set/
+  dest_path: /api/v1/index_set/
   dest_http_method: POST
   is_hidden: True
 
@@ -162,7 +162,7 @@
   method: PUT
   api_type: query
   comp_codename: generic.v2.bk_log.bk_log_component
-  dest_path: /api/v1/search/index_set/
+  dest_path: /api/v1/index_set/
   dest_http_method: PUT
   is_hidden: True
 
@@ -173,7 +173,7 @@
   method: POST
   api_type: query
   comp_codename: generic.v2.bk_log.bk_log_component
-  dest_path: /api/v1/search/index_set/replace/
+  dest_path: /api/v1/index_set/replace/
   dest_http_method: POST
   is_hidden: True
 
