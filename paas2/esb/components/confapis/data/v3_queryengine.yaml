@@ -15,3 +15,12 @@
   dest_path: /v3/queryengine/query_sync/
   dest_http_method: POST
   is_hidden: true
+
+- path: /data/v3/queryengine/query_sync/
+  name: v3_queryengine_query_sync_post2
+  label: 同步查询数据
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/queryengine/query_sync/
+  dest_http_method: POST
+  is_hidden: true
