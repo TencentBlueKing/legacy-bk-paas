@@ -484,15 +484,6 @@
   dest_http_method: GET
   is_hidden: true
 
-- path: /data/v3/resourcecenter/storage_metrics/collect/
-  name: v3_resourcecenter_storage_metrics_collect_get
-  label: 存储指标采集
-  method: GET
-  comp_codename: generic.data.datav3_component
-  dest_path: /v3/resourcecenter/storage_metrics/collect/
-  dest_http_method: GET
-  is_hidden: true
-
 - path: /data/v3/resourcecenter/storage_metrics/{resource_group_id}/disk_history/
   name: v3_resourcecenter_storage_metrics__resource_group_id__disk_history_get
   label: 存储容量指标
@@ -640,28 +631,28 @@
 - path: /data/v3/resourcecenter/resource_sets/used_by_me/
   name: v3_resourcecener_get_resource_set_used_by_me
   label: 我的项目已授权的资源列表
-  method:
+  method: GET
   comp_codename: generic.data.datav3_component
   dest_path: /v3/resourcecenter/resource_sets/used_by_me/
-  dest_http_method:
+  dest_http_method: GET
   is_hidden: true
 
 - path: /data/v3/resourcecenter/resource_sets/managed_by_me/
   name: v3_resourcecener_get_resource_set_managed_by_me
   label: 我管理的资源列表
-  method:
+  method: GET
   comp_codename: generic.data.datav3_component
   dest_path: /v3/resourcecenter/resource_sets/managed_by_me/
-  dest_http_method:
+  dest_http_method: GET
   is_hidden: true
 
 - path: /data/v3/resourcecenter/resource_sets/applicable/
   name: v3_resourcecener_get_resource_set_applicable
   label: 项目可申请的资源列表
-  method:
+  method: GET
   comp_codename: generic.data.datav3_component
   dest_path: /v3/resourcecenter/resource_sets/applicable/
-  dest_http_method:
+  dest_http_method: GET
   is_hidden: true
 
 - path: /data/v3/resourcecenter/resource_sets/register_category/
