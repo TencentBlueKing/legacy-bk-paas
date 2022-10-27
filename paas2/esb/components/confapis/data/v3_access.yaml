@@ -339,3 +339,12 @@
   dest_path: /v3/access/rawdata/{data_id}/tags/
   dest_http_method: POST
   is_hidden: true
+
+- path: /data/v3/access/collector/{data_scenario}/clusters/
+  name: v3_access_collector__data_scenario__clusters_get
+  label: 获取场景集群信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/collector/{data_scenario}/clusters/
+  dest_http_method: GET
+  is_hidden: true
