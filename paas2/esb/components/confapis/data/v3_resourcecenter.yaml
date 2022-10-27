@@ -484,15 +484,6 @@
   dest_http_method: GET
   is_hidden: true
 
-- path: /data/v3/resourcecenter/storage_metrics/collect/
-  name: v3_resourcecenter_storage_metrics_collect_get
-  label: 存储指标采集
-  method: GET
-  comp_codename: generic.data.datav3_component
-  dest_path: /v3/resourcecenter/storage_metrics/collect/
-  dest_http_method: GET
-  is_hidden: true
-
 - path: /data/v3/resourcecenter/storage_metrics/{resource_group_id}/disk_history/
   name: v3_resourcecenter_storage_metrics__resource_group_id__disk_history_get
   label: 存储容量指标
@@ -529,3 +520,407 @@
   dest_http_method: GET
   is_hidden: true
 
+- path: /data/v3/resourcecenter/project_auth/my_project_resource_sets/
+  name: v3_resourcecener_list_my_project_resource_sets_get
+  label: 我参与的项目绑定的资源
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/project_auth/my_project_resource_sets/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/project_auth/user_projects/
+  name: v3_resourcecener_list_user_project_get
+  label: 获取用户参与的项目列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/project_auth/user_projects/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/project_auth/{project_id}/auth_resource_sets/
+  name: v3_resourcecener_auth_resource_set_to_project
+  label: 项目申请资源的使用权限
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/project_auth/{project_id}/auth_resource_sets/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/project_auth/{project_id}/resource_sets/
+  name: v3_resourcecener_list_project_authed_project
+  label: 查询项目被授权的资源
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/project_auth/{project_id}/resource_sets/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/
+  name: v3_resourcecener_resource_set_list
+  label: 资源列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/
+  name: v3_resourcecenter_create_resource_set
+  label: 创建资源
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/apply_manager/
+  name: v3_resourcecener_apply_resource_set_manager_post
+  label: 申请成为资源的管理员
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/apply_manager/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/apply_manager_approve_result/
+  name: v3_resourcecener_apply_resource_set_manager_approve_result_post
+  label: 申请成为资源的管理员审批结果
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/apply_manager_approve_result/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/available/
+  name: v3_resourcecenter_list_available_resource_set
+  label: 根据项目、业务或接入的dataId获取已授权的资源
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/available/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/get_auth_ips/
+  name: v3_resourcecenter_list_auth_ips_get
+  label: 获取业务托管资源的需要授权的IP列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/get_auth_ips/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/list_basic_info/
+  name: v3_resourcecenter_list_resource_set_basic_info
+  label: 获取资源的基本信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/list_basic_info/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/list_by_cluster_group/
+  name: v3_resourcecenter_list_resource_set_by_cluster_group
+  label: 根据cluster_group获取对应的资源信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/list_by_cluster_group/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/used_by_me/
+  name: v3_resourcecener_get_resource_set_used_by_me
+  label: 我的项目已授权的资源列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/used_by_me/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/managed_by_me/
+  name: v3_resourcecener_get_resource_set_managed_by_me
+  label: 我管理的资源列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/managed_by_me/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/applicable/
+  name: v3_resourcecener_get_resource_set_applicable
+  label: 项目可申请的资源列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/applicable/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/register_category/
+  name: v3_resourcecener_create_resource_set_category_post
+  label: 新增资源支持的主机类型
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/register_category/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/supported_versions/
+  name: v3_resourcecenter_get_supported_versions
+  label: 获取业务托管资源支持的版本信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/supported_versions/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/validate_connections/
+  name: v3_resourcecener_validate_connection_post
+  label: 校验资源的连接的连通性
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/validate_connections/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/{resource_set_id}/
+  name: v3_resourcecenter_delete_resource_set_delete
+  label: 删除资源
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/{resource_set_id}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/{resource_set_id}/
+  name: v3_resourcecener_resource_set_detail
+  label: 获取资源详情
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/{resource_set_id}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/{resource_set_id}/
+  name: v3_resourcecenter_update_resource_set
+  label: 更新资源
+  method: PATCH
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/{resource_set_id}/
+  dest_http_method: PATCH
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/{resource_set_id}/approve_result/
+  name: v3_resourcecenter_approve_resource_set
+  label: 资源申请审批结果
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/{resource_set_id}/approve_result/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/{resource_set_id}/cluster_groups/
+  name: v3_resourcecener_resource_set_cluster_groups_get
+  label: 获取资源对应的cluster_group
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/{resource_set_id}/cluster_groups/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/{resource_set_id}/connection_status/
+  name: v3_resourcecener_resource_set_connection_status_get
+  label: 获取用户托管资源的连接状态
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/{resource_set_id}/connection_status/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/{resource_set_id}/latest_flow_operations/
+  name: v3_resourcecenter_get_resource_set_latest_flow_operations_get
+  label: 获取该资源最近一次的flow操作
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/{resource_set_id}/latest_flow_operations/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/{resource_set_id}/register_clusters/
+  name: v3_resourcecenter_register_cluster_to_resource_set
+  label: 注册集群到资源
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/{resource_set_id}/register_clusters/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/{resource_set_id}/related_tasks/
+  name: v3_resourcecener_get_resource_set_related_tasks
+  label: 获取资源关联的任务
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/{resource_set_id}/related_tasks/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/{resource_set_id}/running_operations/
+  name: v3_resourcecenter_get_resource_set_running_operations_get
+  label: 获取资源正在运行的后台操作
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/{resource_set_id}/running_operations/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/{resource_set_id}/task_list/
+  name: v3_resourcecenter_resource_set_task_list
+  label: 获取使用过该资源的Flow和RT任务列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/{resource_set_id}/task_list/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_set_metrics/{resource_set_id}/averages/
+  name: v3_resourcecener_get_resource_set_history_metric_average_get
+  label: 获取资源的历史使用率均值
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_set_metrics/{resource_set_id}/averages/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_set_metrics/{resource_set_id}/cpu_history/
+  name: v3_resourcecener_get_resource_set_history_metric_average_get
+  label: 获取资源CPU使用历史情况
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_set_metrics/{resource_set_id}/cpu_history/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_set_metrics/{resource_set_id}/data_cnt_history/
+  name: v3_resourcecener_get_resource_set_storage_data_cnt_history
+  label: 获取存储资源的入库数据量历史
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_set_metrics/{resource_set_id}/data_cnt_history/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_set_metrics/{resource_set_id}/data_delay_history/
+  name: v3_resourcecener_get_resource_set_storage_data_delay_history
+  label: 获取存储资源的数据入库延迟历史
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_set_metrics/{resource_set_id}/data_delay_history/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_set_metrics/{resource_set_id}/memory_history/
+  name: v3_resourcecener_get_resource_set_memory_history
+  label: 获取资源内存使用历史情况
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_set_metrics/{resource_set_id}/memory_history/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_set_metrics/{resource_set_id}/network_history/
+  name: v3_resourcecener_get_resource_set_network_history
+  label: 获取资源关联的网络使用历史数据
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_set_metrics/{resource_set_id}/network_history/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_set_metrics/{resource_set_id}/storage_history/
+  name: v3_resourcecener_get_resource_set_storage_history
+  label: 获取资源存储使用历史情况
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_set_metrics/{resource_set_id}/storage_history/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_set_metrics/{resource_set_id}/task_count_history/
+  name: v3_resourcecener_get_resource_set_task_count_history
+  label: 获取资源关联的任务数量历史数据
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_set_metrics/{resource_set_id}/task_count_history/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_set_metrics/{resource_set_id}/task_metric_summary/
+  name: v3_resourcecener_get_task_metric_summary
+  label: 获取资源关联的Flow任务或RT的指标统计
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_set_metrics/{resource_set_id}/task_metric_summary/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_set_metrics/{resource_set_id}/task_metric_summary_filter/
+  name: v3_resourcecener_get_task_metric_summary_filter
+  label: 获取资源关联的Flow任务或RT的指标的筛选信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_set_metrics/{resource_set_id}/task_metric_summary_filter/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/schedule_metrics/collect/
+  name: v3_resourcecener_collect_schedule_metrics_get
+  label: 调度指标采集
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/schedule_metrics/collect/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/storage_metrics/collect/
+  name: v3_resourcecener_collect_storage_metrics_get
+  label: 存储指标采集
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/storage_metrics/collect/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/storage_metrics/result_tables/collect/
+  name: v3_resourcecener_collect_rt_storage_metrics_get
+  label: 存储集群中RT的存储指标采集
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/storage_metrics/result_tables/collect/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/task_count_metrics/collect/
+  name: v3_resourcecenter_collect_task_count_metrics_get
+  label: 资源绑定任务数指标采集
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/task_count_metrics/collect/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/tags/
+  name: v3_resourcecenter_get_resource_set_tags
+  label: 已有的资源tag
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/tags/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/resourcecenter/resource_sets/supported_categories/
+  name: v3_resourcecenter_list_supported_resource_set_categories
+  label: 支持的资源类型
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/resource_sets/supported_categories/
+  dest_http_method: GET
+  is_hidden: true

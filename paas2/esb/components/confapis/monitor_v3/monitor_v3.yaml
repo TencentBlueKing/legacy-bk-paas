@@ -247,6 +247,17 @@
   path: /v2/monitor_v3/metadata_query_event_group/
   method: GET
 
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/access_bk_data_by_result_table/
+  is_hidden: true
+  label: 将结果表接入到计算平台
+  label_en: access_bk_data_by_result_table
+  name: access_bk_data_by_result_table
+  path: /v2/monitor_v3/access_bk_data_by_result_table/
+  method: POST
+
 - api_type: query
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: GET
