@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.36
+    - update: esb update data, monitor_v3 confapis
+
 # 2.14.35
     - update: esb update data confapis
 
