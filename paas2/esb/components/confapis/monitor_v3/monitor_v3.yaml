@@ -1438,6 +1438,7 @@
   name: search_alert_by_event
   path: /v2/monitor_v3/search_alert_by_event/
   method: POST
+
 - api_type: operate
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST
@@ -1518,23 +1519,34 @@
 - api_type: operate
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST
-  dest_path: /apm_api/v1/application/create_application_simple/
-  is_hidden: false
-  label: 快速创建APM应用
-  label_en: null
-  name: apm_create_application
-  path: /v2/monitor_v3/apm/create_application/
-  method: POST
-
-- api_type: operate
-  comp_codename: generic.v2.monitor_v3.monitor_v3_component
-  dest_http_method: POST
   dest_path: /apm_api/v1/application/create_application/
   is_hidden: true
   label: 创建APM应用
   label_en: null
   name: create_apm_application
   path: /v2/monitor_v3/create_apm_application/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /apm_api/v1/application/delete_application/
+  is_hidden: true
+  label: 删除APM应用
+  label_en: null
+  name: delete_apm_application
+  path: /v2/monitor_v3/delete_apm_application/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /apm_api/v1/application/create_application_simple/
+  is_hidden: false
+  label: 快速创建APM应用
+  label_en: null
+  name: apm_create_application
+  path: /v2/monitor_v3/apm/create_application/
   method: POST
 
 - api_type: operate
@@ -1918,6 +1930,77 @@
   is_hidden: true
   label: BCS集群接入监控
   label_en: null
-  name: register_bcs_cluster
+  name: register_cluster_from_bcs
   path: /v2/monitor_v3/register_cluster/
+  method: POST
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v3/meta/list_space_types/
+  is_hidden: true
+  label: 查询空间类型列表
+  label_en: list space types
+  name: metadata_list_space_types
+  path: /v2/monitor_v3/metadata_list_space_types/
+  method: GET
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v3/meta/list_spaces/
+  is_hidden: true
+  label: 查询空间实例列表
+  label_en: list spaces
+  name: metadata_list_spaces
+  path: /v2/monitor_v3/metadata_list_spaces/
+  method: GET
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v3/meta/get_space_detail/
+  is_hidden: true
+  label: 查询空间实例详情
+  label_en: get space detail
+  name: metadata_get_space_detail
+  path: /v2/monitor_v3/metadata_get_space_detail/
+  method: GET
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v3/meta/list_sticky_spaces/
+  is_hidden: true
+  label: 查询置顶空间列表
+  label_en: list sticky spaces
+  name: metadata_list_sticky_spaces
+  path: /v2/monitor_v3/metadata_list_sticky_spaces/
+  method: GET
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/stick_space/
+  is_hidden: true
+  label: 取消置顶/置顶空间
+  label_en: stick space
+  name: metadata_stick_space
+  path: /v2/monitor_v3/metadata_stick_space/
+  method: POST
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v3/meta/get_clusters_by_space_uid/
+  is_hidden: true
+  label: 查询空间下的集群信息
+  label_en: get cluster by space uid
+  name: metadata_get_clusters_by_space_uid
+  path: /v2/monitor_v3/metadata_get_clusters_by_space_uid/
+  method: GET
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/create_space/
+  is_hidden: true
+  label: 创建空间
+  label_en: create space
+  name: metadata_create_space
+  path: /v2/monitor_v3/metadata_create_space/
   method: POST
