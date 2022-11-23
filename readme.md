@@ -38,10 +38,10 @@
 |模块列表 |PaaS2.0（停止更新，仅限维护） |PaaS3.0（活跃开源项目） |
 |:--|:--|:--|
 |esb: 蓝鲸API网关 |集成在主仓库（paas-ce/paas/esb) |独立成一个产品，APIGateway |
-|login: 蓝鲸统一登录服务 |集成在主仓库（paas-ce/paas/login) |独立成一个产品，统一登录用户管理 https://github.com/TencentBlueKing/bk-user |
-|paas: 蓝鲸开发者中心 |集成在主仓库（paas-ce/paas) |独立成一个产品，PaaS-开发者中心 https://github.com/TencentBlueKing/blueking-paas |
-|paas: web工作台 |集成在主仓库（paas-ce/paas) |独立成一个产品，将“工作台”优化为“桌面” https://github.com/TencentBlueKing/blueking-console |
-|LessCode: 蓝鲸可视化开发平台 |集成在主仓库（paas-ce/paas/lesscode) |独立成一个产品，可视化开发平台 https://github.com/TencentBlueKing/bk-lesscode |
+|login: 蓝鲸统一登录服务 |集成在主仓库（paas-ce/paas/login) |独立成一个产品，[统一登录用户管理](https://github.com/TencentBlueKing/bk-user) |
+|paas: 蓝鲸开发者中心 |集成在主仓库（paas-ce/paas) |独立成一个产品，[PaaS-开发者中心](https://github.com/TencentBlueKing/blueking-paas) |
+|paas: web工作台 |集成在主仓库（paas-ce/paas) |独立成一个产品，将“工作台”优化为[桌面](https://github.com/TencentBlueKing/blueking-console) |
+|LessCode: 蓝鲸可视化开发平台 |集成在主仓库（paas-ce/paas/lesscode) |独立成一个产品，[可视化开发平台](https://github.com/TencentBlueKing/bk-lesscode) |
 
 <br>
 
