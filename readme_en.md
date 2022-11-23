@@ -4,7 +4,9 @@
 [![license](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](https://github.com/Tencent/bk-PaaS/blob/master/LICENSE) [![Release Version](https://img.shields.io/badge/release-3.0.0-brightgreen.svg)](https://github.com/Tencent/bk-PaaS/releases) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/Tencent/bk-PaaS/pulls)
 
 
-> **Community Edition**
+[简体中文](readme.md) | English
+
+>**Blueking main version V6, currently the project is not updated, only maintenance functions**
 
 The BlueKing PaaS is an open development platform that allows developers to create, develop, deploy and manage SaaS applications quickly and easily.
 
@@ -19,6 +21,56 @@ The BlueKing PaaS Community Edition contains:
     - appengine: Application Engine
 - PaaSAgent（paas-ce/paasagent）: Application Engine Agent（golang [[labstack/echo](https://github.com/labstack/echo)]）
 - LessCode: Visual development platform, provides front-end page online visual drag-and-drop assembly, configuration editing, source code generation, secondary development and other capabilities，[document](https://github.com/TencentBlueKing/bk-lesscode/blob/develop/readme.md)
+
+
+>**Roadmap for Blueking PaaS platform products**
+|category |current status |open source status |open source address |belonging to BlueKing SmartCloud main version |release time |
+|:--|
+|PaaS3.0 |Mainline version, Updating and maintaining |Open source |https://github.com/tencentblueking/blueking-paas |V7 |2022 |
+|PaaS2.0 |Stopped updating, maintenance features only |Open source |https://github.com/tencent/bk-paas |V6 |2019 |
+|PaaS1.0 |Stopped maintenance |Not open source |None |None |2012|
+
+
+|Module List |PaaS2.0 (no longer updated, maintenance only) |PaaS3.0 (active open source project)
+|:--|
+|esb: BlueKing API Gateway |Integrated in the main repository (paas-ce/paas/esb) |Standalone as a product, APIGateway |
+|login: BlueKing Unified Login Service |Integrated in the main repository (paas-ce/paas/login) |Standalone product, Unified Login User Management https://github.com/TencentBlueKing/bk-user |
+|paas: BlueKing Developer Center |Integrated in the main repository (paas-ce/paas) |Standalone product, PaaS-Developer Center https://github.com/TencentBlueKing/blueking-paas |
+|paas: web workbench |Integrated in the main repository (paas-ce/paas) |Standalone product, optimize "workbench" to "console" https://github.com/ TencentBlueKing/blueking-console |
+|LessCode: Visual development platform |Integrated in the main repository (paas-ce/paas/lesscode) |Standalone product, visual development platform https://github.com/TencentBlueKing/bk-lesscode |
+
+>**How to migrate SaaS developed in V6.0 and before to V7.0**
+
+The "Developer Center" of PaaS platform provides "one-click migration" function, which only supports the SaaS developed by the official "Python development framework" of BlueKing, other types of Other types of SaaS migration solutions are being tested (please look forward to it, and it will be updated to the official website). 
+
+>**What are the functional differences between PaaS platform versions**
+
+|Function |PaaS2.0 |PaaS3.0 |
+|:--|
+|Minimum size of platform and application cluster|Platform (1 server)/Application (1 server)<br>Can be mixed<br>No high availability|Platform (1 server)/Application (1 server)<br>Yes mix |
+|Underlying technology |Native docker |kubernetes |
+|Application cluster scalability |Manual |Automatically invoke cluster node expansion |
+|Application Scalability |Manual, cumbersome |Adjust the number of replicas to automatically expand |
+|Application type |Main web application |Supports different programming languages ​​and complex application architecture |
+|Supported programming languages ​​|Python (PHP, Java immature) |Python, Go, Node.JS |
+|Support image deployment | |Yes (can support any programming language) |
+|Support application source code repository |svn, Git |svn, Git (support Oauth authorization) |
+|Support custom process start command | |Yes |
+|Support application multi-module management and deployment | |Yes |
+|View process real-time log online | |Yes |
+|Stop process online | |Yes |
+|Support inter-process communication settings | |Yes |
+|Online adjustment process instance number | |Yes |
+|Deployment restrictions (administrators can deploy only) | |Yes |
+|View application CPU/memory resource information in real time | |Yes (Phase II, based on BCS) |
+|Support Webconsole | |Yes |
+|Support access method |Only sub-path, special way to configure independent domain name |Sub-path + independent sub-domain name|
+|Support independent domain name | |Yes |
+|MySQL Add-ons |Yes, only available for S-Mart applications |Yes |
+|Redis Add-onss | |Yes |
+|RabbitMQ Add-onss | |Yes |
+|bkrepo Add-onss | |Yes |
+
 
 ## Overview
 
@@ -78,7 +130,7 @@ free-operation of SaaS applications
 
 ## Contributing
 
-If you have good ideas or suggestions, please let us know by Issues or Pull Requests and contribute to the Blue Whale Open Source Community. For bk-PaaS branch management, issues, and pr specifications, read the [CONTRIBUTING(In Chinese)](docs/CONTRIBUTING.md)
+If you have good ideas or suggestions, please let us know by Issues or Pull Requests and contribute to the BlueKing Open Source Community. For bk-PaaS branch management, issues, and pr specifications, read the [CONTRIBUTING(In Chinese)](docs/CONTRIBUTING.md)
 
 If you are interested in contributing, check out the [CONTRIBUTING.md], also join our [Tencent OpenSource Plan](https://opensource.tencent.com/contribution).
 
