@@ -12,7 +12,7 @@ The BlueKing PaaS is an open development platform that allows developers to crea
 
 This open source project is the BlueKing PaaS Community Edition，It provides framework, API Gateway, scheduling engine, common components, etc. Helping developers to build SaaS Application(support tools and operating systems) quickly, cost-effectively and effortlessly . It provides a complete automation and self-service for a SaaS application from creation, deployment, maintenance and management. allowing developers to focus on the logical development of SaaS applications.
 
-The BlueKing PaaS Community Edition contains:
+The BlueKing PaaS contains:
 
 - PaaS（paas-ce/paas）: include 4 web projects（python [[Django](https://www.djangoproject.com/)]）
     - login: Unified Login Service
@@ -22,31 +22,39 @@ The BlueKing PaaS Community Edition contains:
 - PaaSAgent（paas-ce/paasagent）: Application Engine Agent（golang [[labstack/echo](https://github.com/labstack/echo)]）
 - LessCode: Visual development platform, provides front-end page online visual drag-and-drop assembly, configuration editing, source code generation, secondary development and other capabilities，[document](https://github.com/TencentBlueKing/bk-lesscode/blob/develop/readme.md)
 
+<br>
 
 >**Roadmap for Blueking PaaS platform products**
+
+
 |category |current status |open source status |open source address |belonging to BlueKing SmartCloud main version |release time |
-|:--|
+|:--|:--|:--|:--|:--|:--|
 |PaaS3.0 |Mainline version, Updating and maintaining |Open source |https://github.com/tencentblueking/blueking-paas |V7 |2022 |
 |PaaS2.0 |Stopped updating, maintenance features only |Open source |https://github.com/tencent/bk-paas |V6 |2019 |
 |PaaS1.0 |Stopped maintenance |Not open source |None |None |2012|
 
+<br>
 
 |Module List |PaaS2.0 (no longer updated, maintenance only) |PaaS3.0 (active open source project)
-|:--|
+|:--|:--|:--|
 |esb: BlueKing API Gateway |Integrated in the main repository (paas-ce/paas/esb) |Standalone as a product, APIGateway |
-|login: BlueKing Unified Login Service |Integrated in the main repository (paas-ce/paas/login) |Standalone product, Unified Login User Management https://github.com/TencentBlueKing/bk-user |
-|paas: BlueKing Developer Center |Integrated in the main repository (paas-ce/paas) |Standalone product, PaaS-Developer Center https://github.com/TencentBlueKing/blueking-paas |
-|paas: web workbench |Integrated in the main repository (paas-ce/paas) |Standalone product, optimize "workbench" to "console" https://github.com/ TencentBlueKing/blueking-console |
-|LessCode: Visual development platform |Integrated in the main repository (paas-ce/paas/lesscode) |Standalone product, visual development platform https://github.com/TencentBlueKing/bk-lesscode |
+|login: BlueKing Unified Login Service |Integrated in the main repository (paas-ce/paas/login) |Standalone product, [Unified Login User Management]( https://github.com/TencentBlueKing/bk-user) |
+|paas: BlueKing Developer Center |Integrated in the main repository (paas-ce/paas) |Standalone product, [PaaS-Developer Center](https://github.com/TencentBlueKing/blueking-paas) |
+|paas: web workbench |Integrated in the main repository (paas-ce/paas) |Standalone product, optimize "workbench" to [console](https://github.com/ TencentBlueKing/blueking-console) |
+|LessCode: Visual development platform |Integrated in the main repository (paas-ce/paas/lesscode) |Standalone product, [visual development platform ](https://github.com/TencentBlueKing/bk-lesscode) |
+
+<br>
 
 >**How to migrate SaaS developed in V6.0 and before to V7.0**
 
 The "Developer Center" of PaaS platform provides "one-click migration" function, which only supports the SaaS developed by the official "Python development framework" of BlueKing, other types of Other types of SaaS migration solutions are being tested (please look forward to it, and it will be updated to the official website). 
 
+<br>
+
 >**What are the functional differences between PaaS platform versions**
 
 |Function |PaaS2.0 |PaaS3.0 |
-|:--|
+|:--|:--|:--|
 |Minimum size of platform and application cluster|Platform (1 server)/Application (1 server)<br>Can be mixed<br>No high availability|Platform (1 server)/Application (1 server)<br>Yes mix |
 |Underlying technology |Native docker |kubernetes |
 |Application cluster scalability |Manual |Automatically invoke cluster node expansion |
