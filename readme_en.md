@@ -6,7 +6,7 @@
 
 [简体中文](readme.md) | English
 
->**Blueking main version V6, currently the project is not updated, only maintenance functions**
+>**BlueKing main version V6, currently the project is not updated, only maintenance functions**
 
 The BlueKing PaaS is an open development platform that allows developers to create, develop, deploy and manage SaaS applications quickly and easily.
 
@@ -24,10 +24,10 @@ The BlueKing PaaS contains:
 
 <br>
 
->**Roadmap for Blueking PaaS platform products**
+>**Roadmap for BlueKing PaaS platform products**
 
 
-|category |current status |open source status |open source address |belonging to BlueKing SmartCloud main version |release time |
+|category |current status |open source status |open source address |belonging to BlueKing main version |release time |
 |:--|:--|:--|:--|:--|:--|
 |PaaS3.0 |Mainline version, Updating and maintaining |Open source |https://github.com/tencentblueking/blueking-paas |V7 |2022 |
 |PaaS2.0 |Stopped updating, maintenance features only |Open source |https://github.com/tencent/bk-paas |V6 |2019 |
