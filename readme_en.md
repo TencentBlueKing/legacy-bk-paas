@@ -41,7 +41,7 @@ The BlueKing PaaS contains:
 |login: BlueKing Unified Login Service |Integrated in the main repository (paas-ce/paas/login) |Standalone product, [Unified Login User Management]( https://github.com/TencentBlueKing/bk-user) |
 |paas: BlueKing Developer Center |Integrated in the main repository (paas-ce/paas) |Standalone product, [PaaS-Developer Center](https://github.com/TencentBlueKing/blueking-paas) |
 |paas: web workbench |Integrated in the main repository (paas-ce/paas) |Standalone product, optimize "workbench" to [console](https://github.com/ TencentBlueKing/blueking-console) |
-|LessCode: Visual development platform |Integrated in the main repository (paas-ce/paas/lesscode) |Standalone product, [visual development platform ](https://github.com/TencentBlueKing/bk-lesscode) |
+|LessCode: Visual development platform |Integrated in the main repository lesscode-master branch) |Standalone product, [visual development platform ](https://github.com/TencentBlueKing/bk-lesscode) |
 
 <br>
 
