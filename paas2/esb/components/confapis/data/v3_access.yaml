@@ -348,3 +348,86 @@
   dest_path: /v3/access/collector/{data_scenario}/clusters/
   dest_http_method: GET
   is_hidden: true
+
+- path: /data/v3/access/ip_chooser/host_agent_statistics/
+  name: v3_access_ip_chooser_host_agent_statistics
+  label: ip选择器统计信息
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/ip_chooser/host_agent_statistics/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/access/ip_chooser/topology_host_ids_nodes/
+  name: v3_access_ip_chooser_topology_host_ids_nodes
+  label: ip选择器拓扑节点
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/ip_chooser/topology_host_ids_nodes/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/access/ip_chooser/query_path/
+  name: v3_access_ip_chooser_query_path
+  label: ip选择器查询拓扑路径
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/ip_chooser/query_path/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/access/ip_chooser/get_settings/
+  name: v3_access_ip_chooser_get_settings
+  label: ip选择器获取配置
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/ip_chooser/get_settings/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/access/ip_chooser/save_settings/
+  name: v3_access_ip_chooser_save_settings
+  label: ip选择器保存配置
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/ip_chooser/save_settings/
+  dest_http_method: POST
+  is_hidden: true
+
+
+- path: /data/v3/access/ip_chooser/topology_host_count/
+  name: v3_access_ip_chooser_topology_host_count
+  label: ip选择器节点数量
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/ip_chooser/topology_host_count/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/access/ip_chooser/hosts_details/
+  name: v3_access_ip_chooser_hosts_details
+  label: ip选择器节点详情
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/ip_chooser/hosts_details/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/access/ip_chooser/topology_hosts/
+  name: v3_access_ip_chooser_topology_hosts
+  label: ip选择器拓扑节点信息
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/ip_chooser/topology_hosts/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/access/ip_chooser/host_check/
+  name: v3_access_ip_chooser_host_check
+  label: ip选择器host信息检查
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/access/ip_chooser/host_check/
+  dest_http_method: POST
+  is_hidden: true
+
