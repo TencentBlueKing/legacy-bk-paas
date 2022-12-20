@@ -247,6 +247,61 @@
   path: /v2/monitor_v3/metadata_query_event_group/
   method: GET
 
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v3/meta/get_log_group/
+  is_hidden: false
+  label: 查询日志分组具体内容
+  label_en: metadata get log group
+  name: metadata_get_log_group
+  path: /v2/monitor_v3/metadata_get_log_group/
+  method: GET
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/delete_log_group/
+  is_hidden: false
+  label: 删除日志分组
+  label_en: metadata delete log group
+  name: metadata_delete_log_group
+  path: /v2/monitor_v3/metadata_delete_log_group/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/modify_log_group/
+  is_hidden: false
+  label: 修改日志分组
+  label_en: metadata modify log group
+  name: metadata_modify_log_group
+  path: /v2/monitor_v3/metadata_modify_log_group/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/create_log_group/
+  is_hidden: false
+  label: 创建日志分组
+  label_en: metadata create log group
+  name: metadata_create_log_group
+  path: /v2/monitor_v3/metadata_create_log_group/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v3/meta/query_log_group/
+  is_hidden: false
+  label: 查询日志分组
+  label_en: metadata query log group
+  name: metadata_query_log_group
+  path: /v2/monitor_v3/metadata_query_log_group/
+  method: GET
+
 - api_type: operate
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST
