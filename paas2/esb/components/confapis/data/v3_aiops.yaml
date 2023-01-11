@@ -223,6 +223,15 @@
   dest_http_method: GET
   is_hidden: true
 
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/add_on_result_tables/
+  name: v3_aiops_get_AIOps_Model_experiment_add_on_result_tables
+  label: 实验配置获取参考数据结果表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/add_on_result_tables/
+  dest_http_method: GET
+  is_hidden: true
+
 - path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/copy/
   name: v3_aiops_copy_AIOps_Model_experiment
   label: 复制实验
@@ -445,6 +454,15 @@
   method: POST
   comp_codename: generic.data.datav3_component
   dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/training_input/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{experiment_id}/evaluate_input/
+  name: v3_aiops_model_experiment_evaluate_input
+  label: 模型定义的评估输入
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{experiment_id}/evaluate_input/
   dest_http_method: POST
   is_hidden: true
 
@@ -2013,7 +2031,7 @@
   dest_http_method: GET
   is_hidden: true
 
-- path: /data/v3/aiops/scene_service/evaluation/{plan_id}/info/ 
+- path: /data/v3/aiops/scene_service/evaluation/{plan_id}/info/
   name: v3_aiops_scene_service_evaluation_plan_info
   label: 查看编辑态评估基本信息
   method: GET
@@ -2022,7 +2040,7 @@
   dest_http_method: GET
   is_hidden: true
 
-- path: /data/v3/aiops/scene_service/evaluation/{plan_id}/group/ 
+- path: /data/v3/aiops/scene_service/evaluation/{plan_id}/group/
   name: v3_aiops_scene_service_evaluation_plan_gropu
   label: 获取方案编辑态评估指标分组信息
   method: POST
@@ -2031,7 +2049,7 @@
   dest_http_method: POST
   is_hidden: true
 
-- path: /data/v3/aiops/scene_service/evaluation/{plan_id}/metrics/ 
+- path: /data/v3/aiops/scene_service/evaluation/{plan_id}/metrics/
   name: v3_aiops_scene_service_evaluation_plan_metrics
   label: 查询评估指标列表或指标详情
   method: POST
@@ -2214,9 +2232,117 @@
 - path: /data/v3/aiops/scene_service/application/node_situation/{node_id}/result_preview/
   name: v3_aiops_scene_service_application_node_situation_result_preview
   label: 获取应用节点输出预览
-  method: GET
+  method: POST
   comp_codename: generic.data.datav3_component
   dest_path: /v3/aiops/scene_service/application/node_situation/{node_id}/result_preview/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/enum/base_scene_tag/
+  name: v3_aiops_enum_base_scene_tag
+  label: 获取基础场景标签
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/enum/base_scene_tag/
   dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/scene_service/scenes/{scene_id}/application_distribution/
+  name: v3_aiops_scene_service_scenes__scene_id__application_distribution
+  label: 查询场景/方案的应用分布情况
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/scene_service/scenes/{scene_id}/application_distribution/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/scene_service/scenes/{scene_id}/application_publish_stat/
+  name: v3_aiops_scene_service_scenes__scene_id__application_publish_stat
+  label: 查询场景发布情况
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/scene_service/scenes/{scene_id}/application_publish_stat/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/enum/field_role/
+  name: v3_aiops_enum_field_role
+  label: 获取可用字段角色
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/enum/field_role/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/enum/run_dataframe/
+  name: v3_aiops_enum_run_dataframe
+  label: 可用运行Dataframe列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/enum/run_dataframe/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/enum/custom_algorithm_type/
+  name: v3_aiops_enum_custom_algorithm_type
+  label: 自定义算法分类
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/enum/custom_algorithm_type/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/scene_service/scenes/fuzzy_scene_plan/
+  name: v3_aiops_scene_service_scenes_fuzzy_scene_plan
+  label: 查询场景方案列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/scene_service/scenes/fuzzy_scene_plan/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/algorithm/{algorithm_name}/set_tags/
+  name: v3_aiops_algorithm_set_tags
+  label: 算法设置标签接口
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/algorithm/{algorithm_name}/set_tags/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/aiops/algorithm/{algorithm_name}/tags/
+  name: v3_aiops_algorithm_get_tags
+  label: 查询算法标签接口
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/algorithm/{algorithm_name}/tags/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/algorithm/{algorithm_name}/name_validation/
+  name: v3_aiops_algorithm_name_validation
+  label: 检查算法名称是否合法
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/algorithm/{algorithm_name}/name_validation/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/models/{model_id}/experiments/{model_experiment_id}/list_dependence_environment/
+  name: v3_aiops_models_experiments_list_dependence_environment
+  label: 获取依赖环境列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/models/{model_id}/experiments/{model_experiment_id}/list_dependence_environment/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/aiops/user_favorite/{username}/
+  name: v3_aiops_update_user_favorite
+  label: 更新用户收藏信息
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/user_favorite/{username}/
+  dest_http_method: PUT
   is_hidden: true
 

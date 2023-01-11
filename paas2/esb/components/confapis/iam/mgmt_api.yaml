@@ -160,7 +160,7 @@
   label_en: mgmt api revoke group policy
   method: DELETE
   api_type: operate
-  comp_codename: generic.v2.iam.iam_delete_component
+  comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/management/groups/{group_id}/policies/
   dest_http_method: DELETE
   is_hidden: true
@@ -171,7 +171,7 @@
   label_en: mgmt api revoke group action policy
   method: DELETE
   api_type: operate
-  comp_codename: generic.v2.iam.iam_delete_component
+  comp_codename: generic.v2.iam.iam_component
   dest_path: /o/bk_iam/api/v1/open/management/groups/{group_id}/actions/policies/
   dest_http_method: DELETE
   is_hidden: true
