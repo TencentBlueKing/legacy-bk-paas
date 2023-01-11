@@ -1981,6 +1981,17 @@
 - api_type: operate
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST
+  dest_path: /api/v4/grafana/time_series/unify_query/
+  is_hidden: false
+  label: 视图数据查询
+  label_en: null
+  name: time_series_unify_query
+  path: /v2/monitor_v3/time_series_unify_query/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
   dest_path: /api/v4/bcs/register_cluster/
   is_hidden: true
   label: BCS集群接入监控
@@ -2058,4 +2069,25 @@
   label_en: create space
   name: metadata_create_space
   path: /v2/monitor_v3/metadata_create_space/
+  method: POST
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/update_space/
+  is_hidden: true
+  label: 更新空间
+  label_en: update space
+  name: metadata_update_space
+  path: /v2/monitor_v3/metadata_update_space/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v4/event_plugin/deploy_event_plugin/
+  is_hidden: true
+  label: 部署告警源插件
+  label_en: deploy event plugin
+  name: deploy_event_plugin
+  path: /v2/monitor_v3/deploy_event_plugin/
   method: POST
