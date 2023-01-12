@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.42
+    - update: saas version list sort by upload time
+
 # 2.14.41
     - update: esb update data, monitor_v3, iam confapis
 
