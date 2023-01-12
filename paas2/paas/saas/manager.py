@@ -67,7 +67,7 @@ class SaaSAppManager(models.Manager):
 
 
 class SaaSVersionManager(models.Manager):
-    def get_version_list(self, saas_app, limit=10):
+    def get_version_list(self, saas_app, limit=20):
         if not saas_app:
             return []
 
@@ -76,8 +76,11 @@ class SaaSVersionManager(models.Manager):
         try:
             saas_versions = sorted(saas_versions, key=lambda s: list(map(int, s.version.split("."))), reverse=True)
         except Exception:
-            logger.exception("there got one wrong version in the saas list")
-            saas_versions = sorted(saas_versions, key=lambda s: s.version, reverse=True)
+            # logger.exception("there got one wrong version in the saas list")
+            try:
+                saas_versions = sorted(saas_versions, key=lambda s: s.upload_file.uploaded_at, reverse=True)
+            except Exception:
+                saas_versions = sorted(saas_versions, key=lambda s: s.version, reverse=True)
 
         # then limit
         saas_versions = saas_versions[:limit]
