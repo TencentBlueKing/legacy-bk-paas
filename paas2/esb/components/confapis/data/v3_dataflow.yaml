@@ -735,3 +735,30 @@
   dest_path: /v3/dataflow/flow/resource_sets/flow_task_count/
   dest_http_method: POST
   is_hidden: true
+
+- path: /data/v3/dataflow/tool/result_tables/{result_table_id}/add_partitions/start/
+  name: v3_dataflow_tool_rt_add_partition_post
+  label: 结果表分区扩容接口
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/tool/result_tables/{result_table_id}/add_partitions/start/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/tool/result_tables/{result_table_id}/add_partitions/retry/
+  name: v3_dataflow_tool_retry_rt_add_partition_post
+  label: 重试上次失败的结果表扩容操作
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/tool/result_tables/{result_table_id}/add_partitions/retry/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/dataflow/tool/result_tables/{result_table_id}/add_partitions/get_latest_log/
+  name: v3_dataflow_tool_rt_add_partition_latest_log_get
+  label: 结果表分区扩容状态和日志查询
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/tool/result_tables/{result_table_id}/add_partitions/get_latest_log/
+  dest_http_method: GET
+  is_hidden: true

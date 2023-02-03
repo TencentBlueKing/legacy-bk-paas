@@ -907,6 +907,15 @@
   dest_http_method: GET
   is_hidden: true
 
+- path: /data/v3/aiops/serving/{data_processing_id}/config/
+  name: v3_aiops_serving_retrieve_config
+  label: 当前模型实例的配置
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/serving/{data_processing_id}/config/
+  dest_http_method: GET
+  is_hidden: true
+
 - path: /data/v3/aiops/serving/overview/
   name: v3_aiops_serving_overview
   label: 模型当前应用状态

@@ -131,6 +131,16 @@
 - api_type: operate
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST
+  dest_path: /api/v3/meta/modify_datasource_result_table/
+  is_hidden: false
+  label: 修改数据源与结果表的关系
+  label_en: modify datasource result table
+  name: modify_datasource_result_table
+  path: /v2/monitor_v3/metadata_modify_datasource_result_table/
+  method: POST
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
   dest_path: /api/v3/meta/create_result_table_metric_split/
   is_hidden: false
   label: 创建结果表的维度拆分配置

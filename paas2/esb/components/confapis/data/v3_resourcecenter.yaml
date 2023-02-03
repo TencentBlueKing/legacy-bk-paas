@@ -124,6 +124,15 @@
   dest_http_method: GET
   is_hidden: true
 
+- path: /data/v3/resourcecenter/clusters/query_digest/
+  name: v3_resourcecenter_clusters__query_cluster_digest__get
+  label: 查询集群摘要信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/resourcecenter/clusters/query_digest/
+  dest_http_method: GET
+  is_hidden: true
+
 - path: /data/v3/resourcecenter/resource_groups/all_list/
   name: v3_resourcecenter_resource_groups_all_list_get
   label: 全部资源组（含指标）
