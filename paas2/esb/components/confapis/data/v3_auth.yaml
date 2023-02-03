@@ -474,3 +474,12 @@
   dest_path: /v3/auth/sensitivity/retrieve_dataset/
   dest_http_method: GET
   is_hidden: true
+
+- path: /data/v3/auth/projects/{project_id}/cluster_group/
+  name: v3_auth_projects__project_id__cluster_group_post
+  label: 项目添加资源组
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/auth/projects/{project_id}/cluster_group/
+  dest_http_method: POST
+  is_hidden: true
