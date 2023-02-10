@@ -7020,14 +7020,21 @@ var es_array_join = __webpack_require__("a15b");
 
 
 
-
+function createCallbackName() {
+  var callbackName = "USER_LIST_CALLBACK".concat(+new Date());
+  // 判断是否唯一
+  if (window[callbackName]) {
+    return createCallbackName();
+  }
+  return callbackName
+}
 
 function JSONP(api) {
   var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
   return new Promise(function (resolve, reject) {
     var timer;
-    var callbackName = "USER_LIST_CALLBACK".concat(Date.now());
+    var callbackName = createCallbackName();
 
     window[callbackName] = function (response) {
       timer && clearTimeout(timer);
