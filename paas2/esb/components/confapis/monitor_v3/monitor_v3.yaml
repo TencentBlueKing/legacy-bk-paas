@@ -1689,6 +1689,16 @@
   method: GET
 - api_type: query
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /apm_api/v1/application/query_discover_rules/
+  is_hidden: true
+  label: 查询拓扑发现规则
+  label_en: query apm discover rules
+  name: query_apm_discover_rules
+  path: /v2/monitor_v3/query_discover_rules/
+  method: POST
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: GET
   dest_path: /apm_api/v1/topo/query_topo_node/
   is_hidden: true

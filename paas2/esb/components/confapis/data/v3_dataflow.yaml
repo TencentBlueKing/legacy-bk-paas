@@ -214,6 +214,15 @@
   dest_http_method: PUT
   is_hidden: true
 
+- path: /data/v3/dataflow/flow/flows/{fid}/nodes/{nid}/
+  name: v3_dataflow_flow_flows__fid__nodes__nid__patch
+  label: 更新节点部分信息
+  method: PATCH
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/dataflow/flow/flows/{fid}/nodes/{nid}/
+  dest_http_method: PATCH
+  is_hidden: true
+
 - path: /data/v3/dataflow/flow/flows/{fid}/nodes/{nid}/monitor_data/
   name: v3_dataflow_flow_flows__fid__nodes__nid__monitor_data_get
   label: 根据nid获取监控打点信息
