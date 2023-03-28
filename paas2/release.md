@@ -1,5 +1,7 @@
 Release Log
 ===============================
+# 2.14.45
+    - update: esb update data, monitor_v3, bk_log confapis
 
 # 2.14.44
     - bugfix: app visiable scope error

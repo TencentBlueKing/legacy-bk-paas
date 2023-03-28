@@ -177,6 +177,28 @@
   dest_http_method: POST
   is_hidden: True
 
+- path: /v2/bk_log/databus_collectors/{collector_config_id}/report_token/
+  name: databus_collector_report_token
+  label: 日志平台-获取上报Token
+  label_en: bk_log get report token
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/{collector_config_id}/report_token/
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/databus_collectors/report_host/
+  name: databus_collector_report_host
+  label: 日志平台-获取上报Host
+  label_en: bk_log get report token
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/report_host/
+  dest_http_method: GET
+  is_hidden: True
+
 - path: /v2/bk_log/databus_collectors/{collector_config_id}/tail/
   name: databus_collector_tail
   label: 日志平台-获取kafka采样
@@ -783,7 +805,7 @@
   dest_http_method: GET
   is_hidden: True
 
-- path: /v1/bk_log/meta/spaces/mine/
+- path: /v2/bk_log/meta/spaces/mine/
   name: meta_spaces_mine
   label: 日志平台-获取用户空间列表
   label_en: bk_log get spaces mine
@@ -794,3 +816,46 @@
   dest_http_method: GET
   is_hidden: True
 
+- path: /v2/bk_log/databus/collectors/fast_create/
+  name: collectors_fast_create
+  label: 日志平台-快速创建采集项
+  label_en: bk_log fast create collector_config
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/fast_create/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/databus/collectors/{collector_config_id}/fast_update/
+  name: collectors_fast_update
+  label: 日志平台-快速修改采集项
+  label_en: bk_log fast update collector_config
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/{collector_config_id}/fast_update/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/databus_custom_create/
+  name: databus_custom_create
+  label: 日志平台-创建自定义上报配置项
+  label_en: bk_log create custom report collector_config
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/custom_create/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/{collector_config_id}/databus_custom_update/
+  name: databus_custom_update
+  label: 日志平台-更新自定义上报配置项
+  label_en: bk_log update custom report collector_config
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/{collector_config_id}/custom_update/
+  dest_http_method: POST
+  is_hidden: True
