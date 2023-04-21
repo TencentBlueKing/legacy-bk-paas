@@ -11,7 +11,7 @@ delete cloud host from biz idle set (cloud host management dedicated interface, 
 | field       | type      | mandatory | description                                                                                                         |
 |-------------|-----------|-----------|---------------------------------------------------------------------------------------------------------------------|
 | bk_biz_id   | int       | yes       | business id                                                                                                         |
-| bk_host_ids | int array | yes       | to be deleted cloud host ids, array length is limited to 200, these hosts can only succeed or fail at the same time |
+| bk_host_ids | array | yes       | to be deleted cloud host ids, array length is limited to 200, these hosts can only succeed or fail at the same time |
 
 ### Request Parameters Example
 

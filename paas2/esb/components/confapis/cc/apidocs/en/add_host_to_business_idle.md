@@ -1,7 +1,7 @@
 ### Function description
 
 Add hosts to the service idle machine
-- This interface ensures that hosts are either added successfully or fail at the same time
+- This interface ensures that hosts are either added successfully or fail at the same time(v3.10.25+)
 
 ### Request Parameters
 
@@ -74,10 +74,10 @@ Add hosts to the service idle machine
 
 | name | type | description |
 | ------- | ------ | ------------------------------------- |
-| result | bool | Whether the request was successful or not. true:request successful; false request failed.
-| code | int | The error code. 0 means success, >0 means failure error.
-| message | string | The error message returned by the failed request.
-| data | object | The data returned by the request.
+| result | bool | Whether the request was successful or not. true:request successful; false request failed.|
+| code | int | The error code. 0 means success, >0 means failure error.|
+| message | string | The error message returned by the failed request.|
+| data | object | The data returned by the request.|
 | permission | object | Permission information |
 | request_id | string | Request chain id |
 
