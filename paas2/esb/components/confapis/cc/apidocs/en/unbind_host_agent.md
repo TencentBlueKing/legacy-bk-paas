@@ -1,6 +1,6 @@
 ### Functional description
 
-Unbind agent to host (v3.10.16+).
+Unbind agent to host (v3.10.25+).
 
 ### Request Parameters
 

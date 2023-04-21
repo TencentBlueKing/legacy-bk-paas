@@ -1,6 +1,6 @@
 ### Functional description
 
-Bind agent from host (v3.10.16+).
+Bind agent from host (v3.10.25+).
 
 ### Request Parameters
 

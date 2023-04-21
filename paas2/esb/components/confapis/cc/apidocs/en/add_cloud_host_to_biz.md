@@ -11,7 +11,7 @@ add cloud host to biz idle module (cloud host management dedicated interface, ve
 | field     | type         | mandatory | description                                                                                                               |
 |-----------|--------------|-----------|---------------------------------------------------------------------------------------------------------------------------|
 | bk_biz_id | int          | yes       | business id                                                                                                               |
-| host_info | object array | yes       | to be added cloud host information, array length is limited to 200, these hosts can only succeed or fail at the same time |
+| host_info | array | yes       | to be added cloud host information, array length is limited to 200, these hosts can only succeed or fail at the same time |
 
 #### host_info
 
@@ -87,4 +87,4 @@ host information fields, cloud area ID and inner IP fields are required, other f
 #### data
 | field | type      | description                        |
 |-------|-----------|------------------------------------|
-| ids   | int array | successfully created host id array |
+| ids   | array | successfully created host id array |
