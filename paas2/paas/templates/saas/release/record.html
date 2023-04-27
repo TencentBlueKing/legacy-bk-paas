@@ -5,7 +5,6 @@
     <input type="hidden" value="${app_code}" id="app_code_id">
     <input type="hidden" value="${app_state}" id="app_state_id">
 
-  % if app_state != 1:
     <div class="mt10">
         <select class="form-control" id="app_record" style="width:200px;margin-left:10px;">
             <option value="0" selected>${_(u'全部记录')}</option>
@@ -15,9 +14,6 @@
         </select>
     </div>
     <div id="record_list"></div>
-  % else:
-    <p class="t_c mt20">${_(u'没有记录')}</p>
-  % endif
 </%block>
 <script src="${STATIC_URL}js/paas_release.${JS_SUFFIX}?v=${STATIC_VERSION}"></script>
 <script>
@@ -26,9 +22,7 @@ $(function(){
   var app_state = $("#app_state_id").val();
   $("#app_record").on('change', function() {
     var operate_id = $(this).val();
-    if(app_state != '1'){
-      REL_MANAGER.search_app_record(app_code, operate_id);
-    }
+    REL_MANAGER.search_app_record(app_code, operate_id);
   });
   $("#app_record").trigger('change');
   //REL_MANAGER.search_app_record(app_code, 0);
