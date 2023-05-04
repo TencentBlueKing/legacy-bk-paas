@@ -946,6 +946,17 @@
   suggest_method: GET
   is_hidden: true
 
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: subscription_switch_biz
+  label: 启停业务订阅功能
+  label_en: null
+  dest_path: /backend/api/subscription/switch_biz/
+  path: /v2/nodeman/backend/api/subscription/switch_biz/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
 - api_type: query
   comp_codename: generic.v2.nodeman.nodeman_component
   name: plugin_list
@@ -1069,11 +1080,55 @@
 
 - api_type: query
   comp_codename: generic.v2.nodeman.nodeman_component
-  name: encrypt_rsa_encrypt_rsa
+  name: fetch_public_keys
   label: 获取公钥列表
   label_en: null
   dest_path: /core/api/encrypt_rsa/fetch_public_keys/
   path: /v2/nodeman/core/api/encrypt_rsa/fetch_public_keys/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: sync_task_create
+  label: 创建同步任务
+  label_en: null
+  dest_path: /backend/api/sync_task/create/
+  path: /v2/nodeman/backend/api/sync_task/create/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: sync_task_status
+  label: 查询同步任务状态
+  label_en: null
+  dest_path: /backend/api/sync_task/status/
+  path: /v2/nodeman/backend/api/sync_task/status/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: gray_build
+  label: GSE2.0灰度
+  label_en: null
+  dest_path: /core/api/gray/build/
+  path: /v2/nodeman/core/api/gray/build/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: gray_rollback
+  label: GSE2.0灰度回滚
+  label_en: null
+  dest_path: /core/api/gray/rollback/
+  path: /v2/nodeman/core/api/gray/rollback/
   dest_http_method: POST
   suggest_method: POST
   is_hidden: true
