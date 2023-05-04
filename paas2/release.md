@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.47
+    - update: esb update nodeman confapis
+
 # 2.14.46
     - update: esb update cc confapis
 
