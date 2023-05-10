@@ -115,7 +115,8 @@ def is_bk_token_valid(bk_token):  # NOQA
 
     # 更新 无操作有效期
     try:
-        BkToken.objects.filter(token=bk_token).update(inactive_expire_time=now_time + BK_INACTIVE_COOKIE_AGE)
+        if now_time > inactive_expire_time + settings.BK_INACTIVE_INTERVEL:
+            BkToken.objects.filter(token=bk_token).update(inactive_expire_time=now_time + BK_INACTIVE_COOKIE_AGE)
     except Exception:
         logger.exception("update inactive_expire_time fail")
 

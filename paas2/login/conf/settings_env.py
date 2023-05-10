@@ -69,6 +69,8 @@ BK_COOKIE_AGE = env.int("BK_PAAS_LOGIN_COOKIE_AGE", 60 * 60 * 24)
 BK_TOKEN_OFFSET_ERROR_TIME = env.int("BK_PAAS_LOGIN_TOKEN_OFFSET_ERROR_TIME", 60)
 # 无操作 失效期，默认2个小时. 长时间误操作, 登录态已过期
 BK_INACTIVE_COOKIE_AGE = env.int("BK_PAAS_LOGIN_INACTIVE_COOKIE_AGE", 60 * 60 * 2)
+# 自动续期时间间隔
+BK_INACTIVE_INTERVEL = env.int("BK_PAAS_LOGIN_INACTIVE_INTERVEL", 60)
 
 # session in cookie secure; uncomment this if you need a secure cookie
 # if HTTP_SCHEMA == "https":
