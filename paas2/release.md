@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.48
+    - update: esb update data, monitor_v3 confapis
+
 # 2.14.47
     - update: esb update nodeman confapis
 

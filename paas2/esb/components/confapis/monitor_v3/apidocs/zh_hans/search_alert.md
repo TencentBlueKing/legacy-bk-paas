@@ -18,7 +18,7 @@
 | start_time    | int            | 是   | 开始时间                                                     |
 | end_time      | int            | 是   | 结束时间                                                     |
 | page          | int            | 是   | 页数                                                         |
-| page_size     | int            | 是   | 每页条数（最大5000）                                         |
+| page_size     | int            | 是   | 每页条数（最大500）                                         |
 | show_overview | bool           | 否   | 是否返回总览统计信息，默认 true                              |
 | show_aggs     | bool           | 否   | 是否返回聚合统计信息，默认 true                              |
 | show_dsl      | Bool           | 否   | 是否返回DSL，默认False                                       |

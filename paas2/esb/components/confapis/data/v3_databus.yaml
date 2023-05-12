@@ -339,3 +339,300 @@
   dest_path: /v3/databus/migrations/get_clusters/
   dest_http_method: GET
   is_hidden: true
+
+- path: /data/v3/databus/udc/
+  name: v3_databus_udc_get
+  label: 获取已注册udc列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/udc/
+  name: v3_databus_udc_post
+  label: 注册udc
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/databus/udc/daily_count/
+  name: v3_databus_udc_daily_count
+  label: 查看udc的每日数据量选项
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/daily_count/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/udc/env_info/
+  name: v3_databus_udc_env_info
+  label: udc环境相关变量
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/env_info/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/udc/query_model/
+  name: v3_databus_udc_query_model
+  label: 查看udc的查询模式选项
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/query_model/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/udc/udc_category/
+  name: v3_databus_udc_udc_category_get
+  label: 查看udc的分类类型, 用于用途分类选择
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/udc_category/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/udc/udc_scenario/
+  name: v3_databus_udc_udc_scenario
+  label: 查看udc的建议使用场景
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/udc_scenario/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/udc/{udc_name}/
+  name: v3_databus_udc__udc_name__delete
+  label: 删除udc配置
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/{udc_name}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/databus/udc/{udc_name}/
+  name: v3_databus_udc__udc_name__get
+  label: 获取udc配置
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/{udc_name}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/udc/{udc_name}/
+  name: v3_databus_udc__udc_name__patch
+  label: 部分修改udc配置
+  method: PATCH
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/{udc_name}/
+  dest_http_method: PATCH
+  is_hidden: true
+
+- path: /data/v3/databus/udc/{udc_name}/
+  name: v3_databus_udc__udc_name__put
+  label: 修改udc配置
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/{udc_name}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/databus/udc/{udc_name}/form_config/
+  name: v3_databus_udc__udc_name_form_config_get
+  label: 获取动态表单配置
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/{udc_name}/form_config/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/udc/{udc_name}/get_udc_tags/
+  name: v3_databus_udc_get_udc_tag
+  label: 获取仓库的tag信息
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/{udc_name}/get_udc_tags/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/udc/{udc_name}/query_log/
+  name: v3_databus_udc__udc_name_query_log_get
+  label: 获取连接器日志
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/{udc_name}/query_log/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/udc/{udc_name}/query_task/
+  name: v3_databus_udc__udc_name_query_task_get
+  label: 获取连接器任务运行情况
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/{udc_name}/query_task/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/udc/{udc_name}/versions/
+  name: v3_databus_udc___udc_name__versions__get
+  label: 查看udc版本
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/{udc_name}/versions/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/udc/{udc_name}/versions/
+  name: v3_databus_udc___udc_name__versions
+  label: 创建UDC版本
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/{udc_name}/versions/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/databus/udc/{udc_name}/versions/{version}/
+  name: v3_databus_udc__udc_name__versions__version__delete
+  label: 删除udc版本
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/{udc_name}/versions/{version}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/databus/udc/{udc_name}/versions/{version}/
+  name: v3_databus_udc__udc_name__versions__version__
+  label: 获取udc版本详情
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/{udc_name}/versions/{version}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/udc/{udc_name}/versions/{version}/
+  name: v3_databus_udc__udc_name__versions__version__patch
+  label: 部分修改连接器版本
+  method: PATCH
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/{udc_name}/versions/{version}/
+  dest_http_method: PATCH
+  is_hidden: true
+
+- path: /data/v3/databus/udc/{udc_name}/versions/{version}/
+  name: v3_databus_udc__udc_name__versions__version__put
+  label: 修改连接器版本
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/{udc_name}/versions/{version}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/databus/udc/{udc_name}/versions/{version}/build/
+  name: v3_databus_udc__udc_name__versions__version__build_post
+  label: udc构建任务
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/{udc_name}/versions/{version}/build/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/databus/udc/{udc_name}/versions/{version}/build_info/
+  name: v3_databus_udc__udc_name__versions__version__build_info_get
+  label: 获取构建任务状态
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/{udc_name}/versions/{version}/build_info/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/udc/{udc_name}/versions/{version}/form_config/
+  name: v3_databus_udc__udc_name__versions__version__form_config_get
+  label: 获取动态表单配置
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/{udc_name}/versions/{version}/form_config/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/udc/{udc_name}/versions/{version}/get_rt_config/
+  name: v3_databus_udc__udc_name__versions__version__rt_config_get
+  label: 获取udc的RT配置
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/{udc_name}/versions/{version}/get_rt_config/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/udc/{user_name}/get_logo/
+  name: v3_databus_udc_get_logo
+  label: 获取udc logo
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc/{user_name}/get_logo/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/udc_tasks/
+  name: v3_databus_udc_tasks_get
+  label: 批量获取udc任务
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc_tasks/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/udc_tasks/
+  name: v3_databus_udc_tasks_post
+  label: 创建udc运行任务
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc_tasks/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/databus/udc_tasks/start/
+  name: v3_databus_udc_tasks_start
+  label: 启动udc任务
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc_tasks/start/
+  dest_http_method: POST
+  is_hidden: true
+
+- path: /data/v3/databus/udc_tasks/{connector_task_name}/
+  name: v3_databus_udc_tasks__connector_task_name__delete
+  label: 删除运行任务
+  method: DELETE
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc_tasks/{connector_task_name}/
+  dest_http_method: DELETE
+  is_hidden: true
+
+- path: /data/v3/databus/udc_tasks/{connector_task_name}/
+  name: v3_databus_udc_tasks__connector_task_name__get
+  label: 获取UDC任务配置
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc_tasks/{connector_task_name}/
+  dest_http_method: GET
+  is_hidden: true
+
+- path: /data/v3/databus/udc_tasks/{connector_task_name}/
+  name: v3_databus_udc_tasks__connector_task_name__put
+  label: 修改运行任务
+  method: PUT
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc_tasks/{connector_task_name}/
+  dest_http_method: PUT
+  is_hidden: true
+
+- path: /data/v3/databus/udc_tasks/{process_id}/stop/
+  name: v3_databus_udc_tasks_stop
+  label: 停止udc任务
+  method: POST
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/databus/udc_tasks/{process_id}/stop/
+  dest_http_method: POST
+  is_hidden: true
