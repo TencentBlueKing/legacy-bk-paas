@@ -2,7 +2,7 @@ django==1.8.11
 dj-static==0.0.6
 mako==1.0.4
 pycrypto==2.6.1
-requests==2.21.0
+requests==2.31.0
 gunicorn==19.9.0
 uWSGI==2.0.13.1
 elasticsearch==2.3.0
