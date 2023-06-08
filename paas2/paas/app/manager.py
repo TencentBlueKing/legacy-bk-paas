@@ -12,9 +12,10 @@ specific language governing permissions and limitations under the License.
 
 
 from builtins import str
+
+from django.conf import settings
 from django.db import models
 from django.db.models import Q
-from django.conf import settings
 
 from app.constants import AppStateEnum
 
@@ -59,6 +60,7 @@ class SecureInfoManager(models.Manager):
             "BK_PAAS_INNER_HOST": bk_paas_inner_host,
             "BK_CC_HOST": bk_cc_host,
             "BK_JOB_HOST": bk_job_host,
+            "BK_API_URL_TMPL": settings.BK_API_URL_TMPL,
         }
         # update envs in settings_*.py
         envs.update(settings.APP_DEPLOY_ENVS)
@@ -92,8 +94,9 @@ class AppManager(models.Manager):
         重写 查询
         """
         # PaaS3.0 上创建的应用和已经迁移到 PaaS3.0 的应用不在 PaaS2.0 上展示
-        return super(AppManager, self).get_queryset().filter(
-            is_sysapp=False, from_paasv3=False, migrated_to_paasv3=False)
+        return (
+            super(AppManager, self).get_queryset().filter(is_sysapp=False, from_paasv3=False, migrated_to_paasv3=False)
+        )
 
     def query_app_list(self, user_app_list, keyword, hide_outline, is_saas, is_lapp, is_third, page, page_size):
         start = (page - 1) * page_size
@@ -154,7 +157,7 @@ class AppTagManager(models.Manager):
             return self.get(name=tag_name)
 
         try:
-            return self.get(name=u"其它")
+            return self.get(name="其它")
         except Exception:
             return None
 

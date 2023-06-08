@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.49
+    - add: env var `BK_API_URL_TMPL` for all app
+
 # 2.14.48
     - update: esb update data, monitor_v3 confapis
 
