@@ -14,8 +14,8 @@ specific language governing permissions and limitations under the License.
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import sys
-from django.utils.functional import SimpleLazyObject
 
+from django.utils.functional import SimpleLazyObject
 
 try:
     import pymysql
@@ -157,7 +157,7 @@ STATICFILES_DIRS = (os.path.join(PROJECT_ROOT, "static"),)
 STATIC_VERSION = "0.2.1"
 
 # NOTE: SHOULD NOT CHANGE THIS LINE, WILL BE REPLACED WITH THE VERSION in pipeline
-PLATFORM_VERSION = '2.0.0'
+PLATFORM_VERSION = "2.0.0"
 
 MEDIA_ROOT = os.path.join(PROJECT_ROOT, "media")
 MEDIA_URL = "/media/"
@@ -222,8 +222,8 @@ TIMEZONE_SESSION_KEY = "django_timezone"
 # 避免循环引用
 _ = lambda s: s  # noqa
 LANGUAGES = (
-    ("en", _(u"English")),
-    ("zh-hans", _(u"简体中文")),
+    ("en", _("English")),
+    ("zh-hans", _("简体中文")),
 )
 LANGUAGE_CODE = "zh-hans"
 LANGUAGE_COOKIE_DOMAIN = SimpleLazyObject(
@@ -319,6 +319,8 @@ BK_PAAS3_URL = ""
 BK_APIGW_URL = ""
 # API 网关文档中心地址
 BK_APIGW_DOC_URL = ""
+# 新版网关访问地址模板, e.g. http://bkapi.example.com/api/{api_name}
+BK_API_URL_TMPL = ""
 
 # HTTP CONNECTIONS
 REQUESTS_POOL_CONNECTIONS = 20
