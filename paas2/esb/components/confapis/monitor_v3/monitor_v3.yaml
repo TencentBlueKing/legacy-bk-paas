@@ -1709,14 +1709,14 @@
   method: GET
 - api_type: query
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
-  dest_http_method: GET
+  dest_http_method: POST
   dest_path: /apm_api/v1/topo/query_topo_relation/
   is_hidden: true
   label: 查询topo关系
   label_en: query apm topo relation
   name: query_apm_topo_relation
   path: /v2/monitor_v3/query_apm_topo_relation/
-  method: GET
+  method: POST
 - api_type: query
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: GET
@@ -1875,6 +1875,28 @@
   label_en: query apm span list
   name: query_apm_span_list
   path: /v2/monitor_v3/query_apm_span_list/
+  method: POST
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /apm_api/v1/application/query_span_statistics/
+  is_hidden: true
+  label: 查询接口统计列表
+  label_en: query apm span statistics
+  name: query_apm_span_statistics
+  path: /v2/monitor_v3/query_apm_span_statistics/
+  method: POST
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /apm_api/v1/application/query_service_statistics/
+  is_hidden: true
+  label: 查询服务统计列表
+  label_en: query apm service statistics
+  name: query_apm_service_statistics
+  path: /v2/monitor_v3/query_apm_service_statistics/
   method: POST
 
 - api_type: query
@@ -2154,4 +2176,136 @@
   label_en: deploy event plugin
   name: deploy_event_plugin
   path: /v2/monitor_v3/deploy_event_plugin/
+  method: POST
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v3/meta/list_data_pipeline/
+  is_hidden: true
+  label: 查询链路管道
+  label_en: list_data_pipeline
+  name: metadata_list_data_pipeline
+  path: /v2/monitor_v3/metadata_list_data_pipeline/
+  method: GET
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/create_data_pipeline/
+  is_hidden: true
+  label: 创建链路管道
+  label_en: create_data_pipeline
+  name: metadata_create_data_pipeline
+  path: /v2/monitor_v3/metadata_create_data_pipeline/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/update_data_pipeline/
+  is_hidden: true
+  label: 更新链路管道
+  label_en: update_data_pipeline
+  name: metadata_update_data_pipeline
+  path: /v2/monitor_v3/metadata_update_data_pipeline/
+  method: POST
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v3/meta/get_storage_cluster_info/
+  is_hidden: true
+  label: 查询集群信息
+  label_en: get_storage_cluster_info
+  name: metadata_get_storage_cluster_info
+  path: /v2/monitor_v3/metadata_get_storage_cluster_info/
+  method: GET
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v3/meta/get_etl_config/
+  is_hidden: true
+  label: 查询场景类型
+  label_en: get_etl_config
+  name: metadata_get_etl_config
+  path: /v2/monitor_v3/metadata_get_etl_config/
+  method: GET
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v3/meta/get_transfer_list/
+  is_hidden: true
+  label: 查询 transfer 集群列表
+  label_en: get_transfer_list
+  name: metadata_get_transfer_list
+  path: /v2/monitor_v3/metadata_get_transfer_list/
+  method: GET
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v3/meta/check_cluster_health/
+  is_hidden: true
+  label: 检测集群连通性
+  label_en: check_cluster_health
+  name: metadata_check_cluster_health
+  path: /v2/monitor_v3/metadata_check_cluster_health/
+  method: GET
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v3/meta/list_data_source_by_data_pipeline/
+  is_hidden: true
+  label: 查询使用管道的数据源信息
+  label_en: list_data_source_by_data_pipeline
+  name: metadata_list_data_source_by_data_pipeline
+  path: /v2/monitor_v3/metadata_list_data_source_by_data_pipeline/
+  method: GET
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v3/meta/list_clusters/
+  is_hidden: true
+  label: 查询已经注册的集群
+  label_en: list_clusters
+  name: metadata_list_clusters
+  path: /v2/monitor_v3/metadata_list_clusters/
+  method: GET
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v3/meta/get_storage_cluster_detail/
+  is_hidden: true
+  label: 查询集群详情
+  label_en: get_storage_cluster_detail
+  name: metadata_get_storage_cluster_detail
+  path: /v2/monitor_v3/metadata_get_storage_cluster_detail/
+  method: GET
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/register_cluster/
+  is_hidden: true
+  label: 注册集群
+  label_en: register_cluster
+  name: metadata_register_cluster
+  path: /v2/monitor_v3/metadata_register_cluster/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/update_registered_cluster/
+  is_hidden: true
+  label: 注册集群
+  label_en: update_registered_cluster
+  name: metadata_update_registered_cluster
+  path: /v2/monitor_v3/metadata_update_registered_cluster/
   method: POST

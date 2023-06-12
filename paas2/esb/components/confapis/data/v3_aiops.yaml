@@ -2355,3 +2355,12 @@
   dest_http_method: PUT
   is_hidden: true
 
+
+- path: /data/v3/aiops/serving/{data_processing_id}/model_file/
+  name: v3_aiops_serving__data_processing_id__model_file
+  label: 获取应用模型文件内容
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/aiops/serving/{data_processing_id}/model_file/
+  dest_http_method: GET
+  is_hidden: true
