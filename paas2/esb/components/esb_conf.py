@@ -528,13 +528,10 @@ config = {
                     (
                         "/v2/usermanage/fe_list_users/",
                         {
-                            "comp_codename": "generic.v2.usermanage.usermanage_component",
+                            "comp_codename": "generic.v2.usermanage.fe_list_users",
                             "request_validators": [UserAuthWithBKTokenValidator()],
                             "is_hidden": True,
                             "comp_conf": {
-                                "name": "fe_list_users",
-                                "dest_http_method": "GET",
-                                "dest_path": "/api/v2/profiles/",
                                 "is_support_jsonp": True,
                             },
                         },
@@ -563,6 +560,19 @@ config = {
                                 "name": "fe_list_department_profiles",
                                 "dest_http_method": "GET",
                                 "dest_path": "/api/v2/departments/{lookup_value}/profiles/",
+                                "is_support_jsonp": True,
+                            },
+                        },
+                    ),
+                    (
+                        "/v2/usermanage/fe_update_user_language/",
+                        {
+                            "comp_codename": "generic.v2.usermanage.fe_update_user_language",
+                            "method": "PUT",
+                            "request_validators": [UserAuthWithBKTokenValidator()],
+                            "is_hidden": True,
+                            "comp_conf": {
+                                "name": "fe_update_user_language",
                                 "is_support_jsonp": True,
                             },
                         },

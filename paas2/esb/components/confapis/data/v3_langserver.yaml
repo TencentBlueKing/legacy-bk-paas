@@ -1,0 +1,8 @@
+- path: /data/v3/langserver/functions/
+  name: v3_langserver_functions_get
+  label: 获取函数列表
+  method: GET
+  comp_codename: generic.data.datav3_component
+  dest_path: /v3/langserver/functions/
+  dest_http_method: GET
+  is_hidden: true

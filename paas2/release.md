@@ -1,5 +1,9 @@
 Release Log
 ===============================
+# 2.14.50
+    - esb: update data, bk_log, cc, gsekit, monitor_v3, nodeman, usermanage confapis
+    - esb: fix usermanage fe_list_users
+
 # 2.14.49
     - add: env var `BK_API_URL_TMPL` for all app
 

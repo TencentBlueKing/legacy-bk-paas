@@ -67,3 +67,36 @@
   path: /v2/gsekit/api/meta/access_overview/
   dest_http_method: GET
   suggest_method: GET
+
+- api_type: operate
+  comp_codename: generic.v2.gsekit.gsekit_component
+  name: gray_build
+  label: GSE2.0灰度
+  label_en: null
+  dest_path: /api/core/gray/build/
+  path: /v2/gsekit/api/core/gray/build/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.gsekit.gsekit_component
+  name: gray_rollback
+  label: GSE2.0灰度回滚
+  label_en: null
+  dest_path: /api/core/gray/rollback/
+  path: /v2/gsekit/api/core/gray/rollback/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.gsekit.gsekit_component
+  name: gray_info
+  label: 获取GSE 2.0灰度信息
+  label_en: null
+  dest_path: /api/core/gray/info/
+  path: /v2/gsekit/api/core/gray/info/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true

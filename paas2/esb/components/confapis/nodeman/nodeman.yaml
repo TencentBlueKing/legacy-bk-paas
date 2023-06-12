@@ -1132,3 +1132,36 @@
   dest_http_method: POST
   suggest_method: POST
   is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: gray_info
+  label: 获取GSE 2.0灰度信息
+  label_en: null
+  dest_path: /core/api/gray/info/
+  path: /v2/nodeman/core/api/gray/info/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: upgrade_to_agent_id
+  label: 升级到Agent ID配置
+  label_en: null
+  dest_path: /core/api/gray/upgrade_to_agent_id/
+  path: /v2/nodeman/core/api/gray/upgrade_to_agent_id/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: rollback_agent_id
+  label: 回滚Agent ID配置
+  label_en: null
+  dest_path: /core/api/gray/rollback_agent_id/
+  path: /v2/nodeman/core/api/gray/rollback_agent_id/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
