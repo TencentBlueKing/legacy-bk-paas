@@ -9,6 +9,7 @@ uWSGI==2.0.13.1
 xlrd==1.0.0
 xlwt==1.1.2
 gevent==1.5.0
+greenlet==1.1.2
 pytz==2016.6.1
 python-dateutil==2.8.1
 # django_oauth_toolkit==0.12.0
