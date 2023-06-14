@@ -568,7 +568,7 @@ config = {
                         "/v2/usermanage/fe_update_user_language/",
                         {
                             "comp_codename": "generic.v2.usermanage.fe_update_user_language",
-                            "method": "PUT",
+                            "method": "GET",
                             "request_validators": [UserAuthWithBKTokenValidator()],
                             "is_hidden": True,
                             "comp_conf": {
