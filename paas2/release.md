@@ -1,5 +1,9 @@
 Release Log
 ===============================
+
+# 2.14.51
+    - fix: lock greenlet version to 1.1.2
+
 # 2.14.50
     - esb: update data, bk_log, cc, gsekit, monitor_v3, nodeman, usermanage confapis
     - esb: fix usermanage fe_list_users
