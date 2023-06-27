@@ -321,6 +321,8 @@ BK_APIGW_URL = ""
 BK_APIGW_DOC_URL = ""
 # 新版网关访问地址模板, e.g. http://bkapi.example.com/api/{api_name}
 BK_API_URL_TMPL = ""
+# 蓝鲸使用的domain
+BK_DOMAIN = ""
 
 # HTTP CONNECTIONS
 REQUESTS_POOL_CONNECTIONS = 20

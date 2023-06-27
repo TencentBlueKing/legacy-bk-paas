@@ -61,6 +61,7 @@ class SecureInfoManager(models.Manager):
             "BK_CC_HOST": bk_cc_host,
             "BK_JOB_HOST": bk_job_host,
             "BK_API_URL_TMPL": settings.BK_API_URL_TMPL,
+            "BK_DOMAIN": settings.BK_DOMAIN,
         }
         # update envs in settings_*.py
         envs.update(settings.APP_DEPLOY_ENVS)

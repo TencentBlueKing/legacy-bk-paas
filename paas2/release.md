@@ -1,5 +1,7 @@
 Release Log
 ===============================
+# 2.14.52
+    - add: env var `BK_DOMAIN` for all app
 
 # 2.14.51
     - fix: lock greenlet version to 1.1.2

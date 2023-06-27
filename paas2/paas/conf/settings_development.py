@@ -54,6 +54,7 @@ BK_COOKIE_NAME = "bk_token"
 BK_COOKIE_AGE = 60 * 60 * 24
 # cookie访问域
 BK_COOKIE_DOMAIN = ".bking.com"
+BK_DOMAIN = "bking.com"
 
 # 控制台地址
 ENGINE_HOST = "http://127.0.0.1:8000"
