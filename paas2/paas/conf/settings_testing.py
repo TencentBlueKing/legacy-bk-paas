@@ -24,6 +24,7 @@ DATABASES = {
 
 # cookie访问域
 BK_COOKIE_DOMAIN = ".bking.com"
+BK_DOMAIN = "bking.com"
 
 # domain
 PAAS_DOMAIN = "openpaas.o.bking.com"
