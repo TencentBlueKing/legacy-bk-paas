@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.54
+    - login: translate `登录` to `Sign in`
+
 # 2.14.53
     - add: env var `BKPAAS_BK_DOMAIN` for all app
     - fix: lock greenlet version to 1.1.2 (console & apigw)

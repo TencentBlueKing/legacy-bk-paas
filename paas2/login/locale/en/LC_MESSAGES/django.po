@@ -208,7 +208,7 @@ msgstr "You need to log in BlueKing"
 
 #: templates/401.html:21 templates/account/login_ce.html:66
 msgid "立即登录"
-msgstr "Log in right now"
+msgstr "Sign in"
 
 #: templates/403.html:6
 msgid "您没有访问权限(403页)"
