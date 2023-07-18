@@ -1,31 +1,33 @@
-### 功能描述
+### Function Description
 
-操作服务器上的进程结果查询
+Process results query on action server
 
-### 请求参数
+### Request Parameters
 
 {{ common_args_desc }}
 
-#### 接口参数
+#### Interface parameters
 
-| 字段        |  类型      | 必选   |  描述      |
+| Fields  |  Type  | Required | Description |
 |-------------|------------|--------|------------|
-| bk_biz_id     |  int       | 是     | 业务ID |
-| bk_gse_taskid |  string    | 是     | GSE任务ID |
+| bk_scope_type | string | yes  | Resource range type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id | string | yes | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_gse_taskid |  string    |  yes  |GSE task ID|
 
-### 请求参数示例
+### Example of request
 
 ```json
 {
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
-    "bk_biz_id": 1,
+    "bk_scope_type": "biz",
+    "bk_scope_id": "1",
     "bk_gse_taskid": "GSETASK:20180315180551:1000"
 }
 ```
 
-### 返回结果示例
+### Example of responses
 
 ```json
 {
@@ -75,21 +77,21 @@
 }
 ```
 
-### 返回结果参数说明
+### Response Description
 
 #### response
-| 字段      | 类型      | 描述      |
+| Fields | Type  | Description |
 |-----------|-----------|-----------|
-| result       | bool   | 请求成功与否。true:请求成功；false请求失败 |
-| code         | int    | 错误编码。 0表示success，>0表示失败错误 |
-| message      | string | 请求失败返回的错误信息|
-| data         | object | 请求返回的数据|
-| permission   | object | 权限信息|
-| request_id   | string | 请求链id|
+| result       |  bool   | Whether the request succeeded or not. True: request succeeded;False: request failed|
+| code         |  int    | Error code. 0 indicates success, >0 indicates failure|
+| message      |  string |Error message|
+| data         |  object |Data returned by request|
+| permission   |  object |Permission information|
+| request_id   |  string |Request chain id|
 
 #### data
 
-| 字段      | 类型      | 描述      |
+| Fields | Type  | Description |
 |-----------|-----------|-----------|
-| status       | int       | 预留字段。GSE任务状态码 |
-| result       | object      | 真正的数据，依赖于GSE数据结构 |
+| status       |  int       | Reserved field. GSE task status code|
+| result       |  object      | Real data, depending on the GSE data structure|

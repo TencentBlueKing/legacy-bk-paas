@@ -10,7 +10,8 @@
 
 | 字段              | 类型   | 必选 | 描述                                                         |
 | ----------------- | ------ | ---- | ------------------------------------------------------------ |
-| bk_biz_id         | long   | 是   | 业务 ID                                                      |
+| bk_scope_type | string | 是     | 资源范围类型。可选值: biz - 业务，biz_set - 业务集 |
+| bk_scope_id | string | 是 | 资源范围ID, 与bk_scope_type对应, 表示业务ID或者业务集ID |
 | create_time_start | long   | 是   | 创建起始时间，Unix 时间戳，单位毫秒                          |
 | create_time_end   | long   | 是   | 创建结束时间，Unix 时间戳，单位毫秒                          |
 | job_instance_id   | long   | 否   | 任务实例ID。 如果出入job_instance_id，将忽略其他查询条件     |
@@ -31,7 +32,8 @@
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
-    "bk_biz_id": 1,
+    "bk_scope_type": "biz",
+    "bk_scope_id": "1",
     "type": 0,
     "launch_mode": 1,
     "status": 3,
@@ -54,7 +56,8 @@
     "data": {
         "data": [
             {
-                "bk_biz_id": 1,
+                "bk_scope_type": "biz",
+                "bk_scope_id": "1",
                 "id": 100,
                 "job_template_id": 1,
                 "job_plan_id": 1,
@@ -86,13 +89,14 @@
 | message      | string | 请求失败返回的错误信息|
 | data         | object | 请求返回的数据|
 | permission   | object | 权限信息|
-| request_id   | string | 请求链id|
+
 
 #### data
 
 | 字段            | 类型   | 描述                                                         |
 | --------------- | ------ | ------------------------------------------------------------ |
-| bk_biz_id       | long   | 业务 ID                                                      |
+| bk_scope_type | string |资源范围类型。可选值: biz - 业务，biz_set - 业务集 |
+| bk_scope_id   | string | 资源范围ID, 与bk_scope_type对应, 表示业务ID或者业务集ID |
 | id              | long   | 执行方案 ID                                                  |
 | job_template_id | long   | 作业模版 ID，当任务为执行方案的时候有值                      |
 | job_plan_id     | long   | 作业执行方案 ID，当任务为执行方案的时候有值                  |

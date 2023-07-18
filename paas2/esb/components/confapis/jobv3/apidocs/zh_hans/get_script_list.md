@@ -10,7 +10,8 @@
 
 | 字段       |  类型      | 必选   |  描述      |
 |----------------------|------------|--------|------------|
-| bk_biz_id              |  long      | 是     | 业务ID |
+| bk_scope_type | string | 是     | 资源范围类型。可选值: biz - 业务，biz_set - 业务集 |
+| bk_scope_id | string | 是 | 资源范围ID, 与bk_scope_type对应, 表示业务ID或者业务集ID |
 | name                   |  string    | 否     | 脚本名称，支持模糊查询 |
 | script_language    |  int       | 否     | 脚本语言。0：所有脚本类型，1：shell，2：bat，3：perl，4：python，5：powershell，6：sql。默认值为0 |
 | start                  |  int       | 否     | 分页记录起始位置，不传默认为0 |
@@ -23,7 +24,8 @@
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
-    "bk_biz_id": 1,
+    "bk_scope_type": "biz",
+    "bk_scope_id": "1",
     "name": "脚本1",
     "script_language": 1,
     "start": 0,
@@ -42,7 +44,8 @@
         "data": [
             {
                 "id": "000dbdddc06c453baf1f2decddf00c69",
-                "bk_biz_id": 1,
+                "bk_scope_type": "biz",
+                "bk_scope_id": "1",
                 "name": "a.sh",
                 "script_language": 1,
                 "online_script_version_id": 100,
@@ -69,14 +72,15 @@
 | message      | string | 请求失败返回的错误信息|
 | data         | object | 请求返回的数据|
 | permission   | object | 权限信息|
-| request_id   | string | 请求链id|
+
 
 #### data
 
 | 字段      | 类型      | 描述      |
 |-----------|-----------|-----------|
 | id              | string    | 脚本ID |
-| bk_biz_id       | long      | 业务ID |
+| bk_scope_type | string |资源范围类型。可选值: biz - 业务，biz_set - 业务集 |
+| bk_scope_id   | string | 资源范围ID, 与bk_scope_type对应, 表示业务ID或者业务集ID |
 | name            | string    | 脚本名称 |
 | script_language | int       | 脚本语言。1 - shell, 2 - bat, 3 - perl, 4 - python, 5 - powershell, 6 - SQL |
 | online_script_version_id            | long    | 已上线脚本版本ID;如果脚本没有已上线版本，该值为空 |

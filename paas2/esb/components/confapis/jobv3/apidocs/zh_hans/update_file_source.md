@@ -10,7 +10,8 @@
 
 | 字段             |  类型      | 必选   |  描述       |
 |-----------------|------------|--------|------------|
-| bk_biz_id       |  long      | 是     | 业务 ID     |
+| bk_scope_type | string | 是     | 资源范围类型。可选值: biz - 业务，biz_set - 业务集 |
+| bk_scope_id | string | 是 | 资源范围ID, 与bk_scope_type对应, 表示业务ID或者业务集ID |
 | id              |  int       | 否     | 文件源ID，与code二者至少填一个，同时填写以id为准 |
 | code            |  string    | 否     | 文件源标识，与id二者至少填一个，同时填写以id为准，英文字符开头，1-32位英文字符、下划线、数字组成，创建后不可更改 |
 | alias           |  string    | 否     | 文件源别名 |
@@ -33,7 +34,8 @@
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
-    "bk_biz_id": 1,
+    "bk_scope_type": "biz",
+    "bk_scope_id": "1",
     "code": "sopsArtifactory",
     "alias": "标准运维制品库文件源",
     "type": "BLUEKING_ARTIFACTORY",
@@ -68,7 +70,7 @@
 | message      | string | 请求失败返回的错误信息|
 | data         | object | 请求返回的数据|
 | permission   | object | 权限信息|
-| request_id   | string | 请求链id|
+
 
 #### data
 

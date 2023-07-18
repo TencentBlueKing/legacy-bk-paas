@@ -10,28 +10,30 @@
 
 | 字段          |  类型      | 必选   |  描述      |
 |---------------|------------|--------|------------|
-| bk_biz_id      |  long       | 是     | 业务ID |
+| bk_scope_type | string | 是     | 资源范围类型。可选值: biz - 业务，biz_set - 业务集 |
+| bk_scope_id | string | 是 | 资源范围ID, 与bk_scope_type对应, 表示业务ID或者业务集ID |
 | script_version_id |  long       | 否     | SQL脚本版本ID |
 | script_id | string | 否 | 脚本ID。当传入script_id，且script_version_id为空的时候，使用当前脚本的上线版本 |
 | script_content |  string    | 否     | 脚本内容Base64。如果不存在script_version_id和script_id,那么使用script_content。优先级：script_version_id>script_id>script_content |
 | timeout |  int       | 否     | 脚本超时时间，秒。默认7200，取值范围1-86400 |
-| db_account_id  |  long       | 是     | SQL执行的db帐号ID，必填, 从帐号管理-DB帐号处获得。 |
+| db_account_id  |  long       | 是     | SQL执行的db账号ID，必填, 从账号管理-DB账号处获得。 |
 | target_server    |  object   | 否     | 目标服务器，见server定义 |
 | callback_url |  string   | 否     | 回调URL，当任务执行完成后，JOB会调用该URL告知任务执行结果。回调协议参考callback_protocol组件文档 |
 
 #### server
 
-| 字段               | 类型  | 必选 | 描述                                |
-| ------------------ | ----- | ---- | ----------------------------------- |
-| ip_list            | array | 否   | 静态 IP 列表，定义见ip              |
-| dynamic_group_list | array | 否   | 动态分组列表，定义见dynamic_group   |
-| topo_node_list     | array | 否   | 动态 topo 节点列表，定义见topo_node |
+| 字段               | 类型  | 必选 | 描述                                                         |
+| ------------------ | ----- | ---- | ------------------------------------------------------------ |
+| host_id_list       | array | 否   | 主机ID列表                                                   |
+| ip_list            | array | 否   | ***不推荐使用，建议使用host_id_list参数***。主机IP 列表，定义见ip |
+| dynamic_group_list | array | 否   | 动态分组列表，定义见dynamic_group                            |
+| topo_node_list     | array | 否   | 动态 topo 节点列表，定义见topo_node                          |
 
 #### ip
 
 | 字段        | 类型   | 必选 | 描述     |
 | ----------- | ------ | ---- | -------- |
-| bk_cloud_id | long   | 是   | 云区域ID |
+| bk_cloud_id | long   | 是   | 管控区域ID |
 | ip          | string | 是   | IP地址   |
 
 #### dynamic_group
@@ -54,7 +56,8 @@
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
-    "bk_biz_id": 1,
+    "bk_scope_type": "biz",
+    "bk_scope_id": "1",
     "script_version_id": 1,
     "timeout": 1000,
     "db_account_id": 32,
@@ -64,15 +67,9 @@
                 "id": "blo8gojho0skft7pr5q0"
             }
         ],
-        "ip_list": [
-            {
-                "bk_cloud_id": 0,
-                "ip": "10.0.0.1"
-            },
-            {
-                "bk_cloud_id": 0,
-                "ip": "10.0.0.2"
-            }
+        "host_id_list": [
+            101,
+            102
         ],
         "topo_node_list": [
             {
@@ -109,8 +106,6 @@
 | message      | string | 请求失败返回的错误信息|
 | data         | object | 请求返回的数据|
 | permission   | object | 权限信息|
-| request_id   | string | 请求链id|
-
 #### data
 
 | 字段      | 类型      | 描述      |

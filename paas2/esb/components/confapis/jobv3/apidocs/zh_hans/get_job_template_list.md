@@ -10,12 +10,13 @@
 
 | 字段                    |  类型      | 必选   |  描述      |
 |------------------------|------------|--------|------------|
-| bk_biz_id              |  long      | 是     | 业务 ID |
-| creator                |  string    | 否     | 作业执行方案创建人帐号 |
+| bk_scope_type | string | 是     | 资源范围类型。可选值: biz - 业务，biz_set - 业务集 |
+| bk_scope_id | string | 是 | 资源范围ID, 与bk_scope_type对应, 表示业务ID或者业务集ID |
+| creator                |  string    | 否     | 作业执行方案创建人账号 |
 | name                   |  string    | 否     | 作业执行方案名称，模糊匹配 |
 | create_time_start      |  long      | 否     | 创建起始时间，Unix 时间戳 |
 | create_time_end        |  long      | 否     | 创建结束时间，Unix 时间戳 |
-| last_modify_user       |  string    | 否     | 作业执行方案修改人帐号 |
+| last_modify_user       |  string    | 否     | 作业执行方案修改人账号 |
 | last_modify_time_start |  long      | 否     | 最后修改起始时间，Unix 时间戳 |
 | last_modify_time_end   |  long      | 否     | 最后修改结束时间，Unix 时间戳 |
 | start                  |  int       | 否     | 默认0表示从第1条记录开始返回 |
@@ -28,7 +29,8 @@
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
-    "bk_biz_id": 1,
+    "bk_scope_type": "biz",
+    "bk_scope_id": "1",
     "creator": "admin",
     "name": "test",
     "create_time_start": 1546272000000,
@@ -51,7 +53,8 @@
     "data": {
         "data": [
             {
-                "bk_biz_id": 1,
+                "bk_scope_type": "biz",
+                "bk_scope_id": "1",
                 "id": 100,
                 "name": "test",
                 "creator": "admin",
@@ -77,16 +80,16 @@
 | message      | string | 请求失败返回的错误信息|
 | data         | object | 请求返回的数据|
 | permission   | object | 权限信息|
-| request_id   | string | 请求链id|
 
 #### data
 
 | 字段              | 类型      | 描述      |
 |------------------|-----------|-----------|
-| bk_biz_id        | long      | 业务 ID |
+| bk_scope_type | string |资源范围类型。可选值: biz - 业务，biz_set - 业务集 |
+| bk_scope_id   | string | 资源范围ID, 与bk_scope_type对应, 表示业务ID或者业务集ID |
 | id               | long      | 作业模版 ID |
 | name             | string    | 作业模版名称 |
-| creator          | string    | 创建人帐号 |
+| creator          | string    | 创建人账号 |
 | create_time      | long      | 创建时间，Unix 时间戳 |
-| last_modify_user | string    | 修改人帐号 |
+| last_modify_user | string    | 修改人账号 |
 | last_modify_time | long      | 最后修改时间，Unix 时间戳 |
