@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.55
+    - esb: update jobv3 confapis
+
 # 2.14.54
     - login: translate `登录` to `Sign in`
 

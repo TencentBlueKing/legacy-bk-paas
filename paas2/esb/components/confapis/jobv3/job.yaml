@@ -318,14 +318,3 @@
   dest_path: /api/job/v3/job-manage/generate_local_file_upload_url/
   dest_http_method: POST
   is_hidden: True
-
-  - path: /v2/jobv3/sync_host_agent_id/
-  name: sync_host_agent_id
-  label: 从cmdb同步主机agent_id到Job
-  label_en: Sync host agent id to job
-  suggest_method: POST
-  api_type: operate
-  comp_codename: generic.v2.jobv3.job_component
-  dest_path: /api/job/v3/job-manage/sync_host_agent_id/
-  dest_http_method: POST
-  is_hidden: True
