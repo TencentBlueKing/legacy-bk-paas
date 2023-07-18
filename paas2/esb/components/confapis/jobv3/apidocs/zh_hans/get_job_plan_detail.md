@@ -10,7 +10,8 @@
 
 | 字段        |  类型        | 必选   |  描述         |
 |-------------|-------------|--------|--------------|
-| bk_biz_id   |  long       | 是     | 业务 ID        |
+| bk_scope_type | string | 是     | 资源范围类型。可选值: biz - 业务，biz_set - 业务集 |
+| bk_scope_id | string | 是 | 资源范围ID, 与bk_scope_type对应, 表示业务ID或者业务集ID |
 | job_plan_id |  long       | 是     | 作业执行方案 ID |
 
 ### 请求参数示例
@@ -20,7 +21,8 @@
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
-    "bk_biz_id": 1,
+    "bk_scope_type": "biz",
+    "bk_scope_id": "1",
     "job_plan_id": 100
 }
 ```
@@ -32,7 +34,8 @@
     "code": 0,
     "message": "",
     "data": {
-        "bk_biz_id": 1,
+        "bk_scope_type": "biz",
+        "bk_scope_id": "1",
         "job_plan_id": 100,
         "name": "test",
         "creator": "admin",
@@ -65,10 +68,12 @@
                     ],
                     "ip_list": [
                         {
+                            "bk_host_id": 101,
                             "bk_cloud_id": 0,
                             "ip": "10.0.0.1"
                         },
                         {
+                            "bk_host_id": 102,
                             "bk_cloud_id": 0,
                             "ip": "10.0.0.2"
                         }
@@ -155,10 +160,12 @@
                             ],
                             "ip_list": [
                                 {
+                                    "bk_host_id": 103,
                                     "bk_cloud_id": 0,
                                     "ip": "10.0.0.3"
                                 },
                                 {
+                                    "bk_host_id": 104,
                                     "bk_cloud_id": 0,
                                     "ip": "10.0.0.4"
                                 }
@@ -193,18 +200,18 @@
 | message      | string | 请求失败返回的错误信息|
 | data         | object | 请求返回的数据|
 | permission   | object | 权限信息|
-| request_id   | string | 请求链id|
 
 #### data
 
 | 字段             | 类型      | 描述      |
 |------------------|-----------|-----------|
-| bk_biz_id        | long       | 业务 ID |
+| bk_scope_type | string |资源范围类型。可选值: biz - 业务，biz_set - 业务集 |
+| bk_scope_id   | string | 资源范围ID, 与bk_scope_type对应, 表示业务ID或者业务集ID |
 | job_plan_id      | long       | 执行方案 ID |
 | name             | string    | 作业名称 |
-| creator          | string    | 作业创建人帐号 |
+| creator          | string    | 作业创建人账号 |
 | create_time      | long      | 创建时间，Unix 时间戳 |
-| last_modify_user | string    | 作业修改人帐号 |
+| last_modify_user | string    | 作业修改人账号 |
 | last_modify_time | long      | 最后修改时间，Unix 时间戳 |
 | step_list        | array     | 步骤对象 |
 | global_var_list  | array     | 全局变量信息 |
@@ -230,7 +237,7 @@
 | script_param       | string    | 脚本参数 |
 | script_timeout     | int       | 脚本超时时间，秒。默认3600，取值范围60-86400 |
 | is_param_sensitive | int       | 是否敏感参数, 0.不是（默认），1.是。|
-| account            | object    | 执行帐号名/别名 |
+| account            | object    | 执行账号名/别名 |
 
 #### file_info
 | 字段                  | 类型   | 描述      |
@@ -265,7 +272,8 @@
 #### ip
 | 字段         |  类型   | 描述   |
 |-------------|---------|---------|
-| bk_cloud_id |  int    | 云区域ID |
+| bk_host_id |  long    | 主机ID |
+| bk_cloud_id |  int    | 管控区域ID |
 | ip          |  string | IP地址 |
 
 #### dynamic_group
@@ -289,7 +297,7 @@
 | 字段            | 类型     | 描述      |
 |-----------------|---------|-----------|
 | file_list       | array   | 源文件的绝对路径数组，支持多个文件 |
-| account         | object  | 执行帐号名/别名 |
+| account         | object  | 执行账号名/别名 |
 | server          | object  | 目标服务器 |
 | file_type        | int     | 文件源类型，1：服务器文件，2：本地文件，3：第三方文件源文件 |
 | file_source_id  | int     | 文件源类型为第三方文件源文件时的第三方文件源Id |
@@ -298,5 +306,5 @@
 | 字段            | 类型     | 描述      |
 |-----------------|---------|-----------|
 | path            | string  | 目标文件存放的路径 |
-| account         | object  | 执行帐号名/别名|
+| account         | object  | 执行账号名/别名|
 | server          | object  | 目标服务器 |

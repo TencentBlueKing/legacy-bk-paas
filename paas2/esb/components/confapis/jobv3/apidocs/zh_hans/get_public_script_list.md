@@ -22,7 +22,7 @@
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
-    "name": "脚本1",
+    "name": "a.sh",
     "script_language": 1,
     "start": 0,
     "length": 10
@@ -67,7 +67,6 @@
 | message      | string | 请求失败返回的错误信息|
 | data         | object | 请求返回的数据|
 | permission   | object | 权限信息|
-| request_id   | string | 请求链id|
 
 #### data
 

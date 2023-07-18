@@ -10,7 +10,8 @@
 
 | 字段      |  类型      | 必选   |  描述      |
 |-----------|------------|--------|------------|
-| bk_biz_id   |  long       | 是     | 业务ID |
+| bk_scope_type | string | 是     | 资源范围类型。可选值: biz - 业务，biz_set - 业务集 |
+| bk_scope_id | string | 是 | 资源范围ID, 与bk_scope_type对应, 表示业务ID或者业务集ID |
 | job_instance_id   |  long       | 是     | 作业实例ID |
 | step_instance_id |  long     | 是     | 步骤实例ID |
 | operation_code |  int     | 是     | 操作类型：2、失败IP重做，3、忽略错误 6、确认继续 8、全部重试，9、终止确认流程，10-重新发起确认，11、进入下一步，12、强制跳过 |
@@ -35,7 +36,8 @@
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
-    "bk_biz_id": 1,
+    "bk_scope_type": "biz",
+    "bk_scope_id": "1",
     "job_instance_id": 100,
     "step_instance_id": 200,
     "operation_code": 2
@@ -66,7 +68,7 @@
 | message      | string | 请求失败返回的错误信息|
 | data         | object | 请求返回的数据|
 | permission   | object | 权限信息|
-| request_id   | string | 请求链id|
+
 
 #### data
 

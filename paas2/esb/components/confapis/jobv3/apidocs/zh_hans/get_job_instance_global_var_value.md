@@ -10,7 +10,8 @@
 
 | 字段      |  类型      | 必选   |  描述      |
 |-----------|------------|--------|------------|
-| bk_biz_id       |  long       | 是     | 业务ID |
+| bk_scope_type | string | 是     | 资源范围类型。可选值: biz - 业务，biz_set - 业务集 |
+| bk_scope_id | string | 是 | 资源范围ID, 与bk_scope_type对应, 表示业务ID或者业务集ID |
 | job_instance_id |  long    | 是     | 作业实例ID |
 
 ### 请求参数示例
@@ -20,7 +21,8 @@
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
-    "bk_biz_id": 1,
+    "bk_scope_type": "biz",
+    "bk_scope_id": "1",
     "job_instance_id": 100
 }
 ```
@@ -80,16 +82,15 @@
 | message      | string | 请求失败返回的错误信息|
 | data         | object | 请求返回的数据|
 | permission   | object | 权限信息|
-| request_id   | string | 请求链id|
 
 #### data
 
 | 字段      | 类型      | 描述      |
 |-----------|-----------|-----------|
 | job_instance_id  | long       | 作业实例ID |
-| job_instance_var_list | array   | 作业实例全局变量值。定义见step_instance_var |
+| step_instance_var_list | array   | 作业步骤实例全局变量值。定义见step_instance_var |
 
-**step_instance_var**
+#### step_instance_var
 
 | 字段             | 类型  | 描述                             |
 | ---------------- | ----- | -------------------------------- |
@@ -117,7 +118,8 @@
 
 | 字段        | 类型   | 必选 | 描述     |
 | ----------- | ------ | ---- | -------- |
-| bk_cloud_id | int    | 是   | 云区域ID |
+| bk_host_id |  long    | 主机ID |
+| bk_cloud_id | int    | 是   | 管控区域ID |
 | ip          | string | 是   | IP地址   |
 
 #### dynamic_group

@@ -10,7 +10,8 @@
 
 | 字段                   |  类型       | 必选   |  描述       |
 |------------------------|------------|--------|------------|
-| bk_biz_id              |  long      | 是     | 业务 ID     |
+| bk_scope_type | string | 是     | 资源范围类型。可选值: biz - 业务，biz_set - 业务集 |
+| bk_scope_id | string | 是 | 资源范围ID, 与bk_scope_type对应, 表示业务ID或者业务集ID |
 | id                     |  long      | 否     | 定时任务 ID |
 
 ### 请求参数示例
@@ -20,7 +21,8 @@
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
-    "bk_biz_id": 1,
+    "bk_scope_type": "biz",
+    "bk_scope_id": "1",
     "id": 1
 }
 ```
@@ -33,7 +35,8 @@
     "code": 0,
     "message": "",
     "data": {
-        "bk_biz_id": 1,
+        "bk_scope_type": "biz",
+        "bk_scope_id": "1",
         "job_plan_id": 100,
         "id": 1,
         "name": "test",
@@ -54,10 +57,12 @@
                     ],
                     "ip_list": [
                         {
+                            "bk_host_id": 101,
                             "bk_cloud_id": 0,
                             "ip": "10.0.0.1"
                         },
                         {
+                            "bk_host_id": 102,
                             "bk_cloud_id": 0,
                             "ip": "10.0.0.2"
                         }
@@ -94,21 +99,22 @@
 | message      | string | 请求失败返回的错误信息|
 | data         | object | 请求返回的数据|
 | permission   | object | 权限信息|
-| request_id   | string | 请求链id|
+
 
 #### data
 | 字段             | 类型      | 描述      |
 |------------------|-----------|-----------|
-| bk_biz_id        | long      | 业务 ID |
+| bk_scope_type | string |资源范围类型。可选值: biz - 业务，biz_set - 业务集 |
+| bk_scope_id   | string | 资源范围ID, 与bk_scope_type对应, 表示业务ID或者业务集ID |
 | job_plan_id      | long      | 执行方案 ID |
 | id               | long      | 定时作业 ID |
 | name             | string    | 定时作业名称 |
 | status           | int       | 定时作业状态：1.已启动、2.已暂停 |
 | expression       | string    | 定时任务crontab的定时规则，新建时必填，修改时选填。各字段含义为：分 时 日 月 周，如: 0/5 * * * ? 表示每5分钟执行一次 |
 | global_var_list |  array     | 全局变量信息 |
-| creator          | string    | 作业创建人帐号 |
+| creator          | string    | 作业创建人账号 |
 | create_time      | long      | 创建时间，Unix 时间戳 |
-| last_modify_user | string    | 作业修改人帐号 |
+| last_modify_user | string    | 作业修改人账号 |
 | last_modify_time | long      | 最后修改时间，Unix 时间戳 |
 
 #### global_var
@@ -131,7 +137,8 @@
 
 | 字段         |  类型   |  描述   |
 |-------------|---------|---------|
-| bk_cloud_id |  int    | 云区域ID |
+| bk_host_id |  long    | 主机ID |
+| bk_cloud_id |  int    | 管控区域ID |
 | ip          |  string | IP地址 |
 
 #### topo_node

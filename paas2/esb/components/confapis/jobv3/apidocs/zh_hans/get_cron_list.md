@@ -10,14 +10,15 @@
 
 | 字段                   |  类型       | 必选   |  描述      |
 |------------------------|------------|--------|------------|
-| bk_biz_id              |  long      | 是     | 业务 ID |
+| bk_scope_type | string | 是     | 资源范围类型。可选值: biz - 业务，biz_set - 业务集 |
+| bk_scope_id | string | 是 | 资源范围ID, 与bk_scope_type对应, 表示业务ID或者业务集ID |
 | name                   |  string    | 否     | 定时作业名称 |
 | id                     |  long      | 否     | 定时任务 ID，如果存在则忽略其他筛选条件，只查询这个指定的作业信息 |
 | status                 |  int       | 否     | 定时作业状态：1.已启动、2.已暂停 |
-| creator                |  string    | 否     | 定时作业创建人帐号 |
+| creator                |  string    | 否     | 定时作业创建人账号 |
 | create_time_start      |  long      | 否     | 创建起始时间，Unix 时间戳(s) |
 | create_time_end        |  long      | 否     | 创建结束时间，Unix 时间戳(s) |
-| last_modify_user       |  string    | 否     | 作业修改人帐号 |
+| last_modify_user       |  string    | 否     | 作业修改人账号 |
 | last_modify_time_start |  long      | 否     | 最后修改起始时间，Unix 时间戳(s) |
 | last_modify_time_end   |  long      | 否     | 最后修改结束时间，Unix 时间戳(s) |
 | start                  |  int       | 否     | 默认 0 表示从第 1 条记录开始返回 |
@@ -30,7 +31,8 @@
     "bk_app_code": "esb_test",
     "bk_app_secret": "xxx",
     "bk_token": "xxx",
-    "bk_biz_id": 2,
+    "bk_scope_type": "biz",
+    "bk_scope_id": "1",
     "name": "test",
     "id": 1000031,
     "status": 1,
@@ -57,10 +59,11 @@
         "data": [
             {
                 "id": 1000031,
-                "name": "tylertest动态分组ID变更",
+                "name": "test",
                 "status": 1,
                 "creator": "admin",
-                "bk_biz_id": 2,
+                "bk_scope_type": "biz",
+                "bk_scope_id": "1",
                 "job_plan_id": 1000193,
                 "expression": "* * * * * *",
                 "create_time": 1617285956,
@@ -84,18 +87,19 @@
 | message      | string | 请求失败返回的错误信息|
 | data         | object | 请求返回的数据|
 | permission   | object | 权限信息|
-| request_id   | string | 请求链id|
+
 
 #### data
 | 字段             | 类型      | 描述      |
 |------------------|-----------|-----------|
-| bk_biz_id        | long      | 业务 ID |
+| bk_scope_type | string |资源范围类型。可选值: biz - 业务，biz_set - 业务集 |
+| bk_scope_id   | string | 资源范围ID, 与bk_scope_type对应, 表示业务ID或者业务集ID |
 | job_plan_id      | long      | 执行方案 ID |
 | id               | long      | 定时作业 ID |
 | name             | string    | 定时作业名称 |
 | status           | int       | 定时作业状态：1.已启动、2.已暂停 |
 | expression       | string    | 定时任务crontab的定时规则，新建时必填，修改时选填。各字段含义为：分 时 日 月 周，如: 0/5 * * * ? 表示每5分钟执行一次 |
-| creator          | string    | 作业创建人帐号 |
+| creator          | string    | 作业创建人账号 |
 | create_time      | long      | 创建时间，Unix 时间戳(s) |
-| last_modify_user | string    | 作业修改人帐号 |
+| last_modify_user | string    | 作业修改人账号 |
 | last_modify_time | long      | 最后修改时间，Unix 时间戳(s) |
