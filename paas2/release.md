@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.56
+    - esb: update cc confapis
+
 # 2.14.55
     - esb: update jobv3 confapis
 
