@@ -144,6 +144,18 @@
   dest_http_method: POST
   is_hidden: True
 
+- path: /v2/bk_log/index_set/
+  name: index_set
+  label: 日志平台-索引集列表
+  label_en: bk_log index-set list api
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/index_set/
+  dest_http_method: GET
+  is_hidden: True
+
+
 - path: /v2/bk_log/create_index_set/
   name: create_index_set
   label: 日志平台-创建索引集
@@ -750,6 +762,17 @@
   dest_http_method: GET
   is_hidden: True
 
+- path: /v2/bk_log/list_bcs_collector_without_rule/
+  name: list_bcs_collector_without_rule
+  label: 日志平台-查询非BCS创建的容器采集项
+  label_en: bk_log list bcs collector
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/collectors/list_bcs_collector_without_rule/
+  dest_http_method: GET
+  is_hidden: True
+
 - path: /v2/bk_log/create_bcs_collector/
   name: create_bcs_collector
   label: 日志平台-创建bcs采集项
@@ -957,4 +980,37 @@
   comp_codename: generic.v2.bk_log.bk_log_component
   dest_path: /api/v1/databus/collectors/{collector_config_id}/start/
   dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/databus/clean_template/etl_preview/
+  name: databus_clean_template_etl_preview
+  label: 日志平台-清洗模板-预览提取结果
+  label_en: bk_log clean_template etl preview
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/databus/clean_template/etl_preview/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/result_table/
+  name: list_result_tables
+  label: 日志平台-获取集群索引列表
+  label_en: bk_log result_table
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/result_table/
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/result_table/{result_table_id}/
+  name: list_result_table_fields
+  label: 日志平台-集群索引详情
+  label_en: bk_log result_table retrieve
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/result_table/{result_table_id}/
+  dest_http_method: GET
   is_hidden: True

@@ -2078,6 +2078,17 @@
 - api_type: operate
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST
+  dest_path: /api/v4/grafana/time_series/unify_query_raw/
+  is_hidden: true
+  label: 视图数据查询(原始数据)
+  label_en: time series unify raw query
+  name: time_series_unify_query_raw
+  path: /v2/monitor_v3/time_series_unify_query_raw/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
   dest_path: /api/v4/bcs/register_cluster/
   is_hidden: true
   label: BCS集群接入监控
@@ -2308,4 +2319,92 @@
   label_en: update_registered_cluster
   name: metadata_update_registered_cluster
   path: /v2/monitor_v3/metadata_update_registered_cluster/
+  method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v4/application_web/create_application/
+  is_hidden: true
+  label: 【APM】应用创建
+  label_en: create apm application
+  name: apm_create_web_application
+  path: /v2/monitor_v3/apm/create_web_application/
+  suggest_method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v4/application_web/delete_application/
+  is_hidden: true
+  label: 【APM】应用删除
+  label_en: delete apm application
+  name: apm_delete_web_application
+  path: /v2/monitor_v3/apm/delete_web_application/
+  suggest_method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v4/application_web/setup/
+  is_hidden: true
+  label: 【APM】应用更新
+  label_en: update apm application
+  name: apm_update_web_application
+  path: /v2/monitor_v3/apm/update_web_application/
+  suggest_method: POST
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v4/application_web/check_duplicate_app_name/
+  is_hidden: true
+  label: 【APM】应用名校验
+  label_en: check apm duplicate app name
+  name: apm_check_duplicate_app_name
+  path: /v2/monitor_v3/apm/check_duplicate_app_name/
+  suggest_method: GET
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v4/application_web/{application_id}/application_info/
+  is_hidden: true
+  label: 【APM】应用详情查询
+  label_en: apm application info
+  name: apm_application_info
+  path: /v2/monitor_v3/apm/application_info/
+  suggest_method: GET
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v4/application_web/{application_id}/query_bk_data_token/
+  is_hidden: true
+  label: 【APM】应用token查询
+  label_en: query apm data token
+  name: apm_query_bk_data_token
+  path: /v2/monitor_v3/apm/query_bk_data_token/
+  suggest_method: GET
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v4/application_web/application_info_by_app_name/
+  is_hidden: true
+  label: 【APM】根据应用名查询应用详情
+  label_en: query apm application info by app name
+  name: apm_application_info_by_app_name
+  path: /v2/monitor_v3/apm/application_info_by_app_name/
+  suggest_method: GET
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v3/meta/query_data_source_by_space_uid/
+  is_hidden: false
+  label: 根据space_uid查询data_source
+  label_en: metadata query data source by space_uid
+  name: metadata_query_data_source_by_space_uid
+  path: /v2/monitor_v3/metadata_query_data_source_by_space_uid/
   method: POST
