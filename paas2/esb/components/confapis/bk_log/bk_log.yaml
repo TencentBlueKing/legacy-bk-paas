@@ -1014,3 +1014,91 @@
   dest_path: /api/v1/result_table/{result_table_id}/
   dest_http_method: GET
   is_hidden: True
+
+- path: /v2/bk_log/search_index_set/{index_set_id}/search/
+  name: search log
+  label: 日志平台-日志检索
+  label_en: bk_log search log
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/search/index_set/{index_set_id}/search/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/index_set/{index_set_id}/desensitize/config/create/
+  name: desensitize_config_create
+  label: 脱敏配置创建
+  label_en: create desensitize config
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/index_set/{index_set_id}/desensitize/config/create/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/index_set/{index_set_id}/desensitize/config/update/
+  name: desensitize_config_update
+  label: 脱敏配置编辑
+  label_en: update desensitize config
+  method: PUT
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/index_set/{index_set_id}/desensitize/config/update/
+  dest_http_method: PUT
+  is_hidden: True
+
+- path: /v2/bk_log/index_set/{index_set_id}/desensitize/config/retrieve/
+  name: desensitize_config_retrieve
+  label: 脱敏配置详情
+  label_en: desensitize config retrieve
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/index_set/{index_set_id}/desensitize/config/retrieve/
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/index_set/{index_set_id}/desensitize/config/delete/
+  name: desensitize_config_delete
+  label: 脱敏配置删除
+  label_en: desensitize config delete
+  method: DELETE
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/index_set/{index_set_id}/desensitize/config/delete/
+  dest_http_method: DELETE
+  is_hidden: True
+
+- path: /v2/bk_log/search_index_set/union_search/
+  name: union_search
+  label: 日志平台-联合检索-日志内容
+  label_en: bk_log union search
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/search/index_set/union_search/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/search_index_set/union_search/fields/
+  name: union_search_fields
+  label: 日志平台-联合检索-Mapping字段信息
+  label_en: bk_log union search fields
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/search/index_set/union_search/fields/
+  dest_http_method: POST
+  is_hidden: True
+
+- path: /v2/bk_log/search_index_set/aggs/union_search/date_histogram/
+  name: union_search_data_histogram
+  label: 日志平台-联合检索-时间聚合曲线图
+  label_en: bk_log union search date histogram
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /api/v1/search/index_set/aggs/union_search/date_histogram/
+  dest_http_method: POST
+  is_hidden: True
