@@ -247,7 +247,7 @@ export LAN_IP=$(get_lan_ip | head -1)
 
 WORK_DIR=$PWD
 
-if [ -z "$INSTALL_PATH" ]; then
+if [ ! -z "$INSTALL_PATH" ]; then
     BK_HOME=$INSTALL_PATH
 else
     BK_HOME=${WORK_DIR%%/paas_agent*}
@@ -350,9 +350,9 @@ rm -rf $code_tempdir
 
 # 部署时, 为App 共享目录建立软连接。
 if [ ! -z "$BKAPP_ENABLE_SHARED_FS" ]; then
-    NFS_DIR=$INSTALL_PATH/public/paas_agent/share/$APP_CODE
+    NFS_DIR=$BK_HOME/public/paas_agent/share/$APP_CODE
     mkdir -p $NFS_DIR
-    chown apps.apps $NFS_DIR
+    chown $APPS_UID:$APPS_GID $NFS_DIR 
     ln -s $NFS_DIR $CODE_PATH/$APP_CODE/USERRES
 fi
 step "-------- create app container --------"
