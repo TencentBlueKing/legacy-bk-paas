@@ -652,6 +652,28 @@
   dest_http_method: POST
   is_hidden: True
 
+- path: /v2/bk_log/grafana/custom_es_datasource/{index_set_id}/_mapping
+  name: custom_es_datasource_mapping
+  label: 日志平台-自定义ES数据源获取Mapping
+  label_en: bk_log es grafana_custom_es_datasource mapping
+  method: GET
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /grafana/custom_es_datasource/{index_set_id}/_mapping
+  dest_http_method: GET
+  is_hidden: True
+
+- path: /v2/bk_log/grafana/custom_es_datasource/_msearch
+  name: custom_es_datasource_msearch
+  label: 日志平台-自定义ES数据源msearch
+  label_en: bk_log es grafana_custom_es_datasource msearch
+  method: POST
+  api_type: query
+  comp_codename: generic.v2.bk_log.bk_log_component
+  dest_path: /grafana/custom_es_datasource/_msearch
+  dest_http_method: POST
+  is_hidden: True
+
 - path: /v2/bk_log/grafana/target_tree/
   name: grafana_target_tree
   label: 日志平台-grafana查询接口
@@ -1016,7 +1038,7 @@
   is_hidden: True
 
 - path: /v2/bk_log/search_index_set/{index_set_id}/search/
-  name: search log
+  name: search_log
   label: 日志平台-日志检索
   label_en: bk_log search log
   method: POST
