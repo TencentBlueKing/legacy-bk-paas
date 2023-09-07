@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.59
+    - esb: update bk_log confapis
+
 # 2.14.58
     - esb: update bk_log confapis
 
