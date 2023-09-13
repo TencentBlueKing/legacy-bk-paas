@@ -115,6 +115,9 @@ def is_bk_token_valid(bk_token):  # NOQA
 
     # 更新 无操作有效期
     try:
+        # 为避免每个请求都刷新inactive_expire_time造成性能问题，在对inactive_expire_time续期前，进行更新时间间隔判断
+        # 表记录中的inactive_expire_time = 上一个now_time + BK_INACTIVE_COOKIE_AGE
+        # 需判断 (当前时间 + BK_INACTIVE_COOKIE_AGE) > (inactive_expire_time + 更新时间间隔)，才进行续期
         if now_time + BK_INACTIVE_COOKIE_AGE > inactive_expire_time + settings.BK_INACTIVE_UPDATE_INTERVEL:
             BkToken.objects.filter(token=bk_token).update(inactive_expire_time=now_time + BK_INACTIVE_COOKIE_AGE)
     except Exception:
