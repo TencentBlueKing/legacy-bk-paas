@@ -21,7 +21,7 @@
     - esb: 蓝鲸API网关
     - appengine: 蓝鲸应用引擎
 - PaaSAgent（paas-ce/paasagent）: 蓝鲸应用引擎Agent（golang [[labstack/echo](https://github.com/labstack/echo)]）
-- LessCode: 蓝鲸可视化开发平台，提供了前端页面在线可视化拖拽组装、配置编辑、源码生成、二次开发等能力，[详细介绍](https://github.com/TencentBlueKing/bk-lesscode/blob/develop/readme.md)
+- LessCode: 蓝鲸运维开发平台，提供了前端页面在线可视化拖拽组装、配置编辑、源码生成、二次开发等能力，[详细介绍](https://github.com/TencentBlueKing/bk-lesscode/blob/develop/readme.md)
 
 <br>
 
@@ -41,7 +41,7 @@
 |login: 蓝鲸统一登录服务 |集成在主仓库（paas-ce/paas/login) |独立成一个产品，[统一登录用户管理](https://github.com/TencentBlueKing/bk-user) |
 |paas: 蓝鲸开发者中心 |集成在主仓库（paas-ce/paas) |独立成一个产品，[PaaS-开发者中心](https://github.com/TencentBlueKing/blueking-paas) |
 |paas: web工作台 |集成在主仓库（paas-ce/paas) |独立成一个产品，将“工作台”优化为[桌面](https://github.com/TencentBlueKing/blueking-console) |
-|LessCode: 蓝鲸可视化开发平台 |集成在主仓库 lesscode-master 分支 |独立成一个产品，[可视化开发平台](https://github.com/TencentBlueKing/bk-lesscode) |
+|LessCode: 蓝鲸运维开发平台 |集成在主仓库 lesscode-master 分支 |独立成一个产品，[运维开发平台](https://github.com/TencentBlueKing/bk-lesscode) |
 
 <br>
 
@@ -96,7 +96,7 @@ PaaS平台的“开发者中心”提供“一键迁移”功能，仅支持将�
 - API网关：支持两种接入模式（在线自助接入和组件编码接入）的企业级服务总线，方便开发者对接企业内已有系统的API服务
 - 多环境部署：支持多环境部署SaaS应用, 方便开发者进行测试验证及生产环境发布
 - 可插拔式应用：支持蓝鲸S-mart应用上传部署, 方便蓝鲸S-mart应用部署移植 [更多应用](http://bk.tencent.com/s-mart)
-- 可视化开发平台：支持前端页面在线可视化拖拽组装、配置编辑、源码生成、二次开发等能力（[详细介绍](https://github.com/TencentBlueKing/bk-lesscode/blob/develop/readme.md)）
+- 运维开发平台：支持前端页面在线可视化拖拽组装、配置编辑、源码生成、二次开发等能力（[详细介绍](https://github.com/TencentBlueKing/bk-lesscode/blob/develop/readme.md)）
 
 ## Experience
 
