@@ -10,8 +10,8 @@ Query Cron job details
 
 | Fields             |  Type   | Required | Description |
 |------------------------|------------|--------|------------|
-| bk_scope_type | string | yes  | Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id | string | yes | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string | yes  | Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id | string | yes | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | id                     |   long      |  no   | Cron Job ID |
 
 ### Example of request
@@ -57,10 +57,12 @@ Query Cron job details
                     ],
                     "ip_list": [
                         {
+                            "bk_host_id": 101,
                             "bk_cloud_id": 0,
                             "ip": "10.0.0.1"
                         },
                         {
+                            "bk_host_id": 102,
                             "bk_cloud_id": 0,
                             "ip": "10.0.0.2"
                         }
@@ -102,8 +104,8 @@ Query Cron job details
 #### data
 | Fields       | Type  | Description |
 |------------------|-----------|-----------|
-| bk_scope_type | string |Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id   | string | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string |Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id   | string | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | job_plan_id      |  long      | Job Plan ID |
 | id               |  long      | Cron job ID |
 | name             |  string    | Cron job name |

@@ -1165,3 +1165,80 @@
   dest_http_method: POST
   suggest_method: POST
   is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: ipchooser_host_check
+  label: 根据用户手动输入的`IP`/`IPv6`/`主机名`/`host_id`等关键字信息获取真实存在的机器信息
+  label_en: null
+  dest_path: /core/api/ipchooser_host/check/
+  path: /v2/nodeman/core/api/ipchooser_host/check/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: ipchooser_host_details
+  label: 根据主机关键信息获取机器详情信息
+  label_en: null
+  dest_path: /core/api/ipchooser_host/details/
+  path: /v2/nodeman/core/api/ipchooser_host/details/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: ipchooser_topo_agent_statistics
+  label: 获取多个拓扑节点的主机 Agent 状态统计信息
+  label_en: null
+  dest_path: /core/api/ipchooser_topo/agent_statistics/
+  path: /v2/nodeman/core/api/ipchooser_topo/agent_statistics/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: ipchooser_topo_query_host_id_infos
+  label: 根据多个拓扑节点与搜索条件批量分页查询所包含的主机 ID 信息
+  label_en: null
+  dest_path: /core/api/ipchooser_topo/query_host_id_infos/
+  path: /v2/nodeman/core/api/ipchooser_topo/query_host_id_infos/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: ipchooser_topo_query_hosts
+  label: 根据多个拓扑节点与搜索条件批量分页查询所包含的主机信息
+  label_en: null
+  dest_path: /core/api/ipchooser_topo/query_hosts/
+  path: /v2/nodeman/core/api/ipchooser_topo/query_hosts/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: ipchooser_topo_query_path
+  label: 查询多个节点拓扑路径
+  label_en: null
+  dest_path: /core/api/ipchooser_topo/query_path/
+  path: /v2/nodeman/core/api/ipchooser_topo/query_path/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true
+
+- api_type: operate
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: ipchooser_topo_trees
+  label: 批量获取含各节点主机数量的拓扑树
+  label_en: null
+  dest_path: /core/api/ipchooser_topo/trees/
+  path: /v2/nodeman/core/api/ipchooser_topo/trees/
+  dest_http_method: POST
+  suggest_method: POST
+  is_hidden: true

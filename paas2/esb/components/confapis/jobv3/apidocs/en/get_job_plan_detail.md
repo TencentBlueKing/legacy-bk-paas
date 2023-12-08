@@ -10,8 +10,8 @@ Check Job Plan details by Job Plan ID
 
 | Fields  |  Type    | Required | Description |
 |-------------|-------------|--------|--------------|
-| bk_scope_type | string | yes  | Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id | string | yes | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string | yes  | Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id | string | yes | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | job_plan_id |  long       |  yes  |Job Plan ID|
 
 ### Example of request
@@ -68,10 +68,12 @@ Check Job Plan details by Job Plan ID
                     ],
                     "ip_list": [
                         {
+                            "bk_host_id": 101,
                             "bk_cloud_id": 0,
                             "ip": "10.0.0.1"
                         },
                         {
+                            "bk_host_id": 102,
                             "bk_cloud_id": 0,
                             "ip": "10.0.0.2"
                         }
@@ -158,10 +160,12 @@ Check Job Plan details by Job Plan ID
                             ],
                             "ip_list": [
                                 {
+                                    "bk_host_id": 103,
                                     "bk_cloud_id": 0,
                                     "ip": "10.0.0.3"
                                 },
                                 {
+                                    "bk_host_id": 104,
                                     "bk_cloud_id": 0,
                                     "ip": "10.0.0.4"
                                 }
@@ -202,8 +206,8 @@ Check Job Plan details by Job Plan ID
 
 | Fields       | Type  | Description |
 |------------------|-----------|-----------|
-| bk_scope_type | string |Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id   | string | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string |Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id   | string | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | job_plan_id      |  long       | Job Plan ID |
 | name             |  string    | Job name|
 | creator          |  string    | Job creator account number|
@@ -269,6 +273,7 @@ Check Job Plan details by Job Plan ID
 #### ip
 | Fields   | Type | Description |
 |-------------|---------|---------|
+| bk_host_id |  long    | Host ID |
 | bk_cloud_id |  int    | BK-Net ID |
 | ip          |  string | IP Address |
 

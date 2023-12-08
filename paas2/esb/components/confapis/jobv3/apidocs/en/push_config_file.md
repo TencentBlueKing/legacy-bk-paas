@@ -10,8 +10,8 @@ Distribute configuration files, this interface is used to distribute small plain
 
 | Fields |  Type  | Required | Description |
 |-------------|------------|--------|------------|
-| bk_scope_type | string | yes  | Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id | string | yes | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string | yes  | Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id | string | yes | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | task_name        |   string     |  no   | Custom job name|
 | account_alias  |  string    |  yes  |Execute account alias|
 | file_target_path |  string    |  yes  |File transfer destination path|
@@ -27,11 +27,13 @@ Distribute configuration files, this interface is used to distribute small plain
 
 #### server
 
-| Fields             | Type  | Required | Description                         |
-| ------------------ | ----- | -------- | ----------------------------------- |
-| ip_list            |  array | no       | Static IP list, as defined in ip              |
-| dynamic_group_list | array | no       | Dynamic grouping list, for definition, see dynamic_group   |
-| topo_node_list     |  array | no       | For dynamic topo node list, see topo_node for definition|
+| Fields             | Type  | Required | Description                                             |
+| ------------------ | ----- | -------- | ------------------------------------------------------- |
+| host_id_list       | array | no       | Host ID list         |
+| ip_list            | array | no       | Static IP list, see ip for definition. ***Deprecated, it is recommended to use the host_id_list parameter***; if host_id_list and ip_list exist at the same time, the ip_list parameter will be ignored.                 |
+| dynamic_group_list | array | no       | Dynamic grouping list, see dynamic_group for definition |
+| topo_node_list     | array | no       | Dynamic topo node list, see topo_node for definition    |
+
 
 #### ip
 
@@ -60,7 +62,7 @@ Distribute configuration files, this interface is used to distribute small plain
     "bk_token": "xxx",
     "bk_scope_type": "biz",
     "bk_scope_id": "1",
-    "account": "root",
+    "account_alias": "root",
     "file_target_path": "/tmp/",
     "file_list": [
         {
@@ -74,15 +76,9 @@ Distribute configuration files, this interface is used to distribute small plain
                 "id": "blo8gojho0skft7pr5q0"
             }
         ],
-        "ip_list": [
-            {
-                "bk_cloud_id": 0,
-                "ip": "10.0.0.1"
-            },
-            {
-                "bk_cloud_id": 0,
-                "ip": "10.0.0.2"
-            }
+        "host_id_list": [
+            101,
+            102
         ],
         "topo_node_list": [
             {

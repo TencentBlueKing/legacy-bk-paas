@@ -10,8 +10,8 @@ Query information of cron jobs under business
 
 | Fields             |  Type   | Required | Description |
 |------------------------|------------|--------|------------|
-| bk_scope_type | string | yes  | Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id | string | yes | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string | yes  | Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id | string | yes | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | name                   |   string    |  no   | Cron job name |
 | id                     |   long      |  no   | Cron Job ID. If it exists, ignore other filtering criteria and only query the specified job information |
 | status                 |   int       |  no   | Cron job status: 1. Started, 2. Paused |
@@ -92,8 +92,8 @@ Query information of cron jobs under business
 #### data
 | Fields       | Type  | Description |
 |------------------|-----------|-----------|
-| bk_scope_type | string |Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id   | string | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string |Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id   | string | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | job_plan_id      |  long      | Job Plan ID |
 | id               |  long      | Cron job ID |
 | name             |  string    | Cron job name |

@@ -10,8 +10,8 @@ Query business script list
 
 | Fields |  Type  | Required | Description |
 |----------------------|------------|--------|------------|
-| bk_scope_type | string | yes  | Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id | string | yes | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string | yes  | Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id | string | yes | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | name                   |   string    |  no   | Script name, supports fuzzy query|
 | script_language    |   int       |  no   | Scripting language. 0: all script types, 1: shell, 2: bat，3：perl，4： python，5：powershell，6： sql. Default 0|
 | start                  |   int       |  no   | Start position of paging record, default 0|
@@ -79,8 +79,8 @@ Query business script list
 | Fields | Type  | Description |
 |-----------|-----------|-----------|
 | id              |  string    | Script ID|
-| bk_scope_type | string |Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id   | string | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string |Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id   | string | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | name            |  string    | Script name|
 | script_language | int       | Scripting language. 1 - shell, 2 - bat, 3 - perl, 4 - python, 5 - powershell, 6 - SQL |
 | online_script_version_id            |  long    | Online script version ID; null if the script does not have an online version|

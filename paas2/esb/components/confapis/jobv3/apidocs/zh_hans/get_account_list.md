@@ -13,6 +13,8 @@
 | bk_scope_type | string | 是     | 资源范围类型。可选值: biz - 业务，biz_set - 业务集 |
 | bk_scope_id | string | 是 | 资源范围ID, 与bk_scope_type对应, 表示业务ID或者业务集ID |
 | category               |  int        | 否     | 账号用途（1：系统账号，2：DB账号），不传则不区分 |
+| account                |  string     | 否     | 账号名称 |
+| alias                  |  string     | 否     | 账号别名 |
 | start                  |  int        | 否     | 分页记录起始位置，不传默认为0 |
 | length                 |  int        | 否     | 单次返回最大记录数，最大1000，不传默认为20 |
 
@@ -26,6 +28,8 @@
     "bk_scope_type": "biz",
     "bk_scope_id": "1",
     "category": 1,
+    "account": "aaa",
+    "alias": "aaa",
     "start": 0,
     "length": 1
 }

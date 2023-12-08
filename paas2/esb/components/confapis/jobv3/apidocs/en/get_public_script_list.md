@@ -42,7 +42,6 @@ Query public script list
                 "id": "000dbdddc06c453baf1f2decddf00c69",
                 "name": "a.sh",
                 "script_language": 1,
-                "public": false,
                 "online_script_version_id": 100,
                 "creator": "admin",
                 "create_time": 1600746078520,

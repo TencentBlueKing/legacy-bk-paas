@@ -10,8 +10,8 @@ Update the file source.
 
 | Fields       |  Type  | Required | Description |
 |-----------------|------------|--------|------------|
-| bk_scope_type | string | yes  | Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id | string | yes | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string | yes  | Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id | string | yes | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | id              |   int       |  no   | File source ID, at least one of which is required with code, and id preferred |
 | code            |   string    |  no   | At least one of the document source identification and id is required, and id preferred. It must start with English characters and consist of 1 32 English characters, underscores or numbers. It can not be changed after creation|
 | alias           |   string    |  no   | File source alias|

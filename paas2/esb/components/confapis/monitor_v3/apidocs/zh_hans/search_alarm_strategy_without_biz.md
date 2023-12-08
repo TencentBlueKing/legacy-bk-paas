@@ -311,7 +311,7 @@
 | 字段                                | 类型     | 必选  | 描述           |
 |-----------------------------------|--------|-----|--------------|
 | options                            | dict   | 是   | 通知套餐配置         |
-| options.converge_config             | dict | 是   |     收敛配置     |
+| options.converge_config             | string | 是   |     收敛配置     |
 | options.noise_reduce_config         | dict | 否  |     降噪配置，不带默认不开启     |
 | options.start_time             | string | 是   |    生效开始时间（格式：00:00:00）     |
 | options.end_time             | string | 是   |    生效结束时间（格式：23:59:59)     |

@@ -1,6 +1,6 @@
 ### 功能描述
 
-根据ip列表批量查询作业执行日志
+根据主机列表批量查询作业执行日志
 
 ### 请求参数
 
@@ -44,6 +44,34 @@
 
 ### 返回结果示例
 
+#### 脚本执行步骤
+```json
+{
+    "result": true,
+    "code": 0,
+    "message": "",
+    "data": {
+        "log_type": 1,
+        "job_instance_id": 100,
+        "step_instance_id": 200,
+        "script_task_logs": [
+            {
+                "bk_host_id": 101,
+                "ip": "10.0.0.1",
+                "bk_cloud_id": 0,
+                "log_content": "[2018-03-15 14:39:30][PID:56875] job_start\n"
+            },
+            {
+                "bk_host_id": 102,
+                "ip": "10.0.0.2",
+                "bk_cloud_id": 0,
+                "log_content": "[2018-03-15 14:39:30][PID:16789] job_start\n"
+            }
+        ]
+    }
+}
+```
+
 #### 文件分发步骤
 ```json
 {
@@ -52,7 +80,7 @@
     "message": "",
     "data": {
         "log_type": 2,
-        "task_instance_id": 100,
+        "job_instance_id": 100,
         "step_instance_id": 200,
         "file_task_logs": [
             {
@@ -61,36 +89,37 @@
                 "bk_cloud_id": 0,
                 "file_logs": [
                     {
-                        "mode": 1,
+                        "mode": 1, 
                         "src_ip": {
                             "bk_host_id": 102,
-                            "bk_cloud_id": 0,
+                            "bk_cloud_id": 0, 
                             "ip": "10.0.0.2"
-                        },
-                        "src_path": "/data/1.log",
+                        }, 
+                        "src_path": "/data/1.log", 
                         "dest_ip": {
                             "bk_host_id": 101,
-                            "bk_cloud_id": 0,
+                            "bk_cloud_id": 0, 
                             "ip": "10.0.0.1"
-                        },
-                        "dest_path": "/tmp/1.log",
+                        }, 
+                        "dest_path": "/tmp/1.log", 
                         "status": 4,
-                        "log_content": "[2021-06-28 11:32:16] FileName: /tmp/1.log FileSize: 9.0 Bytes State: dest agent success download file Speed: 1 KB/s Progress: 100% StatusDesc: dest agent success download file Detail: success"
+                        "log_content": "[2021-06-28 11:32:16] FileName: /tmp/1.log FileSize: 9.0 Bytes State: dest agent success download file Speed: 1 KB/s Progress: 100% StatusDesc: dest agent success download file Detail: success" 
                     }
                 ]
             },
             {
+                "bk_host_id": 102,
                 "ip": "10.0.0.2",
                 "bk_cloud_id": 0,
                 "file_logs": [
                     {
-                        "mode": 0,
+                        "mode": 0, 
                         "src_ip": {
                             "bk_host_id": 102,
-                            "bk_cloud_id": 0,
+                            "bk_cloud_id": 0, 
                             "ip": "10.0.0.2"
-                        },
-                        "src_path": "/data/1.log",
+                        }, 
+                        "src_path": "/data/1.log",  
                         "status": 4,
                         "log_content": "[2021-06-28 11:32:16] FileName: /data/1.log FileSize: 9.0 Bytes State: source agent success upload file Speed: 1 KB/s Progress: 100% StatusDesc: source agent success upload file Detail: success upload"
                     }
@@ -103,7 +132,7 @@
 
 **文件任务返回结果说明**
 
-- 如果需要返回文件源的上传日志，需要在ip_list添加源文件服务器IP
+- 如果需要返回文件源的上传日志，需要在 host_id_list/ip_list添加源文件主机信息
 
 ### 返回结果说明
 

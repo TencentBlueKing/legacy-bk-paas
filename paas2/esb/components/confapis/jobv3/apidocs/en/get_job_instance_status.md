@@ -10,8 +10,8 @@ Query job execution status based on job instance ID
 
 | Fields       |  Type  | Required | Description |
 |------------------|------------|--------|------------|
-| bk_scope_type | string | yes  | Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id | string | yes | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string | yes  | Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id | string | yes | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | job_instance_id  |  long       |  yes  |Job instance ID|
 | return_ip_result | boolean | no |Whether to return the task details on each ip corresponds to step_ip_result_list in the return result. The default value is false. |
 
@@ -61,6 +61,7 @@ Query job execution status based on job instance ID
                 "start_time": 1605064271000,
                 "step_ip_result_list": [
                     {
+                        "bk_host_id": 101,
                         "ip": "10.0.0.1",
                         "bk_cloud_id": 0,
                         "status": 9,
@@ -107,8 +108,8 @@ Query job execution status based on job instance ID
 | start_time   |  long       | Execution start time, Unix timestamp, in milliseconds|
 | end_time     |  long   | Execution end time, Unix timestamp, in milliseconds|
 | total_time   |  int        | Total elapsed time in milliseconds|
-| bk_scope_type | string |Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id   | string | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string |Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id   | string | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | job_instance_id    |  long    | Job instance ID|
 
 #### step_instance
@@ -131,6 +132,7 @@ Query job execution status based on job instance ID
 
 | Fields | Type  | Description |
 |-----------|-----------|-----------|
+| bk_host_id | long | Host ID |
 | ip          | string    | IP |
 | bk_cloud_id | long       | BK-Net ID |
 | status      |  int       | Agent task execution status: 1. Agent exception; Pending implementation Successful execution Failed to distribute the task; 404. Forced termination of task failed|

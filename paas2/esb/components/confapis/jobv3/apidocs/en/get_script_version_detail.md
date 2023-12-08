@@ -10,8 +10,8 @@ Query business script version details
 
 | Fields |  Type  | Required | Description |
 |----------------------|------------|--------|------------|
-| bk_scope_type | string | yes  | Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id | string | yes | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string | yes  | Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id | string | yes | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | id             |   long       |  yes  |Script version ID. If passed in, other conditions will be masked based on this condition|
 | script_id      |   string     |  no   | Script ID (can be passed in with version to locate a script version)|
 | version        |   string     |  no   | Script version (can be passed in with script_id to locate a script version)|
@@ -48,7 +48,9 @@ Query business script version details
         "creator": "admin",
         "create_time": 1600746078520,
         "last_modify_user": "admin",
-        "last_modify_time": 1600746078520
+        "last_modify_time": 1600746078520,
+        "script_language": 1,
+        "description": "script description"
     }
 }
 ```
@@ -70,8 +72,8 @@ Query business script version details
 | Fields | Type  | Description |
 |-----------|-----------|-----------|
 | id                |  long      | Script version ID|
-| bk_scope_type | string |Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id   | string | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string |Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id   | string | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | script_id         |  string    | Script ID to which the script version belongs|
 | version           |  string    | Version|
 | content           |  string    | Script version content|
@@ -81,3 +83,5 @@ Query business script version details
 | create_time       |  long      | Creation time Unix timestamp (ms)|
 | last_modify_user  | string    | Last modify user|
 | last_modify_time  | long      | Last modified time Unix timestamp (ms)|
+| script_language   | int    | Script language:1 - shell, 2 - bat, 3 - perl, 4 - python, 5 - powershell, 6 - sql |
+| description       | string | Description                                                  |

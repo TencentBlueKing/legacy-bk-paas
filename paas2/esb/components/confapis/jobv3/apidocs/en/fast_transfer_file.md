@@ -7,8 +7,8 @@ Quick File transfer
 #### Interface parameters
 | Fields       |  Type  | Required | Description |
 |------------------|------------|--------|------------|
-| bk_scope_type | string | yes  | Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id | string | yes | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string | yes  | Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id | string | yes | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | account_alias    |   string    |  no  |Target execution account alias, available from the account page, recommended. When both account_alias and account_id exist, account_id takes precedence. |
 | account_id | long | no |Target execution account ID, available from the get_account_List api. When both account_alias and account_id exist, account_id takes precedence. |
 | file_target_path |  string    |  yes  |File transfer destination path|
@@ -39,11 +39,12 @@ Quick File transfer
 
 #### server
 
-| Fields |  Type  | Required | Description |
-|-----------|------------|--------|------------|
-| ip_list               |  array | no   | Static IP list|
-| dynamic_group_list | array | no   | Dynamic group ID list|
-| topo_node_list        |  array | no   | Dynamic topo node list|
+| Fields             | Type  | Required | Description                                             |
+| ------------------ | ----- | -------- | ------------------------------------------------------- |
+| host_id_list       | array | no       | Host ID list         |
+| ip_list            | array | no       | Static IP list, see ip for definition. ***Deprecated, it is recommended to use the host_id_list parameter***; if host_id_list and ip_list exist at the same time, the ip_list parameter will be ignored.                 |
+| dynamic_group_list | array | no       | Dynamic grouping list, see dynamic_group for definition |
+| topo_node_list     | array | no       | Dynamic topo node list, see topo_node for definition    |
 
 #### ip_list
 
@@ -86,15 +87,9 @@ Quick File transfer
                         "id": "blo8gojho0sabc7priuy"
                     }
                 ],
-                "ip_list": [
-                    {
-                        "bk_cloud_id": 0,
-                        "ip": "10.0.0.1"
-                    },
-                    {
-                        "bk_cloud_id": 0,
-                        "ip": "10.0.0.2"
-                    }
+                "host_id_list": [
+                    101,
+                    102
                 ],
                 "topo_node_list": [
                     {
@@ -129,15 +124,9 @@ Quick File transfer
                 "id": "blo8gojho0sabc7priuy"
             }
         ],
-        "ip_list": [
-            {
-                "bk_cloud_id": 0,
-                "ip": "10.0.0.1"
-            },
-            {
-                "bk_cloud_id": 0,
-                "ip": "10.0.0.2"
-            }
+        "host_id_list": [
+            103,
+            104
         ],
         "topo_node_list": [
             {

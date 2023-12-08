@@ -10,8 +10,8 @@ Update credentials.
 
 | Fields                  |  Type  | Required | Description |
 |----------------------------|------------|--------|------------|
-| bk_scope_type | string | yes  | Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id | string | yes | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string | yes  | Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id | string | yes | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | id                         |   string    |  yes  |Credential ID     |
 | name                       |   string    |  no   | Credential name     |
 | type                       |   string    |  no   | Credential type, which can be ACCESS_KEY_SECRET_KEY,PASSWORD,USERNAME_PASSWORD,SECRET_KEY|

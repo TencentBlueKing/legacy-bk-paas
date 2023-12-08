@@ -10,8 +10,8 @@ Gets the value of the job instance global variable
 
 | Fields |  Type  | Required | Description |
 |-----------|------------|--------|------------|
-| bk_scope_type | string | yes  | Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id | string | yes | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string | yes  | Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id | string | yes | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | job_instance_id |  long    |  yes  |Job instance ID|
 
 ### Example of request
