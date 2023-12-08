@@ -2572,3 +2572,14 @@
   name: grafana_log_query
   path: /v2/monitor_v3/log_query/
   suggest_method: POST
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /api/v3/meta/query_result_table_storage_detail/
+  is_hidden: true
+  label: 查询结果表的存储信息
+  label_en: query result table storage detail
+  name: metadata_query_result_table_storage_detail
+  path: /v2/monitor_v3/metadata_query_result_table_storage_detail/
+  method: GET
+
