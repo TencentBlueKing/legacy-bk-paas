@@ -42,7 +42,9 @@ Query public script version details
         "creator": "admin",
         "create_time": 1600746078520,
         "last_modify_user": "admin",
-        "last_modify_time": 1600746078520
+        "last_modify_time": 1600746078520,
+        "script_language": 1,
+        "description": "script description"
     }
 }
 ```
@@ -73,3 +75,5 @@ Query public script version details
 | create_time       |  long      | Creation time Unix timestamp (ms)|
 | last_modify_user  | string    | Last modify user|
 | last_modify_time  | long      | Last modified time Unix timestamp (ms)|
+| script_language   | int    | Script language:1 - shell, 2 - bat, 3 - perl, 4 - python, 5 - powershell, 6 - sql |
+| description       | string | Description                                                  |

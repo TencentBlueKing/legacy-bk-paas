@@ -10,8 +10,8 @@ Query job instance list (execution history)
 
 | Fields        | Type | Required | Description                                              |
 | ----------------- | ------ | ---- | ------------------------------------------------------------ |
-| bk_scope_type | string | yes  | Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id | string | yes | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string | yes  | Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id | string | yes | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | create_time_start | long   |  yes |Creation time start, Unix timestamp, in milliseconds                          |
 | create_time_end   |  long   |  yes |Creation time end, Unix timestamp, in milliseconds                          |
 | job_instance_id   |  long   |  no |Task instance ID. If job_instance_id is in or out, other query criteria are ignored     |
@@ -95,8 +95,8 @@ Query job instance list (execution history)
 
 | Fields          | Type   | Description                                                  |
 | --------------- | ------ | ------------------------------------------------------------ |
-| bk_scope_type   | string | Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id     | string | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type   | string | Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id     | string | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | id              |  long   | Job Plan ID                                          |
 | job_template_id | long   | Job Template ID, which has a value when the task is Job Plan |
 | job_plan_id     |  long   | Job Plan ID, which has a value when the task is a Job Plan |

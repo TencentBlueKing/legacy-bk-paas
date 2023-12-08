@@ -10,8 +10,8 @@ Query the list of executive accounts to which users have access under the busine
 
 | Fields |  Type  | Required | Description |
 |----------------------|------------|--------|------------|
-| bk_scope_type | string | yes  | Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id | string | yes | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string | yes  | Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id | string | yes | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | category               |   int        |  no   | Account usage (1: system account, 2: DB account)|
 | start                  |   int        |  no   | Start position of paging record, default 0|
 | length                 |   int        |  no |The maximum number of records returned in a single time is 1000 at most, default 20|
@@ -80,8 +80,8 @@ Query the list of executive accounts to which users have access under the busine
 | Fields | Type  | Description |
 |-----------|-----------|-----------|
 | id                    |  long      | Account ID|
-| bk_scope_type | string |Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id   | string | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string |Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id   | string | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | account               |  string    | Account name|
 | alias                 |  string    | Account alias|
 | category              |  int       | Account usage (1: system account, 2: DB account)|

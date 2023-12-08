@@ -10,8 +10,8 @@ Query business script version list
 
 | Fields |  Type  | Required | Description |
 |----------------------|------------|--------|------------|
-| bk_scope_type | string | yes  | Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id | string | yes | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string | yes  | Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id | string | yes | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | script_id              |   string    |  yes  |Script ID|
 | return_script_content  |  bool      |  no   | Whether the script content needs to be returned. True: returns script content; False: does not return script content. The default is false. |
 | start                  |   int       |  no   | Start position of paging record, default 0|
@@ -54,7 +54,9 @@ Query business script version list
                 "creator": "admin",
                 "create_time": 1600746078520,
                 "last_modify_user": "admin",
-                "last_modify_time": 1600746078520
+                "last_modify_time": 1600746078520,
+                "script_language": 1,
+                "description": "script description"
             }
         ],
         "start": 0,
@@ -81,8 +83,8 @@ Query business script version list
 | Fields | Type  | Description |
 |-----------|-----------|-----------|
 | id                |  long      | Script version ID|
-| bk_scope_type | string |Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id   | string | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string |Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id   | string | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | script_id         |  string    | Script ID to which the script version belongs|
 | version           |  string    | Version|
 | content           |  string    | Script content|
@@ -92,3 +94,5 @@ Query business script version list
 | create_time       |  long      | Creation time Unix timestamp (ms)|
 | last_modify_user  | string    | Last modify user|
 | last_modify_time  | long      | Last modified time Unix timestamp (ms)|
+| script_language   | int    | Script language:1 - shell, 2 - bat, 3 - perl, 4 - python, 5 - powershell, 6 - sql |
+| description       | string | Description                                                  |

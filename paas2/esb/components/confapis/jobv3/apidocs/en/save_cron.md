@@ -10,8 +10,8 @@ Create or update Cron Job; Create Cron Job, Cron Job status is paused by default
 
 | Fields       |  Type  | Required | Description |
 |-----------------|------------|--------|------------|
-| bk_scope_type | string | yes  | Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id | string | yes | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string | yes  | Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id | string | yes | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | job_plan_id     |   long      |  yes  |Job Plan ID of the job to be executed regularly|
 | id              |   long      |  no   | Cron Job ID, when updating a Cron Job, you must pass this value Cron Job |
 | name            |   string    |  no   | Cron job name, required for new creation and optional for modification |
@@ -29,11 +29,12 @@ Create or update Cron Job; Create Cron Job, Cron Job status is paused by default
 | server    |   object   |  no   | The value of the host type global variable|
 
 #### server
-| Fields             | Type | Required | Description |
-|-----------------------|-------|--------|------------|
-| ip_list               |  array | no       | Static IP list|
-| dynamic_group_list | array | no   | Dynamic grouping list|
-| topo_node_list        |  array | no   | Dynamic topo node list|
+| Fields             | Type  | Required | Description                                             |
+| ------------------ | ----- | -------- | ------------------------------------------------------- |
+| host_id_list       | array | no       | Host ID list         |
+| ip_list            | array | no       | Static IP list, see ip for definition. ***Deprecated, it is recommended to use the host_id_list parameter***; if host_id_list and ip_list exist at the same time, the ip_list parameter will be ignored.                 |
+| dynamic_group_list | array | no       | Dynamic grouping list, see dynamic_group for definition |
+| topo_node_list     | array | no       | Dynamic topo node list, see topo_node for definition    |
 
 #### ip
 
@@ -59,7 +60,6 @@ Create or update Cron Job; Create Cron Job, Cron Job status is paused by default
     "bk_username": "admin",
     "bk_scope_type": "biz",
     "bk_scope_id": "1",
-    "execute_time": 0,
     "expression": "0 0/5 * * *",
     "job_plan_id": 1023060,
     "name": "test API",
@@ -87,12 +87,7 @@ Create or update Cron Job; Create Cron Job, Cron Job status is paused by default
         {
             "name": "hostVar",
             "server": {
-                "ip_list": [
-                    {
-                        "bk_cloud_id": 0,
-                        "ip": "10.0.0.1"
-                    }
-                ]
+                "host_id_list": [1,2,3]
             }
         }
     ]
@@ -108,7 +103,6 @@ Create or update Cron Job; Create Cron Job, Cron Job status is paused by default
     "bk_username": "admin",
     "bk_scope_type": "biz",
     "bk_scope_id": "1",
-    "execute_time": 0,
     "expression": "0 0/5 * * *",
     "job_plan_id": 1023060,
     "name": "test API",
@@ -136,12 +130,7 @@ Create or update Cron Job; Create Cron Job, Cron Job status is paused by default
         {
             "name": "hostVar",
             "server": {
-                "ip_list": [
-                    {
-                        "bk_cloud_id": 0,
-                        "ip": "10.0.0.1"
-                    }
-                ]
+                "host_id_list": [2,3,4]
             }
         }
     ]
@@ -219,6 +208,7 @@ Create or update Cron Job; Create Cron Job, Cron Job status is paused by default
                 "server": {                  
                     "ip_list": [
                         {
+                            "bk_host_id": 101,
                             "bk_cloud_id": 0, 
                             "ip": "10.0.0.1"  
                         }
@@ -231,8 +221,7 @@ Create or update Cron Job; Create Cron Job, Cron Job status is paused by default
         "create_time": 1642045370,         
         "last_modify_user": "admin",       
         "last_modify_time": 1642045370     
-    },
-    "job_request_id": "19b76b84e481846e"  
+    }
 }
 ```
 #### 2. Update  Cron Job 
@@ -305,6 +294,7 @@ Create or update Cron Job; Create Cron Job, Cron Job status is paused by default
                 "server": {
                     "ip_list": [
                         {
+                            "bk_host_id": 101,
                             "bk_cloud_id": 0,
                             "ip": "10.0.0.1"
                         }
@@ -317,8 +307,7 @@ Create or update Cron Job; Create Cron Job, Cron Job status is paused by default
         "create_time": 1641990674,
         "last_modify_user": "admin",
         "last_modify_time": 1641995052
-    },
-    "job_request_id": "69f5b499072003aa"
+    }
 }
 ```
 
@@ -341,8 +330,8 @@ Create or update Cron Job; Create Cron Job, Cron Job status is paused by default
 | id              |   long      | Cron Job ID |
 | name            |   string    | Cron job name |
 | status          |   int       | Cron Job Status |
-| bk_scope_type | string |Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id   | string | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string |Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id   | string | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | job_plan_id     |   long      | Job Plan ID of the job to be executed regularly |
 | creator           |  string    | Creator|
 | create_time       |  long      | Created time, Unix timestamp|
@@ -368,6 +357,7 @@ Create or update Cron Job; Create Cron Job, Cron Job status is paused by default
 | Fields             | Type | Description |
 |-----------------------|-------|------------|
 | variable              |  string |Referenced variable name|
+| host_id_list          | array  | Host ID list |
 | ip_list               |  array  |Static IP list|
 | dynamic_group_list    |  array  |Dynamic group ID list|
 | topo_node_list        |  array  |Dynamic topo node list|
@@ -375,6 +365,7 @@ Create or update Cron Job; Create Cron Job, Cron Job status is paused by default
 #### ip
 | Fields | Type | Description |
 |-------------|---------|---------|
+| bk_host_id |  long    | Host ID |
 | bk_cloud_id |  int    | BK-Net ID |
 | ip          |  string | IP Address |
 

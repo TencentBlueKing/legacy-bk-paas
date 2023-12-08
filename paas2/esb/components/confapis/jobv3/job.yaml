@@ -1,5 +1,3 @@
----
-# Job Execute API
 - path: /v2/jobv3/execute_job_plan/
   name: execute_job_plan
   label: 执行作业执行方案
@@ -9,7 +7,7 @@
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-execute/execute_job_plan/
   dest_http_method: POST
-  
+
 - path: /v2/jobv3/fast_execute_script/
   name: fast_execute_script
   label: 快速执行脚本
@@ -29,7 +27,7 @@
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-execute/fast_execute_sql/
   dest_http_method: POST  
-  
+
 - path: /v2/jobv3/fast_transfer_file/
   name: fast_transfer_file
   label: 快速分发文件
@@ -39,7 +37,7 @@
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-execute/fast_transfer_file/
   dest_http_method: POST
-  
+
 - path: /v2/jobv3/push_config_file/
   name: push_config_file
   label: 分发配置文件
@@ -60,7 +58,7 @@
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-execute/operate_step_instance/
   dest_http_method: POST
-  
+
 - path: /v2/jobv3/operate_job_instance/
   name: operate_job_instance
   label: 作业实例操作
@@ -70,22 +68,22 @@
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-execute/operate_job_instance/
   dest_http_method: POST
-  
+
 - path: /v2/jobv3/get_job_instance_status/
   name: get_job_instance_status
   label: 根据作业实例 ID 查询作业执行状态
   label_en: Get the job execution status based on the job instance ID
-  suggest_method: GET
+  suggest_method: POST
   api_type: query
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-execute/get_job_instance_status/
   dest_http_method: POST
-  
+
 - path: /v2/jobv3/get_job_instance_ip_log/
   name: get_job_instance_ip_log
   label: 根据作业实例ID查询作业执行日志
   label_en: Get job instance ip log
-  suggest_method: GET
+  suggest_method: POST
   api_type: query
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-execute/get_job_instance_ip_log/
@@ -100,33 +98,32 @@
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-execute/batch_get_job_instance_ip_log/
   dest_http_method: POST
-  
+
 - path: /v2/jobv3/get_job_instance_list/
   name: get_job_instance_list
   label: 查询作业实例列表(执行历史)
   label_en: Get job instance list
-  suggest_method: GET
+  suggest_method: POST
   api_type: query
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-execute/get_job_instance_list/
   dest_http_method: POST
-  
+
 - path: /v2/jobv3/get_job_instance_global_var_value/
   name: get_job_instance_global_var_value
   label: 获取作业实例全局变量值
   label_en: Get job instance global variable value
-  suggest_method: GET
+  suggest_method: POST
   api_type: query
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-execute/get_job_instance_global_var_value/
   dest_http_method: POST
 
-# Job management API
 - path: /v2/jobv3/get_job_template_list/
   name: get_job_template_list
   label: 查询作业模版列表
   label_en: Get job template list
-  suggest_method: GET
+  suggest_method: POST
   api_type: query
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-manage/get_job_template_list/
@@ -136,37 +133,37 @@
   name: get_job_plan_list
   label: 查询执行方案列表
   label_en: Get job execution plan list
-  suggest_method: GET
+  suggest_method: POST
   api_type: query
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-manage/get_job_plan_list/
   dest_http_method: POST
-  
+
 - path: /v2/jobv3/get_job_plan_detail/
   name: get_job_plan_detail
   label: 查询执行方案详情
   label_en: Get job execution plan detail
-  suggest_method: GET
+  suggest_method: POST
   api_type: query
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-manage/get_job_plan_detail/
   dest_http_method: POST
-  
+
 - path: /v2/jobv3/get_account_list/
   name: get_account_list
   label: 查询业务下的执行账号
   label_en: Get accounts
-  suggest_method: GET
+  suggest_method: POST
   api_type: query
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-manage/get_account_list/
   dest_http_method: POST
-  
+
 - path: /v2/jobv3/get_public_script_list/
   name: get_public_script_list
   label: 查询公共脚本列表
   label_en: Get public script list
-  suggest_method: GET
+  suggest_method: POST
   api_type: query
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-manage/get_public_script_list/
@@ -176,7 +173,7 @@
   name: get_public_script_version_list
   label: 查询公共脚本版本列表
   label_en: Get public script version list
-  suggest_method: GET
+  suggest_method: POST
   api_type: query
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-manage/get_public_script_version_list/
@@ -186,7 +183,7 @@
   name: get_public_script_version_detail
   label: 查询公共脚本详情
   label_en: Get public script detail
-  suggest_method: GET
+  suggest_method: POST
   api_type: query
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-manage/get_public_script_version_detail/
@@ -196,7 +193,7 @@
   name: get_script_list
   label: 查询脚本列表
   label_en: Get script list
-  suggest_method: GET
+  suggest_method: POST
   api_type: query
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-manage/get_script_list/
@@ -206,7 +203,7 @@
   name: get_script_version_list
   label: 查询脚本版本列表
   label_en: Get script version list
-  suggest_method: GET
+  suggest_method: POST
   api_type: query
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-manage/get_script_version_list/
@@ -216,33 +213,32 @@
   name: get_script_version_detail
   label: 查询脚本详情
   label_en: Get script version detail
-  suggest_method: GET
+  suggest_method: POST
   api_type: query
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-manage/get_script_version_detail/
   dest_http_method: POST
 
-# Job Crontab API
 - path: /v2/jobv3/get_cron_list/
   name: get_cron_list
   label: 查询业务下定时作业信息
   label_en: Get crontab job list
-  suggest_method: GET
+  suggest_method: POST
   api_type: query
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-crontab/get_cron_list/
   dest_http_method: POST
-  
+
 - path: /v2/jobv3/get_cron_detail/
   name: get_cron_detail
   label: 查询定时作业详情
   label_en: Get crontab job detail
-  suggest_method: GET
+  suggest_method: POST
   api_type: query
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-crontab/get_cron_detail/
   dest_http_method: POST
-  
+
 - path: /v2/jobv3/save_cron/
   name: save_cron
   label: 新建或保存定时作业
@@ -252,7 +248,7 @@
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-crontab/save_cron/
   dest_http_method: POST
-  
+
 - path: /v2/jobv3/update_cron_status/
   name: update_cron_status
   label: 更新定时作业状态，如启动或暂停
@@ -262,7 +258,6 @@
   comp_codename: generic.v2.jobv3.job_component
   dest_path: /api/job/v3/job-crontab/update_cron_status/
   dest_http_method: POST
-  
 
 - path: /v2/jobv3/create_credential/
   name: create_credential
@@ -318,3 +313,253 @@
   dest_path: /api/job/v3/job-manage/generate_local_file_upload_url/
   dest_http_method: POST
   is_hidden: True
+
+- path: /v2/jobv3/create_public_script/
+  name: create_public_script
+  label: 创建公共脚本
+  label_en: Save public script
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/create_public_script/
+  dest_http_method: POST
+
+- path: /v2/jobv3/update_public_script_basic/
+  name: update_public_script_basic
+  label: 更新公共脚本基础信息
+  label_en: Update public script
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/update_public_script_basic/
+  dest_http_method: POST
+
+- path: /v2/jobv3/delete_public_script_version/
+  name: delete_public_script_version
+  label: 删除公共脚本版本
+  label_en: Delete public script version
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/delete_public_script_version/
+  dest_http_method: POST
+
+- path: /v2/jobv3/create_public_script_version/
+  name: create_public_script_version
+  label: 新建公共脚本版本
+  label_en: Save public script version
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/create_public_script_version/
+  dest_http_method: POST
+
+- path: /v2/jobv3/update_public_script_version/
+  name: update_public_script_version
+  label: 修改公共脚本版本
+  label_en: Update public script version
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/update_public_script_version/
+  dest_http_method: POST
+
+- path: /v2/jobv3/publish_public_script_version/
+  name: publish_public_script_version
+  label: 发布公共脚本版本
+  label_en: Publish public script version
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/publish_public_script_version/
+  dest_http_method: POST
+
+- path: /v2/jobv3/disable_public_script_version/
+  name: disable_public_script_version
+  label: 禁用公共脚本版本
+  label_en: Disable public script version
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/disable_public_script_version/
+  dest_http_method: POST
+
+- path: /v2/jobv3/delete_public_script/
+  name: delete_public_script
+  label: 删除公共脚本
+  label_en: Delete public script
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/delete_public_script/
+  dest_http_method: POST
+
+- path: /v2/jobv3/create_script/
+  name: create_script
+  label: 创建脚本
+  label_en: Save script
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/create_script/
+  dest_http_method: POST
+
+- path: /v2/jobv3/update_script_basic/
+  name: update_script_basic
+  label: 更新脚本基础信息
+  label_en: Update script basic
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/update_script_basic/
+  dest_http_method: POST
+
+- path: /v2/jobv3/delete_script_version/
+  name: delete_script_version
+  label: 删除脚本版本
+  label_en: Delete script version
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/delete_script_version/
+  dest_http_method: POST
+
+- path: /v2/jobv3/create_script_version/
+  name: create_script_version
+  label: 新建脚本版本
+  label_en: Save script version
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/create_script_version/
+  dest_http_method: POST
+
+- path: /v2/jobv3/update_script_version/
+  name: update_script_version
+  label: 修改脚本版本信息
+  label_en: Update script version
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/update_script_version/
+  dest_http_method: POST
+
+- path: /v2/jobv3/publish_script_version/
+  name: publish_script_version
+  label: 发布脚本版本
+  label_en: Publish script version
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/publish_script_version/
+  dest_http_method: POST
+
+- path: /v2/jobv3/disable_script_version/
+  name: disable_script_version
+  label: 禁用脚本版本
+  label_en: Disable script version
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/disable_script_version/
+  dest_http_method: POST
+
+- path: /v2/jobv3/delete_script/
+  name: delete_script
+  label: 删除脚本
+  label_en: Delete script
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/delete_script/
+  dest_http_method: POST
+
+- path: /v2/jobv3/create_account/
+  name: create_account
+  label: 创建账号
+  label_en: Create account
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/create_account/
+  dest_http_method: POST
+
+- path: /v2/jobv3/delete_account/
+  name: delete_account
+  label: 删除账号
+  label_en: Delete account
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/delete_account/
+  dest_http_method: POST
+
+- path: /v2/jobv3/create_dangerous_rule/
+  name: create_dangerous_rule
+  label: 创建高危语句规则
+  label_en: Create dangerous rule
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/create_dangerous_rule/
+  dest_http_method: POST
+
+- path: /v2/jobv3/update_dangerous_rule/
+  name: update_dangerous_rule
+  label: 修改高危语句规则
+  label_en: Update dangerous rule
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/update_dangerous_rule/
+  dest_http_method: POST
+
+- path: /v2/jobv3/delete_dangerous_rule/
+  name: delete_dangerous_rule
+  label: 删除高危语句规则
+  label_en: Delete dangerous rule
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/delete_dangerous_rule/
+  dest_http_method: POST
+
+- path: /v2/jobv3/get_dangerous_rule_list/
+  name: get_dangerous_rule_list
+  label: 查看高危语句规则列表
+  label_en: Get dangerous rule list
+  suggest_method: POST
+  api_type: query
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/get_dangerous_rule_list/
+  dest_http_method: POST
+
+- path: /v2/jobv3/enable_dangerous_rule/
+  name: enable_dangerous_rule
+  label: 启用高危语句规则
+  label_en: Enable dangerous rule
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/enable_dangerous_rule/
+  dest_http_method: POST
+
+- path: /v2/jobv3/disable_dangerous_rule/
+  name: disable_dangerous_rule
+  label: 停用高危语句规则
+  label_en: Disable dangerous rule
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/disable_dangerous_rule/
+  dest_http_method: POST
+
+- path: /v2/jobv3/check_script/
+  name: check_script
+  label: 高危脚本检测
+  label_en: Check script
+  suggest_method: POST
+  api_type: operate
+  comp_codename: generic.v2.jobv3.job_component
+  dest_path: /api/job/v3/job-manage/check_script/
+  dest_http_method: POST

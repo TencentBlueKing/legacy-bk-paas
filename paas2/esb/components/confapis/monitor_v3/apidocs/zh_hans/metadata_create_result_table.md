@@ -32,11 +32,13 @@
 **注意**： 上述的`label`都应该通过`metadata_get_label`接口获取，不应该自行创建
 
 #### 目前结果表可以选择的选项包括
-| 选项名 | 类型 | 描述 |
-| -------------- | ------ | ----------- |
-| cmdb_level_config | list | CMDB层级拆分配置 |
-| group_info_alias | string | 分组标识字段别名 |
+| 选项名                  | 类型 | 描述              |
+|----------------------|--|-----------------|
+| cmdb_level_config    | list | CMDB层级拆分配置      |
+| group_info_alias     | string | 分组标识字段别名        |
 | es_unique_field_list | list | ES生成doc_id的字段列表 |
+| segmented_query_enable   | bool | 分段查询开关 |
+
 
 ###### 参数: default_storage_config及storage_config -- 在influxdb下支持的参数
 

@@ -10,8 +10,8 @@ Update Cron job status, such as started or paused
 
 | Fields  |  Type  | Required | Description |
 |----------- |------------|--------|------------|
-| bk_scope_type | string | yes  | Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id | string | yes | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string | yes  | Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id | string | yes | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | id         |   long      |  yes |Cron job ID|
 | status     |   int       |  yes  |State, 1. Start, 2. Paused|
 

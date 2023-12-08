@@ -1,6 +1,6 @@
 ### Function Description
 
-Bulk query of job execution logs by ip list
+Bulk query of job execution logs by host list
 
 ### Request Parameters
 
@@ -10,11 +10,12 @@ Bulk query of job execution logs by ip list
 
 | Fields |  Type  | Required | Description |
 |-----------|------------|--------|------------|
-| bk_scope_type | string | yes | Resource range type. Optional values: biz - Business, biz_set - Business Set |
-| bk_scope_id | string | yes | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string | yes | Resource scope type. Optional values: biz - Business, biz_set - Business Set |
+| bk_scope_id | string | yes | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | job_instance_id | long | yes | Job instance ID |
 | step_instance_id |  long    | yes | Step instance ID |
-| ip_list |  array    | yes | Source/target host IP list, see ip for definition |
+| host_id_list       | array | no   | Host ID list         |
+| ip_list |  array    | no | Host IP list. ***Deprecated, it is recommended to use the host_id_list parameter***; if host_id_list and ip_list exist at the same time, the ip_list parameter will be ignored. |
 
 ##### ip
 
@@ -34,15 +35,8 @@ Bulk query of job execution logs by ip list
     "bk_scope_id": "1",
     "job_instance_id": 100,
     "step_instance_id": 200,
-    "ip_list": [
-        {
-            "bk_cloud_id": 0,
-            "ip": "10.0.0.1"
-        },
-        {
-            "bk_cloud_id": 0,
-            "ip": "10.0.0.2"
-        }
+    "host_id_list": [
+        101,102
     ]
 }
 ```
@@ -56,42 +50,75 @@ Bulk query of job execution logs by ip list
     "code": 0,
     "message": "",
     "data": {
+        "log_type": 1,
+        "job_instance_id": 100,
+        "step_instance_id": 200,
+        "script_task_logs": [
+            {
+                "bk_host_id": 101,
+                "ip": "10.0.0.1",
+                "bk_cloud_id": 0,
+                "log_content": "[2018-03-15 14:39:30][PID:56875] job_start\n"
+            },
+            {
+                "bk_host_id": 102,
+                "ip": "10.0.0.2",
+                "bk_cloud_id": 0,
+                "log_content": "[2018-03-15 14:39:30][PID:16789] job_start\n"
+            }
+        ]
+    }
+}
+```
+
+#### File execution steps
+```json
+{
+    "result": true,
+    "code": 0,
+    "message": "",
+    "data": {
         "log_type": 2,
-        "task_instance_id": 100,
+        "job_instance_id": 100,
         "step_instance_id": 200,
         "file_task_logs": [
             {
+                "bk_host_id": 101,
                 "ip": "10.0.0.1",
                 "bk_cloud_id": 0,
                 "file_logs": [
                     {
-                        "mode": 1,
+                        "mode": 1, 
                         "src_ip": {
-                            "bk_cloud_id": 0,
+                            "bk_host_id": 102,
+                            "bk_cloud_id": 0, 
                             "ip": "10.0.0.2"
-                        },
-                        "src_path": "/data/1.log",
+                        }, 
+                        "src_path": "/data/1.log", 
                         "dest_ip": {
-                            "bk_cloud_id": 0,
+                            "bk_host_id": 101,
+                            "bk_cloud_id": 0, 
                             "ip": "10.0.0.1"
-                        },
-                        "dest_path": "/tmp/1.log",
+                        }, 
+                        "dest_path": "/tmp/1.log", 
                         "status": 4,
-                        "log_content": "[2021-06-28 11:32:16] FileName: /tmp/1.log FileSize: 9.0 Bytes State: dest agent success download file Speed: 1 KB/s Progress: 100% StatusDesc: dest agent success download file Detail: success"
+                        "log_content": "[2021-06-28 11:32:16] FileName: /tmp/1.log FileSize: 9.0 Bytes State: dest agent success download file Speed: 1 KB/s Progress: 100% StatusDesc: dest agent success download file Detail: success" 
                     }
                 ]
             },
             {
+                "bk_host_id": 102,
                 "ip": "10.0.0.2",
                 "bk_cloud_id": 0,
                 "file_logs": [
                     {
-                        "mode": 0,
+                        "mode": 0, 
                         "src_ip": {
-                            "bk_cloud_id": 0,
+                            "bk_host_id": 102,
+                            "bk_cloud_id": 0, 
                             "ip": "10.0.0.2"
-                        },
-                        "src_path": "/data/1.log",
+                        }, 
+                        "src_path": "/data/1.log",  
                         "status": 4,
                         "log_content": "[2021-06-28 11:32:16] FileName: /data/1.log FileSize: 9.0 Bytes State: source agent success upload file Speed: 1 KB/s Progress: 100% StatusDesc: source agent success upload file Detail: success upload"
                     }
@@ -122,7 +149,8 @@ Bulk query of job execution logs by ip list
 
 | Fields | Type  | Description |
 |-----------|-----------|-----------|
-| bk_cloud_id   | int         | Target server cloud area ID                                  |
+| bk_host_id |  long    | Host ID |
+| bk_cloud_id   | int         | Target server BK-Net ID                             |
 | ip            | string      | Target server IP address |
 | log_type   | int         | Log type. 1 - Script execution task log; 2 - File distribution task log |
 | script_task_logs   | array      | Log of script execution task. See script_task_log for definition |
@@ -132,6 +160,7 @@ Bulk query of job execution logs by ip list
 
 | Fields |  Type | Description |
 |-----------|------------|--------|
+| bk_host_id |  long    | Host ID |
 | bk_cloud_id |  long    | BK-Net ID |
 | ip          |  string  | Target IP address |
 | log_content |  string  | Script execution log content |
@@ -140,6 +169,7 @@ Bulk query of job execution logs by ip list
 
 | Fields |  Type | Description |
 |-----------|------------|--------|
+| bk_host_id |  long    | Host ID |
 | bk_cloud_id |  long    | BK-Net ID |
 | ip          |  string  | Source/target IP address |
 | file_logs   |  array  | File distribution log content. See file_log for definition |
@@ -160,5 +190,6 @@ Bulk query of job execution logs by ip list
 
 | Fields |  Type | Description |
 |-----------|------------|--------|
+| bk_host_id |  long    | Host ID |
 | bk_cloud_id |  long    | BK-Net ID |
 | ip          |  string  | IP Address |

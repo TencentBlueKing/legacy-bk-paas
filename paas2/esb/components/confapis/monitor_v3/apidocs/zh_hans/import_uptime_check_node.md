@@ -26,12 +26,14 @@
 | ip          | str  | 是   | IP       |
 | bk_cloud_id | int  | 是   | 云区域ID |
 | bk_biz_id   | int  | 是   | 业务id   |
+| bk_host_id   | int  | 否   | 主机id   |
 
 ##### 节点基本配置--node_conf
 
 | 字段            | 类型 | 必选 | 描述                                       |
 | --------------- | ---- | ---- | ------------------------------------------ |
 | is_common       | bool | 否   | 是否为通用节点，默认false                  |
+| ip_type       | bool | 否   | ip类型(0、4、6)，默认4                  |
 | name            | str  | 是   | 节点名称                                   |
 | location        | dict | 是   | 节点所在地区                               |
 | carrieroperator | str  | 是   | 运营商，最大长度50(内网、联通、移动、其他) |
@@ -50,6 +52,7 @@
     "bk_app_code": "xxx",
     "bk_app_secret": "xxxxx",
     "bk_token": "xxxx",
+    "bk_biz_id": 2,
     "conf_list":[{
         "node_conf": {
             "carrieroperator": "内网",
@@ -58,7 +61,8 @@
                 "city": "广东"
             },
             "name": "中国广东内网",
-            "is_common": false
+            "is_common": false,
+            "ip_type": 4
         },
         "target_conf": {
             "bk_biz_id": 2,
@@ -73,7 +77,8 @@
                 "city": "广东"
             },
             "name": "中国广东内网",
-            "is_common": false
+            "is_common": false,
+            "ip_type": 4
         },
         "target_conf": {
             "bk_biz_id": 2,

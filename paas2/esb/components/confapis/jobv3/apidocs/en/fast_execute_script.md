@@ -10,8 +10,8 @@ Start Job Plan
 
 | Fields  |  Type  | Required | Description |
 |---------------|------------|--------|------------|
-| bk_scope_type | string | yes  | Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id | string | yes | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string | yes  | Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id | string | yes | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | script_version_id |  long       |  no   | Script version ID. When script_version_id is not empty, the script version corresponding to script_version_id is used|
 | script_id | string | no |Script id. When script_id is passed in and script_version_id is empty, the online version of the script is used|
 | script_content | string | no |Script content Base64. If script_version_id and script_id do not exist, script_content is used. Priority: script_version_id>script_id>script_content|
@@ -26,11 +26,12 @@ Start Job Plan
 | callback_url |  string   |  no       | Callback URL, when the task execution is completed, the JOB will call this URL to inform the task execution result. Callback protocol refer to the callback_protocol component documentation|
 
 #### server
-| Fields             | Type  | Required | Description                         |
-| ------------------ | ----- | -------- | ----------------------------------- |
-| ip_list            |  array | no       | Static IP list, as defined in ip              |
-| dynamic_group_list | array | no       | Dynamic grouping list, for definition, see dynamic_group   |
-| topo_node_list     |  array | no       | Dynamic topo node list. See topo_node for definition|
+| Fields             | Type  | Required | Description                                             |
+| ------------------ | ----- | -------- | ------------------------------------------------------- |
+| host_id_list       | array | no       | Host ID list         |
+| ip_list            | array | no       | Static IP list, see ip for definition. ***Deprecated, it is recommended to use the host_id_list parameter***; if host_id_list and ip_list exist at the same time, the ip_list parameter will be ignored.                 |
+| dynamic_group_list | array | no       | Dynamic grouping list, see dynamic_group for definition |
+| topo_node_list     | array | no       | Dynamic topo node list, see topo_node for definition    |
 
 #### ip
 
@@ -74,15 +75,9 @@ Start Job Plan
                 "id": "blo8gojho0skft7pr5q0"
             }
         ],
-        "ip_list": [
-            {
-                "bk_cloud_id": 0,
-                "ip": "10.0.0.1"
-            },
-            {
-                "bk_cloud_id": 0,
-                "ip": "10.0.0.2"
-            }
+        "host_id_list": [
+            101,
+            102
         ],
         "topo_node_list": [
             {

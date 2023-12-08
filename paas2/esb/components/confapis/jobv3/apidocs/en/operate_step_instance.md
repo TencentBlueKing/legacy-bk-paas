@@ -10,8 +10,8 @@ Used to perform actions on the steps of an executed instance, such as retry, ign
 
 | Fields |  Type  | Required | Description |
 |-----------|------------|--------|------------|
-| bk_scope_type | string | yes  | Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id | string | yes | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string | yes  | Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id | string | yes | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | job_instance_id   |   long       |  yes  |Job instance ID|
 | step_instance_id |  long     |  yes  |Step instance ID|
 | operation_code |  int     |  yes  |Operation Code: 2. Retry failed IP; 3. Ignore error; 6. Confirm continue; 8. Retry all ; 9. Terminate the confirmation process; 10. Restart the confirmation; 11. Enter the next step; 12. Forcibly skip|

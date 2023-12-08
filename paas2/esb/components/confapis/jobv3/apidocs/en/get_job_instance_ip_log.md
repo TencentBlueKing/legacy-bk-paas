@@ -1,6 +1,6 @@
 ### Function Description
 
-Query job execution log by ip
+Query job execution log by host
 
 ### Request Parameters
 
@@ -10,12 +10,13 @@ Query job execution log by ip
 
 | Fields |  Type  | Required | Description |
 |-----------|------------|--------|------------|
-| bk_scope_type | string | yes  | Resource range type. Optional values: biz - Business，biz_set - Business Set |
-| bk_scope_id | string | yes | Resource range ID. Corresponds to bk_scope_type, which means business ID or business set ID |
+| bk_scope_type | string | yes  | Resource scope type. Optional values: biz - Business，biz_set - Business Set |
+| bk_scope_id | string | yes | Resource scope ID. Corresponds to bk_scope_type, which means business ID or business set ID |
 | job_instance_id | long | yes |Job instance ID|
 | step_instance_id |  long    |  yes  |Step instance ID|
-| bk_cloud_id | int | yes |Target server cloud area ID|
-| ip | string | yes |Destination server IP|
+| bk_cloud_id | int | no |Target server BK-Net ID|
+| ip | string | no |Destination server IP. ***Deprecated, it is recommended to use the bk_host_id parameter|
+| bk_host_id |  string    | no | Host ID|
 
 ### Example of request
 
@@ -28,8 +29,7 @@ Query job execution log by ip
     "bk_scope_id": "1",
     "job_instance_id": 50,
     "step_instance_id": 100,
-    "bk_cloud_id": 0,
-    "ip": "10.0.0.1"
+    "bk_host_id": 101
 }
 ```
 
@@ -43,6 +43,7 @@ Query job execution log by ip
     "message": "",
     "data": {
         "log_type": 1,
+        "bk_host_id": 101,
         "ip": "10.0.0.1",
         "bk_cloud_id": 0,
         "log_content": "[2018-03-15 14:39:30][PID:56875] job_start\n"
@@ -59,17 +60,20 @@ Query job execution log by ip
     "message": "",
     "data": {
         "log_type": 2,
+        "bk_host_id": 101,
         "ip": "10.0.0.1",
         "bk_cloud_id": 0,
         "file_logs": [
             {
                 "mode": 1,
                 "src_ip": {
+                    "host_id": 102,
                     "bk_cloud_id": 0,
                     "ip": "10.0.0.2"
                 },
                 "src_path": "/data/1.log",
                 "dest_ip": {
+                    "bk_host_id": 101,
                     "bk_cloud_id": 0,
                     "ip": "10.0.0.1"
                 },
@@ -80,6 +84,7 @@ Query job execution log by ip
             {
                 "mode": 0,
                 "src_ip": {
+                    "bk_host_id": 102,
                     "bk_cloud_id": 0,
                     "ip": "10.0.0.2"
                 },
