@@ -1771,6 +1771,36 @@
 - api_type: query
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: GET
+  dest_path: /apm_api/v1/application/get_bkdata_flow/
+  is_hidden: true
+  label: 获取bkdata flow详情
+  label_en: query apm bkdata flow
+  name: query_apm_bk_data_flow_detail
+  path: /v2/monitor_v3/apm/get_bkdata_flow/
+  method: GET
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /apm_api/v1/application/create_or_update_bkdata_flow/
+  is_hidden: true
+  label: 创建/更新计算平台Flow
+  label_en: create or update bkdata flow
+  name: create_or_update_bkdata_flow
+  path: /v2/monitor_v3/apm/create_or_update_bkdata_flow/
+  method: POST
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /apm_api/v1/application/operate_apm_dataid/
+  is_hidden: true
+  label: 恢复/暂停APM中某个DataId的链路
+  label_en: operate apm dataid
+  name: operate_apm_dataid
+  path: /v2/monitor_v3/apm/operate_apm_dataid/
+  method: POST
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
   dest_path: /apm_api/v1/topo/query_topo_node/
   is_hidden: true
   label: 查询topo节点
