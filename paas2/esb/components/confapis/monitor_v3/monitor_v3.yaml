@@ -672,6 +672,7 @@
   name: delete_user_groups
   path: /v2/monitor_v3/delete_user_groups/
   suggest_method: POST
+
 - api_type: operate
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST
@@ -682,6 +683,73 @@
   name: save_user_group
   path: /v2/monitor_v3/save_user_group/
   suggest_method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v4/user_group/preview/
+  is_hidden: false
+  label: 预览一个组的轮值规则
+  label_en: preview duty user group
+  name: preview_user_group
+  path: /v2/monitor_v3/preview_user_group/
+  suggest_method: POST
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v4/duty_rule/search/
+  is_hidden: false
+  label: 查询轮值规则组
+  label_en: search user group latest
+  name: search_duty_rules
+  path: /v2/monitor_v3/search_duty_rules/
+  suggest_method: POST
+
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v4/duty_rule/search_detail/
+  is_hidden: false
+  label: 查询单个轮值规则的详情
+  label_en: search duty rule detail
+  name: search_duty_rule_detail
+  path: /v2/monitor_v3/search_duty_rule_detail/
+  suggest_method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v4/duty_rule/delete/
+  is_hidden: false
+  label: 批量删除轮值规则
+  label_en: delete duty rules
+  name: delete_duty_rules
+  path: /v2/monitor_v3/delete_duty_rules/
+  suggest_method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v4/duty_rule/save/
+  is_hidden: false
+  label: 保存轮值规则
+  label_en: save duty rule
+  name: save_duty_rule
+  path: /v2/monitor_v3/save_duty_rule/
+  suggest_method: POST
+
+- api_type: operate
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: POST
+  dest_path: /api/v4/duty_rule/preview/
+  is_hidden: false
+  label: 预览轮值规则
+  label_en: preview duty rule
+  name: preview_duty_rule
+  path: /v2/monitor_v3/preview_duty_rule/
+  suggest_method: POST
+
 - api_type: operate
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST

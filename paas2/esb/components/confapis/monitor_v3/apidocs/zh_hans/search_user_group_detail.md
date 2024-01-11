@@ -35,26 +35,60 @@
 
 ####  data字段说明
 
-| 字段             | 类型     | 描述                                       |
-|----------------|--------|------------------------------------------|
-| bk_biz_id      | int    | 业务ID                                     |
-| name           | string | 名称                                       |
-| need_duty      | bool   | 是否轮值                                     |
-| channels       | list   | 通知渠道 可选项 `user(内部用户)`, `wxwork-bot(企业微信机器人)` |
-| id             | int    | 告警组ID                                    |
-| desc           | string | 说明                                       |
-| duty_arranges  | list   | 通知接收人员                                   |
-| alert_notice   | list   | 告警通知方式                                   |
-| action_notice  | list   | 告警处理通知配置                                 |
-| strategy_count | int    | 关联的告警策略数量                                |
-| delete_allowed | bool   | 是否可删除                                    |
-| edit_allowed   | bool   | 是否可编辑                                    |
-| config_source  | string | 配置来源                                     |
-| update_time    | string | 更新时间                                     |
-| update_user    | string | 更新人                                      |
-| create_time    | string | 创建时间                                     |
-| create_user    | string | 创建人                                      |
+| 字段             | 类型        | 描述                                           |
+|----------------|-----------|----------------------------------------------|
+| bk_biz_id      | int       | 业务ID                                         |
+| name           | string    | 名称                                           |
+| need_duty      | bool      | 是否轮值                                         |
+| channels       | list      | 通知渠道 可选项 `user(内部用户)`, `wxwork-bot(企业微信机器人)` |
+| id             | int       | 告警组ID                                        |
+| desc           | string    | 说明                                           |
+| duty_rules     | list[int] | 轮值规则                                         |
+| duty_arranges  | list      | 通知接收人员                                       |
+| alert_notice   | list      | 告警通知方式                                       |
+| action_notice  | list      | 告警处理通知配置                                     |
+| duty_notice    | dict      | 轮值计划通知                                       |
+| strategy_count | int       | 关联的告警策略数量                                    |
+| delete_allowed | bool      | 是否可删除                                        |
+| edit_allowed   | bool      | 是否可编辑                                        |
+| config_source  | string    | 配置来源                                         |
+| update_time    | string    | 更新时间                                         |
+| update_user    | string    | 更新人                                          |
+| create_time    | string    | 创建时间                                         |
+| create_user    | string    | 创建人                                          |
 
+
+### `duty_notice` 数据格式
+
+| 字段              | 类型   | 必须  | 描述       |
+|-----------------|------|-----|----------|
+| plan_notice     | dict | 否   | 轮值计划通知配置 |
+| personal_notice | dict | 否   | 值班人员通知配置 |
+
+### `plan_notice` 数据格式
+
+| 字段       | 类型        | 必须  | 描述       |
+|----------|-----------|-----|----------|
+| enabled  | bool      | 否   | 是否发送     |
+| period   | dict      | 否   | 发送时间配置   |
+| days     | int       | 是   | 发送多久以后的  |
+| chat_ids | list[str] | 是   | 企业微信ID列表 |
+
+### `period` 数据格式
+
+| 字段   | 类型        | 必须  | 描述                              |
+|------|-----------|-----|---------------------------------|
+| type | string    | 是   | 周期类型，`daily` `weekly` `monthly` |
+| date | list[int] | 否   | 发送日期，数字表示， `daily`的情况下可为空       |
+| time | string    | 是   | 交班时间， 格式 `08:00`                |
+
+### `personal_notice` 数据格式
+
+| 字段         | 类型        | 必须  | 描述         |
+|------------|-----------|-----|------------|
+| enabled    | bool      | 否   | 是否发送       |
+| hours_ago  | int       | 是   | 单位小时，值班前多久 |
+| duty_rules | list[int] | 是   | 指定轮值规则     |
 
 ### `duty_arranges` 数据格式
 | 字段             | 类型 | 必须 | 描述                             |
