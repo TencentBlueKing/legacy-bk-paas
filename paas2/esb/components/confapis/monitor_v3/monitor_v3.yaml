@@ -1878,6 +1878,26 @@
   method: GET
 - api_type: query
   comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /apm_api/v1/profiling/services_detail/
+  is_hidden: true
+  label: 查询profile服务详情
+  label_en: query profile service detail
+  name: query_apm_profile_service_detail
+  path: /v2/monitor_v3/apm/profiling/services_detail/
+  method: GET
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
+  dest_http_method: GET
+  dest_path: /apm_api/v1/profiling/builtin_profile_datasource/
+  is_hidden: true
+  label: 查询内建 Profiling 存储
+  label_en: query builtin profile datasource
+  name: query_builtin_profile_datasource
+  path: /v2/monitor_v3/apm/profiling/builtin_profile_datasource/
+  method: GET
+- api_type: query
+  comp_codename: generic.v2.monitor_v3.monitor_v3_component
   dest_http_method: POST
   dest_path: /apm_api/v1/topo/query_topo_relation/
   is_hidden: true
