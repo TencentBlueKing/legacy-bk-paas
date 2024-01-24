@@ -503,7 +503,7 @@
   is_hidden: true
 
 - path: /data/v3/databus/udc/{udc_name}/versions/{version}/
-  name: v3_databus_udc__udc_name__versions__version__
+  name: v3_databus_udc__udc_name__versions__version__get
   label: 获取udc版本详情
   method: GET
   comp_codename: generic.data.datav3_component
