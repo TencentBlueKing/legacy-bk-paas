@@ -1,4 +1,4 @@
-Django==1.8.11
+Django==3.2.24
 PyMySQL==0.6.7
 requests==2.21.0
 celery==3.1.18
