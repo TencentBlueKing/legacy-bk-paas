@@ -84,6 +84,8 @@ class AddChannelView(View, TemplateRenderMixin):
     def post(self, request):
         form = ESBChannelForm(request.POST)
         if form.is_valid():
+            # component_name不在request.POST中，需要手动赋值，不然会丢失
+            form.instance.component_name = form.cleaned_data["component_name"]
             form.save()
             return HttpResponseRedirect(reverse("manager.channel.list"))
         system_form = ComponentSystemForm()
