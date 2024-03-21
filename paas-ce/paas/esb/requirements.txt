@@ -13,7 +13,7 @@ enum34==1.1.6
 ConcurrentLogHandler==0.9.1
 
 # encrypt
-pycrypto==2.6.1
+pycryptodome==3.20.0
 
 markdown==2.6.6
 gunicorn==19.9.0
