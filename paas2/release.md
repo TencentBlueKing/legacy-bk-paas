@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.66
+    - all: replace pycrypto with pycryptodome==3.20.0
+
 # 2.14.65
     - esb: update data confiapis, fix name with suffix underline
 
