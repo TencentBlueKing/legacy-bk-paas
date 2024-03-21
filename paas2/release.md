@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.67 
+    - esb: use cryptography==3.4.8
+
 # 2.14.66
     - all: replace pycrypto with pycryptodome==3.20.0
 

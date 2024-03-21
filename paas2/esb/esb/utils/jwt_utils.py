@@ -10,21 +10,33 @@ an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express o
 specific language governing permissions and limitations under the License.
 """
 
-from builtins import object
 import time
+from builtins import object
 
 import jwt
-from Crypto.PublicKey import RSA
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric import rsa
+
 from esb.utils.func_ctrl import FunctionControllerClient
-from jwt.algorithms import has_crypto
-from jwt.contrib.algorithms.pycrypto import RSAAlgorithm
 
 
 class JWTKey(object):
     def generate(self, length=2048):
-        key = RSA.generate(length)
-        private_key = key.exportKey()
-        public_key = key.publickey().exportKey()
+        # public_exponent (int) – The public exponent of the new key. Either 65537 or 3 (for legacy purposes).
+        # Almost everyone should use 65537.
+        # more: https://cryptography.io/en/latest/hazmat/primitives/asymmetric/rsa/#generation
+        key = rsa.generate_private_key(public_exponent=65537, key_size=length)
+
+        private_key = key.private_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PrivateFormat.TraditionalOpenSSL,
+            encryption_algorithm=serialization.NoEncryption(),
+        )
+
+        public_key = key.public_key().public_bytes(
+            encoding=serialization.Encoding.PEM, format=serialization.PublicFormat.SubjectPublicKeyInfo
+        )
+
         return private_key, public_key
 
     def get_private_key(self):
@@ -84,10 +96,3 @@ class JWTClient(object):
         self.prepare_payload(now)
 
         return jwt.encode(self.payload, private_key, algorithm=self.ALGORITHM, headers=self.headers)
-
-
-# replace cryptography with pycrypto
-if has_crypto:
-    jwt.unregister_algorithm(JWTClient.ALGORITHM)
-
-jwt.register_algorithm(JWTClient.ALGORITHM, RSAAlgorithm(RSAAlgorithm.SHA512))
