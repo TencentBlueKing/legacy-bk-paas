@@ -13,7 +13,7 @@ Jinja2==2.8
 MarkupSafe==0.23
 meld3==1.0.2
 pbr==1.10.0
-pycrypto==2.6.1
+pycryptodome==3.20.0
 pytz==2016.6.1
 gunicorn==19.6.0
 six==1.10.0
