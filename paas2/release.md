@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.68
+    - fix: login encrypt bk_token fail
+
 # 2.14.67 
     - esb: use cryptography==3.4.8
 
