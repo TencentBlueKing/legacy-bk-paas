@@ -75,7 +75,8 @@ def encrypt(plaintext, key="", base64=True):
     key = force_bytes(key)
     key = hashlib.md5(key).digest()
     cipher = AES.new(key, AES.MODE_ECB)
-    ciphertext = cipher.encrypt(pad(plaintext))
+    pad_text = pad(plaintext)
+    ciphertext = cipher.encrypt(pad_text.encode("utf-8"))
 
     # 将密文base64加密
     if base64:
