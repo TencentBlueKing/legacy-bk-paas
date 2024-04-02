@@ -1242,3 +1242,14 @@
   dest_http_method: POST
   suggest_method: POST
   is_hidden: true
+
+- api_type: query
+  comp_codename: generic.v2.nodeman.nodeman_component
+  name: install_channel_list
+  label: 列出所有安装通道
+  label_en: null
+  dest_path: /api/install_channel/
+  path: /v2/nodeman/api/install_channel/
+  dest_http_method: GET
+  suggest_method: GET
+  is_hidden: true

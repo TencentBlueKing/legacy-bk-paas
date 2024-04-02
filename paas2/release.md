@@ -1,5 +1,8 @@
 Release Log
 ===============================
+# 2.14.69
+    - fix: update nodeman confapis
+
 # 2.14.68
     - fix: login encrypt bk_token fail
 
