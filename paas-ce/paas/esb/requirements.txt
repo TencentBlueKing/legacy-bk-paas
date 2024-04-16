@@ -16,7 +16,7 @@ ConcurrentLogHandler==0.9.1
 pycryptodome==3.20.0
 
 markdown==2.6.6
-gunicorn==19.9.0
+gunicorn==22.0.0
 uWSGI==2.0.13.1
 PyYAML==5.1
 
