@@ -3,7 +3,7 @@ dj-static==0.0.6
 mako==1.0.4
 pycryptodome==3.20.0
 requests==2.21.0
-gunicorn==19.9.0
+gunicorn==22.0.0
 uWSGI==2.0.13.1
 elasticsearch==2.3.0
 pymysql==0.6.7
