@@ -3,7 +3,7 @@ dj-static==0.0.6
 pycryptodome==3.20.0
 requests==2.21.0
 pymysql==0.6.7
-gunicorn==19.9.0
+gunicorn==22.0.0
 uWSGI==2.0.13.1
 xlrd==1.0.0
 xlwt==1.1.2
