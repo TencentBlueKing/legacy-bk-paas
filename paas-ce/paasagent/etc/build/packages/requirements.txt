@@ -15,7 +15,7 @@ meld3==1.0.2
 pbr==1.10.0
 pycryptodome==3.20.0
 pytz==2016.6.1
-gunicorn==19.6.0
+gunicorn==22.0.0
 six==1.10.0
 SQLAlchemy==1.0.12
 stevedore==1.17.1
