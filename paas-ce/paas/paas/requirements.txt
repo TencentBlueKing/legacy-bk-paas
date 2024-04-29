@@ -4,7 +4,7 @@ mako==1.0.4
 pycryptodome==3.20.0
 requests==2.21.0
 gunicorn==19.9.0
-uWSGI==2.0.13.1
+uWSGI==2.0.22
 elasticsearch==2.3.0
 pymysql==0.6.7
 redis==2.10.5
