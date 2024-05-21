@@ -4,7 +4,7 @@ Django==1.8.11
 requests==2.21.0
 jinja2==2.8
 sqlalchemy==1.0.12
-pymysql==0.6.7
+pymysql==1.1.1
 redis==2.10.5
 thrift==0.10.0
 gevent==1.1.2
