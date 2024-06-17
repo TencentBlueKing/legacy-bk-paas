@@ -20,7 +20,7 @@ six==1.10.0
 SQLAlchemy==1.0.12
 stevedore==1.17.1
 suds==0.4
-urllib3==1.24.1
+urllib3==1.26.19
 amqp==1.4.9
 anyjson==0.3.3
 billiard==3.3.0.23
