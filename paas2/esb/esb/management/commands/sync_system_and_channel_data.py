@@ -14,6 +14,8 @@ import json
 import logging
 
 from django.core.management.base import BaseCommand
+from django.conf import settings
+from django.db.models import Q
 
 from common.constants import API_TYPE_Q
 from esb.bkcore.models import ComponentSystem, ESBBuffetComponent, ESBChannel, SystemDocCategory
@@ -111,7 +113,11 @@ class Command(BaseCommand):
         default_update_fields = ["name", "component_codename", "component_name", "method", "is_hidden"]
         force_update_fields = ["component_system_id", "type", "timeout_time"]
 
-        remaining_official_channel_ids = self._get_official_channel_ids()
+        # 获取需要豁免sync的自定义通道
+        exclude_custom_channel_ids = self._get_exclude_custom_channel_ids()
+        official_channel_ids = self._get_official_channel_ids()
+        # 官方通道列表，需排除掉豁免的自定义通道
+        remaining_official_channel_ids = list(set(official_channel_ids) - set(exclude_custom_channel_ids))
         remaining_official_channels = dict.fromkeys(remaining_official_channel_ids, None)
 
         conf_client = conf_tools.ConfClient()
@@ -238,10 +244,34 @@ class Command(BaseCommand):
 
     def _get_official_channel_ids(self):
         # CMSI下如果有自定义消息通道，会导致自定义通道也被识别为官方通道。因此这里要过滤掉CMSI
-        official_system_ids = ComponentSystem.objects.get_official_ids(exclude_names=["CMSI"])
+        official_system_ids = ComponentSystem.objects.get_official_ids()
         return list(
             ESBChannel.objects.filter(component_system_id__in=official_system_ids).values_list("id", flat=True)
         )
 
     def _hide_channels(self, channel_ids):
         ESBChannel.objects.filter(id__in=channel_ids).update(is_hidden=True)
+
+    def _get_exclude_custom_channel_ids(self):
+        exclude_channels_config = settings.EXCLUDE_CUSTOM_CHANNEL_WHEN_SYNC
+        if not exclude_channels_config:
+            return []
+        try:
+            exclude_channels_config = json.loads(exclude_channels_config)
+        except Exception as e:
+            logger.error("EXCLUDE_CUSTOM_CHANNEL_WHEN_SYNC is not json format, please check!")
+            # 不直接抛出，避免esb 执行命令异常而中断。
+            exclude_channels_config = {}
+
+        filter_qs = Q()
+        for system, paths in exclude_channels_config.items():
+            if not isinstance(paths, list):
+                continue
+            try:
+                system_obj = ComponentSystem.objects.get(name=system)
+            except ComponentSystem.DoesNotExist:
+                continue
+            filter_qs = filter_qs | (Q(component_system=system_obj) & Q(path__in=paths))
+        if not filter_qs:
+            return []
+        return list(ESBChannel.objects.filter(filter_qs).values_list("id", flat=True))

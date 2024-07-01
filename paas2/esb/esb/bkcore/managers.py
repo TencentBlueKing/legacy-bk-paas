@@ -15,11 +15,8 @@ from components.constants import BK_SYSTEMS
 
 
 class ComponentSystemManager(models.Manager):
-    def get_official_ids(self, exclude_names=None):
-        system_objs = self.filter(name__in=BK_SYSTEMS.keys())
-        if exclude_names:
-            system_objs = system_objs.exclude(name__in=exclude_names)
-        return list(system_objs.values_list("id", flat=True))
+    def get_official_ids(self):
+        return list(self.filter(name__in=BK_SYSTEMS.keys()).values_list("id", flat=True))
 
 
 class ESBChannelManager(models.Manager):
