@@ -12,7 +12,6 @@ specific language governing permissions and limitations under the License.
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import json
 import environ
 from django.conf.global_settings import *  # noqa F403,F401
 
