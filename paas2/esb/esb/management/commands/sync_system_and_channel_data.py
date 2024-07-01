@@ -243,7 +243,6 @@ class Command(BaseCommand):
             self.warning_msgs.append("%s change: %s" % (flag, ", ".join(warning)))
 
     def _get_official_channel_ids(self):
-        # CMSI下如果有自定义消息通道，会导致自定义通道也被识别为官方通道。因此这里要过滤掉CMSI
         official_system_ids = ComponentSystem.objects.get_official_ids()
         return list(
             ESBChannel.objects.filter(component_system_id__in=official_system_ids).values_list("id", flat=True)
